@@ -304,7 +304,7 @@
   }
   document.addEventListener("click", (e) => {
     const t = e.target.closest("[data-signup]");
-    if (t) { e.preventDefault(); openSheet(t.closest("#demo, .demo-cta") ? current : userTookOver ? current : null, t.dataset.signup); }
+    if (t) { e.preventDefault(); openSheet(t.closest("#demo, .demo-foot") ? current : userTookOver ? current : null, t.dataset.signup); }
   });
   $$("[data-close]", sheet).forEach((c) => c.addEventListener("click", (e) => { if (c.tagName === "A") e.preventDefault(); closeSheet(); }));
   document.addEventListener("keydown", (e) => {
@@ -335,6 +335,15 @@
     otpInput.value = ""; showPane("done");
   });
 
+  /* ---------- how it works: stepper follows scroll ---------- */
+  const stepItems = $$("#stepper li");
+  const stepIO = "IntersectionObserver" in window ? new IntersectionObserver((es) => es.forEach((e) => {
+    if (!e.isIntersecting) return;
+    const i = +e.target.dataset.step;
+    stepItems.forEach((li, j) => { li.classList.toggle("on", j === i); li.classList.toggle("done", j < i); });
+  }), { rootMargin: "-40% 0px -55% 0px" }) : null;
+  if (stepIO) $$(".how-step").forEach((s) => stepIO.observe(s));
+
   /* ---------- mobile sticky CTA: after the hero, hidden near the final CTA ---------- */
   const mcta = $("#mobileCta"), finalSec = $("#start");
   function mctaUpdate() {
@@ -345,48 +354,13 @@
   }
   window.addEventListener("scroll", mctaUpdate, { passive: true }); mctaUpdate();
 
-  /* ---------- how it works: tour with auto-advance ---------- */
-  const tour = $("#tour"), tabs = $$(".tab", tour), panes = $$(".pane", tour);
-  const TOUR_MS = 5200;
-  tour.style.setProperty("--tour-ms", TOUR_MS + "ms");
-  let tourIdx = 0, tourTimer = null, tourVisible = false, tourHover = false, tourManual = false;
-  function tourShow(i, run) {
-    tourIdx = i;
-    tabs.forEach((t, j) => {
-      t.classList.toggle("on", j === i); t.classList.toggle("done", j < i); t.classList.remove("run");
-      t.setAttribute("aria-selected", String(j === i)); t.tabIndex = j === i ? 0 : -1;
-    });
-    panes.forEach((p, j) => { p.hidden = j !== i; p.classList.toggle("on", j === i); });
-    const typer = $(".typer", panes[i]); if (typer) { delete typer.dataset.done; typeOnce(typer); }
-    clearTimeout(tourTimer);
-    if (run && !reduceMotion) {
-      void tabs[i].offsetWidth; tabs[i].classList.add("run");
-      tourTimer = setTimeout(() => tourShow((i + 1) % tabs.length, tourVisible && !tourHover && !tourManual), TOUR_MS);
-    }
-  }
-  tabs.forEach((t, i) => {
-    t.addEventListener("click", () => { tourManual = true; tourShow(i, false); });
-    t.addEventListener("keydown", (e) => {
-      if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
-      const n = (tourIdx + (e.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length;
-      tourManual = true; tourShow(n, false); tabs[n].focus();
-    });
-  });
-  tour.addEventListener("pointerenter", () => { tourHover = true; clearTimeout(tourTimer); tabs[tourIdx].classList.remove("run"); });
-  tour.addEventListener("pointerleave", () => { tourHover = false; if (tourVisible && !tourManual) tourShow(tourIdx, true); });
-  if ("IntersectionObserver" in window) {
-    new IntersectionObserver((es) => es.forEach((e) => {
-      tourVisible = e.isIntersecting;
-      if (tourVisible && !tourManual && !tourHover) tourShow(tourIdx, true); else clearTimeout(tourTimer);
-    }), { threshold: 0.4 }).observe(tour);
-  }
-
-  const pauseBtn = $("#autopilot");
-  if (pauseBtn) pauseBtn.addEventListener("click", () => {
-    const paused = pauseBtn.getAttribute("aria-pressed") !== "true";
-    pauseBtn.setAttribute("aria-pressed", String(paused));
-    $(".plabel", pauseBtn).textContent = paused ? "Paused · no new orders · tap to resume" : "Autopilot on · tap to pause";
-  });
+  /* ---------- limits phone switch ---------- */
+  const live = $("#phLive");
+  $$(".switch").forEach((sw) => sw.addEventListener("click", () => {
+    const on = sw.getAttribute("aria-checked") !== "true";
+    sw.setAttribute("aria-checked", String(on));
+    if (sw.id === "autopilot" && live) { live.classList.toggle("paused", !on); $("span", live).textContent = on ? "Autopilot on" : "Paused · no new orders"; }
+  }));
 
   /* ---------- FAQ: one open at a time ---------- */
   const faqs = $$(".faq details");
