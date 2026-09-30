@@ -1,18 +1,11 @@
-/* FinStocks AI landing page v2
-   - header state on scroll, mobile nav
-   - NSE ticker strip (illustrative values)
-   - hero app scene: 3D tilt, prompt -> rules -> hypothetical backtest chart (pre-scripted)
-   - phone control panel switches
-   - transform-only scroll reveal
-*/
+/* FinStocks AI landing page v3 behaviour */
 (function () {
   "use strict";
   const $ = (s, el) => (el || document).querySelector(s);
   const $$ = (s, el) => Array.from((el || document).querySelectorAll(s));
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const finePointer = window.matchMedia("(pointer: fine)").matches;
 
-  /* ---------- header ---------- */
+  /* header + nav */
   const header = $("#header");
   const onScroll = () => header.classList.toggle("scrolled", window.scrollY > 8);
   onScroll(); window.addEventListener("scroll", onScroll, { passive: true });
@@ -20,18 +13,7 @@
   navToggle.addEventListener("click", () => navToggle.setAttribute("aria-expanded", String(nav.classList.toggle("open"))));
   $$(".nav-links a", nav).forEach((a) => a.addEventListener("click", () => nav.classList.remove("open")));
 
-  /* ---------- ticker (illustrative, not live) ---------- */
-  const TICKS = [
-    ["NIFTY 50", "24,812.40", "+0.42"], ["BANKNIFTY", "52,104.15", "+0.18"], ["RELIANCE", "2,931.20", "+0.71"],
-    ["HDFCBANK", "1,684.55", "-0.22"], ["TCS", "4,102.90", "+0.35"], ["INFY", "1,876.30", "-0.48"],
-    ["ICICIBANK", "1,242.75", "+0.56"], ["BHARTIARTL", "1,598.10", "+1.02"], ["ITC", "462.35", "-0.11"],
-    ["LT", "3,644.00", "+0.29"], ["SBIN", "812.60", "+0.64"], ["HINDUNILVR", "2,455.85", "-0.37"],
-  ];
-  const track = $("#tickerTrack");
-  const one = TICKS.map((t) => '<span class="ticker-item"><span class="sym">' + t[0] + '</span><span class="px num">' + t[1] + '</span><span class="chg ' + (t[2][0] === "-" ? "down" : "up") + '">' + t[2] + "%</span></span>").join("") + '<span class="ticker-item note">Illustrative quotes · not live market data</span>';
-  track.innerHTML = one + one;
-
-  /* ---------- scenarios (simulated; labelled hypothetical in the UI) ---------- */
+  /* scenarios (simulated; labelled hypothetical in the UI) */
   const MONTHS = ["Jan 23", "Apr 23", "Jul 23", "Oct 23", "Jan 24", "Apr 24", "Jul 24", "Oct 24", "Jan 25", "Apr 25", "Jul 25", "Oct 25", "Dec 25"];
   function series(seed, drift, vol, n) {
     let x = seed, v = 100; const out = [100];
@@ -51,7 +33,6 @@
       strategy: series(9, 0.0088, 0.09, 36), stats: [["Max drawdown", "−16.2%"], ["Trades", "58"], ["Time in cash", "31%"]] },
   ];
 
-  /* ---------- demo ---------- */
   const chips = $$(".chip"), input = $("#promptInput"), runBtn = $("#runPrompt");
   const rulesEl = $("#rules"), chartEl = $("#chart"), tipEl = $("#tip"), statsEl = $("#stats");
   let typingTimer = null;
@@ -63,7 +44,7 @@
     statsEl.innerHTML = stats.map((s) => '<div class="stat"><div class="l">' + s[0] + '</div><div class="v">' + s[1] + "</div></div>").join("");
   }
   function renderChart(sc) {
-    const W = 560, H = 262, padL = 34, padR = 52, padT = 14, padB = 26, n = sc.strategy.length;
+    const W = 560, H = 262, padL = 32, padR = 52, padT = 12, padB = 24, n = sc.strategy.length;
     const all = sc.strategy.concat(BENCH);
     const minV = Math.floor(Math.min.apply(null, all) / 10) * 10, maxV = Math.ceil(Math.max.apply(null, all) / 10) * 10;
     const x = (i) => padL + (i / (n - 1)) * (W - padL - padR);
@@ -71,10 +52,10 @@
     const path = (arr) => arr.map((v, i) => (i ? "L" : "M") + x(i).toFixed(1) + " " + y(v).toFixed(1)).join(" ");
     const ticks = []; for (let k = 0; k <= 4; k++) ticks.push(Math.round(minV + ((maxV - minV) / 4) * k));
     let s = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="Hypothetical growth of 100 for the strategy versus the Nifty 50, simulated">';
-    s += '<defs><linearGradient id="areaGrad" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#d6b66e" stop-opacity="0.22"/><stop offset="1" stop-color="#d6b66e" stop-opacity="0"/></linearGradient></defs>';
+    s += '<defs><linearGradient id="areaGrad" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#12805c" stop-opacity="0.16"/><stop offset="1" stop-color="#12805c" stop-opacity="0"/></linearGradient></defs>';
     s += '<g class="grid">' + ticks.map((t) => '<line x1="' + padL + '" x2="' + (W - padR) + '" y1="' + y(t).toFixed(1) + '" y2="' + y(t).toFixed(1) + '"/>').join("") + "</g>";
     s += '<g class="axis">' + ticks.map((t) => '<text x="' + (padL - 6) + '" y="' + (y(t) + 3).toFixed(1) + '" text-anchor="end">' + t + "</text>").join("");
-    [0, 9, 18, 27, 35].forEach((i) => { s += '<text x="' + x(i).toFixed(1) + '" y="' + (H - 6) + '" text-anchor="' + (i === 0 ? "start" : i === 35 ? "end" : "middle") + '">' + MONTHS[Math.round((i / 35) * (MONTHS.length - 1))] + "</text>"; });
+    [0, 9, 18, 27, 35].forEach((i) => { s += '<text x="' + x(i).toFixed(1) + '" y="' + (H - 5) + '" text-anchor="' + (i === 0 ? "start" : i === 35 ? "end" : "middle") + '">' + MONTHS[Math.round((i / 35) * (MONTHS.length - 1))] + "</text>"; });
     s += "</g>";
     s += '<path class="area" d="' + path(sc.strategy) + " L" + x(n - 1).toFixed(1) + " " + y(minV).toFixed(1) + " L" + padL + " " + y(minV).toFixed(1) + ' Z"/>';
     s += '<path class="b" d="' + path(BENCH) + '"/><path class="s" d="' + path(sc.strategy) + '"/>';
@@ -118,37 +99,24 @@
   input.value = SCENARIOS[0].prompt;
   run(SCENARIOS[0]);
 
-  /* ---------- 3D tilt on the app scene (desktop pointers only) ---------- */
-  const scene = $("#scene"), app = $("#app");
-  if (finePointer && !reduceMotion) {
-    scene.addEventListener("pointermove", (e) => {
-      const r = scene.getBoundingClientRect();
-      const px = (e.clientX - r.left) / r.width - 0.5, py = (e.clientY - r.top) / r.height - 0.5;
-      app.style.setProperty("--ry", (px * 6).toFixed(2) + "deg");
-      app.style.setProperty("--rx", (6 - py * 6).toFixed(2) + "deg");
-    });
-    scene.addEventListener("pointerleave", () => { app.style.setProperty("--ry", "0deg"); app.style.setProperty("--rx", "6deg"); });
-  }
-
-  /* ---------- phone switches ---------- */
+  /* phone switches */
   const live = $("#phLive");
   $$(".switch").forEach((sw) => sw.addEventListener("click", () => {
     const on = sw.getAttribute("aria-checked") !== "true";
     sw.setAttribute("aria-checked", String(on));
-    if (sw.id === "autopilot") { live.classList.toggle("paused", !on); $("span", live).textContent = on ? "Autopilot on · within limits" : "Paused · no new orders"; }
+    if (sw.id === "autopilot" && live) { live.classList.toggle("paused", !on); $("span", live).textContent = on ? "Autopilot on" : "Paused"; }
   }));
 
-  /* ---------- FAQ: one open at a time ---------- */
+  /* FAQ */
   const faqs = $$(".faq details");
   faqs.forEach((d) => d.addEventListener("toggle", () => { if (d.open) faqs.forEach((o) => { if (o !== d) o.open = false; }); }));
 
-  /* ---------- scroll reveal (transform only) ---------- */
+  /* reveal */
   const revealEls = $$(".reveal");
   if ("IntersectionObserver" in window && !reduceMotion) {
     revealEls.forEach((el) => { if (el.getBoundingClientRect().top > window.innerHeight) el.classList.add("pending"); });
     const io = new IntersectionObserver((entries) => entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.remove("pending"); io.unobserve(en.target); } }), { rootMargin: "0px 0px -6% 0px" });
     revealEls.forEach((el) => io.observe(el));
   }
-
   $("#year").textContent = new Date().getFullYear();
 })();
