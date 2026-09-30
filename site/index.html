@@ -6,7 +6,7 @@
 <title>FinStocks AI</title>
 <meta name="description" content="Describe your investing idea in plain language. FinStocks AI turns it into readable rules, tests them on past market data, and places orders in your own broker account only when you switch it on.">
 <meta property="og:title" content="FinStocks AI">
-<meta property="og:description" content="See every rule before a rupee moves. Prompt-based strategies, tested on past data, executed in your own broker account.">
+<meta property="og:description" content="Investing you can read before you run. Prompt-based strategies, tested on past data, practised with virtual money.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#ffffff">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,15 +21,15 @@
   <nav class="nav container" id="nav" aria-label="Main">
     <a class="brand" href="#top" aria-label="FinStocks AI home"><i aria-hidden="true"></i>FinStocks</a>
     <ul class="nav-links">
+      <li><a href="#demo">Try it</a></li>
+      <li><a href="#safety">Safety</a></li>
       <li><a href="#how">How it works</a></li>
-      <li><a href="#document">Strategy document</a></li>
-      <li><a href="#trust">Trust</a></li>
       <li><a href="#pricing">Pricing</a></li>
       <li><a href="#faq">FAQ</a></li>
     </ul>
     <div class="nav-actions">
-      <a class="btn btn-line btn-sm" href="#login">Log in</a>
-      <a class="btn btn-black btn-sm" href="#mock">Try Mock Mode</a>
+      <a class="nav-login" href="#login" data-signup="login">Log in</a>
+      <button class="btn btn-black btn-sm" type="button" data-signup>Start in Mock Mode</button>
       <button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 8h16M4 16h16"/></svg>
       </button>
@@ -39,50 +39,47 @@
 
 <main id="top">
 
-  <!-- HERO -->
+  <!-- 1 · HOOK + TRY IT -->
   <section class="hero">
     <div class="container">
       <div class="hero-top">
-        <span class="hero-kicker rise"><i aria-hidden="true"></i>Prompt-based investing · Indian equities</span>
+        <span class="kicker rise"><i aria-hidden="true"></i>Prompt-based investing for Indian equities</span>
         <h1 class="rise rise-2">Investing you can read before you run.</h1>
-        <p class="lede rise rise-3">Describe an idea in plain words. FinStocks AI drafts the rules, tests them on past NSE data, and runs them with virtual money until you say go.</p>
+        <p class="lede rise rise-3">Describe an idea in plain words. FinStocks AI drafts the rules, tests them on past NSE data, and lets you practise with virtual money until you say go.</p>
       </div>
 
-      <!-- AI CHAT BOX -->
       <form class="ask rise rise-4" id="ask" autocomplete="off">
         <label for="askInput" class="sr-only">Describe your investing idea</label>
         <textarea id="askInput" rows="2" placeholder="Describe your investing idea…"></textarea>
         <div class="ask-bar">
-          <span class="ask-mode"><i aria-hidden="true"></i>FinStocks AI · Mock Mode · ₹10,000 virtual</span>
-          <span class="ask-right">
-            <span class="ask-hint">Enter to send</span>
-            <button class="ask-send" type="submit" aria-label="Send prompt">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
-            </button>
+          <span class="ask-mode"><i aria-hidden="true"></i>Mock Mode · ₹10,000 virtual</span>
+          <span class="ask-right"><span class="ask-hint">Enter to send</span>
+            <button class="send" type="submit" aria-label="Send prompt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
           </span>
         </div>
       </form>
       <div class="ask-chips rise rise-4" role="group" aria-label="Example prompts">
-        <button class="ask-chip" type="button" data-key="largecap">Invest ₹10,000 in large caps, rebalance monthly</button>
-        <button class="ask-chip" type="button" data-key="dividend">Steady dividend portfolio, low churn</button>
-        <button class="ask-chip" type="button" data-key="trend">Follow the trend in banking stocks</button>
+        <span class="ask-chips-label">Try</span>
+        <button class="ask-chip" type="button">Invest ₹10,000 in large caps, rebalance monthly</button>
+        <button class="ask-chip" type="button">Steady dividend portfolio, low churn</button>
+        <button class="ask-chip" type="button">Follow the trend in banking stocks</button>
       </div>
-      <p class="ask-note rise rise-4">Examples use simulated data. Nothing trades until you approve. Investment in securities market are subject to market risks.</p>
 
-      <!-- STAGE: live chat inside the product -->
-      <div class="stage rise rise-5" id="stage">
+      <!-- live product demo -->
+      <div class="stage rise rise-5" id="demo">
         <div class="stage-light" aria-hidden="true"></div>
+        <div class="stage-caption"><span class="rec" aria-hidden="true"></span>Live demo · virtual funds · simulated results</div>
         <div class="stage-inner">
           <div class="app" aria-label="Interactive example of the FinStocks AI chat">
             <div class="app-bar">
               <span class="brand"><i aria-hidden="true"></i>FinStocks</span>
               <span class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Search strategies, stocks…</span>
-              <span class="right"><span class="badge"><i aria-hidden="true"></i>Mock Mode</span><span class="avatar" aria-hidden="true"></span></span>
+              <span class="bar-right"><span class="badge"><i aria-hidden="true"></i>Mock Mode</span><span class="avatar" aria-hidden="true"></span></span>
             </div>
             <div class="app-body">
               <aside class="app-side">
                 <button class="side-new" type="button" id="newChat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>New strategy</button>
-                <span class="side-label">Today</span>
+                <span class="side-label">Examples</span>
                 <button class="side-item" type="button" data-key="largecap">Large caps, monthly</button>
                 <button class="side-item" type="button" data-key="dividend">Dividend, low churn</button>
                 <button class="side-item" type="button" data-key="trend">Bank trend follower</button>
@@ -93,234 +90,255 @@
                 <form class="composer" id="composer" autocomplete="off">
                   <label for="composerInput" class="sr-only">Message FinStocks AI</label>
                   <input id="composerInput" type="text" placeholder="Ask a follow-up or describe a new idea…">
-                  <button class="ask-send sm" type="submit" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+                  <button class="send sm" type="submit" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
                 </form>
               </div>
             </div>
           </div>
           <div class="phone" aria-hidden="true">
             <div class="phone-screen">
-              <div class="notif" id="notif"><span class="nb"><i></i>FinStocks · now</span><b id="notifTitle">Strategy ready in Mock Mode</b><span id="notifBody">3 virtual orders queued for your approval</span></div>
+              <div class="notif" id="notif"><span class="nb"><i></i>FinStocks · now</span><b>Strategy ready in Mock Mode</b><span id="notifBody">Orders await your approval</span></div>
               <div class="ph-h"><span class="l">Order to approve</span><span class="v" id="phSym">BUY RELIANCE</span></div>
-              <div class="ph-order">
-                <div class="t"><span id="phQty">1 share · ₹2,931</span><span class="tag">virtual</span></div>
-                <div class="d">From your approved rules. Placed only if you approve.</div>
-                <div class="acts"><span class="mini primary">Approve</span><span class="mini">Skip</span></div>
-              </div>
-              <div class="ph-limits">
-                <div>Cap remaining <b>₹1,240</b></div>
-                <div>Loss limit <b>−10%</b></div>
-                <div>Autopilot <b class="live-dot">On</b></div>
-              </div>
+              <div class="ph-order"><div class="t"><span id="phQty">1 share · ₹2,931</span><span class="tag">virtual</span></div><div class="d">From your approved rules. Placed only if you approve.</div><div class="acts"><span class="mini primary">Approve</span><span class="mini">Skip</span></div></div>
+              <div class="ph-limits"><div>Cap remaining <b>₹1,240</b></div><div>Loss limit <b>−10%</b></div><div>Autopilot <b class="live-dot">On</b></div></div>
             </div>
           </div>
         </div>
-        <div class="stage-caption"><span class="rec" aria-hidden="true"></span>Live demo · virtual funds · simulated results</div>
       </div>
+      <div class="demo-foot">
+        <p><strong>Like what you see?</strong> Save a strategy and practise it with ₹10,000 of virtual money.</p>
+        <button class="btn btn-black" type="button" data-signup>Start in Mock Mode</button>
+      </div>
+      <ul class="assure" aria-label="What starting involves">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg>No broker login to start</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg>No payment details</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg>Nothing trades until you approve</li>
+      </ul>
     </div>
   </section>
 
-  <!-- CAPABILITIES -->
-  <section class="caps">
+  <!-- 2 · REASSURE -->
+  <section class="section safety" id="safety">
     <div class="container">
-      <div class="caps-list reveal">
-        <span>Prompt</span><span>Rules</span><span>Backtest <small>hypothetical</small></span><span>Mock Mode <small>₹0</small></span><span>Autopilot <small>your limits</small></span><span>Broker execution</span>
+      <div class="sh reveal">
+        <span class="eyebrow">Safety</span>
+        <h2 class="h2-lg">Your money never leaves your broker.</h2>
+        <p class="lede">The questions every investor should ask a trading app, answered where you can check them yourself.</p>
       </div>
-      <p class="caps-foot reveal">Everything runs through your own broker account. FinStocks never holds your money.</p>
-    </div>
-  </section>
-
-  <!-- FEATURE 1 -->
-  <section class="section" id="how" style="padding-top:0">
-    <div class="container feature">
-      <div class="feature-text reveal">
-        <h2>Describe it. Then read it.</h2>
-        <p>Say what you want in plain English or Hinglish. The AI drafts a strategy as numbered rules you can read line by line, and edit before anything else happens.</p>
-        <span class="foot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v.01M12 11v5"/></svg>See our <a href="#limits">disclosures on AI-drafted strategies</a></span>
-      </div>
-      <div class="still g1 reveal">
-        <div class="still-dots" aria-hidden="true"></div>
-        <div class="bubble" style="left:8%;top:12%"><b class="typer" data-text="“Invest ₹10,000 across large caps, rebalance monthly”">“Invest ₹10,000 across large caps, rebalance monthly”</b><span>Your prompt</span></div>
-        <div class="win stagger">
-          <div class="line" style="border-top:0;padding-top:0"><span>Draft 1 · 5 rules</span><b>editable</b></div>
-          <div class="line"><span>01 Universe</span><b>Nifty 100</b></div>
-          <div class="line"><span>02 Weighting</span><b>Equal · top 10 momentum</b></div>
-          <div class="line"><span>03 Rebalance</span><b>1st trading day, monthly</b></div>
-          <div class="line"><span>04 Exit</span><b>−8% from entry</b></div>
-          <div class="line"><span>05 Cap</span><b>₹10,000</b></div>
+      <div class="safety-grid">
+        <div class="safe reveal">
+          <span class="safe-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span>
+          <h3>Who holds my money?</h3>
+          <p>You do. Funds and shares stay in your own demat and trading account. FinStocks can’t withdraw.</p>
+        </div>
+        <div class="safe reveal">
+          <span class="safe-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10h18M5 10v9h14v-9M12 3 3 10h18L12 3Z"/></svg></span>
+          <h3>Who places the orders?</h3>
+          <p><span class="tbd" title="Confirm broker and registration">[Broker]</span>, a SEBI-registered stock broker, through its own login. We never see your password.</p>
+        </div>
+        <div class="safe reveal">
+          <span class="safe-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span>
+          <h3>Can I see every trade?</h3>
+          <p>Every order carries exchange algo ID <span class="tbd" title="Confirm empanelment reference">[ref]</span> and shows in your broker app.</p>
+        </div>
+        <div class="safe reveal">
+          <span class="safe-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 12 2 2 4-4"/><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3Z"/></svg></span>
+          <h3>Are you registered?</h3>
+          <p><span class="tbd" title="Confirm SEBI registration">[SEBI Reg. No.]</span> · <a href="https://www.sebi.gov.in" target="_blank" rel="noopener">Verify on SEBI Check ↗</a></p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- FEATURE 2 -->
-  <section class="section" style="padding-top:0">
-    <div class="container feature flip">
-      <div class="feature-text reveal">
-        <h2>Test it against the Nifty 50, with costs.</h2>
-        <p>Every rule set runs on past NSE data with brokerage and taxes included, and is compared with the index. Results are hypothetical, labelled as such, and shown with the drawdown, not just the gain.</p>
-        <span class="foot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v.01M12 11v5"/></svg>Simulated results do not predict future performance. <a href="#">Methodology</a></span>
+  <!-- 3 · UNDERSTAND -->
+  <section class="section how" id="how">
+    <div class="container how-grid">
+      <div class="how-rail">
+        <span class="eyebrow">How it works</span>
+        <h2 class="h2-lg">From idea to live in four steps.</h2>
+        <p class="lede">You approve every step. Stay in Mock Mode as long as you like; going live is optional.</p>
+        <ol class="stepper" id="stepper">
+          <li class="on"><a href="#step-1"><span class="n">1</span><span><b>Describe</b><small>Type your idea in plain words</small></span></a></li>
+          <li><a href="#step-2"><span class="n">2</span><span><b>Test</b><small>See it on past data, with costs</small></span></a></li>
+          <li><a href="#step-3"><span class="n">3</span><span><b>Practise</b><small>Run it with virtual money</small></span></a></li>
+          <li><a href="#step-4"><span class="n">4</span><span><b>Go live</b><small>Only inside limits you set</small></span></a></li>
+        </ol>
+        <button class="btn btn-black" type="button" data-signup>Start in Mock Mode</button>
       </div>
-      <div class="still g2 reveal">
-        <div class="still-dots" aria-hidden="true"></div>
-        <div class="bubble" style="right:8%;top:10%"><b>Worst month −11.4%</b><span>Shown before the upside, always</span></div>
-        <div class="win stagger">
-          <svg class="mini-chart" viewBox="0 0 400 120" aria-hidden="true"><defs><linearGradient id="miniGrad" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#12805c" stop-opacity="0.18"/><stop offset="1" stop-color="#12805c" stop-opacity="0"/></linearGradient></defs><g class="plot"><path class="area" d="M0 100 L40 92 L80 96 L120 80 L160 84 L200 66 L240 72 L280 52 L320 58 L360 38 L400 30 L400 120 L0 120 Z" fill="url(#miniGrad)"/><path class="b" d="M0 100 L40 95 L80 90 L120 88 L160 80 L200 76 L240 70 L280 64 L320 56 L360 50 L400 44"/><path class="s" d="M0 100 L40 92 L80 96 L120 80 L160 84 L200 66 L240 72 L280 52 L320 58 L360 38 L400 30"/></g></svg>
-          <div class="line" style="border-top:0;padding-top:0"><span>Backtest · Jan 23 – Dec 25</span><b>hypothetical</b></div>
-          <div class="line"><span>Benchmark</span><b>Nifty 50</b></div>
-          <div class="line"><span>Costs applied</span><b>Brokerage · STT · GST · slippage</b></div>
-          <div class="line"><span>Max drawdown</span><b>−11.4%</b></div>
-          <div class="line"><span>Rebalances</span><b>36</b></div>
-          <div class="line"><span>Data</span><b>NSE EOD · adjusted</b></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FEATURE 3 -->
-  <section class="section" style="padding-top:0">
-    <div class="container feature">
-      <div class="feature-text reveal">
-        <h2>Go live only inside your limits.</h2>
-        <p>Practise in Mock Mode for as long as you like. When you connect your broker, you set a capital cap, a loss limit and trading hours. Pause Autopilot in one tap. Every order shows in your broker app.</p>
-        <span class="foot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v.01M12 11v5"/></svg>Orders via <span class="tbd" title="Confirm broker">[Broker]</span>, a SEBI-registered stock broker.</span>
-      </div>
-      <div class="still g3 reveal">
-        <div class="still-dots" aria-hidden="true"></div>
-        <div class="phone" aria-label="Example controls">
-          <div class="phone-screen">
-            <div class="notif cycle"><span class="nb"><i></i>FinStocks · now</span><b>Loss limit respected</b><span>No new orders placed today</span></div>
-            <div class="ph-h"><span class="l">Limits</span><span class="v">Your controls</span></div>
-            <div class="ph-row"><div class="l"><strong>Autopilot</strong><span>Executes approved rules</span></div><button class="switch" id="autopilot" type="button" role="switch" aria-checked="true" aria-label="Autopilot"></button></div>
-            <div class="ph-row"><div class="l"><strong>Maximum capital</strong><span>Never deploy more</span></div><span class="v">₹10,000</span></div>
-            <div class="ph-row"><div class="l"><strong>Loss limit</strong><span>Pause all at this drawdown</span></div><span class="v">−10%</span></div>
-            <div class="ph-row"><div class="l"><strong>Trading window</strong><span>Orders only in this window</span></div><span class="v">09:15–15:30</span></div>
-            <div class="ph-row"><div class="l"><strong>Confirm each order</strong><span>Approve on your phone</span></div><button class="switch" type="button" role="switch" aria-checked="true" aria-label="Confirm each order"></button></div>
-            <span class="ph-live" id="phLive"><i aria-hidden="true"></i><span>Autopilot on</span></span>
+      <div class="how-steps">
+        <article class="how-step" id="step-1" data-step="0">
+          <span class="step-k">Step 1 · Describe</span>
+          <h3>Say it the way you’d say it to a friend.</h3>
+          <p>English or Hinglish. How much, what kind of stocks, how often to change. The AI turns it into numbered rules you can read and edit.</p>
+          <div class="still g1 reveal">
+            <div class="still-dots" aria-hidden="true"></div>
+            <div class="bubble" style="left:7%;top:10%"><b class="typer" data-text="“Invest ₹10,000 across large caps, rebalance monthly”">“Invest ₹10,000 across large caps, rebalance monthly”</b><span>Your prompt</span></div>
+            <div class="win stagger">
+              <div class="line first"><span>Draft 1 · 5 rules</span><b>editable</b></div>
+              <div class="line"><span>01 Universe</span><b>Nifty 100</b></div>
+              <div class="line"><span>02 Weighting</span><b>Equal · top 10 momentum</b></div>
+              <div class="line"><span>03 Rebalance</span><b>1st trading day, monthly</b></div>
+              <div class="line"><span>04 Exit</span><b>−8% from entry</b></div>
+              <div class="line"><span>05 Cap</span><b>₹10,000</b></div>
+            </div>
           </div>
-        </div>
+        </article>
+        <article class="how-step" id="step-2" data-step="1">
+          <span class="step-k">Step 2 · Test</span>
+          <h3>See how it would have behaved, worst month first.</h3>
+          <p>The rules run on past NSE data with brokerage and taxes included, next to the Nifty 50. Results are hypothetical and labelled that way.</p>
+          <div class="still g2 reveal">
+            <div class="still-dots" aria-hidden="true"></div>
+            <div class="bubble" style="right:7%;top:9%"><b>Worst month −11.4%</b><span>Shown before the upside</span></div>
+            <div class="win stagger">
+              <svg class="mini-chart" viewBox="0 0 400 120" aria-hidden="true"><defs><linearGradient id="miniGrad" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#12805c" stop-opacity="0.18"/><stop offset="1" stop-color="#12805c" stop-opacity="0"/></linearGradient></defs><g class="plot"><path d="M0 100 L40 92 L80 96 L120 80 L160 84 L200 66 L240 72 L280 52 L320 58 L360 38 L400 30 L400 120 L0 120 Z" fill="url(#miniGrad)"/><path class="b" d="M0 100 L40 95 L80 90 L120 88 L160 80 L200 76 L240 70 L280 64 L320 56 L360 50 L400 44"/><path class="s" d="M0 100 L40 92 L80 96 L120 80 L160 84 L200 66 L240 72 L280 52 L320 58 L360 38 L400 30"/></g></svg>
+              <div class="line first"><span>Backtest · Jan 23 – Dec 25</span><b>hypothetical</b></div>
+              <div class="line"><span>Benchmark</span><b>Nifty 50</b></div>
+              <div class="line"><span>Costs applied</span><b>Brokerage · STT · GST</b></div>
+              <div class="line"><span>Max drawdown</span><b>−11.4%</b></div>
+            </div>
+          </div>
+        </article>
+        <article class="how-step" id="step-3" data-step="2">
+          <span class="step-k">Step 3 · Practise</span>
+          <h3>Run it with ₹10,000 of virtual money.</h3>
+          <p>Mock Mode follows live prices and places virtual orders exactly as your rules say. Stay as long as you like. No broker, no payment.</p>
+          <div class="still g3 reveal">
+            <div class="still-dots" aria-hidden="true"></div>
+            <div class="bubble" style="left:7%;top:9%"><b>Day 12 in Mock Mode</b><span>3 virtual orders placed by your rules</span></div>
+            <div class="win stagger">
+              <div class="line first"><span>Mock portfolio</span><b>virtual</b></div>
+              <div class="line"><span>RELIANCE × 1</span><b>₹2,931</b></div>
+              <div class="line"><span>ICICIBANK × 2</span><b>₹2,486</b></div>
+              <div class="line"><span>LT × 1</span><b>₹3,644</b></div>
+              <div class="line"><span>Virtual cash</span><b>₹939</b></div>
+              <div class="line"><span>Next rebalance</span><b>1 Nov · 09:20</b></div>
+            </div>
+          </div>
+        </article>
+        <article class="how-step" id="step-4" data-step="3">
+          <span class="step-k">Step 4 · Go live</span>
+          <h3>Go live only inside the limits you set.</h3>
+          <p>Connect your broker when you’re ready. Set a capital cap, a loss limit and trading hours. Pause Autopilot in one tap.</p>
+          <div class="still g4 reveal">
+            <div class="still-dots" aria-hidden="true"></div>
+            <div class="phone" aria-label="Example controls">
+              <div class="phone-screen">
+                <div class="notif cycle"><span class="nb"><i></i>FinStocks · now</span><b>Loss limit respected</b><span>No new orders placed today</span></div>
+                <div class="ph-h"><span class="l">Limits</span><span class="v">Your controls</span></div>
+                <div class="ph-row"><div class="l"><strong>Autopilot</strong><span>Executes approved rules</span></div><button class="switch" id="autopilot" type="button" role="switch" aria-checked="true" aria-label="Autopilot"></button></div>
+                <div class="ph-row"><div class="l"><strong>Maximum capital</strong><span>Never deploy more</span></div><span class="v">₹10,000</span></div>
+                <div class="ph-row"><div class="l"><strong>Loss limit</strong><span>Pause all at this drawdown</span></div><span class="v">−10%</span></div>
+                <div class="ph-row"><div class="l"><strong>Trading window</strong><span>Orders only in this window</span></div><span class="v">09:15–15:30</span></div>
+                <div class="ph-row"><div class="l"><strong>Confirm each order</strong><span>Approve on your phone</span></div><button class="switch" type="button" role="switch" aria-checked="true" aria-label="Confirm each order"></button></div>
+                <span class="ph-live" id="phLive"><i aria-hidden="true"></i><span>Autopilot on</span></span>
+              </div>
+            </div>
+          </div>
+        </article>
       </div>
     </div>
   </section>
 
-  <!-- STRATEGY DOCUMENT -->
-  <section class="section docsec" id="document">
+  <!-- 4 · VERIFY THE DETAIL -->
+  <section class="section" id="document">
     <div class="container doc-grid">
-      <div class="feature-text reveal">
-        <h2>Every strategy is a document, not a secret.</h2>
-        <p>Rules in plain words. Why each stock qualifies. What could go wrong. The data used. Nothing runs until your name is on it.</p>
-        <p style="font-size:0.9rem;color:var(--ink-3)">SEBI’s 2025 framework treats strategies whose logic is hidden from the user as a separate, more regulated category. We chose the other path.</p>
+      <div class="doc-text">
+        <div class="sh reveal">
+          <span class="eyebrow">No black box</span>
+          <h2 class="h2-md">Every strategy is a document, not a secret.</h2>
+          <p class="lede">SEBI’s 2025 rules treat strategies whose logic is hidden from you as a separate, more regulated category. We chose the other path.</p>
+        </div>
+        <dl class="ai-limits reveal">
+          <div><dt>What the AI does</dt><dd>Drafts rules from your prompt using <span class="tbd" title="Confirm data sources">[data sources]</span>. It never improvises a trade.</dd></div>
+          <div><dt>What it can get wrong</dt><dd>It can misread a vague prompt or fit the past too neatly. That’s why you see every rule and a labelled test first.</dd></div>
+          <div><dt>What we won’t claim</dt><dd>No accuracy percentages, no guaranteed returns, no “beats the market”.</dd></div>
+        </dl>
       </div>
       <article class="doc reveal" aria-label="Example strategy document">
         <div class="doc-title"><small>Strategy document · Draft 1</small>Large caps, monthly rebalance</div>
         <div class="meta"><div>Prepared for<b>You</b></div><div>Capital<b>₹10,000 · virtual</b></div><div>Universe<b>Nifty 100</b></div><div>Benchmark<b>Nifty 50</b></div></div>
         <div class="doc-body">
           <div class="doc-col"><h4>Rules</h4><ol><li>Hold the ten Nifty 100 stocks with the strongest 6-month price momentum, equal weight.</li><li>Rebalance on the first trading day of each month.</li><li>Sell any holding that falls 8% below its entry price.</li><li>Never deploy more than ₹10,000 in total.</li></ol></div>
-          <div class="doc-col"><h4>Why these stocks</h4><p>Each holding is in the top decile of 6-month momentum and trades at least ₹5 crore a day, so orders of this size fill without moving the price.</p><h4 style="margin-top:8px">Data used</h4><p>NSE end-of-day prices, adjusted for corporate actions, from <span class="tbd" title="Confirm data vendor">[data vendor]</span>. Brokerage, STT and exchange charges applied per trade.</p></div>
+          <div class="doc-col"><h4>Why these stocks</h4><p>Each holding is in the top decile of 6-month momentum and trades at least ₹5 crore a day, so orders of this size fill without moving the price.</p><h4>Data used</h4><p>NSE end-of-day prices, adjusted for corporate actions, from <span class="tbd" title="Confirm data vendor">[data vendor]</span>. Costs applied per trade.</p></div>
         </div>
-        <div class="doc-warn"><h4>What could go wrong</h4><p>Momentum strategies lag in sharp reversals. In the simulated period the worst month was −11.4%. Costs and slippage reduce results further. Simulated results do not predict future performance.</p></div>
+        <div class="doc-warn"><h4>What could go wrong</h4><p>Momentum strategies lag in sharp reversals. In the simulated period the worst month was −11.4%. Simulated results do not predict future performance.</p></div>
         <div class="doc-sign"><span>Approved by</span><span class="sig">— you, before anything runs</span><span>Status · Draft</span></div>
       </article>
     </div>
   </section>
 
-  <!-- TRUST -->
-  <section class="section" id="trust">
-    <div class="container">
-      <div class="reveal"><h2>Checkable, not just claimed.</h2><p class="lede" style="margin-top:16px">The three questions every investor should ask, answered where you can verify them.</p></div>
-      <div class="trust-grid">
-        <div class="trust reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10h18M5 10v9h14v-9M12 3 3 10h18L12 3Z"/></svg><h3>Orders through your broker</h3><p>Placed via <span class="tbd" title="Confirm broker and registration">[Broker]</span>, a SEBI-registered stock broker, using the broker’s own login.</p></div>
-        <div class="trust reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg><h3>Your money stays yours</h3><p>Funds and shares never leave your own demat and trading account. FinStocks cannot withdraw.</p></div>
-        <div class="trust reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg><h3>Every order is tagged</h3><p>Each order carries exchange algo ID <span class="tbd" title="Confirm empanelment reference">[ref]</span> and appears in your broker app.</p></div>
-        <div class="trust reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 12 2 2 4-4"/><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3Z"/></svg><h3>Verify us on SEBI</h3><p><span class="tbd" title="Confirm SEBI registration">[SEBI Reg. No.]</span> · <a href="https://www.sebi.gov.in" target="_blank" rel="noopener">Look us up on SEBI Check</a></p></div>
-      </div>
+  <!-- 5 · WHO'S BEHIND IT -->
+  <section class="section founder">
+    <div class="container founder-inner reveal">
+      <p class="quote">“The tools that trade for you never showed you why. A strategy you can’t read is a strategy you can’t trust.”</p>
+      <div class="byline"><span class="av" aria-hidden="true">RC</span><div><strong>Rushikesh Chavan</strong><span>Founder, FinStocks AI · Bengaluru · <a href="https://www.linkedin.com" target="_blank" rel="noopener">LinkedIn</a></span></div></div>
     </div>
   </section>
 
-  <!-- AI LIMITS -->
-  <section class="section limits" id="limits">
-    <div class="container">
-      <div class="reveal"><h2>What our AI does, and what it doesn’t.</h2></div>
-      <div class="limits-grid">
-        <div class="limit reveal"><span class="k">What it does</span><h3>Drafts rules from your prompt</h3><p>It reads your prompt and drafts a rule set from <span class="tbd" title="Confirm data sources">[data sources]</span>. It does not place discretionary trades and does not learn from your account in real time.</p></div>
-        <div class="limit reveal"><span class="k">What it can get wrong</span><h3>Misread you, or overfit the past</h3><p>It can misread an ambiguous prompt or draft rules that fit history too neatly. That is why you see every rule and a labelled test before anything runs.</p></div>
-        <div class="limit reveal"><span class="k">What we will not claim</span><h3>No accuracy. No guarantees.</h3><p>No accuracy percentages, no guaranteed returns, no “beats the market”. Backtests are simulated and do not predict future results.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOUNDER -->
-  <section class="section founder" id="proof">
-    <div class="container founder-grid">
-      <div class="reveal">
-        <p class="quote">“We started FinStocks because the tools that trade for you never showed you why. A strategy you cannot read is a strategy you cannot trust.”</p>
-        <div class="byline"><span class="av" aria-hidden="true">RC</span><div><strong>Rushikesh Chavan</strong><span>Founder · Bengaluru · <a href="https://www.linkedin.com" target="_blank" rel="noopener" style="text-decoration:underline;text-underline-offset:3px">LinkedIn</a></span></div></div>
-      </div>
-      <div class="reveal">
-        <div class="metrics">
-          <div class="metric"><span class="l">Strategies backtested in Mock Mode</span><span class="v"><span class="tbd" title="Replace with live operating metric">[N]</span></span></div>
-          <div class="metric"><span class="l">Prompts turned into readable rule sets</span><span class="v"><span class="tbd" title="Replace with live operating metric">[N]</span></span></div>
-          <div class="metric"><span class="l">Founded in Bengaluru</span><span class="v">2025</span></div>
-        </div>
-        <p class="metric-note">We publish operating numbers, not returns. Named user quotes will appear here once collected, with any compensation disclosed.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- PRICING -->
+  <!-- 6 · DECIDE -->
   <section class="section" id="pricing">
     <div class="container">
-      <div class="reveal"><h2>Simple pricing. Every charge listed.</h2></div>
+      <div class="sh reveal">
+        <span class="eyebrow">Pricing</span>
+        <h2 class="h2-lg">Start at ₹0. Pay only when you go live.</h2>
+        <p class="lede">Every charge is listed here and shown again before each order.</p>
+      </div>
       <div class="plans">
         <div class="plan reveal">
-          <span class="k">Mock Mode</span>
+          <div class="plan-head"><span class="k">Mock Mode</span><span class="rec-tag">Start here</span></div>
           <div class="price">₹0<small>/ month</small></div>
           <p>Practise with virtual money, for as long as you like.</p>
-          <ul><li>Unlimited prompts and rule drafts</li><li>Backtests with costs and benchmark</li><li>Virtual portfolio on live prices</li></ul>
-          <a class="btn btn-line" href="#mock">Start in Mock Mode</a>
+          <ul><li>Unlimited prompts and rule drafts</li><li>Backtests with costs and benchmark</li><li>₹10,000 virtual portfolio on live prices</li></ul>
+          <button class="btn btn-black" type="button" data-signup>Start in Mock Mode</button>
         </div>
-        <div class="plan featured reveal">
-          <span class="k">Live</span>
+        <div class="plan reveal">
+          <div class="plan-head"><span class="k">Live</span></div>
           <div class="price"><span class="tbd" title="Confirm plan price">₹[—]</span><small>/ month</small></div>
-          <p>Execute approved strategies in your own broker account.</p>
+          <p>Run approved strategies in your own broker account.</p>
           <ul><li>Everything in Mock Mode</li><li>Autopilot within your caps and limits</li><li>Order confirmations on your phone</li><li>Cancel any time, no lock-in</li></ul>
-          <a class="btn btn-white" href="#mock">Practise first, then go live</a>
+          <button class="btn btn-line" type="button" data-signup>Practise first, then upgrade</button>
         </div>
       </div>
-      <div class="charges reveal">
+      <details class="charges reveal">
+        <summary>See every charge<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg></summary>
         <table><tbody>
           <tr><td>Platform subscription</td><td>FinStocks AI</td><td><span class="tbd">₹[—] / month</span></td></tr>
           <tr><td>Algo order charge</td><td><span class="tbd">[Broker / exchange]</span></td><td><span class="tbd">₹[—] per order</span></td></tr>
           <tr><td>Brokerage, STT, GST, stamp duty</td><td>Broker and exchange</td><td>Per broker tariff</td></tr>
         </tbody></table>
-      </div>
+      </details>
     </div>
   </section>
 
-  <!-- FAQ -->
-  <section class="section" id="faq" style="padding-top:0">
-    <div class="container">
-      <div class="reveal"><h2>Before you trust us.</h2></div>
+  <!-- 7 · LAST DOUBTS -->
+  <section class="section faqsec" id="faq">
+    <div class="container faq-grid">
+      <div class="sh reveal">
+        <span class="eyebrow">FAQ</span>
+        <h2 class="h2-md">Questions before you start.</h2>
+        <p class="lede">Can’t find yours? Write to <span class="tbd">[support email]</span>.</p>
+      </div>
       <div class="faq reveal">
-        <details open><summary>Is FinStocks AI SEBI-registered?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></summary><div class="a"><span class="tbd" title="Legal to supply exact wording per the verified registration category">[Registered name, category and number, with a SEBI Check link.]</span> Registration does not guarantee performance or returns.</div></details>
-        <details><summary>Who holds my money?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></summary><div class="a">You do. Funds and shares stay in your own trading and demat account with your broker. FinStocks AI only sends order instructions you have authorised and can never withdraw.</div></details>
-        <details><summary>Which brokers can I connect?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></summary><div class="a"><span class="tbd" title="Confirm the full broker list">[Broker list]</span>. Connection uses the broker’s own login. We never see your broker password.</div></details>
-        <details><summary>What if the AI drafts a bad strategy?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></summary><div class="a">Nothing runs until you approve it. Once live, your loss limit pauses everything automatically, and you can pause or close positions yourself in your broker app at any time. Losses are possible and are yours; no strategy is guaranteed.</div></details>
-        <details><summary>Can I stop it at any time?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></summary><div class="a">Yes. One tap pauses Autopilot. Pausing sends no new orders; existing holdings stay in your account until you decide what to do with them.</div></details>
-        <details><summary>Is this investment advice?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></summary><div class="a"><span class="tbd" title="Legal to confirm wording">[Wording depends on registration category.]</span> Strategies are built from your own instructions. You review and approve every rule before it runs.</div></details>
-        <details><summary>How do I raise a complaint?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></summary><div class="a">Write to our grievance officer at <span class="tbd">[email]</span>. If it is not resolved, file on SEBI SCORES or through the SMART ODR portal. Links are in the footer.</div></details>
+        <details open><summary>Is FinStocks AI SEBI-registered?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></summary><div class="a"><span class="tbd" title="Legal to supply exact wording">[Registered name, category and number, with a SEBI Check link.]</span> Registration does not guarantee performance or returns.</div></details>
+        <details><summary>Do I need a broker account to start?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></summary><div class="a">No. Mock Mode needs only a Google account or a mobile number. You connect a broker only if you decide to go live.</div></details>
+        <details><summary>Which brokers can I connect?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></summary><div class="a"><span class="tbd" title="Confirm the full broker list">[Broker list]</span>. Connection uses the broker’s own login.</div></details>
+        <details><summary>What if the AI drafts a bad strategy?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></summary><div class="a">Nothing runs until you approve it. Once live, your loss limit pauses everything automatically, and you can close positions yourself in your broker app. Losses are possible and are yours.</div></details>
+        <details><summary>Can I stop it at any time?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></summary><div class="a">Yes. One tap pauses Autopilot. Existing holdings stay in your account until you decide.</div></details>
+        <details><summary>Is this investment advice?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></summary><div class="a"><span class="tbd" title="Legal to confirm wording">[Wording depends on registration category.]</span> Strategies are built from your own instructions and you approve every rule.</div></details>
+        <details><summary>How do I raise a complaint?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></summary><div class="a">Write to our grievance officer at <span class="tbd">[email]</span>. If unresolved, use SEBI SCORES or SMART ODR (links in the footer).</div></details>
       </div>
     </div>
   </section>
 
-  <!-- FINAL -->
-  <section class="section" style="padding-top:0">
+  <!-- 8 · COMMIT -->
+  <section class="section final-wrap" id="start">
     <div class="container">
       <div class="final reveal">
-        <h2>Test your first idea with virtual money.</h2>
-        <p class="lede">Type a prompt, read the rules, watch it run on live prices. Connect a broker only when you are ready.</p>
-        <a class="btn btn-white" href="#mock">Practise with virtual money</a>
-        <span class="mono">Investment in securities market are subject to market risks.</span>
+        <h2>Your first strategy is one sentence away.</h2>
+        <p class="lede">Type an idea, read the rules, and practise with ₹10,000 of virtual money. Connect a broker only when you’re ready.</p>
+        <button class="btn btn-white" type="button" data-signup>Start in Mock Mode</button>
+        <span class="final-note">No broker login · No payment details · Investment in securities market are subject to market risks.</span>
       </div>
     </div>
   </section>
@@ -332,26 +350,82 @@
     <div class="footer-grid">
       <div>
         <a class="brand" href="#top"><i aria-hidden="true"></i>FinStocks</a>
-        <p style="margin-top:14px;max-width:34ch">Prompt-based strategies, tested on past data, executed in your own broker account.</p>
-        <p style="margin-top:14px;font-size:0.82rem;color:var(--ink-3)"><span class="tbd">[Registered company name]</span><br><span class="tbd">[Registered address, Bengaluru]</span></p>
+        <p class="f-about">Prompt-based strategies, tested on past data, executed in your own broker account.</p>
+        <p class="f-reg"><span class="tbd">[Registered company name]</span><br><span class="tbd">[Registered address, Bengaluru]</span></p>
       </div>
-      <div><span class="k">Product</span><ul><li><a href="#how">How it works</a></li><li><a href="#document">Strategy document</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#faq">FAQ</a></li></ul></div>
-      <div><span class="k">Trust</span><ul><li><a href="#trust">Trust</a></li><li><a href="#">Backtest methodology</a></li><li><a href="https://www.sebi.gov.in" target="_blank" rel="noopener">Verify on SEBI Check</a></li><li><a href="https://scores.sebi.gov.in" target="_blank" rel="noopener">SEBI SCORES</a></li><li><a href="https://smartodr.in" target="_blank" rel="noopener">SMART ODR</a></li></ul></div>
-      <div><span class="k">Company</span><ul><li><a href="#proof">Founder</a></li><li><a href="#">Privacy</a></li><li><a href="#">Terms</a></li><li><a href="#">Grievance officer</a></li></ul></div>
+      <div><span class="k">Product</span><ul><li><a href="#demo">Try it</a></li><li><a href="#how">How it works</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#faq">FAQ</a></li></ul></div>
+      <div><span class="k">Trust</span><ul><li><a href="#safety">Safety</a></li><li><a href="#document">Strategy document</a></li><li><a href="https://www.sebi.gov.in" target="_blank" rel="noopener">Verify on SEBI Check</a></li><li><a href="https://scores.sebi.gov.in" target="_blank" rel="noopener">SEBI SCORES</a></li><li><a href="https://smartodr.in" target="_blank" rel="noopener">SMART ODR</a></li></ul></div>
+      <div><span class="k">Company</span><ul><li><a href="#">About</a></li><li><a href="#">Privacy</a></li><li><a href="#">Terms</a></li><li><a href="#">Grievance officer</a></li></ul></div>
     </div>
     <div class="disclosures">
       <p class="risk">Investment in securities market are subject to market risks. Read all the related documents carefully before investing.</p>
       <p><span class="tbd" title="Legal to supply verbatim text">[Registration granted by SEBI, membership of BASL and certification from NISM in no way guarantee performance of the intermediary or provide any assurance of returns to investors.]</span></p>
       <p>AI disclosure: FinStocks AI uses artificial intelligence to draft strategy rules from your prompts. Rules are executed mechanically once you approve them. <span class="tbd">[Registered entity]</span> remains fully responsible for the output of these tools.</p>
-      <p>Backtested results are hypothetical, simulated on historical data with assumed costs, and do not represent actual trading. Past performance, real or simulated, does not predict future results. Account values and orders shown on this page are examples, not live data.</p>
+      <p>Backtested results are hypothetical, simulated on historical data with assumed costs, and do not represent actual trading. Past performance, real or simulated, does not predict future results. Account values, orders and AI replies on this page are examples, not live data.</p>
       <p>Payments are accepted only through our SEBI-validated UPI handle <span class="tbd">[handle@valid]</span>. We do not run any Telegram or WhatsApp tips group. Our only official app is <span class="tbd">[link]</span>; we are not affiliated with other apps or firms using the name “Finstocks”.</p>
     </div>
-    <div class="footer-bottom">
-      <span>© <span id="year">2026</span> <span class="tbd">[Registered company name]</span></span>
-      <span>Grievance officer · <span class="tbd">[name · email · phone]</span></span>
-    </div>
+    <div class="footer-bottom"><span>© <span id="year">2026</span> <span class="tbd">[Registered company name]</span></span><span>Grievance officer · <span class="tbd">[name · email · phone]</span></span></div>
   </div>
 </footer>
+
+<!-- mobile: persistent primary action -->
+<div class="mobile-cta" id="mobileCta">
+  <span><b>₹0 to start</b><small>Virtual money only</small></span>
+  <button class="btn btn-black btn-sm" type="button" data-signup>Start in Mock Mode</button>
+</div>
+
+<!-- sign-up sheet -->
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" hidden>
+  <div class="sheet-scrim" data-close></div>
+  <div class="sheet-card">
+    <button class="sheet-x" type="button" aria-label="Close" data-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+
+    <div class="sheet-step" data-pane="start">
+      <h2 id="sheetTitle">Start in Mock Mode</h2>
+      <p class="sheet-sub">Practise with ₹10,000 of virtual money. You can connect a broker later, or never.</p>
+      <div class="saving" id="saving" hidden>
+        <span class="saving-k">Saving to your account</span>
+        <b id="savingTitle">Large caps, monthly</b>
+        <span id="savingMeta">5 rules · backtest Jan 23 – Dec 25 · ₹10,000 virtual</span>
+      </div>
+      <button class="btn-google" type="button" id="googleBtn">
+        <svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.5l6.7-6.7C35.7 2.5 30.2 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.8 6C12.3 13.4 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8c4.4-4.1 7.1-10.1 7.1-17.5z"/><path fill="#FBBC05" d="M10.4 28.8A14.6 14.6 0 0 1 9.5 24c0-1.7.3-3.3.9-4.8l-7.8-6A23.9 23.9 0 0 0 0 24c0 3.9.9 7.5 2.6 10.8l7.8-6z"/><path fill="#34A853" d="M24 48c6.2 0 11.7-2 15.6-5.6l-7.5-5.8c-2.1 1.4-4.8 2.3-8.1 2.3-6.3 0-11.7-4-13.6-9.6l-7.8 6C6.5 42.6 14.6 48 24 48z"/></svg>
+        Continue with Google
+      </button>
+      <div class="or"><span>or</span></div>
+      <form class="phone-form" id="phoneForm" novalidate>
+        <label for="phoneInput">Mobile number</label>
+        <div class="phone-field"><span>+91</span><input id="phoneInput" type="tel" inputmode="numeric" maxlength="10" placeholder="98765 43210" autocomplete="tel-national"></div>
+        <p class="field-err" id="phoneErr" hidden>Enter a 10-digit mobile number.</p>
+        <button class="btn btn-black full" type="submit">Send code</button>
+      </form>
+      <ul class="sheet-assure"><li>No broker login</li><li>No payment details</li><li>Delete your account any time</li></ul>
+    </div>
+
+    <div class="sheet-step" data-pane="otp" hidden>
+      <h2>Enter the code</h2>
+      <p class="sheet-sub">We sent a 6-digit code to <b id="otpTo">+91</b>. <button class="linkbtn" type="button" data-back>Change number</button></p>
+      <form class="phone-form" id="otpForm" novalidate>
+        <label for="otpInput">6-digit code</label>
+        <input class="otp" id="otpInput" type="text" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="••••••">
+        <p class="field-err" id="otpErr" hidden>Enter the 6 digits from the SMS.</p>
+        <button class="btn btn-black full" type="submit">Verify and continue</button>
+      </form>
+    </div>
+
+    <div class="sheet-step done" data-pane="done" hidden>
+      <span class="done-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg></span>
+      <h2>You’re in Mock Mode.</h2>
+      <p class="sheet-sub" id="doneText">₹10,000 of virtual money is ready. Describe your first idea to get started.</p>
+      <ol class="next">
+        <li><b>Now</b>Review the rules and run your first virtual trades</li>
+        <li><b>Anytime</b>Edit rules and re-test</li>
+        <li><b>Later</b>Connect a broker, only if you want to go live</li>
+      </ol>
+      <a class="btn btn-black full" href="#top" data-close>Open my dashboard</a>
+    </div>
+  </div>
+</div>
 
 <!-- PAGE-END -->
 <script src="app.js"></script>
