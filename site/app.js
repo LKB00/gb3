@@ -14,7 +14,8 @@
 
   /* ---------- header, nav, active section ---------- */
   const header = $("#header");
-  const onScroll = () => header.classList.toggle("scrolled", window.scrollY > 8);
+  const cosmos = $(".cosmos");
+  const onScroll = () => header.classList.toggle("scrolled", window.scrollY > (cosmos ? cosmos.offsetHeight - 40 : 8));
   onScroll(); window.addEventListener("scroll", onScroll, { passive: true });
   const nav = $("#nav"), navToggle = $("#navToggle");
   navToggle.addEventListener("click", () => navToggle.setAttribute("aria-expanded", String(nav.classList.toggle("open"))));
@@ -385,5 +386,47 @@
     }), { rootMargin: "0px 0px -8% 0px" });
     revealEls.forEach((r) => io.observe(r));
   }
+  /* ---------- starfield ---------- */
+  const cvs = $("#stars");
+  if (cvs && cvs.getContext) {
+    const ctx = cvs.getContext("2d");
+    let W = 0, H = 0, stars = [], raf = 0, on = true;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    function size() {
+      W = cvs.clientWidth; H = cvs.clientHeight;
+      cvs.width = W * dpr; cvs.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const n = Math.round((W * H) / 9000);
+      let seed = 7; const rnd = () => ((seed = (seed * 9301 + 49297) % 233280) / 233280);
+      stars = Array.from({ length: n }, () => ({ x: rnd() * W, y: rnd() * H * 0.85, r: rnd() * 1.1 + 0.3, p: rnd() * Math.PI * 2, s: 0.4 + rnd() * 1.2 }));
+    }
+    function draw(t) {
+      ctx.clearRect(0, 0, W, H);
+      for (const st of stars) {
+        const a = reduceMotion ? 0.55 : 0.25 + 0.5 * (0.5 + 0.5 * Math.sin(st.p + (t / 1000) * st.s));
+        ctx.globalAlpha = a; ctx.fillStyle = "#dfe6ff";
+        ctx.beginPath(); ctx.arc(st.x, st.y, st.r, 0, Math.PI * 2); ctx.fill();
+      }
+      if (!reduceMotion && on) raf = requestAnimationFrame(draw);
+    }
+    size(); draw(0);
+    window.addEventListener("resize", () => { size(); if (reduceMotion) draw(0); });
+    if ("IntersectionObserver" in window) new IntersectionObserver((es) => { on = es[0].isIntersecting; cancelAnimationFrame(raf); if (on && !reduceMotion) raf = requestAnimationFrame(draw); }).observe(cvs);
+  }
+
+  /* ---------- statement fills in word by word as it scrolls through ---------- */
+  const stText = $("#stText");
+  if (stText) {
+    const words = stText.textContent.trim().split(/\s+/);
+    stText.innerHTML = words.map((w) => '<span class="w">' + esc(w) + "</span>").join(" ");
+    const ws = $$(".w", stText);
+    const upd = () => {
+      const r = stText.getBoundingClientRect(), vh = window.innerHeight;
+      const prog = Math.min(1, Math.max(0, (vh * 0.85 - r.top) / (r.height + vh * 0.35)));
+      const n = reduceMotion ? ws.length : Math.round(prog * ws.length);
+      ws.forEach((w, i) => w.classList.toggle("on", i < n));
+    };
+    upd(); window.addEventListener("scroll", upd, { passive: true });
+  }
+
   $("#year").textContent = new Date().getFullYear();
 })();

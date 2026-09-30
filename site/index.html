@@ -8,10 +8,10 @@
 <meta property="og:title" content="FinStocks AI">
 <meta property="og:description" content="Investing you can read before you run. Prompt-based strategies, tested on past data, practised with virtual money.">
 <meta property="og:type" content="website">
-<meta name="theme-color" content="#ffffff">
+<meta name="theme-color" content="#08090c">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -41,28 +41,60 @@
 
   <!-- 1 · HOOK + TRY IT -->
   <section class="hero">
+    <div class="cosmos">
+      <canvas id="stars" aria-hidden="true"></canvas>
+      <div class="cosmos-glow" aria-hidden="true"></div>
+      <div class="container hero-inner">
+        <span class="kicker rise"><i aria-hidden="true"></i>FinStocks AI · Mock Mode</span>
+        <h1 class="rise rise-2">Investing you can <em>read</em> before you run.</h1>
+        <p class="lede rise rise-3">Describe an idea in plain words. See the rules, test them on past NSE data, and practise with virtual money.</p>
+
+        <form class="ask rise rise-4" id="ask" autocomplete="off">
+          <label for="askInput" class="sr-only">Describe your investing idea</label>
+          <textarea id="askInput" rows="1" placeholder="Describe your investing idea…"></textarea>
+          <button class="send" type="submit" aria-label="Send prompt"><span>Draft rules</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        </form>
+        <div class="ask-chips rise rise-4" role="group" aria-label="Example prompts">
+          <button class="ask-chip" type="button">Invest ₹10,000 in large caps, rebalance monthly</button>
+          <button class="ask-chip" type="button">Steady dividend portfolio, low churn</button>
+          <button class="ask-chip" type="button">Follow the trend in banking stocks</button>
+        </div>
+      </div>
+      <div class="horizon" aria-hidden="true"></div>
+    </div>
+
+    <!-- floating product cards across the horizon -->
     <div class="container">
-      <div class="hero-top">
-        <span class="kicker rise"><i aria-hidden="true"></i>Prompt-based investing for Indian equities</span>
-        <h1 class="rise rise-2">Investing you can read before you run.</h1>
-        <p class="lede rise rise-3">Describe an idea in plain words. FinStocks AI drafts the rules, tests them on past NSE data, and lets you practise with virtual money until you say go.</p>
+      <div class="floaters rise rise-5" aria-hidden="true">
+        <div class="fcard f1">
+          <div class="fc-top"><span class="fc-k">Virtual balance</span><span class="fc-pill">This week</span></div>
+          <b class="fc-big num">₹10,000.00</b>
+          <span class="fc-tag">Mock Mode · ₹0 real money</span>
+          <div class="fc-bars">
+            <div><i style="height:38%"></i><span>M</span></div><div><i style="height:72%"></i><span>T</span></div><div><i style="height:20%"></i><span>W</span></div><div><i style="height:48%"></i><span>T</span></div><div><i style="height:86%"></i><span>F</span></div>
+          </div>
+          <span class="fc-cap">Virtual orders placed by your rules</span>
+        </div>
+        <div class="fcard f2">
+          <div class="fc-who"><span class="fc-av"></span><span><b>Large caps, monthly</b><small>Strategy · Draft 1</small></span></div>
+          <b class="fc-hero">5 rules</b>
+          <span class="fc-sub">You can read every one</span>
+          <span class="fc-tag warn">Worst simulated month −11.4%</span>
+          <div class="fc-acts"><span>Approve</span><span>Edit rules</span></div>
+        </div>
+        <div class="fcard f3">
+          <div class="fc-donut">
+            <svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="48" class="t"/><circle cx="60" cy="60" r="48" class="a" pathLength="100" stroke-dasharray="36 64"/><circle cx="60" cy="60" r="48" class="b" pathLength="100" stroke-dasharray="29 71" stroke-dashoffset="-37"/><circle cx="60" cy="60" r="48" class="c" pathLength="100" stroke-dasharray="25 75" stroke-dashoffset="-67"/></svg>
+            <span><b>₹10,000</b><small>Virtual portfolio</small></span>
+          </div>
+          <div class="fc-legend"><span><b>36%</b>LT</span><span><b>29%</b>RELIANCE</span><span><b>25%</b>ICICIBANK</span></div>
+        </div>
       </div>
 
-      <form class="ask rise rise-4" id="ask" autocomplete="off">
-        <label for="askInput" class="sr-only">Describe your investing idea</label>
-        <textarea id="askInput" rows="2" placeholder="Describe your investing idea…"></textarea>
-        <div class="ask-bar">
-          <span class="ask-mode"><i aria-hidden="true"></i>Mock Mode · ₹10,000 virtual</span>
-          <span class="ask-right"><span class="ask-hint">Enter to send</span>
-            <button class="send" type="submit" aria-label="Send prompt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
-          </span>
-        </div>
-      </form>
-      <div class="ask-chips rise rise-4" role="group" aria-label="Example prompts">
-        <span class="ask-chips-label">Try</span>
-        <button class="ask-chip" type="button">Invest ₹10,000 in large caps, rebalance monthly</button>
-        <button class="ask-chip" type="button">Steady dividend portfolio, low churn</button>
-        <button class="ask-chip" type="button">Follow the trend in banking stocks</button>
+      <!-- statement: fills in as you scroll -->
+      <div class="statement" id="statement">
+        <span class="st-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+        <p id="stText">FinStocks AI turns one sentence into a strategy you can read. It tests the rules on past NSE data with costs included, lets you practise with virtual money for as long as you like, and never places a real order until you approve it.</p>
       </div>
 
       <!-- live product demo -->
@@ -122,7 +154,7 @@
     <div class="container">
       <div class="sh reveal">
         <span class="eyebrow">Safety</span>
-        <h2 class="h2-lg">Your money never leaves your broker.</h2>
+        <h2 class="h2-lg">Your money never leaves <em>your broker.</em></h2>
         <p class="lede">The questions every investor should ask a trading app, answered where you can check them yourself.</p>
       </div>
       <div class="safety-grid">
@@ -155,7 +187,7 @@
     <div class="container how-grid">
       <div class="how-rail">
         <span class="eyebrow">How it works</span>
-        <h2 class="h2-lg">From idea to live in four steps.</h2>
+        <h2 class="h2-lg">From idea to live in <em>four steps.</em></h2>
         <p class="lede">You approve every step. Stay in Mock Mode as long as you like; going live is optional.</p>
         <ol class="stepper" id="stepper">
           <li class="on"><a href="#step-1"><span class="n">1</span><span><b>Describe</b><small>Type your idea in plain words</small></span></a></li>
@@ -246,7 +278,7 @@
       <div class="doc-text">
         <div class="sh reveal">
           <span class="eyebrow">No black box</span>
-          <h2 class="h2-md">Every strategy is a document, not a secret.</h2>
+          <h2 class="h2-md">Every strategy is a document, <em>not a secret.</em></h2>
           <p class="lede">SEBI’s 2025 rules treat strategies whose logic is hidden from you as a separate, more regulated category. We chose the other path.</p>
         </div>
         <dl class="ai-limits reveal">
@@ -281,7 +313,7 @@
     <div class="container">
       <div class="sh reveal">
         <span class="eyebrow">Pricing</span>
-        <h2 class="h2-lg">Start at ₹0. Pay only when you go live.</h2>
+        <h2 class="h2-lg">Start at ₹0. Pay only when you <em>go live.</em></h2>
         <p class="lede">Every charge is listed here and shown again before each order.</p>
       </div>
       <div class="plans">
@@ -316,7 +348,7 @@
     <div class="container faq-grid">
       <div class="sh reveal">
         <span class="eyebrow">FAQ</span>
-        <h2 class="h2-md">Questions before you start.</h2>
+        <h2 class="h2-md">Questions before you <em>start.</em></h2>
         <p class="lede">Can’t find yours? Write to <span class="tbd">[support email]</span>.</p>
       </div>
       <div class="faq reveal">
@@ -334,8 +366,8 @@
   <!-- 8 · COMMIT -->
   <section class="section final-wrap" id="start">
     <div class="container">
-      <div class="final reveal">
-        <h2>Your first strategy is one sentence away.</h2>
+      <div class="final reveal"><div class="horizon small" aria-hidden="true"></div>
+        <h2>Your first strategy is <em>one sentence</em> away.</h2>
         <p class="lede">Type an idea, read the rules, and practise with ₹10,000 of virtual money. Connect a broker only when you’re ready.</p>
         <button class="btn btn-white" type="button" data-signup>Start in Mock Mode</button>
         <span class="final-note">No broker login · No payment details · Investment in securities market are subject to market risks.</span>
@@ -364,6 +396,7 @@
       <p>Backtested results are hypothetical, simulated on historical data with assumed costs, and do not represent actual trading. Past performance, real or simulated, does not predict future results. Account values, orders and AI replies on this page are examples, not live data.</p>
       <p>Payments are accepted only through our SEBI-validated UPI handle <span class="tbd">[handle@valid]</span>. We do not run any Telegram or WhatsApp tips group. Our only official app is <span class="tbd">[link]</span>; we are not affiliated with other apps or firms using the name “Finstocks”.</p>
     </div>
+    <div class="wordmark" aria-hidden="true">FinStocks</div>
     <div class="footer-bottom"><span>© <span id="year">2026</span> <span class="tbd">[Registered company name]</span></span><span>Grievance officer · <span class="tbd">[name · email · phone]</span></span></div>
   </div>
 </footer>
