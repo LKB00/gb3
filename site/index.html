@@ -43,94 +43,79 @@
   <section class="hero">
     <div class="container">
       <div class="hero-top">
-        <h1 class="rise">Investing you can read before you run.</h1>
-        <div class="hero-row rise rise-2">
-          <div class="pillrow">
-            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h10M4 17h13"/></svg>Prompt-based strategies</span>
-            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3Z"/></svg>Rules you approve</span>
-            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 17l5-5 4 4 8-8"/><path d="M14 8h6v6"/></svg>Mock Mode with virtual money</span>
-          </div>
-          <a class="btn btn-black" href="#mock" id="mock">Practise with virtual money <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-        </div>
+        <span class="hero-kicker rise"><i aria-hidden="true"></i>Prompt-based investing · Indian equities</span>
+        <h1 class="rise rise-2">Investing you can read before you run.</h1>
+        <p class="lede rise rise-3">Describe an idea in plain words. FinStocks AI drafts the rules, tests them on past NSE data, and runs them with virtual money until you say go.</p>
       </div>
 
-      <!-- STAGE -->
-      <div class="stage rise rise-3">
+      <!-- AI CHAT BOX -->
+      <form class="ask rise rise-4" id="ask" autocomplete="off">
+        <label for="askInput" class="sr-only">Describe your investing idea</label>
+        <textarea id="askInput" rows="2" placeholder="Describe your investing idea…"></textarea>
+        <div class="ask-bar">
+          <span class="ask-mode"><i aria-hidden="true"></i>FinStocks AI · Mock Mode · ₹10,000 virtual</span>
+          <span class="ask-right">
+            <span class="ask-hint">Enter to send</span>
+            <button class="ask-send" type="submit" aria-label="Send prompt">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+            </button>
+          </span>
+        </div>
+      </form>
+      <div class="ask-chips rise rise-4" role="group" aria-label="Example prompts">
+        <button class="ask-chip" type="button" data-key="largecap">Invest ₹10,000 in large caps, rebalance monthly</button>
+        <button class="ask-chip" type="button" data-key="dividend">Steady dividend portfolio, low churn</button>
+        <button class="ask-chip" type="button" data-key="trend">Follow the trend in banking stocks</button>
+      </div>
+      <p class="ask-note rise rise-4">Examples use simulated data. Nothing trades until you approve. Investment in securities market are subject to market risks.</p>
+
+      <!-- STAGE: live chat inside the product -->
+      <div class="stage rise rise-5" id="stage">
         <div class="stage-light" aria-hidden="true"></div>
         <div class="stage-inner">
-          <div class="app" aria-label="Interactive example of the FinStocks app">
+          <div class="app" aria-label="Interactive example of the FinStocks AI chat">
             <div class="app-bar">
               <span class="brand"><i aria-hidden="true"></i>FinStocks</span>
               <span class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Search strategies, stocks…</span>
               <span class="right"><span class="badge"><i aria-hidden="true"></i>Mock Mode</span><span class="avatar" aria-hidden="true"></span></span>
             </div>
             <div class="app-body">
-              <div class="app-main">
-                <div class="app-head">
-                  <div><div class="big num">₹10,000.00</div><div class="sub">Virtual balance · <b>₹0.00</b> deployed · no real money</div></div>
-                  <span class="mini">Hypothetical · simulated</span>
-                </div>
-                <div class="tabs"><span class="on">New prompt</span><span>Strategies</span><span>Backtests</span><span>Orders</span><span>Limits</span></div>
-                <div class="chips" role="group" aria-label="Example prompts">
-                  <button class="chip" type="button" data-key="largecap" aria-pressed="true">Large caps, monthly rebalance</button>
-                  <button class="chip" type="button" data-key="dividend" aria-pressed="false">Steady dividend portfolio</button>
-                  <button class="chip" type="button" data-key="trend" aria-pressed="false">Trend in banking stocks</button>
-                </div>
-                <div class="composer">
-                  <label for="promptInput" class="sr-only">Describe your investing idea</label>
-                  <input id="promptInput" type="text" placeholder="Describe your investing idea…" autocomplete="off">
-                  <button class="btn btn-black btn-sm" id="runPrompt" type="button">Draft rules</button>
-                </div>
-                <div class="app-cols">
-                  <div class="card">
-                    <div class="card-head"><b>Rules</b><span>Draft 1 · editable</span></div>
-                    <ol class="rules" id="rules" aria-label="Strategy rules"></ol>
-                    <div style="display:flex;gap:6px"><span class="mini primary">Run in Mock Mode</span><span class="mini">Edit</span></div>
-                  </div>
-                  <div class="card">
-                    <div class="card-head"><b>Growth of 100</b><span>Jan 23 – Dec 25 · costs included</span></div>
-                    <div class="legend"><span class="s"><i></i>Strategy</span><span class="b"><i></i>Nifty 50</span></div>
-                    <div class="chart" id="chart"><div class="tip" id="tip"></div></div>
-                    <div class="stats" id="stats"></div>
-                    <div class="note">Simulated. Does not predict future results.</div>
-                  </div>
-                </div>
-              </div>
-              <aside class="app-rail" aria-hidden="true">
-                <div class="rail-card">
-                  <div class="t">Your limits <span>Live only</span></div>
-                  <div class="r">Max capital <b>₹10,000</b></div>
-                  <div class="r">Loss limit <b>−10%</b></div>
-                  <div class="r">Trading window <b>09:15–15:30</b></div>
-                  <div class="r">Confirm each order <b>On</b></div>
-                </div>
-                <div class="rail-card">
-                  <div class="t">Orders awaiting you <span>3</span></div>
-                  <div class="r">BUY RELIANCE × 1 <b>₹2,931</b></div>
-                  <div class="r">BUY ICICIBANK × 2 <b>₹2,486</b></div>
-                  <div class="r">BUY LT × 1 <b>₹3,644</b></div>
-                  <div class="acts"><span class="mini primary">Approve</span><span class="mini">Review</span></div>
-                </div>
+              <aside class="app-side">
+                <button class="side-new" type="button" id="newChat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>New strategy</button>
+                <span class="side-label">Today</span>
+                <button class="side-item" type="button" data-key="largecap">Large caps, monthly</button>
+                <button class="side-item" type="button" data-key="dividend">Dividend, low churn</button>
+                <button class="side-item" type="button" data-key="trend">Bank trend follower</button>
+                <div class="side-bal"><span class="side-label">Virtual balance</span><span class="v num">₹10,000.00</span><span class="s">₹0 real money at risk</span></div>
               </aside>
+              <div class="thread-wrap">
+                <div class="thread" id="thread" aria-live="polite"></div>
+                <form class="composer" id="composer" autocomplete="off">
+                  <label for="composerInput" class="sr-only">Message FinStocks AI</label>
+                  <input id="composerInput" type="text" placeholder="Ask a follow-up or describe a new idea…">
+                  <button class="ask-send sm" type="submit" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+                </form>
+              </div>
             </div>
           </div>
           <div class="phone" aria-hidden="true">
             <div class="phone-screen">
-              <div class="ph-h"><span class="l">Order to approve</span><span class="v">BUY RELIANCE</span></div>
+              <div class="notif" id="notif"><span class="nb"><i></i>FinStocks · now</span><b id="notifTitle">Strategy ready in Mock Mode</b><span id="notifBody">3 virtual orders queued for your approval</span></div>
+              <div class="ph-h"><span class="l">Order to approve</span><span class="v" id="phSym">BUY RELIANCE</span></div>
               <div class="ph-order">
-                <div class="t">1 share · ₹2,931 <span>rebalance</span></div>
-                <div class="d">Rule 03 · first trading day. Placed through your broker only if you approve.</div>
+                <div class="t"><span id="phQty">1 share · ₹2,931</span><span class="tag">virtual</span></div>
+                <div class="d">From your approved rules. Placed only if you approve.</div>
                 <div class="acts"><span class="mini primary">Approve</span><span class="mini">Skip</span></div>
               </div>
               <div class="ph-limits">
                 <div>Cap remaining <b>₹1,240</b></div>
-                <div>Drawdown today <b>−0.6%</b></div>
-                <div>Autopilot <b>On</b></div>
+                <div>Loss limit <b>−10%</b></div>
+                <div>Autopilot <b class="live-dot">On</b></div>
               </div>
             </div>
           </div>
         </div>
-        <div class="stage-caption">Example account · virtual funds · simulated results</div>
+        <div class="stage-caption"><span class="rec" aria-hidden="true"></span>Live demo · virtual funds · simulated results</div>
       </div>
     </div>
   </section>
@@ -155,8 +140,8 @@
       </div>
       <div class="still g1 reveal">
         <div class="still-dots" aria-hidden="true"></div>
-        <div class="bubble" style="left:8%;top:12%"><b>“Invest ₹10,000 across large caps, rebalance monthly”</b><span>Your prompt</span></div>
-        <div class="win">
+        <div class="bubble" style="left:8%;top:12%"><b class="typer" data-text="“Invest ₹10,000 across large caps, rebalance monthly”">“Invest ₹10,000 across large caps, rebalance monthly”</b><span>Your prompt</span></div>
+        <div class="win stagger">
           <div class="line" style="border-top:0;padding-top:0"><span>Draft 1 · 5 rules</span><b>editable</b></div>
           <div class="line"><span>01 Universe</span><b>Nifty 100</b></div>
           <div class="line"><span>02 Weighting</span><b>Equal · top 10 momentum</b></div>
@@ -179,7 +164,8 @@
       <div class="still g2 reveal">
         <div class="still-dots" aria-hidden="true"></div>
         <div class="bubble" style="right:8%;top:10%"><b>Worst month −11.4%</b><span>Shown before the upside, always</span></div>
-        <div class="win">
+        <div class="win stagger">
+          <svg class="mini-chart" viewBox="0 0 400 120" aria-hidden="true"><defs><linearGradient id="miniGrad" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#12805c" stop-opacity="0.18"/><stop offset="1" stop-color="#12805c" stop-opacity="0"/></linearGradient></defs><g class="plot"><path class="area" d="M0 100 L40 92 L80 96 L120 80 L160 84 L200 66 L240 72 L280 52 L320 58 L360 38 L400 30 L400 120 L0 120 Z" fill="url(#miniGrad)"/><path class="b" d="M0 100 L40 95 L80 90 L120 88 L160 80 L200 76 L240 70 L280 64 L320 56 L360 50 L400 44"/><path class="s" d="M0 100 L40 92 L80 96 L120 80 L160 84 L200 66 L240 72 L280 52 L320 58 L360 38 L400 30"/></g></svg>
           <div class="line" style="border-top:0;padding-top:0"><span>Backtest · Jan 23 – Dec 25</span><b>hypothetical</b></div>
           <div class="line"><span>Benchmark</span><b>Nifty 50</b></div>
           <div class="line"><span>Costs applied</span><b>Brokerage · STT · GST · slippage</b></div>
@@ -203,6 +189,7 @@
         <div class="still-dots" aria-hidden="true"></div>
         <div class="phone" aria-label="Example controls">
           <div class="phone-screen">
+            <div class="notif cycle"><span class="nb"><i></i>FinStocks · now</span><b>Loss limit respected</b><span>No new orders placed today</span></div>
             <div class="ph-h"><span class="l">Limits</span><span class="v">Your controls</span></div>
             <div class="ph-row"><div class="l"><strong>Autopilot</strong><span>Executes approved rules</span></div><button class="switch" id="autopilot" type="button" role="switch" aria-checked="true" aria-label="Autopilot"></button></div>
             <div class="ph-row"><div class="l"><strong>Maximum capital</strong><span>Never deploy more</span></div><span class="v">₹10,000</span></div>
