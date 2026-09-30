@@ -120,33 +120,28 @@
         <h2 class="h2-lg">Your money never leaves your broker.</h2>
       </div>
 
-      <div class="flow reveal" role="img" aria-label="Diagram: you approve, FinStocks sends order instructions to your SEBI-registered broker, which executes on NSE. Your money stays in your own account and FinStocks cannot withdraw it.">
-        <div class="node you">
-          <span class="node-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></span>
-          <b>You</b><small>Approve every order</small>
-        </div>
-        <div class="wire"><span class="wire-l">approval</span><i class="pulse"></i></div>
-        <div class="node fs">
-          <span class="node-ic dark"><i class="fs-dot"></i></span>
-          <b>FinStocks AI</b><small>Sends instructions only</small>
-        </div>
-        <div class="wire strong"><span class="wire-l">order + algo ID</span><i class="pulse"></i><i class="pulse d2"></i>
-          <div class="nope" aria-hidden="true"><span>✕ cannot withdraw</span></div>
-        </div>
-        <div class="node broker">
-          <div class="broker-top"><b><span class="tbd" title="Confirm broker">[Broker]</span></b><small>SEBI-registered stock broker</small></div>
-          <div class="vault">
-            <span class="lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span>
-            <b>Your demat account</b>
-            <span class="coins"><i>₹</i><i>₹</i><i>₹</i></span>
-            <small>Money and shares stay here</small>
-          </div>
-        </div>
-        <div class="wire"><span class="wire-l">executes</span><i class="pulse"></i></div>
-        <div class="node nse">
-          <span class="node-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-5 4 4 8-8"/></svg></span>
-          <b>NSE</b><small>Exchange</small>
-        </div>
+      <div class="lanes reveal" role="img" aria-label="Diagram. What moves: you approve an order, FinStocks sends the instruction, your SEBI-registered broker places it tagged with an algo ID, and NSE executes it. Where your money is: only in your own demat account at your broker. FinStocks has no access to your funds.">
+        <span class="lh"></span>
+        <span class="ll"><b>What moves</b><small>Order instructions</small></span>
+        <span class="ll"><b>Where your money is</b><small>Money and shares</small></span>
+
+        <span class="lh"><i>1</i>You</span>
+        <span class="lm" data-l="What moves">You approve an order</span>
+        <span class="lc none" data-l="Your money">—</span>
+
+        <span class="lh"><i>2</i>FinStocks AI</span>
+        <span class="lm" data-l="What moves">Sends the instruction to your broker</span>
+        <span class="lc no" data-l="Your money"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>No access. Can’t hold or withdraw funds.</span>
+
+        <span class="lh hl"><i>3</i><span class="tbd" title="Confirm broker">[Broker]</span><small>SEBI-registered</small></span>
+        <span class="lm hl" data-l="What moves">Places it, tagged with an exchange algo ID</span>
+        <span class="lc yes hl" data-l="Your money"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Stays in your own demat account</span>
+
+        <span class="lh"><i>4</i>NSE</span>
+        <span class="lm" data-l="What moves">Executes the trade</span>
+        <span class="lc none" data-l="Your money">—</span>
+
+        <span class="track" aria-hidden="true"><i class="pulse"></i></span>
       </div>
 
       <div class="proofs reveal">
