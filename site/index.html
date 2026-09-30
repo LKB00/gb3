@@ -63,33 +63,31 @@
       <div class="horizon" aria-hidden="true"></div>
     </div>
 
-    <!-- floating product cards across the horizon -->
+    <!-- prompt → rules → practice, across the horizon -->
     <div class="container">
-      <div class="floaters rise rise-5" aria-hidden="true">
-        <div class="fcard f1">
-          <div class="fc-top"><span class="fc-k">Virtual balance</span><span class="fc-pill">This week</span></div>
-          <b class="fc-big num">₹10,000.00</b>
-          <span class="fc-tag">Mock Mode · ₹0 real money</span>
-          <div class="fc-bars">
-            <div><i style="height:38%"></i><span>M</span></div><div><i style="height:72%"></i><span>T</span></div><div><i style="height:20%"></i><span>W</span></div><div><i style="height:48%"></i><span>T</span></div><div><i style="height:86%"></i><span>F</span></div>
-          </div>
-          <span class="fc-cap">Virtual orders placed by your rules</span>
-        </div>
-        <div class="fcard f2">
-          <div class="fc-who"><span class="fc-av"></span><span><b>Large caps, monthly</b><small>Strategy · Draft 1</small></span></div>
-          <b class="fc-hero">5 rules</b>
-          <span class="fc-sub">You can read every one</span>
-          <span class="fc-tag warn">Worst simulated month −11.4%</span>
-          <div class="fc-acts"><span>Approve</span><span>Edit rules</span></div>
-        </div>
-        <div class="fcard f3">
-          <div class="fc-donut">
-            <svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="48" class="t"/><circle cx="60" cy="60" r="48" class="a" pathLength="100" stroke-dasharray="36 64"/><circle cx="60" cy="60" r="48" class="b" pathLength="100" stroke-dasharray="29 71" stroke-dashoffset="-37"/><circle cx="60" cy="60" r="48" class="c" pathLength="100" stroke-dasharray="25 75" stroke-dashoffset="-67"/></svg>
-            <span><b>₹10,000</b><small>Virtual portfolio</small></span>
-          </div>
-          <div class="fc-legend"><span><b>36%</b>LT</span><span><b>29%</b>RELIANCE</span><span><b>25%</b>ICICIBANK</span></div>
-        </div>
-      </div>
+      <ol class="story rise rise-5" aria-label="How a prompt becomes a strategy">
+        <li class="sc">
+          <span class="sc-k"><i>01</i>You type</span>
+          <p class="sc-quote">“Invest ₹10,000 in large caps, rebalance monthly”</p>
+          <span class="sc-foot">Plain English or Hinglish</span>
+        </li>
+        <li class="sc">
+          <span class="sc-k"><i>02</i>AI drafts the rules</span>
+          <ul class="sc-rules">
+            <li><span>Universe</span><b>Nifty 100</b></li>
+            <li><span>Pick</span><b>Top 10 by momentum</b></li>
+            <li><span>Rebalance</span><b>Monthly</b></li>
+            <li><span>Exit</span><b>−8% from entry</b></li>
+          </ul>
+          <span class="sc-foot">Every rule readable and editable</span>
+        </li>
+        <li class="sc">
+          <span class="sc-k"><i>03</i>You practise</span>
+          <b class="sc-big num">₹10,000</b>
+          <div class="sc-alloc" aria-hidden="true"><i style="flex:36"></i><i style="flex:29"></i><i style="flex:25"></i><i style="flex:10"></i></div>
+          <span class="sc-foot">Virtual money on live prices · ₹0 at risk</span>
+        </li>
+      </ol>
 
       <!-- statement: fills in as you scroll -->
       <div class="statement" id="statement">
