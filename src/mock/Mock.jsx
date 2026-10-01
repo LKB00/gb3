@@ -355,7 +355,14 @@ export function MockBlock({ b, state, pin, marker, onClick, label }) {
 
 // A group of blocks that belongs to one Design Lab decision.
 export function MockSlot({ blocks, state, marker, placeholder }) {
-  if (!blocks) return <div className="m-slot-empty">{placeholder}</div>;
+  if (!blocks) {
+    return (
+      <div className={'m-slot-empty' + (state ? ` m-slot-${state}` : '')}>
+        {placeholder}
+        {marker != null && <span className="mb-marker" aria-hidden>{marker}</span>}
+      </div>
+    );
+  }
   return (
     <div className={'m-slot' + (state ? ` m-slot-${state}` : '')}>
       {(blocks.length ? blocks : [{ type: 'empty' }]).map((b, i) => <Block key={i} b={b} />)}

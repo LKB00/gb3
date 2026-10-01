@@ -1,126 +1,191 @@
-import { Check, RotateCcw, TriangleAlert, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, RotateCcw, TriangleAlert } from 'lucide-react';
 import { useState } from 'react';
 import MockFrame, { MockBlock, MockSlot } from '../mock/Mock';
 import { markPassed } from '../progress';
 
-// Design Lab: people make design decisions, see a live preview,
-// then "Check my design" marks each part as good or a common mistake.
-export default function Lab({ id, lab, title }) {
-  const [choice, setChoice] = useState({});
-  const [checked, setChecked] = useState(false);
-
+// Design Lab, built as a guided flow:
+//   one decision at a time → instant feedback → fix mistakes → next step → summary.
+// Why: showing every question at once, with feedback only after a "Check" button,
+// made people unsure what to do first and which part of the preview they were changing.
+export default function Lab({ id, lab, title, next }) {
   const decisions = lab.decisions;
-  const allPicked = decisions.every((d) => choice[d.id] !== undefined);
-  const score = decisions.filter((d) => d.options[choice[d.id]]?.ok).length;
-  const perfect = score === decisions.length;
-  const indexOf = (dId) => decisions.findIndex((d) => d.id === dId);
+  const total = decisions.length;
+  const [step, setStep] = useState(0);
+  const [reached, setReached] = useState(0);
+  const [choice, setChoice] = useState({});
+  const [tried, setTried] = useState({});
+  const [finished, setFinished] = useState(false);
+  const [skipped, setSkipped] = useState(false);
 
-  const pick = (dId, i) => {
-    setChoice((c) => ({ ...c, [dId]: i }));
-    setChecked(false);
+  const d = decisions[step];
+  const picked = choice[d.id];
+  const pickedOpt = picked !== undefined ? d.options[picked] : undefined;
+  const best = (dec) => dec.options.findIndex((o) => o.ok);
+  const firstTry = decisions.filter((x) => (tried[x.id] || [])[0] === best(x)).length;
+
+  const pick = (i) => {
+    setChoice((c) => ({ ...c, [d.id]: i }));
+    setTried((t) => ({ ...t, [d.id]: (t[d.id] || []).includes(i) ? t[d.id] : [...(t[d.id] || []), i] }));
   };
 
-  const runCheck = () => {
-    setChecked(true);
-    if (perfect) markPassed(id);
+  const goTo = (n) => {
+    setStep(n);
+    setReached((r) => Math.max(r, n));
   };
 
-  const showBest = () => {
-    setChoice(Object.fromEntries(decisions.map((d) => [d.id, d.options.findIndex((o) => o.ok)])));
-    setChecked(true);
+  const advance = () => {
+    if (step < total - 1) return goTo(step + 1);
+    setFinished(true);
+    if (!skipped) markPassed(id);
+  };
+
+  const skip = () => {
+    setChoice(Object.fromEntries(decisions.map((x) => [x.id, best(x)])));
+    setSkipped(true);
+    setFinished(true);
+  };
+
+  const restart = () => {
+    setStep(0);
+    setReached(0);
+    setChoice({});
+    setTried({});
+    setFinished(false);
+    setSkipped(false);
   };
 
   // Frame blocks + one slot per decision (slots not placed in the frame go at the end).
   const placed = new Set(lab.frame.filter((f) => f.slot).map((f) => f.slot));
-  const layout = [...lab.frame, ...decisions.filter((d) => !placed.has(d.id)).map((d) => ({ slot: d.id }))];
+  const layout = [...lab.frame, ...decisions.filter((x) => !placed.has(x.id)).map((x) => ({ slot: x.id }))];
 
   return (
-    <div className="lab">
-      <div className="lab-controls">
-        <p className="lab-goal">
-          <span className="label">Your task</span>
-          {lab.goal}
-        </p>
-
-        {decisions.map((d, n) => {
-          const picked = choice[d.id];
-          return (
-            <fieldset key={d.id} className="lab-decision">
-              <legend>
-                <span className="lab-num">{n + 1}</span>
-                {d.label}
-              </legend>
-              <div className="lab-options" role="radiogroup" aria-label={d.label}>
-                {d.options.map((o, i) => {
-                  const on = picked === i;
-                  const verdict = checked && on ? (o.ok ? ' lab-opt-good' : ' lab-opt-bad') : '';
-                  return (
-                    <button
-                      key={i}
-                      role="radio"
-                      aria-checked={on}
-                      className={'lab-opt' + (on ? ' lab-opt-on' : '') + verdict}
-                      onClick={() => pick(d.id, i)}
-                    >
-                      {checked && on && (o.ok ? <Check size={13} strokeWidth={2.25} aria-hidden /> : <X size={13} strokeWidth={2.25} aria-hidden />)}
-                      {o.label}
-                    </button>
-                  );
-                })}
-              </div>
-              {checked && picked !== undefined && (
-                <p className={'lab-why ' + (d.options[picked].ok ? 'lab-why-good' : 'lab-why-bad')}>
-                  {d.options[picked].ok ? (
-                    <strong><Check size={13} strokeWidth={2.25} aria-hidden /> Good choice.</strong>
-                  ) : (
-                    <strong><TriangleAlert size={13} strokeWidth={2} aria-hidden /> Common mistake.</strong>
-                  )}{' '}
-                  {d.options[picked].why}
-                </p>
-              )}
-            </fieldset>
-          );
-        })}
-
-        <div className="lab-actions">
-          <button className="btn btn-primary" onClick={runCheck} disabled={!allPicked}>
-            {allPicked ? 'Check my design' : `Answer all ${decisions.length} to check`}
-          </button>
-          <button className="btn btn-ghost" onClick={showBest}>Show the best answer</button>
-          {Object.keys(choice).length > 0 && (
-            <button className="btn btn-ghost" onClick={() => { setChoice({}); setChecked(false); }}><RotateCcw size={14} strokeWidth={1.75} aria-hidden /> Start over</button>
-          )}
-        </div>
-
-        {checked && (
-          <div className={'lab-score ' + (perfect ? 'lab-score-good' : 'lab-score-bad')} role="status">
-            <span className="lab-score-num">{score}/{decisions.length}</span>
-            {perfect
-              ? 'Great design. No common mistakes, so this lab is passed.'
-              : `${decisions.length - score} common mistake${decisions.length - score > 1 ? 's' : ''} found. Look at the parts marked in red and try again.`}
-          </div>
-        )}
-      </div>
+    <div className={'lab' + (finished ? ' lab-finished' : '')}>
+      <header className="lab-head">
+        <p className="label">Your task</p>
+        <p className="lab-goal">{lab.goal}</p>
+        <ol className="lab-steps" aria-label="Steps">
+          {decisions.map((x, n) => {
+            const done = finished || (choice[x.id] === best(x) && n !== step);
+            const current = !finished && n === step;
+            const canGo = !finished && n <= reached;
+            return (
+              <li key={x.id} className={'lab-step' + (current ? ' is-current' : '') + (done ? ' is-done' : '')}>
+                <button type="button" disabled={!canGo} onClick={() => goTo(n)} aria-current={current ? 'step' : undefined}>
+                  <span className="lab-step-dot">{done && !current ? <Check size={11} strokeWidth={2.5} aria-hidden /> : n + 1}</span>
+                  <span className="lab-step-label">{x.label}</span>
+                </button>
+              </li>
+            );
+          })}
+        </ol>
+      </header>
 
       <div className="lab-preview">
         <p className="label">Live preview</p>
         <MockFrame title={title}>
           {layout.map((item, i) => {
             if (!item.slot) return <MockBlock key={i} b={item} />;
-            const d = decisions[indexOf(item.slot)];
-            const o = d.options[choice[d.id]];
-            const state = checked && o ? (o.ok ? 'good' : 'bad') : o ? 'on' : undefined;
+            const n = decisions.findIndex((x) => x.id === item.slot);
+            const dec = decisions[n];
+            const o = dec.options[choice[dec.id]];
+            let state;
+            if (!finished && n === step) state = o ? (o.ok ? 'good' : 'bad') : 'focus';
             return (
               <MockSlot
                 key={i}
                 blocks={o?.blocks}
                 state={state}
-                marker={o ? indexOf(item.slot) + 1 : undefined}
-                placeholder={`${indexOf(item.slot) + 1} · ${d.label}`}
+                marker={!finished && (o || n === step) ? n + 1 : undefined}
+                placeholder={n === step ? 'Your choice shows here' : `Step ${n + 1}`}
               />
             );
           })}
         </MockFrame>
+      </div>
+
+      <div className="lab-panel" aria-live="polite">
+        {!finished ? (
+          <>
+            <h3 className="lab-q lab-q-step">{d.label}</h3>
+            <div className="lab-options" role="radiogroup" aria-label={d.label}>
+              {d.options.map((o, i) => {
+                const on = picked === i;
+                const wasWrong = !on && (tried[d.id] || []).includes(i) && !o.ok;
+                return (
+                  <button
+                    key={i}
+                    type="button"
+                    role="radio"
+                    aria-checked={on}
+                    className={'lab-opt' + (on ? (o.ok ? ' lab-opt-good' : ' lab-opt-bad') : '') + (wasWrong ? ' lab-opt-tried' : '')}
+                    onClick={() => pick(i)}
+                  >
+                    <span className="lab-radio" aria-hidden />
+                    <span>{o.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {!pickedOpt && <p className="lab-hint">Pick one. You’ll see it in the preview and get feedback right away.</p>}
+
+            {pickedOpt && (
+              <div className={'lab-why ' + (pickedOpt.ok ? 'lab-why-good' : 'lab-why-bad')}>
+                <strong>
+                  {pickedOpt.ok ? <Check size={14} strokeWidth={2.25} aria-hidden /> : <TriangleAlert size={14} strokeWidth={2} aria-hidden />}
+                  {pickedOpt.ok ? 'Good choice' : 'Common mistake'}
+                </strong>
+                <span>{pickedOpt.why}</span>
+                {!pickedOpt.ok && <span className="lab-why-try">Try another option.</span>}
+              </div>
+            )}
+
+            <div className="lab-nav">
+              {step > 0 && (
+                <button type="button" className="btn btn-ghost" onClick={() => goTo(step - 1)}>
+                  <ArrowLeft size={14} strokeWidth={1.75} aria-hidden /> Back
+                </button>
+              )}
+              {pickedOpt?.ok && (
+                <button type="button" className="btn btn-primary" onClick={advance}>
+                  {step < total - 1 ? 'Next step' : 'Finish'} <ArrowRight size={14} strokeWidth={1.75} aria-hidden />
+                </button>
+              )}
+              <button type="button" className="lab-skip" onClick={skip}>Skip and show the answer</button>
+            </div>
+          </>
+        ) : (
+          <>
+            <p className="lab-count">{skipped ? 'The answer' : 'Lab passed'}</p>
+            <h3 className="lab-q">
+              {skipped ? 'This is the best design.' : firstTry === total ? 'Perfect. No mistakes.' : 'Done. You fixed every mistake.'}
+            </h3>
+            {!skipped && <p className="lab-hint">{firstTry} of {total} right on the first try.</p>}
+            <ul className="lab-summary">
+              {decisions.map((x) => {
+                const fixed = !skipped && (tried[x.id] || [])[0] !== best(x);
+                return (
+                  <li key={x.id}>
+                    <span className={'lab-sum-icon' + (fixed ? ' is-fixed' : '')}>
+                      {fixed ? <RotateCcw size={12} strokeWidth={2} aria-hidden /> : <Check size={12} strokeWidth={2.5} aria-hidden />}
+                    </span>
+                    <span>
+                      <span className="lab-sum-q">{x.label}</span>
+                      <strong>{x.options[best(x)].label}</strong>
+                      {fixed && <span className="lab-sum-note">Fixed after a mistake</span>}
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+            <div className="lab-nav">
+              {next}
+              <button type="button" className="btn btn-ghost" onClick={restart}>
+                <RotateCcw size={14} strokeWidth={1.75} aria-hidden /> Try again
+              </button>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
