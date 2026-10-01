@@ -2,6 +2,7 @@ import { NavLink } from 'react-router-dom';
 
 // One header for every Explore page, so the deeper material feels like one place.
 const tabs = [
+  { to: '/autonomy', label: 'Autonomy ladder' },
   { to: '/teardowns', label: 'Teardowns' },
   { to: '/anti-patterns', label: 'Dark patterns' },
   { to: '/principles', label: 'Principles' },

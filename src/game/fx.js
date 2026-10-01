@@ -237,7 +237,7 @@ export function fx(name, opts) {
 
 // A soft tap on any button, link or tab, so the whole site feels physical.
 // Game answers play their own sounds, so they are skipped here.
-const SILENT = '.lab-opt, .tot-option, .story-choice, .build-piece, .speed-option, .mb-click, [data-fx="off"]';
+const SILENT = '.lab-opt, .tot-option, .story-choice, .build-piece, .speed-option, .power-opt, .mb-click, [data-fx="off"]';
 export function listenForTaps() {
   document.addEventListener(
     'pointerdown',

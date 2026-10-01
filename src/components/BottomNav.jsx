@@ -3,7 +3,7 @@ import { Compass, Gamepad2, House, Layers, UserRound } from 'lucide-react';
 
 // Phone only (hidden on bigger screens by CSS): the main places sit at the
 // bottom, where thumbs can reach them, like in most mobile apps.
-const EXPLORE = ['/teardowns', '/anti-patterns', '/principles', '/glossary', '/learn'];
+const EXPLORE = ['/autonomy', '/teardowns', '/anti-patterns', '/principles', '/glossary', '/learn'];
 const tabs = [
   { to: '/', label: 'Home', icon: House, match: (p) => p === '/' },
   { to: '/play', label: 'Play', icon: Gamepad2, match: (p) => p.startsWith('/play') || p.startsWith('/practice') },

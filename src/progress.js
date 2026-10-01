@@ -88,7 +88,7 @@ export const LEVELS = [
   { xp: 1000, name: 'AI UX pro' },
   { xp: 1300, name: 'Legend' },
 ];
-export const XP = { star: 10, hunt: 30, streak: 5, daily: 10, speed: 2 };
+export const XP = { star: 10, hunt: 30, streak: 5, daily: 10, speed: 2, power: 2 };
 
 // Build mode: best stars per brief, in game-stats.builds = { briefId: 1–3 }.
 export function saveBuild(id, stars) {
@@ -111,6 +111,13 @@ export function storyBests(stats) {
   const out = { ...(stats.stories || {}) };
   if (stats.storyBest != null && out.tidy == null) out.tidy = stats.storyBest;
   return out;
+}
+
+// How much power?: best points out of 16.
+export function savePower(points) {
+  const s = readObj('game-stats');
+  if ((s.powerBest || 0) >= points) return;
+  writeObj('game-stats', { ...s, powerBest: points });
 }
 
 // Speed round: best points in 60 seconds.
@@ -164,7 +171,8 @@ export function useXP() {
     dailyRight * XP.daily +
     Object.values(storyBests(stats)).reduce((n, t) => n + Math.round(Math.max(0, t) / 2), 0) +
     Object.values(stats.builds || {}).reduce((n, st) => n + st * XP.star, 0) +
-    (stats.speedBest || 0) * XP.speed;
+    (stats.speedBest || 0) * XP.speed +
+    (stats.powerBest || 0) * XP.power;
   let i = LEVELS.length - 1;
   while (LEVELS[i].xp > xp) i--;
   const level = LEVELS[i];

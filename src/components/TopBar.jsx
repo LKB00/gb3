@@ -6,7 +6,7 @@ import { GoalToast, LevelUpToast, SoundHint, StreakPill } from './Today';
 import { useFx } from '../game/fx';
 
 const PLAY = ['/play', '/practice'];
-const EXPLORE = ['/teardowns', '/anti-patterns', '/principles', '/glossary', '/learn'];
+const EXPLORE = ['/autonomy', '/teardowns', '/anti-patterns', '/principles', '/glossary', '/learn'];
 
 // Where the phone back button goes from an inner page (desktop uses breadcrumbs).
 const PARENT_NAMES = { '/play': 'Play', '/play/story': 'Stories', '/patterns': 'Cards', '/learn': 'Deep dives', '/teardowns': 'Teardowns' };

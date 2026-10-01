@@ -15,6 +15,8 @@ import Story from './pages/Story';
 import PlayerCard from './pages/PlayerCard';
 import Speed from './pages/Speed';
 import Build from './pages/Build';
+import Power from './pages/Power';
+import Autonomy from './pages/Autonomy';
 import Principles from './pages/Principles';
 import AntiPatterns from './pages/AntiPatterns';
 import Glossary from './pages/Glossary';
@@ -44,6 +46,8 @@ export default function App() {
           <Route path="/play/card" element={<PlayerCard />} />
           <Route path="/play/speed" element={<Speed />} />
           <Route path="/play/build" element={<Build />} />
+          <Route path="/play/power" element={<Power />} />
+          <Route path="/autonomy" element={<Autonomy />} />
           <Route path="/practice" element={<Navigate to="/play" replace />} />
           <Route path="/principles" element={<Principles />} />
           <Route path="/anti-patterns" element={<AntiPatterns />} />

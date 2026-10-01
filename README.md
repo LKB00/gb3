@@ -8,6 +8,7 @@ A playground for AI interaction design. Not a course: quick games, instant wins,
 - **Fix it** (the Play tab on each card): build an AI feature one decision at a time with instant feedback. Win the card with 1–3 stars.
 - **Spot the flaw** (`/play/spot-the-flaw`): realistic AI screens with hidden mistakes. Tap what is wrong.
 - **Cards** (`/patterns`): 34 pattern cards in 7 groups (Input, Output, Control, Trust, Feedback, Agents, Voice & vision). Each has Play, Why it works and Cheat sheet tabs.
+- **How much power?**: pick how much an AI should do on its own (suggest → act alone) for 8 real tasks.
 - **Build mode** (`/play/build`): a blank AI screen and a box of pieces. Tap or drag the right pieces on, leave the traps out, then check. 4 briefs (research answer, travel agent, long writing task, voice in a car), 1–3 stars each.
 - **Stories** (`/play/story`): 4 branching stories with a trust meter and 4 endings each: a file-cleanup agent (Priya), a kitchen voice assistant (Arjun), a bank help bot (Meera) and a coding agent (Kabir).
 - **Challenge a friend**: after the Daily or a Speed round, copy a link. Your friend plays the exact same rounds (seeded) and sees your score to beat. Everything is in the link, no server.
@@ -17,7 +18,7 @@ A playground for AI interaction design. Not a course: quick games, instant wins,
 - **Day streak + daily goal** (`/play`, flame in the top bar): any answer in any game is a "move"; 10 moves is the daily goal. One missed day per week is covered by a free skip day, so one busy day doesn't wipe out a streak. A toast celebrates the goal.
 - **Player card** (`/play/card`): your name, AI-designer type (from the group you've mastered most, e.g. "The Trust Keeper"), level, XP, stats and badges. Save as a 1080×1350 image or share; made in the browser, nothing uploaded.
 - **XP, levels and badges** (`/play`): stars, flaws found and best streak add up to XP; 6 levels from Rookie to Legend; a badge per group (gold with all 3 stars).
-- **Explore**: Teardowns of ChatGPT, Perplexity, GitHub Copilot and Claude Code; 8 AI dark patterns; Principles (UX heuristics, psychology, Microsoft's 18 Human-AI guidelines); Glossary; Deep dives (9 short reads).
+- **Explore**: the Autonomy ladder (5 levels of AI power, with a level finder); Teardowns of ChatGPT, Perplexity, GitHub Copilot and Claude Code; 8 AI dark patterns; Principles (UX heuristics, psychology, Microsoft's 18 Human-AI guidelines); Glossary; Deep dives (9 short reads).
 - **Installable app**: add it to the home screen or dock; works offline (service worker in `public/sw.js`).
 - **Backup code** (`/play` → Your progress): copy a code with all progress and paste it on another device. Restoring merges and never loses progress.
 - **Link previews**: Open Graph and Twitter tags with `public/og.png`, so shared links show a title card.
