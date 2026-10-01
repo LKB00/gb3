@@ -2,6 +2,8 @@ import { Link, useParams } from 'react-router-dom';
 import { getLesson, lessons } from '../data/lessons';
 import { getPattern } from '../data/patterns';
 import PatternCard from '../components/PatternCard';
+import Compare from '../components/Compare';
+import { visuals } from '../data/visuals';
 import NotFound from './NotFound';
 
 export default function Lesson() {
@@ -14,7 +16,7 @@ export default function Lesson() {
   const next = lessons[idx + 1];
 
   return (
-    <article className="container page narrow">
+    <article className="container page lesson">
       <nav className="crumbs" aria-label="Breadcrumb">
         <Link to="/learn">Learning path</Link> / Lesson {idx + 1} of {lessons.length}
       </nav>
@@ -30,6 +32,12 @@ export default function Lesson() {
         <section key={s.heading} className="lesson-section">
           <h2>{s.heading}</h2>
           <p>{s.text}</p>
+          {s.visual && (
+            <div className="lesson-visual">
+              <Compare data={visuals[s.visual].compare} />
+              <Link to={`/patterns/${s.visual}#lab`} className="link-like small">Try it in the Design Lab →</Link>
+            </div>
+          )}
         </section>
       ))}
 
