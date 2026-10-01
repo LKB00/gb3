@@ -1,35 +1,29 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Check, Flame, RotateCcw, Trophy, X } from 'lucide-react';
-import { getCategory, patterns } from '../data/patterns';
-import { visuals } from '../data/visuals';
+import { ArrowRight, Check, Eye, Flame, RotateCcw, Trophy, X } from 'lucide-react';
+import { getCategory, getPattern } from '../data/patterns';
+import { makeDeck } from '../game/decks';
 import MockFrame, { MockBlock } from '../mock/Mock';
 import { saveStreak, useGameStats, XP } from '../progress';
 import Burst from './Burst';
 
 // This or That: two versions of the same AI screen. Tap the better one.
 // Quick rounds, instant answer, a streak to protect. No reading needed to start.
-function makeDeck(n) {
-  const ids = patterns.map((p) => p.id);
-  for (let i = ids.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [ids[i], ids[j]] = [ids[j], ids[i]];
-  }
-  return ids.slice(0, n).map((id) => ({ id, goodFirst: Math.random() < 0.5 }));
-}
-
+//   mode:   'classic' (clear differences) or 'hard' (one small detail differs)
+//   deck:   a fixed list of rounds (used by the Daily challenge)
+//   onDone: called with [true/false per round] instead of showing the score screen
 const VERDICT = [
-  [10, 'Flawless. You have real AI design sense.'],
-  [8, 'Sharp eye. Just a couple got past you.'],
-  [5, 'Not bad. A few tricky ones in there.'],
+  [1, 'Flawless. You have real AI design sense.'],
+  [0.8, 'Sharp eye. Just a couple got past you.'],
+  [0.5, 'Not bad. A few tricky ones in there.'],
   [0, 'Warm-up round. Play again, it gets easier.'],
 ];
 
-export default function ThisOrThat({ rounds = 10 }) {
-  const [deck, setDeck] = useState(() => makeDeck(rounds));
+export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedDeck, onDone }) {
+  const [deck, setDeck] = useState(() => fixedDeck || makeDeck(mode, rounds));
   const [i, setI] = useState(0);
   const [pick, setPick] = useState(null); // 0 or 1
-  const [score, setScore] = useState(0);
+  const [results, setResults] = useState([]);
   const [streak, setStreak] = useState(0);
   const [runBest, setRunBest] = useState(0);
   const [over, setOver] = useState(false);
@@ -37,19 +31,33 @@ export default function ThisOrThat({ rounds = 10 }) {
   const stats = useGameStats();
   const nextRef = useRef(null);
 
+  // Switching mode (Classic ↔ Hard) starts a fresh run.
+  useEffect(() => {
+    if (fixedDeck) return;
+    setDeck(makeDeck(mode, rounds));
+    setI(0);
+    setPick(null);
+    setResults([]);
+    setStreak(0);
+    setRunBest(0);
+    setOver(false);
+    setRecordXp(0);
+  }, [mode, rounds, fixedDeck]);
+
   const round = deck[i];
-  const p = patterns.find((x) => x.id === round.id);
-  const v = visuals[round.id];
+  const p = getPattern(round.pattern);
   const sides = round.goodFirst ? ['good', 'bad'] : ['bad', 'good'];
   const answered = pick !== null;
   const right = answered && sides[pick] === 'good';
+  const score = results.filter(Boolean).length;
 
   const choose = useCallback(
     (n) => {
       if (pick !== null || over) return;
       setPick(n);
-      if (sides[n] === 'good') {
-        setScore((s) => s + 1);
+      const ok = sides[n] === 'good';
+      setResults((r) => [...r, ok]);
+      if (ok) {
         const s = streak + 1;
         setStreak(s);
         setRunBest((b) => Math.max(b, s));
@@ -69,14 +77,15 @@ export default function ThisOrThat({ rounds = 10 }) {
     }
     setRecordXp(Math.max(0, runBest - (stats.bestStreak || 0)) * XP.streak);
     saveStreak(runBest);
-    setOver(true);
-  }, [pick, i, deck.length, runBest, stats.bestStreak]);
+    if (onDone) onDone(results);
+    else setOver(true);
+  }, [pick, i, deck.length, runBest, stats.bestStreak, onDone, results]);
 
   const again = () => {
-    setDeck(makeDeck(rounds));
+    setDeck(makeDeck(mode, rounds));
     setI(0);
     setPick(null);
-    setScore(0);
+    setResults([]);
     setStreak(0);
     setRunBest(0);
     setOver(false);
@@ -101,7 +110,7 @@ export default function ThisOrThat({ rounds = 10 }) {
   }, [choose, next, pick]);
 
   if (over) {
-    const verdict = VERDICT.find(([min]) => score >= Math.round((min / 10) * deck.length))[1];
+    const verdict = VERDICT.find(([min]) => score >= min * deck.length)[1];
     return (
       <div className="tot tot-over">
         {score >= deck.length * 0.8 && <Burst count={24} />}
@@ -116,7 +125,11 @@ export default function ThisOrThat({ rounds = 10 }) {
           <button type="button" className="btn btn-primary btn-lg" onClick={again}>
             <RotateCcw size={15} strokeWidth={1.75} aria-hidden /> Play again
           </button>
-          <Link to="/patterns" className="btn btn-ghost btn-lg">Collect pattern cards</Link>
+          {mode === 'classic' ? (
+            <Link to="/play/this-or-that?mode=hard" className="btn btn-ghost btn-lg"><Eye size={15} strokeWidth={1.75} aria-hidden /> Try Hard mode</Link>
+          ) : (
+            <Link to="/play/daily" className="btn btn-ghost btn-lg">Today’s Daily</Link>
+          )}
         </div>
       </div>
     );
@@ -127,7 +140,7 @@ export default function ThisOrThat({ rounds = 10 }) {
       <div className="tot-bar">
         <span className="tot-round">
           {deck.map((_, n) => (
-            <span key={n} className={'tot-pip' + (n < i ? ' is-past' : '') + (n === i ? ' is-now' : '')} />
+            <span key={n} className={'tot-pip' + (n < i ? (results[n] ? ' is-right' : ' is-wrong') : '') + (n === i ? ' is-now' : '')} />
           ))}
         </span>
         <span className="tot-score"><Check size={14} strokeWidth={2.25} aria-hidden /> {score}</span>
@@ -137,18 +150,21 @@ export default function ThisOrThat({ rounds = 10 }) {
       </div>
 
       <div className="tot-q">
-        <span className={`tag tag-${p.category}`}>{getCategory(p.category).name}</span>
+        <div className="row">
+          <span className={`tag tag-${p.category}`}>{getCategory(p.category).name}</span>
+          {round.hard && <span className="tag tag-hard"><Eye size={11} strokeWidth={2} aria-hidden /> Hard · one detail differs</span>}
+        </div>
         <h3>Which one is better?</h3>
-        <p>{v.lab.goal}</p>
+        <p>{round.brief}</p>
       </div>
 
       <div className="tot-options">
         {sides.map((side, n) => {
-          const state = answered ? (side === 'good' ? 'good' : 'bad') : '';
+          const state = answered ? side : '';
           const mine = pick === n;
           return (
             <button
-              key={n}
+              key={`${round.key}-${n}`}
               type="button"
               className={'tot-option' + (state ? ` is-${state}` : '') + (mine ? ' is-mine' : '')}
               onClick={() => choose(n)}
@@ -158,9 +174,9 @@ export default function ThisOrThat({ rounds = 10 }) {
               <span className="tot-letter">
                 {answered ? (side === 'good' ? <Check size={13} strokeWidth={2.5} aria-hidden /> : <X size={13} strokeWidth={2.5} aria-hidden />) : n ? 'B' : 'A'}
               </span>
-              {answered && <span className="tot-caption">{v.compare[side].caption}</span>}
+              {answered && <span className="tot-caption">{round[side].caption}</span>}
               <MockFrame>
-                {v.compare[side].blocks.map((b, k) => (
+                {round[side].blocks.map((b, k) => (
                   <MockBlock key={k} b={b} pin={answered ? b.pin : undefined} state={answered && b.pin ? side : undefined} />
                 ))}
               </MockFrame>
@@ -178,7 +194,7 @@ export default function ThisOrThat({ rounds = 10 }) {
               The pattern is <Link to={`/patterns/${p.id}`}>{p.title}</Link>.
             </p>
             <button type="button" className="btn btn-primary" onClick={next} ref={nextRef}>
-              {i < deck.length - 1 ? 'Next' : 'See score'} <ArrowRight size={14} strokeWidth={1.75} aria-hidden />
+              {i < deck.length - 1 ? 'Next' : onDone ? 'See result' : 'See score'} <ArrowRight size={14} strokeWidth={1.75} aria-hidden />
             </button>
           </>
         )}

@@ -3,7 +3,7 @@ import { ArrowRight } from 'lucide-react';
 import { patterns } from '../data/patterns';
 import { usePassed, useXP } from '../progress';
 import ThisOrThat from '../components/ThisOrThat';
-import { GameTiles } from './Play';
+import { DailyBanner, GameTiles } from './Play';
 import { useTitle } from '../useTitle';
 
 // Home = play in one second. The first game starts right here, no reading needed.
@@ -27,6 +27,10 @@ export default function Home() {
 
       <section className="home-game" aria-label="This or That, quick round">
         <ThisOrThat rounds={5} />
+      </section>
+
+      <section className="block">
+        <DailyBanner />
       </section>
 
       <section className="block">

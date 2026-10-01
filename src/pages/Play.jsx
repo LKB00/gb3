@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { ArrowRight, Check, Flame, Puzzle, ScanSearch, Shuffle, Star, Zap } from 'lucide-react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { ArrowRight, BookOpenText, CalendarDays, Check, Eye, Flame, Puzzle, ScanSearch, Shuffle, Star, Zap } from 'lucide-react';
 import { categories, patterns } from '../data/patterns';
 import { hunts } from '../data/hunts';
-import { useGameStats, useHuntsDone, usePassed, useStars, useXP } from '../progress';
+import { dailyStreak, useDaily, useGameStats, useHuntsDone, usePassed, useStars, useXP } from '../progress';
+import { dailyNumber, todayKey } from '../game/decks';
 import Hunt from '../components/Hunt';
 import ThisOrThat from '../components/ThisOrThat';
 import Breadcrumbs from '../components/Breadcrumbs';
@@ -51,6 +52,25 @@ export function LevelCard() {
   );
 }
 
+// The Daily challenge, as a wide banner: today's status and streak.
+export function DailyBanner() {
+  const daily = useDaily();
+  const key = todayKey();
+  const today = daily[key];
+  const streak = dailyStreak(daily);
+  return (
+    <Link to="/play/daily" className={'daily-banner' + (today ? ' is-done' : '')}>
+      <CalendarDays size={22} strokeWidth={1.75} aria-hidden />
+      <span className="daily-banner-text">
+        <strong>Daily #{dailyNumber(key)}</strong>
+        <span>{today ? `Done today: ${today.filter(Boolean).length}/${today.length}. Share your result.` : '5 rounds, same for everyone today. One try.'}</span>
+      </span>
+      {streak > 0 && <span className="pill-streak"><Flame size={13} strokeWidth={1.75} aria-hidden /> {streak}</span>}
+      <span className="btn btn-primary">{today ? 'See result' : 'Play today’s'} <ArrowRight size={14} strokeWidth={1.75} aria-hidden /></span>
+    </Link>
+  );
+}
+
 export function GameTiles() {
   const random = useRandomChallenge();
   const passed = usePassed();
@@ -58,10 +78,16 @@ export function GameTiles() {
   const stats = useGameStats();
   return (
     <div className="games">
+      <Link to="/play/story" className="game game-d">
+        <BookOpenText size={22} strokeWidth={1.75} aria-hidden />
+        <strong>Agent on duty</strong>
+        <span>A short story: design an AI agent and keep the user’s trust. 4 endings.</span>
+        <span className="game-meta"><Star size={13} strokeWidth={1.75} aria-hidden /> {stats.storyBest != null ? `Best trust ${stats.storyBest}` : 'New'}</span>
+      </Link>
       <Link to="/play/this-or-that" className="game game-a">
         <Shuffle size={22} strokeWidth={1.75} aria-hidden />
         <strong>This or That</strong>
-        <span>Two AI screens. Tap the better one. 10 quick rounds.</span>
+        <span>Two AI screens. Tap the better one. Classic or Hard mode.</span>
         <span className="game-meta"><Flame size={13} strokeWidth={1.75} aria-hidden /> Best streak {stats.bestStreak || 0}</span>
       </Link>
       <button type="button" onClick={random} className="game game-b">
@@ -114,6 +140,7 @@ export default function Play() {
       </header>
       <div className="play-grid">
         <LevelCard />
+        <DailyBanner />
         <GameTiles />
       </div>
       <section className="block">
@@ -129,10 +156,22 @@ export default function Play() {
 
 export function ThisOrThatPage() {
   useTitle('This or That');
+  const [params, setParams] = useSearchParams();
+  const mode = params.get('mode') === 'hard' ? 'hard' : 'classic';
   return (
     <div className="page page-wide">
       <Breadcrumbs items={[{ label: 'Play', to: '/play' }, { label: 'This or That' }]} />
-      <ThisOrThat rounds={10} />
+      <div className="tabs tot-modes" role="tablist" aria-label="Mode">
+        <button role="tab" aria-selected={mode === 'classic'} className="tab" onClick={() => setParams({}, { replace: true })}>
+          <Shuffle size={15} strokeWidth={1.75} aria-hidden /> Classic
+        </button>
+        <button role="tab" aria-selected={mode === 'hard'} className="tab" onClick={() => setParams({ mode: 'hard' }, { replace: true })}>
+          <Eye size={15} strokeWidth={1.75} aria-hidden /> Hard <span className="tab-count">one detail differs</span>
+        </button>
+      </div>
+      <div className="view">
+        <ThisOrThat rounds={10} mode={mode} />
+      </div>
     </div>
   );
 }

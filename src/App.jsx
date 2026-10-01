@@ -8,6 +8,8 @@ import PatternDetail from './pages/PatternDetail';
 import Learn from './pages/Learn';
 import Lesson from './pages/Lesson';
 import Play, { SpotTheFlaw, ThisOrThatPage } from './pages/Play';
+import Daily from './pages/Daily';
+import Story from './pages/Story';
 import Principles from './pages/Principles';
 import AntiPatterns from './pages/AntiPatterns';
 import Glossary from './pages/Glossary';
@@ -30,6 +32,8 @@ export default function App() {
           <Route path="/play" element={<Play />} />
           <Route path="/play/this-or-that" element={<ThisOrThatPage />} />
           <Route path="/play/spot-the-flaw" element={<SpotTheFlaw />} />
+          <Route path="/play/daily" element={<Daily />} />
+          <Route path="/play/story" element={<Story />} />
           <Route path="/practice" element={<Navigate to="/play" replace />} />
           <Route path="/principles" element={<Principles />} />
           <Route path="/anti-patterns" element={<AntiPatterns />} />
