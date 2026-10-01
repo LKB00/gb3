@@ -3,13 +3,16 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import MockFrame, { MockBlock } from '../mock/Mock';
 import { getPattern } from '../data/patterns';
-import { markHuntDone } from '../progress';
+import { markHuntDone, useHuntsDone, XP } from '../progress';
+import Burst, { XpPop } from './Burst';
 
-// Mistake Hunt: click the parts of the screen that are wrong.
+// Spot the flaw: tap the parts of the screen that are wrong.
 export default function Hunt({ scenario }) {
   const [found, setFound] = useState([]); // block indexes, in the order found
   const [fine, setFine] = useState(null); // last "this part is fine" click
   const [revealed, setRevealed] = useState(false);
+  const doneBefore = useHuntsDone();
+  const [wasDone] = useState(() => doneBefore.includes(scenario.id));
 
   const mistakes = scenario.blocks.map((b, i) => (b.mistake ? i : -1)).filter((i) => i >= 0);
   const done = found.length === mistakes.length;
@@ -80,9 +83,15 @@ export default function Hunt({ scenario }) {
           })}
         </ol>
 
-        {done && !revealed && <p className="demo-ok"><Check size={14} strokeWidth={2} aria-hidden /> You found every mistake.</p>}
+        {done && !revealed && (
+          <p className="demo-ok hunt-win">
+            <Burst />
+            <Check size={14} strokeWidth={2} aria-hidden /> All flaws found!
+            {!wasDone && <XpPop amount={XP.hunt} />}
+          </p>
+        )}
         {!done && !revealed && (
-          <button className="btn btn-ghost btn-sm" onClick={() => setRevealed(true)}>Show the ones I missed</button>
+          <button className="btn btn-ghost btn-sm" onClick={() => setRevealed(true)}>Give up and show me</button>
         )}
       </div>
     </div>

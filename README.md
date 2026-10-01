@@ -1,22 +1,19 @@
 # AI Patterns
 
-A free website where designers **learn AI interaction design by doing**: you make the design decisions first, get instant feedback on common mistakes, and only then see the expert answer and the reasons behind it.
+A playground for AI interaction design. Not a course: quick games, instant wins, pattern cards to collect, XP and levels. Anyone curious about AI design patterns can jump in and play in one second.
 
-- **Pattern library**: 34 patterns in 7 groups (Input, Output, Control, Trust, Feedback, Agents, Voice & vision), including agentic patterns (autonomy dial, activity log & undo, pause & redirect, cost estimates), voice and image patterns, and a bias check.
-- **Visual first**: every pattern shows a ✕ bad and a ✓ better screen, with short labels on the screen itself.
-- **Design Lab**: on every pattern page, people build the feature one step at a time. Each pick shows in the live preview with instant feedback; a common mistake is explained and you try again.
-- **Mistake Hunt** (`/practice`): realistic AI screens with hidden mistakes. Click what is wrong, then jump to the pattern that fixes it.
-- **Live demos** for 15 patterns (including an L1–L5 autonomy explainer and a simulated voice conversation), and a **learning path** of 9 short visual lessons.
-- **Teardowns**: stage-by-stage breakdowns of ChatGPT, Perplexity, GitHub Copilot and Claude Code.
-- **Anti-patterns**: 8 AI dark patterns (from CDT and DarkBench research), with the fix for each.
-- **Principles**: UX heuristics, Laws of UX and psychology per pattern, plus Microsoft's 18 Human-AI guidelines mapped to patterns.
-- **Glossary** of plain-English AI terms, and further reading.
-- Light and dark mode, works on phone and desktop. Lab progress is saved in the browser.
+- **This or That** (`/play/this-or-that`, and a 5-round version right on Home): two versions of the same AI screen, tap the better one. Score, streak, keyboard ← / →.
+- **Fix it** (the Play tab on each card): build an AI feature one decision at a time with instant feedback. Win the card with 1–3 stars.
+- **Spot the flaw** (`/play/spot-the-flaw`): realistic AI screens with hidden mistakes. Tap what is wrong.
+- **Cards** (`/patterns`): 34 pattern cards in 7 groups (Input, Output, Control, Trust, Feedback, Agents, Voice & vision). Each has Play, Why it works and Cheat sheet tabs.
+- **XP, levels and badges** (`/play`): stars, flaws found and best streak add up to XP; 6 levels from Rookie to Legend; a badge per group (gold with all 3 stars).
+- **Explore**: Teardowns of ChatGPT, Perplexity, GitHub Copilot and Claude Code; 8 AI dark patterns; Principles (UX heuristics, psychology, Microsoft's 18 Human-AI guidelines); Glossary; Deep dives (9 short reads).
+- Light and dark mode, works on phone and desktop. Progress is saved only in the browser.
 
 ## Design
 
 Simple layout (one top bar + one centered reading column), in the same design language as the Refund Agent and
-Instead projects: sand paper, charcoal ink, 0.5px hairlines, pill controls, Lato + Libre Baskerville,
+Instead projects: sand paper, charcoal ink, 0.5px hairlines, pill controls, Bricolage Grotesque for headings + Lato for text,
 and soft pastels only for group tags and status. Icons are [Lucide](https://lucide.dev) (ISC license).
 
 ## Run it
@@ -45,21 +42,17 @@ Live at **https://lkb00.github.io/patricka/** — every push to `main` builds an
 
 | Part | Why it is here |
 |---|---|
-| Top bar with 3 places only | Learn (guided), Practice (do) and Library (look up). Three choices are easy to remember, so people don't get lost. |
-| Simple Home | One main button (Start / Continue) and three cards. No long lists on the first screen. |
+| Top bar: Play, Cards, Explore | Three places, named like a product, not a course. Easy to remember. |
+| XP pill in the top bar | Your score is always visible and a tap away; it grows as you play. |
+| Home starts a game | No reading needed: the first This or That round is right under the headline. |
+| This or That | The fastest way in: two screens, one tap, instant answer, a streak to protect. |
+| Fix it, one step at a time | One decision at a time with instant feedback; a slip is explained and you try again. Stars reward a clean run. |
+| Cards to collect | Patterns become collectible cards (locked until you win them), which gives a reason to come back. |
+| Levels and badges | Small, honest goals (next level, finish a group) instead of a syllabus. |
+| Confetti, XP pops, card unlocks | Short moments of delight on wins; turned off for people who prefer reduced motion. |
 | Breadcrumbs | Every inner page shows where you are and one step back. |
-| Progress ring in the top bar | Your labs and hunts done, always visible, one click to Practice. |
-| Pattern page in 3 tabs: Do, Understand, Reference | One short screen at a time instead of one long page. Doing comes first. |
-| Do → Understand | After you pass a lab, one button takes you to the expert answer and the why. |
-| "Why it matters" (Understand tab) | Learners need the reason before the rule. |
-| The expert answer (bad vs better) | A picture teaches faster than text. Pins label the exact part that matters. |
-| Real examples | Grounds each pattern in products people already use (ChatGPT, Perplexity, Gmail, Netflix…). |
-| Principles behind it | Shows the UX heuristic, law or psychology that makes the pattern work. |
-| Reference tab | Rules of thumb and details for later, out of the way while learning. |
-| Library tabs | Patterns, Teardowns, Anti-patterns, Principles and Glossary feel like one place. |
-| Guided Design Lab | One decision at a time with a step tracker; the part you are designing is highlighted in the preview; feedback comes the moment you pick; a summary shows what you got right first time. |
-| Practice tabs | Design Labs and Mistake Hunt are two modes; only one is on screen at a time. |
-| Mistake Hunt | Builds the skill of spotting problems in real screens, and links each mistake to its fix. |
+| Card page tabs: Play, Why it works, Cheat sheet | One short screen at a time. Playing comes first. |
+| Explore tabs | Teardowns, Dark patterns, Principles, Glossary and Deep dives feel like one place. |
 | Light tints instead of outlines | Mistakes and good choices are marked with a soft background and a short note, not heavy strokes. |
 | One spacing and type scale | Spacing 4/8/12/16/24/32/48/64 px; type 10/12/13/14/16/18/20/30/40 px, each with one job. |
 | Page titles, contrast, keyboard focus | Easy to find tabs, readable text (WCAG AA), usable without a mouse. |

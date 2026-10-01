@@ -1,74 +1,41 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, BookOpen, Library, Target } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { patterns } from '../data/patterns';
-import { lessons } from '../data/lessons';
-import { hunts } from '../data/hunts';
-import { useHuntsDone, usePassed } from '../progress';
+import { usePassed, useXP } from '../progress';
+import ThisOrThat from '../components/ThisOrThat';
+import { GameTiles } from './Play';
 import { useTitle } from '../useTitle';
 
-const ARROW = { size: 15, strokeWidth: 1.75, 'aria-hidden': true };
-const FIRST = 'streaming-response';
-
-// Home has one job: get people started. One main button, then the three places.
+// Home = play in one second. The first game starts right here, no reading needed.
 export default function Home() {
   useTitle(null);
   const passed = usePassed();
-  const huntsDone = useHuntsDone();
-  const started = passed.length + huntsDone.length > 0;
-  const next = passed.length === 0 ? patterns.find((p) => p.id === FIRST) : patterns.find((p) => !passed.includes(p.id));
-
-  const places = [
-    {
-      to: '/learn',
-      icon: BookOpen,
-      title: 'Learn',
-      text: 'Short lessons in order, from basics to AI agents.',
-      meta: `${lessons.length} lessons`,
-    },
-    {
-      to: '/practice',
-      icon: Target,
-      title: 'Practice',
-      text: 'Build AI features in labs and find mistakes in real-looking screens.',
-      meta: `${passed.length}/${patterns.length} labs · ${huntsDone.length}/${hunts.length} hunts`,
-    },
-    {
-      to: '/patterns',
-      icon: Library,
-      title: 'Library',
-      text: 'Look up any pattern, product teardown, principle or word.',
-      meta: `${patterns.length} patterns`,
-    },
-  ];
+  const { xp, level } = useXP();
 
   return (
-    <div className="page">
-      <header className="page-head home-hero">
-        <p className="label">Learn AI interaction design by doing</p>
-        <h1 className="display">Don’t just read about AI design. Practice it.</h1>
-        <p className="lead">Make design decisions, see your mistakes right away, then learn why.</p>
-        <div className="actions">
-          {next ? (
-            <Link to={`/patterns/${next.id}`} className="btn btn-primary btn-lg">
-              {started ? `Continue: ${next.title}` : 'Start your first lab'} <ArrowRight {...ARROW} />
-            </Link>
-          ) : (
-            <Link to="/practice" className="btn btn-primary btn-lg">Keep practicing <ArrowRight {...ARROW} /></Link>
-          )}
-        </div>
-        <p className="small muted">{started ? 'Your progress is saved in this browser.' : 'About 1 minute. No sign-up.'}</p>
+    <div className="page page-wide">
+      <header className="home-hero">
+        <p className="eyebrow">A playground for AI interaction design</p>
+        <h1 className="display display-xl">Can you spot good AI design?</h1>
+        <p className="lead">Quick games about the patterns behind ChatGPT, Copilot, Perplexity and more. Play a round right now.</p>
+        {xp > 0 && (
+          <p className="home-me">
+            You’re a <strong>{level.name}</strong> · {xp} XP · {passed.length}/{patterns.length} cards
+          </p>
+        )}
       </header>
 
-      <nav className="places" aria-label="Where to go">
-        {places.map(({ to, icon: Icon, title, text, meta }) => (
-          <Link key={to} to={to} className="place">
-            <Icon size={20} strokeWidth={1.5} aria-hidden />
-            <strong>{title}</strong>
-            <span>{text}</span>
-            <span className="place-meta">{meta}</span>
-          </Link>
-        ))}
-      </nav>
+      <section className="home-game" aria-label="This or That, quick round">
+        <ThisOrThat rounds={5} />
+      </section>
+
+      <section className="block">
+        <div className="row space-between">
+          <h2>More games</h2>
+          <Link to="/play" className="text-link">Your level and badges <ArrowRight size={14} strokeWidth={1.75} aria-hidden /></Link>
+        </div>
+        <GameTiles />
+      </section>
     </div>
   );
 }

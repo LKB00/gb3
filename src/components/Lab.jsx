@@ -1,9 +1,10 @@
-import { ArrowLeft, ArrowRight, Check, RotateCcw, TriangleAlert } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, RotateCcw, Star, TriangleAlert } from 'lucide-react';
 import { useState } from 'react';
 import MockFrame, { MockBlock, MockSlot } from '../mock/Mock';
-import { markPassed } from '../progress';
+import { markPassed, saveStars, useStars, XP } from '../progress';
+import Burst, { XpPop } from './Burst';
 
-// Design Lab, built as a guided flow:
+// Challenge ("Fix it"), built as a guided flow:
 //   one decision at a time → instant feedback → fix mistakes → next step → summary.
 // Why: showing every question at once, with feedback only after a "Check" button,
 // made people unsure what to do first and which part of the preview they were changing.
@@ -16,12 +17,15 @@ export default function Lab({ id, lab, title, next }) {
   const [tried, setTried] = useState({});
   const [finished, setFinished] = useState(false);
   const [skipped, setSkipped] = useState(false);
+  const [gained, setGained] = useState(0);
+  const savedStars = useStars();
 
   const d = decisions[step];
   const picked = choice[d.id];
   const pickedOpt = picked !== undefined ? d.options[picked] : undefined;
   const best = (dec) => dec.options.findIndex((o) => o.ok);
-  const firstTry = decisions.filter((x) => (tried[x.id] || [])[0] === best(x)).length;
+  const mistakes = decisions.reduce((n, x) => n + (tried[x.id] || []).filter((k) => !x.options[k].ok).length, 0);
+  const stars = mistakes === 0 ? 3 : mistakes === 1 ? 2 : 1;
 
   const pick = (i) => {
     setChoice((c) => ({ ...c, [d.id]: i }));
@@ -36,7 +40,10 @@ export default function Lab({ id, lab, title, next }) {
   const advance = () => {
     if (step < total - 1) return goTo(step + 1);
     setFinished(true);
-    if (!skipped) markPassed(id);
+    if (skipped) return;
+    setGained(Math.max(0, stars - (savedStars[id] || 0)) * XP.star);
+    saveStars(id, stars);
+    markPassed(id);
   };
 
   const skip = () => {
@@ -52,6 +59,7 @@ export default function Lab({ id, lab, title, next }) {
     setTried({});
     setFinished(false);
     setSkipped(false);
+    setGained(0);
   };
 
   // Frame blocks + one slot per decision (slots not placed in the frame go at the end).
@@ -61,7 +69,7 @@ export default function Lab({ id, lab, title, next }) {
   return (
     <div className={'lab' + (finished ? ' lab-finished' : '')}>
       <header className="lab-head">
-        <p className="label">Your task</p>
+        <p className="label">The brief</p>
         <p className="lab-goal">{lab.goal}</p>
         <ol className="lab-steps" aria-label="Steps">
           {decisions.map((x, n) => {
@@ -151,16 +159,26 @@ export default function Lab({ id, lab, title, next }) {
                   {step < total - 1 ? 'Next step' : 'Finish'} <ArrowRight size={14} strokeWidth={1.75} aria-hidden />
                 </button>
               )}
-              <button type="button" className="lab-skip" onClick={skip}>Skip and show the answer</button>
+              <button type="button" className="lab-skip" onClick={skip}>Reveal the answer (no card)</button>
             </div>
           </>
         ) : (
           <>
-            <p className="lab-count">{skipped ? 'The answer' : 'Lab passed'}</p>
+            {!skipped && <Burst count={stars === 3 ? 26 : 16} />}
+            <p className="lab-count">{skipped ? 'The answer' : 'Card collected'}</p>
             <h3 className="lab-q">
-              {skipped ? 'This is the best design.' : firstTry === total ? 'Perfect. No mistakes.' : 'Done. You fixed every mistake.'}
+              {skipped ? 'Here’s the winning design.' : stars === 3 ? 'Perfect run!' : stars === 2 ? 'Nice save!' : 'Got there!'}
+              {gained > 0 && <XpPop amount={gained} />}
             </h3>
-            {!skipped && <p className="lab-hint">{firstTry} of {total} right on the first try.</p>}
+            {!skipped && (
+              <p className="lab-stars" aria-label={`${stars} of 3 stars`}>
+                {[1, 2, 3].map((n) => (
+                  <Star key={n} size={22} strokeWidth={1.5} className={n <= stars ? 'is-on' : ''} style={{ animationDelay: `${n * 120}ms` }} aria-hidden />
+                ))}
+                <span>{mistakes === 0 ? 'No mistakes' : `${mistakes} mistake${mistakes > 1 ? 's' : ''} fixed`}</span>
+              </p>
+            )}
+            {skipped && <p className="lab-hint">No card this time. Play again to collect it.</p>}
             <ul className="lab-summary">
               {decisions.map((x) => {
                 const fixed = !skipped && (tried[x.id] || [])[0] !== best(x);
@@ -172,7 +190,7 @@ export default function Lab({ id, lab, title, next }) {
                     <span>
                       <span className="lab-sum-q">{x.label}</span>
                       <strong>{x.options[best(x)].label}</strong>
-                      {fixed && <span className="lab-sum-note">Fixed after a mistake</span>}
+                      {fixed && <span className="lab-sum-note">Fixed after a slip</span>}
                     </span>
                   </li>
                 );
