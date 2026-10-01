@@ -227,7 +227,7 @@ export default function Play() {
         <DailyBanner />
         <GameTiles />
       </div>
-      <section className="block">
+      <section className="block hide-phone">
         <div className="section-head">
           <h2>Badges</h2>
           <p className="section-sub">Collect every card in a group to win its badge. All 3 stars on each makes it gold.</p>
@@ -235,8 +235,7 @@ export default function Play() {
         <Badges />
       </section>
       <section className="block">
-        <h2>Your progress</h2>
-        <AppAndBackup />
+        <Link to="/me" className="text-link">Settings, app install and backup are on your Me page <ArrowRight size={14} strokeWidth={1.75} aria-hidden /></Link>
       </section>
     </div>
   );

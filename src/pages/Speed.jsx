@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { RotateCcw, Swords, Timer, Zap } from 'lucide-react';
+import { RotateCcw, Swords, Timer, X, Zap } from 'lucide-react';
 import { makeDeck, seeded } from '../game/decks';
 import { challengeLink, useChallenge, verdict } from '../game/challenge';
 import { fx } from '../game/fx';
@@ -65,6 +65,13 @@ export default function Speed() {
     setCount(3);
     setPhase('count');
   };
+
+  // Focus mode: on phones the top and bottom bars hide while the clock runs.
+  useEffect(() => {
+    const on = phase === 'play' || phase === 'count';
+    document.body.classList.toggle('focus-mode', on);
+    return () => document.body.classList.remove('focus-mode');
+  }, [phase]);
 
   // 3 · 2 · 1 countdown
   useEffect(() => {
@@ -188,6 +195,9 @@ export default function Speed() {
       {phase === 'play' && (
         <div className="speed">
           <div className="speed-bar">
+            <button type="button" className="speed-quit" onClick={() => setPhase('ready')} aria-label="Quit this round">
+              <X size={18} strokeWidth={2} aria-hidden />
+            </button>
             <span className={'speed-time' + (secs <= 10 ? ' is-low' : '')}><Timer size={16} strokeWidth={2} aria-hidden /> {secs}s</span>
             <span className="speed-track" aria-hidden><span style={{ width: `${(left / (SECONDS * 1000)) * 100}%` }} /></span>
             <span className="speed-points" key={points}>{points}</span>
