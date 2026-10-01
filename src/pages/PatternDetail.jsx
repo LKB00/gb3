@@ -8,6 +8,7 @@ import { usePassed } from '../progress';
 import DemoFrame from '../components/DemoFrame';
 import Compare from '../components/Compare';
 import Lab from '../components/Lab';
+import { useTitle } from '../useTitle';
 import NotFound from './NotFound';
 
 const ICON = { size: 14, strokeWidth: 2, 'aria-hidden': true };
@@ -17,6 +18,7 @@ export default function PatternDetail() {
   const { hash } = useLocation();
   const passed = usePassed();
   const p = getPattern(id);
+  useTitle(p?.title);
 
   useEffect(() => {
     if (hash === '#lab') document.getElementById('lab')?.scrollIntoView();
@@ -30,6 +32,15 @@ export default function PatternDetail() {
   const prev = patterns[idx - 1];
   const next = patterns[idx + 1];
   const relatedLessons = lessons.filter((l) => l.patterns.includes(p.id));
+  const sections = [
+    { id: 'difference', label: 'See the difference' },
+    p.demo && { id: 'try', label: 'Try it' },
+    { id: 'lab', label: 'Design Lab' },
+    { id: 'rules', label: 'Rules' },
+    { id: 'details', label: 'Details' },
+  ].filter(Boolean);
+  // Hash links are used by the router, so in-page jumps scroll directly.
+  const jump = (sid) => document.getElementById(sid)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
   return (
     <article className="page">
@@ -40,15 +51,26 @@ export default function PatternDetail() {
         </div>
         <h1 className="display">{p.title}</h1>
         <p className="lead">{p.summary}</p>
+        <div className="why">
+          <p className="label">Why it matters</p>
+          <p>{p.problem}</p>
+        </div>
       </header>
 
-      <section className="block">
+      <nav className="on-page" aria-label="On this page">
+        <span className="label">On this page</span>
+        {sections.map((s) => (
+          <button key={s.id} className="on-page-link" onClick={() => jump(s.id)}>{s.label}</button>
+        ))}
+      </nav>
+
+      <section className="block" id="difference">
         <h2>See the difference</h2>
         <Compare data={v.compare} />
       </section>
 
       {p.demo && (
-        <section className="block">
+        <section className="block" id="try">
           <h2>Try it</h2>
           <DemoFrame name={p.demo} />
         </section>
@@ -60,7 +82,7 @@ export default function PatternDetail() {
         <Lab key={p.id} id={p.id} lab={v.lab} />
       </section>
 
-      <section className="block">
+      <section className="block" id="rules">
         <h2>Rules of thumb</h2>
         <div className="rules">
           <div>
@@ -78,11 +100,9 @@ export default function PatternDetail() {
         </div>
       </section>
 
-      <section className="block">
+      <section className="block" id="details">
         <h2>Details</h2>
         <dl className="details">
-          <dt>Problem</dt>
-          <dd>{p.problem}</dd>
           <dt>Solution</dt>
           <dd>{p.solution}</dd>
           <dt>Use it when</dt>

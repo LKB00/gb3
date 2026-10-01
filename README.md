@@ -36,3 +36,18 @@ Built with React + Vite. Uses hash links (`/#/patterns`) so it works on GitHub P
 
 Live at **https://lkb00.github.io/patricka/** — every push to `main` builds and publishes the site automatically
 (`.github/workflows/deploy.yml`). One-time setup: repo **Settings → Pages → Source: GitHub Actions**.
+
+## UX decisions (why each part is here)
+
+| Part | Why it is here |
+|---|---|
+| Sidebar with every pattern | One-click access to all 22 patterns; the current one stays highlighted and in view, so you never lose your place. |
+| "Why it matters" under each title | Learners need the reason before the rule. The problem comes first, then the solution. |
+| See the difference (bad vs better) | A picture teaches faster than text. Pins label the exact part that matters. |
+| Try it (live demo) | Feeling the interaction makes it stick. |
+| Design Lab | Learning by doing; mistakes are explained the moment you make them, in plain words. |
+| Rules of thumb | A quick summary to remember and reuse at work. |
+| Details (collapsed lower down) | Depth for people who want it, without slowing everyone else down. |
+| On this page | Long pages stay easy to move around. |
+| Mistake Hunt | Builds the skill of spotting problems in real screens, and links each mistake to its fix. |
+| Page titles, contrast, keyboard focus | Easy to find tabs, readable text (WCAG AA), usable without a mouse. |

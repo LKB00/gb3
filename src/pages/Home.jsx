@@ -1,3 +1,4 @@
+import { useTitle } from '../useTitle';
 import { Link } from 'react-router-dom';
 import { ArrowRight, BookOpen, ChevronRight, FlaskConical, ScanSearch } from 'lucide-react';
 import { categories, patterns } from '../data/patterns';
@@ -8,6 +9,7 @@ import Compare from '../components/Compare';
 const ARROW = { size: 15, strokeWidth: 1.75, 'aria-hidden': true };
 
 export default function Home() {
+  useTitle(null);
   return (
     <div className="page">
       <header className="page-head">
@@ -23,7 +25,31 @@ export default function Home() {
       </header>
 
       <section className="block">
-        <Compare data={visuals['streaming-response'].compare} />
+        <h2>How each pattern works</h2>
+        <ol className="steps-how">
+          <li>
+            <span className="index-num">1</span>
+            <strong>See the difference</strong>
+            <span>A bad and a better screen, side by side.</span>
+          </li>
+          <li>
+            <span className="index-num">2</span>
+            <strong>Know why</strong>
+            <span>The problem it solves, in one short paragraph.</span>
+          </li>
+          <li>
+            <span className="index-num">3</span>
+            <strong>Build it yourself</strong>
+            <span>The Design Lab checks your choices for common mistakes.</span>
+          </li>
+        </ol>
+        <div className="example">
+          <p className="label">Example · Show progress</p>
+          <Compare data={visuals['streaming-response'].compare} />
+          <Link to="/patterns/streaming-response" className="text-link">
+            Open this pattern <ArrowRight size={14} strokeWidth={1.75} aria-hidden />
+          </Link>
+        </div>
       </section>
 
       <section className="block">
