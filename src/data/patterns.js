@@ -362,6 +362,113 @@ export const patterns = [
     donts: ['Lock the screen until finished', 'Trap people in a bot loop with no human option'],
     examples: ['Agents that notify when a report is ready', 'Support chats with "Talk to a person"'],
   },
+  {
+    id: 'contextual-nudge',
+    title: 'Offer help at the right moment',
+    category: 'input',
+    summary: 'Suggest AI help where and when it is useful, not everywhere all the time.',
+    problem:
+      'AI features hide behind a button nobody notices, or pop up so often that people learn to ignore them.',
+    solution:
+      'Offer one small, relevant suggestion in context, at a natural pause: an empty doc, a long email, a repeated task. Make it easy to dismiss and do not repeat it if ignored.',
+    when: ['There is a clear moment when AI saves time', 'People do not know the feature exists'],
+    avoid: ['Interrupting focused work with pop-ups', 'Suggesting the same thing again after it was dismissed'],
+    dos: ['Tie the suggestion to what the person is doing', 'Keep it small and dismissible', 'Back off after a “no”'],
+    donts: ['Show a pop-up on every page', 'Hide the only way to turn suggestions off'],
+    examples: [],
+  },
+  {
+    id: 'reply-to-part',
+    title: 'Reply to a part',
+    category: 'input',
+    summary: 'Let people select part of an answer and ask about just that.',
+    problem:
+      'People often want to change or ask about one sentence in a long answer. Retyping or describing it is slow, and the AI may change the wrong part.',
+    solution:
+      'When text is selected, offer “Ask about this” or quick actions. Send the selection as a quote, so the follow-up is about exactly that part.',
+    when: ['Long answers, documents or code', 'People refine answers step by step'],
+    avoid: ['Very short answers where the whole reply is the context'],
+    dos: ['Show the quoted part above the input', 'Offer quick actions like Explain or Shorten', 'Keep the rest of the answer unchanged'],
+    donts: ['Make people copy and paste text back in', 'Rewrite the whole answer for a small question'],
+    examples: [],
+  },
+  {
+    id: 'show-understanding',
+    title: 'Show what it understood',
+    category: 'input',
+    summary: 'For voice and images, show what the AI heard or saw before it acts.',
+    problem:
+      'Speech and images are easy to misread. If the AI acts on a wrong reading, people do not know why the result is off.',
+    solution:
+      'Show the transcript or the detected parts of an image, highlight unclear bits, and let people correct them before or while the AI answers.',
+    when: ['Voice input', 'Image, camera or document input'],
+    avoid: ['Plain typed text, where people already see what they wrote'],
+    dos: ['Show live transcript or detected areas', 'Make the wrong part easy to fix', 'Show a clear listening or reading state'],
+    donts: ['Act silently on a guess', 'Hide what was picked from the image'],
+    examples: [],
+  },
+  {
+    id: 'autonomy-dial',
+    title: 'Choose how much the AI does',
+    category: 'agents',
+    summary: 'Let people set the agent’s freedom per task, from “suggest only” to “act alone”.',
+    problem:
+      'One fixed level of autonomy never fits. Some tasks are safe to automate, others need a person in the loop. People want to decide.',
+    solution:
+      'Offer clear levels such as Suggest, Ask before acting and Act on its own. Show what each level means, and let people change it per task or tool.',
+    when: ['Agents that act in other apps or on files', 'Tasks with very different levels of risk'],
+    avoid: ['Too many fine-grained settings nobody understands'],
+    dos: ['Name levels by what the AI will do', 'Default to the safer level', 'Let people change the level at any time'],
+    donts: ['Hide autonomy in deep settings', 'Silently raise the level over time'],
+    examples: [],
+    demo: 'AutonomyLevels',
+  },
+  {
+    id: 'action-log',
+    title: 'Activity log & undo',
+    category: 'agents',
+    summary: 'Keep a readable record of what the agent did, with a way to undo each step.',
+    problem:
+      'After an agent works, people cannot tell what it changed. When something is wrong they cannot find it or reverse it.',
+    solution:
+      'Show a plain-language log of each action, with the time, what changed and why. Offer undo or restore points for each step or for the whole run.',
+    when: ['Agents that edit files, data or settings', 'Long or background tasks'],
+    avoid: ['Tiny actions that are obvious and instantly visible'],
+    dos: ['Write log lines people understand', 'Link each step to what it changed', 'Offer restore points'],
+    donts: ['Show only raw technical logs', 'Make actions impossible to reverse'],
+    examples: [],
+  },
+  {
+    id: 'interrupt-redirect',
+    title: 'Pause & redirect',
+    category: 'agents',
+    summary: 'Let people pause an agent mid-task, change the instruction, and continue.',
+    problem:
+      'When an agent heads the wrong way, the only choices are often to wait or to cancel and lose all the work.',
+    solution:
+      'Give a clear Pause that keeps progress. Let people add a correction or take over, then resume from where it stopped.',
+    when: ['Multi-step agent tasks', 'Tasks people can watch while they run'],
+    avoid: ['Instant, one-step answers'],
+    dos: ['Keep work done so far when paused', 'Let people type a correction', 'Show where it will resume'],
+    donts: ['Make Stop the same as “delete everything”', 'Ignore new instructions until the end'],
+    examples: [],
+    demo: 'PauseRedirect',
+  },
+  {
+    id: 'cost-estimate',
+    title: 'Show the cost first',
+    category: 'agents',
+    summary: 'Before an expensive AI task, show the time, credits or money it will use.',
+    problem:
+      'Some AI tasks use a lot of credits, money or time. Surprises on the bill break trust and stop people from trying.',
+    solution:
+      'Show an estimate before starting, offer a cheaper or faster option, and show the real cost afterwards.',
+    when: ['Paid credits or usage-based pricing', 'Long research, video or agent runs'],
+    avoid: ['Free, instant actions where cost talk adds noise'],
+    dos: ['Show the estimate next to the start button', 'Offer a cheaper draft option', 'Warn before limits are reached'],
+    donts: ['Reveal the cost only after the task', 'Hide usage in a billing page'],
+    examples: [],
+  },
 ];
 
 // Keep the list grouped by category (stable sort keeps the order inside a group).

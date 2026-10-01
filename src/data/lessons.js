@@ -153,7 +153,7 @@ export const lessons = [
   {
     id: 'designing-agents',
     level: 'Advanced',
-    minutes: 7,
+    minutes: 9,
     title: 'Designing AI agents',
     intro: 'Agents do work on their own: many steps, real actions. The design job is to keep people in charge without slowing everything down.',
     sections: [
@@ -166,13 +166,41 @@ export const lessons = [
         text: 'Safe actions (drafts, searches): just do them. Risky actions (send, pay, delete): stop and show exactly what will happen.',
       },
       {
+        heading: 'Choose the level of autonomy', visual: 'autonomy-dial',
+        text: 'Agent autonomy is a scale. At level 1 the person does the work and the AI helps; at level 5 the AI works alone and the person watches. Let people pick the level per task, start low, and keep Pause, a log and Undo at every level.',
+      },
+      {
         heading: 'Let people walk away', visual: 'task-status',
         text: 'Long tasks run in the background with a clear status. Tell people when they are needed, and always offer a human.',
       },
     ],
-    takeaways: ['Show the plan, then start', 'Ask before risky actions, not every action', 'Background + status for long tasks'],
+    takeaways: ['Show the plan, then start', 'Let people choose the autonomy level per task', 'Ask before risky actions, not every action', 'Keep Pause, a log and Undo', 'Show costs before big tasks'],
     exercise: 'List what an AI agent in your product could do. Sort each action into "just do it" or "ask first".',
-    patterns: ['plan-first', 'action-approval', 'task-status'],
+    patterns: ['plan-first', 'autonomy-dial', 'action-approval', 'interrupt-redirect', 'action-log', 'cost-estimate', 'task-status'],
+  },
+  {
+    id: 'avoiding-dark-patterns',
+    level: 'Advanced',
+    minutes: 6,
+    title: 'Avoiding AI dark patterns',
+    intro: 'Some AI designs look great in a demo but harm the people using them. Research has named them, so you can spot and avoid them.',
+    sections: [
+      {
+        heading: 'Honest beats pleasing', visual: 'confidence-signals',
+        text: 'AI that always agrees (sycophancy) or sounds certain about guesses leads people to bad decisions. Show uncertainty and sources, and let the AI disagree politely.',
+      },
+      {
+        heading: 'Never pretend to be human', visual: 'ai-disclosure',
+        text: 'A human name, fake typing or claimed feelings make people over-trust the AI and share too much. Say clearly that it is AI. A friendly tone is fine.',
+      },
+      {
+        heading: 'No sneaking', visual: 'action-approval',
+        text: 'Agents must not buy, share, delete or subscribe without clear consent. Ask before risky actions, with exact details, and always offer a way to a human.',
+      },
+    ],
+    takeaways: ['Reward honesty, not agreement', 'Always disclose AI', 'Ask before acting', 'Let conversations end cleanly', 'Make data use visible and optional'],
+    exercise: 'Open the Anti-patterns page. Pick an AI product you use and check it against all eight. Which one does it come closest to?',
+    patterns: ['confidence-signals', 'ai-disclosure', 'action-approval', 'memory-controls'],
   },
 ];
 

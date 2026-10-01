@@ -145,9 +145,69 @@ export const patternPrinciples = {
     ['control', 'People can leave, come back, or ask for a person.'],
     ['peak-end', 'A smooth handoff to a human ends a bad moment well.'],
   ],
+  'contextual-nudge': [
+    ['habituation', 'Offering help only at the right moment keeps it noticed.'],
+    ['minimalist', 'One small chip instead of a pop-up.'],
+    ['agency', 'Skipping is respected, so the person stays in charge.'],
+  ],
+  'reply-to-part': [
+    ['cognitive-load', 'Pointing at text is easier than describing it.'],
+    ['recognition', 'The quoted part stays visible, nothing to remember.'],
+    ['control', 'Only the chosen part changes.'],
+  ],
+  'show-understanding': [
+    ['visibility', 'A live transcript shows what was heard.'],
+    ['error-prevention', 'Misreadings are caught before the AI acts.'],
+    ['mental-model', 'People learn how the AI hears and sees.'],
+  ],
+  'autonomy-dial': [
+    ['agency', 'People choose how much the agent may do.'],
+    ['calibrated-trust', 'Freedom grows as the agent earns trust.'],
+    ['error-prevention', 'Risky tasks stay supervised by default.'],
+  ],
+  'action-log': [
+    ['transparency', 'A readable record shows the work behind the result.'],
+    ['control', 'Undo and restore points give a way back.'],
+    ['loss-aversion', 'Restore points remove the fear of losing work.'],
+  ],
+  'interrupt-redirect': [
+    ['control', 'Pause is a clear way to step in.'],
+    ['loss-aversion', 'Progress is kept, so stopping costs nothing.'],
+    ['agency', 'People steer the task while it runs.'],
+  ],
+  'cost-estimate': [
+    ['visibility', 'The cost is visible before the action.'],
+    ['loss-aversion', 'Surprise charges feel like a loss; estimates prevent them.'],
+    ['error-prevention', 'A warning before the limit prevents half-finished tasks.'],
+  ],
 };
 
 export const patternsUsing = (principleId) =>
   Object.entries(patternPrinciples)
     .filter(([, list]) => list.some(([id]) => id === principleId))
     .map(([patternId]) => patternId);
+
+// Microsoft's 18 Guidelines for Human-AI Interaction (Amershi et al., CHI 2019),
+// grouped by phase, with the patterns on this site that put each one into practice.
+export const haxPhases = ['Initially', 'During interaction', 'When wrong', 'Over time'];
+
+export const haxGuidelines = [
+  { n: 1, phase: 'Initially', name: 'Make clear what the system can do', patterns: ['set-expectations', 'prompt-starters'] },
+  { n: 2, phase: 'Initially', name: 'Make clear how well the system can do what it can do', patterns: ['set-expectations', 'confidence-signals'] },
+  { n: 3, phase: 'During interaction', name: 'Time services based on context', patterns: ['contextual-nudge', 'inline-suggestions'] },
+  { n: 4, phase: 'During interaction', name: 'Show contextually relevant information', patterns: ['visible-context', 'citations'] },
+  { n: 5, phase: 'During interaction', name: 'Match relevant social norms', patterns: ['structured-controls'] },
+  { n: 6, phase: 'During interaction', name: 'Mitigate social biases', patterns: [] },
+  { n: 7, phase: 'When wrong', name: 'Support efficient invocation', patterns: ['prompt-starters', 'reply-to-part'] },
+  { n: 8, phase: 'When wrong', name: 'Support efficient dismissal', patterns: ['inline-suggestions', 'contextual-nudge'] },
+  { n: 9, phase: 'When wrong', name: 'Support efficient correction', patterns: ['editable-output', 'reply-to-part', 'show-understanding'] },
+  { n: 10, phase: 'When wrong', name: 'Scope services when in doubt', patterns: ['clarifying-questions', 'confidence-signals'] },
+  { n: 11, phase: 'When wrong', name: 'Make clear why the system did what it did', patterns: ['explain-why', 'citations'] },
+  { n: 12, phase: 'Over time', name: 'Remember recent interactions', patterns: ['memory-controls', 'regenerate-history'] },
+  { n: 13, phase: 'Over time', name: 'Learn from user behavior', patterns: ['feedback-loop', 'memory-controls'] },
+  { n: 14, phase: 'Over time', name: 'Update and adapt cautiously', patterns: ['autonomy-dial', 'preview-changes'] },
+  { n: 15, phase: 'Over time', name: 'Encourage granular feedback', patterns: ['feedback-loop'] },
+  { n: 16, phase: 'Over time', name: 'Convey the consequences of user actions', patterns: ['action-approval', 'cost-estimate', 'preview-changes'] },
+  { n: 17, phase: 'Over time', name: 'Provide global controls', patterns: ['memory-controls', 'autonomy-dial'] },
+  { n: 18, phase: 'Over time', name: 'Notify users about changes', patterns: ['memory-controls', 'task-status'] },
+];

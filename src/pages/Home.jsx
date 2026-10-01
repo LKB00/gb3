@@ -1,6 +1,6 @@
 import { useTitle } from '../useTitle';
 import { Link } from 'react-router-dom';
-import { ArrowRight, BookOpen, ChevronRight, FlaskConical, ScanSearch } from 'lucide-react';
+import { ArrowRight, BookOpen, Brain, ChevronRight, FlaskConical, ScanSearch, ShieldAlert } from 'lucide-react';
 import { categories, patterns } from '../data/patterns';
 import { lessons } from '../data/lessons';
 import { visuals } from '../data/visuals';
@@ -76,7 +76,7 @@ export default function Home() {
       </section>
 
       <section className="block">
-        <h2>Learn by doing</h2>
+        <h2>Go deeper</h2>
         <ul className="index-list">
           <li>
             <Link to="/practice" className="index-row index-row-icon">
@@ -91,6 +91,22 @@ export default function Home() {
               <FlaskConical size={18} strokeWidth={1.5} aria-hidden />
               <span className="index-title">Design Labs</span>
               <span className="index-sum">Build a feature, then check it for common mistakes.</span>
+              <ChevronRight size={16} strokeWidth={1.75} className="index-chev" aria-hidden />
+            </Link>
+          </li>
+          <li>
+            <Link to="/anti-patterns" className="index-row index-row-icon">
+              <ShieldAlert size={18} strokeWidth={1.5} aria-hidden />
+              <span className="index-title">Anti-patterns</span>
+              <span className="index-sum">Eight AI dark patterns, why they harm people, and what to do instead.</span>
+              <ChevronRight size={16} strokeWidth={1.75} className="index-chev" aria-hidden />
+            </Link>
+          </li>
+          <li>
+            <Link to="/principles" className="index-row index-row-icon">
+              <Brain size={18} strokeWidth={1.5} aria-hidden />
+              <span className="index-title">Principles</span>
+              <span className="index-sum">The psychology behind the patterns, and Microsoft’s 18 guidelines.</span>
               <ChevronRight size={16} strokeWidth={1.75} className="index-chev" aria-hidden />
             </Link>
           </li>

@@ -1,0 +1,37 @@
+// Plain-English AI terms for designers, each with why it matters for design.
+export const glossary = [
+  { term: 'Agent', def: 'An AI that takes several steps on its own to reach a goal, often using tools like a browser or files.', design: 'Needs plans, approvals, logs and undo, not just a chat box.' },
+  { term: 'Autonomy level', def: 'How much an agent does without asking, from “suggest only” to “act alone”.', design: 'Let people choose it per task and start low.' },
+  { term: 'Calibration', def: 'How well an AI’s confidence matches how often it is actually right.', design: 'Only show confidence if it is calibrated; otherwise it misleads.' },
+  { term: 'Context window', def: 'How much text the model can read at once: the conversation, files and instructions.', design: 'Say when input was too long and got cut.' },
+  { term: 'Evals', def: 'Tests that measure how well an AI feature performs on real examples.', design: 'Designers can write the examples that define “good”.' },
+  { term: 'Fine-tuning', def: 'Training a model further on examples so it fits one task or style.', design: 'Changes tone and behavior, so involve design in the examples.' },
+  { term: 'Grounding', def: 'Making the AI answer from specific sources, like your documents, instead of only its memory.', design: 'Makes citations possible; show which sources were used.' },
+  { term: 'Guardrails', def: 'Rules and checks that stop an AI from doing harmful or off-topic things.', design: 'When a guardrail blocks something, explain it in plain words.' },
+  { term: 'Hallucination', def: 'When an AI states something false or made-up as if it were true.', design: 'Design for checking: sources, uncertainty and easy correction.' },
+  { term: 'Human in the loop', def: 'A person reviews or approves the AI’s work at key moments.', design: 'Put the review where the risk is, not on every step.' },
+  { term: 'Latency', def: 'How long the AI takes to respond.', design: 'Stream results and show steps so waiting feels shorter.' },
+  { term: 'Memory', def: 'Information an AI keeps about a person between conversations.', design: 'Show what is saved and let people delete it.' },
+  { term: 'Model', def: 'The trained AI system that produces answers, like the engine inside a product.', design: 'Different models trade speed, cost and quality.' },
+  { term: 'Multimodal', def: 'An AI that works with more than text: images, voice, files or video.', design: 'Show what it saw or heard before it acts.' },
+  { term: 'Prompt', def: 'The instruction or question given to the AI.', design: 'Most people are not prompt experts; give examples and controls.' },
+  { term: 'RAG', def: 'Retrieval-augmented generation: the AI first finds relevant documents, then answers using them.', design: 'Enables “answers from your docs” with citations.' },
+  { term: 'Streaming', def: 'Showing the answer piece by piece as it is generated.', design: 'Makes long answers feel faster; keep a Stop button visible.' },
+  { term: 'Sycophancy', def: 'An AI agreeing with or flattering people instead of being accurate.', design: 'Avoid it; reward honest, evidence-based answers.' },
+  { term: 'System prompt', def: 'Hidden instructions from the product team that shape how the AI behaves.', design: 'Where tone, limits and safety rules are set.' },
+  { term: 'Temperature', def: 'A setting for how random or creative the AI’s output is.', design: 'Higher for brainstorming, lower for facts.' },
+  { term: 'Token', def: 'A small chunk of text the model reads and writes; usage is often priced per token.', design: 'Long inputs and outputs cost more; show costs for big tasks.' },
+  { term: 'Tool use', def: 'When an AI calls other software, like search, a calendar or code, to get something done.', design: 'Show which tools it used and ask before risky ones.' },
+];
+
+export const furtherReading = [
+  { name: 'Guidelines for Human-AI Interaction', by: 'Microsoft Research (HAX Toolkit)', url: 'https://www.microsoft.com/en-us/haxtoolkit/' },
+  { name: 'People + AI Guidebook', by: 'Google PAIR', url: 'https://pair.withgoogle.com/guidebook/' },
+  { name: 'The Shape of AI', by: 'Emily Campbell', url: 'https://www.shapeof.ai/' },
+  { name: 'Accordion Editing and Apple Picking', by: 'Nielsen Norman Group', url: 'https://www.nngroup.com/articles/accordion-editing-apple-picking/' },
+  { name: 'Carbon for AI', by: 'IBM Carbon Design System', url: 'https://carbondesignsystem.com/guidelines/carbon-for-ai/' },
+  { name: 'Designing for Agentic AI', by: 'Smashing Magazine', url: 'https://www.smashingmagazine.com/2026/02/designing-agentic-ai-practical-ux-patterns/' },
+  { name: 'Dark Patterns in AI Chatbots', by: 'Center for Democracy & Technology', url: 'https://cdt.org/insights/dark-patterns-in-ai-chatbots-a-taxonomy-to-inform-better-design/' },
+  { name: 'AI UX Playground', by: 'Pattern catalog with demos', url: 'https://aiuxplayground.com/' },
+  { name: 'aiverse', by: 'Library of AI interactions', url: 'https://www.aiverse.design/' },
+];
