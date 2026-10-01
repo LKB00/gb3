@@ -1,9 +1,11 @@
 import { useSearchParams } from 'react-router-dom';
 import { categories, patterns } from '../data/patterns';
 import PatternCard from '../components/PatternCard';
+import { usePassed } from '../progress';
 
 export default function Patterns() {
   const [params, setParams] = useSearchParams();
+  const passed = usePassed();
   const category = params.get('category') || 'all';
   const query = params.get('q') || '';
 
@@ -24,7 +26,7 @@ export default function Patterns() {
   return (
     <div className="container page">
       <h1>Pattern library</h1>
-      <p className="lead">Proven ways to solve common problems in AI products. Every pattern has a live demo.</p>
+      <p className="lead">{patterns.length} proven ways to solve common problems in AI products. Each one has a visual example and a Design Lab.</p>
 
       <div className="filters">
         <input
@@ -46,7 +48,7 @@ export default function Patterns() {
 
       {list.length ? (
         <div className="card-grid">
-          {list.map((p) => <PatternCard key={p.id} pattern={p} />)}
+          {list.map((p) => <PatternCard key={p.id} pattern={p} passed={passed.includes(p.id)} />)}
         </div>
       ) : (
         <div className="empty">

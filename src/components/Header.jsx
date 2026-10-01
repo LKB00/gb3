@@ -32,10 +32,11 @@ export default function Header() {
           <span className="logo-mark" aria-hidden>
             <svg viewBox="0 0 32 32" width="22" height="22"><path d="M9 22l7-12 7 12" stroke="currentColor" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>
           </span>
-          AI Patterns
+          <span className="logo-text">AI Patterns</span>
         </Link>
         <nav className="nav" aria-label="Main">
           <NavLink to="/patterns">Patterns</NavLink>
+          <NavLink to="/practice">Practice</NavLink>
           <NavLink to="/learn">Learn</NavLink>
           <button className="icon-btn" onClick={() => setTheme(isDark ? 'light' : 'dark')} aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}>
             {isDark ? '☀️' : '🌙'}

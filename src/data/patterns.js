@@ -7,6 +7,7 @@ export const categories = [
   { id: 'control', name: 'Control', blurb: 'Keep the person in charge, not the AI.' },
   { id: 'trust', name: 'Trust', blurb: 'Be honest about what the AI knows and does.' },
   { id: 'feedback', name: 'Feedback', blurb: 'Learn from people and recover from mistakes.' },
+  { id: 'agents', name: 'Agents', blurb: 'Design AI that works on its own, safely.' },
 ];
 
 export const patterns = [
@@ -221,7 +222,151 @@ export const patterns = [
     examples: ['"I couldn\'t read that file — try a PDF under 20 MB"', 'Fallback to manual mode when AI is down'],
     demo: 'GracefulErrors',
   },
+  {
+    id: 'visible-context',
+    title: 'Show the context',
+    category: 'input',
+    summary: 'Show what the AI is looking at, and let people change it.',
+    problem:
+      'People do not know what the AI can "see". It answers about the wrong file, or people paste things it already had.',
+    solution:
+      'Show context as chips near the input ("Q3-report.pdf", "3 selected frames"). Let people add or remove them.',
+    when: ['AI uses the current page, file, selection or history', 'More than one source could be used'],
+    avoid: ['Very simple, single-purpose tools'],
+    dos: ['Show context chips near the input', 'Let people remove or add context', 'Say when context was too big and got cut'],
+    donts: ['Use hidden context people cannot see', 'Silently use an old or wrong file'],
+    examples: ['Coding assistants showing open files', 'Design tools: "Using 3 selected frames"'],
+  },
+  {
+    id: 'structured-controls',
+    title: 'Simple controls, not prompt tricks',
+    category: 'input',
+    summary: 'Give chips and sliders for common needs like tone and length.',
+    problem: 'People must learn "prompt magic" to get the tone or length they want. Most never do.',
+    solution:
+      'Offer simple controls (tone chips, a length slider, a format menu) that add the right instructions behind the scenes.',
+    when: ['The same changes are asked again and again (shorter, more formal…)', 'Users are not prompt experts'],
+    avoid: ['So many controls that it turns into a complex form'],
+    dos: ['Pick the 2–3 most common adjustments', 'Show the current setting clearly', 'Keep free text for everything else'],
+    donts: ['Show 15 settings up front', 'Hide what each control does'],
+    examples: ['Writing tools with tone and length menus', 'Image tools with style and size presets'],
+  },
+  {
+    id: 'regenerate-history',
+    title: 'Versions & retry',
+    category: 'output',
+    summary: 'Let people try again without losing earlier answers.',
+    problem: 'Regenerate replaces the old answer. If the new one is worse, the good one is gone.',
+    solution: 'Keep every version. Show "2 / 3" with arrows so people can go back. Let them say what to change.',
+    when: ['Creative or open-ended answers', 'People often press "try again"'],
+    avoid: ['Facts — different versions of a fact confuse people'],
+    dos: ['Show a version count (2 / 3)', 'Offer quick hints for the retry (shorter, funnier)', 'Keep edits per version'],
+    donts: ['Overwrite the old answer', 'Hide earlier versions in a menu'],
+    examples: ['Chat assistants with ‹ 2/3 › arrows', 'Image tools with a history strip'],
+  },
+  {
+    id: 'preview-changes',
+    title: 'Preview before apply',
+    category: 'control',
+    summary: 'Show what the AI will change before it changes it.',
+    problem: 'When AI edits many things at once, people cannot see what changed, so they cannot check it.',
+    solution: 'Show changes as before → after. Let people accept all, reject all, or go one by one.',
+    when: ['AI edits existing work: text, code, data, designs', 'One action changes many items'],
+    avoid: ['Tiny, obvious changes — an inline suggestion is enough'],
+    dos: ['Highlight removed and added parts', 'Allow accept / reject per change', 'Show a count: "12 changes"'],
+    donts: ['Apply everything silently', 'Show only the final version with no "before"'],
+    examples: ['Code assistants showing diffs', 'Docs with "suggested edits" mode'],
+  },
+  {
+    id: 'set-expectations',
+    title: 'Set expectations',
+    category: 'trust',
+    summary: 'Say early what the AI can do, what it cannot, and that it can be wrong.',
+    problem: 'People expect AI to know everything, or nothing. Wrong expectations lead to blind trust or no use at all.',
+    solution:
+      'On first use, show 2–3 strengths, the key limit, and a short honest note: "Can make mistakes. Check important info."',
+    when: ['First use of an AI feature', 'Adding AI to a product people already know'],
+    avoid: ['Long legal text that people skip'],
+    dos: ['Name 2–3 strengths with examples', 'Say the most important limit', 'Keep a small "can make mistakes" note visible'],
+    donts: ['Over-promise ("knows everything!")', 'Hide limits in the terms of service'],
+    examples: ['"I can\'t see your files" notes', 'Beta labels on new AI features'],
+  },
+  {
+    id: 'explain-why',
+    title: 'Explain why',
+    category: 'trust',
+    summary: 'Show the main reasons behind an AI result, in simple words.',
+    problem: 'When AI recommends or decides with no reason, people either follow blindly or ignore it.',
+    solution: 'Show the 2–3 real reasons in plain words, next to the result. Let people correct a wrong reason.',
+    when: ['Recommendations, rankings, flags and decisions', 'High-stakes results (money, health, hiring)'],
+    avoid: ['Obvious results', 'Long technical explanations nobody reads'],
+    dos: ['Use 2–3 short, real reasons', 'Link reasons to the person\'s own data', 'Let people say "this is wrong"'],
+    donts: ['Show model jargon (scores, weights)', 'Invent nice-sounding reasons that are not the real ones'],
+    examples: ['"Because you watched X"', 'Spam filters saying why a mail was flagged'],
+  },
+  {
+    id: 'memory-controls',
+    title: 'Memory you control',
+    category: 'trust',
+    summary: 'Show what the AI remembers, and let people edit or delete it.',
+    problem:
+      'AI that remembers things feels creepy when people do not know what it knows. Wrong memories keep causing bad answers.',
+    solution:
+      'Say when something is saved, show one clear memory list, and let people edit, delete, or turn memory off.',
+    when: ['Assistants that personalize over time', 'Any AI that saves user data for later'],
+    avoid: ['Never hide memory, even "for their own good"'],
+    dos: ['Show a small "Memory updated" note', 'One place to see and delete memories', 'Offer a temporary / private chat'],
+    donts: ['Save sensitive things silently', 'Make deleting hard to find'],
+    examples: ['"Manage memory" pages in chat assistants', 'Temporary chats that are not remembered'],
+  },
+  {
+    id: 'plan-first',
+    title: 'Show the plan first',
+    category: 'agents',
+    summary: 'Before a long task, the AI shows its plan so people can fix it early.',
+    problem:
+      'Agents start long tasks right away. If they misunderstood, people find out at the end, after time and money are spent.',
+    solution: 'Show a short step-by-step plan with a time estimate. Let people edit steps, then press Start.',
+    when: ['Multi-step tasks (research, bulk edits, migrations)', 'Tasks that take minutes or cost money'],
+    avoid: ['Quick one-step tasks — just do them'],
+    dos: ['Keep the plan short (3–7 steps)', 'Let people edit, add or remove steps', 'Show a time or cost estimate'],
+    donts: ['Start without showing the plan', 'Show a 40-step technical plan'],
+    examples: ['Research agents confirming the scope', 'Coding agents proposing a plan before editing'],
+  },
+  {
+    id: 'action-approval',
+    title: 'Ask before risky actions',
+    category: 'agents',
+    summary: 'The AI asks first before it sends, pays, deletes or shares.',
+    problem: 'Agents can send emails, buy things or delete data. One wrong action can cause real harm.',
+    solution:
+      'Low-risk actions: just do them. High-risk actions: pause, show exactly what will happen, and ask. Let people set how much freedom the AI has.',
+    when: ['Sending, paying, deleting, sharing, publishing', 'Actions in other apps on the person\'s behalf'],
+    avoid: ['Asking about every tiny step — people start clicking "Yes" without reading'],
+    dos: ['Show exactly what will happen (who, what, how many)', 'Make Cancel as easy as Approve', 'Let people set autonomy levels'],
+    donts: ['Ask about everything (approval fatigue)', 'Use vague questions like "Proceed?"'],
+    examples: ['Agents asking before sending an email', 'Shopping agents confirming the total before paying'],
+  },
+  {
+    id: 'task-status',
+    title: 'Background tasks & handoff',
+    category: 'agents',
+    summary: 'For long tasks, show status, let people leave, and hand over clearly.',
+    problem:
+      'Long AI tasks lock the screen or run invisibly. When they get stuck nobody knows, and people cannot reach a human.',
+    solution:
+      'Run long tasks in the background with a clear status. Notify when done or when input is needed. Offer a path to a human.',
+    when: ['Tasks longer than ~30 seconds', 'Support bots and agents that can get stuck'],
+    avoid: ['Very short tasks — keep them inline'],
+    dos: ['Show status: running, needs you, done', 'Let people leave and come back', 'Hand off to a human with the full chat'],
+    donts: ['Lock the screen until finished', 'Trap people in a bot loop with no human option'],
+    examples: ['Agents that notify when a report is ready', 'Support chats with "Talk to a person"'],
+  },
 ];
+
+// Keep the list grouped by category (stable sort keeps the order inside a group).
+const catOrder = (p) => categories.findIndex((c) => c.id === p.category);
+patterns.sort((a, b) => catOrder(a) - catOrder(b));
 
 export const getPattern = (id) => patterns.find((p) => p.id === id);
 export const getCategory = (id) => categories.find((c) => c.id === id);
