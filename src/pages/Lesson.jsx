@@ -47,7 +47,7 @@ export default function Lesson() {
       </aside>
 
       <aside className="panel exercise">
-        <h2>✏️ Try this</h2>
+        <h2>Try this</h2>
         <p>{lesson.exercise}</p>
       </aside>
 

@@ -93,7 +93,7 @@ export default function PatternDetail() {
         <div className="row wrap related">
           <span className="demo-muted">Learn more in:</span>
           {relatedLessons.map((l) => (
-            <Link key={l.id} to={`/learn/${l.id}`} className="chip">📘 {l.title}</Link>
+            <Link key={l.id} to={`/learn/${l.id}`} className="chip">{l.title}</Link>
           ))}
         </div>
       )}
