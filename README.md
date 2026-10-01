@@ -8,6 +8,8 @@ A playground for AI interaction design. Not a course: quick games, instant wins,
 - **Fix it** (the Play tab on each card): build an AI feature one decision at a time with instant feedback. Win the card with 1–3 stars.
 - **Spot the flaw** (`/play/spot-the-flaw`): realistic AI screens with hidden mistakes. Tap what is wrong.
 - **Cards** (`/patterns`): 34 pattern cards in 7 groups (Input, Output, Control, Trust, Feedback, Agents, Voice & vision). Each has Play, Why it works and Cheat sheet tabs.
+- **Day streak + daily goal** (`/play`, flame in the top bar): any answer in any game is a "move"; 10 moves is the daily goal. One missed day per week is covered by a free skip day, so one busy day doesn't wipe out a streak. A toast celebrates the goal.
+- **Player card** (`/play/card`): your name, AI-designer type (from the group you've mastered most, e.g. "The Trust Keeper"), level, XP, stats and badges. Save as a 1080×1350 image or share; made in the browser, nothing uploaded.
 - **XP, levels and badges** (`/play`): stars, flaws found and best streak add up to XP; 6 levels from Rookie to Legend; a badge per group (gold with all 3 stars).
 - **Explore**: Teardowns of ChatGPT, Perplexity, GitHub Copilot and Claude Code; 8 AI dark patterns; Principles (UX heuristics, psychology, Microsoft's 18 Human-AI guidelines); Glossary; Deep dives (9 short reads).
 - Light and dark mode, works on phone and desktop. Progress is saved only in the browser.
@@ -53,6 +55,8 @@ Live at **https://lkb00.github.io/patricka/** — every push to `main` builds an
 | Daily challenge + share grid | A small reason to come back every day, and a result people want to post. No fake leaderboards: we have no server, so we never invent numbers. |
 | Story mode with a trust meter | Choices with visible consequences (and a branch when things go wrong) are more gripping than single questions. |
 | Hard mode | Near-identical screens train the eye for small details, like a design review. |
+| Day streak with a free skip day | Builds a habit without guilt: one busy day doesn't reset weeks of play, and today not played yet never shows as broken. |
+| Player card + designer type | Something personal to keep and show off; the type changes as you play, so it's a reason to explore other groups. |
 | Levels and badges | Small, honest goals (next level, finish a group) instead of a syllabus. |
 | Confetti, XP pops, card unlocks | Short moments of delight on wins; turned off for people who prefer reduced motion. |
 | Breadcrumbs | Every inner page shows where you are and one step back. |

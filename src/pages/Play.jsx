@@ -7,6 +7,7 @@ import { dailyStreak, useDaily, useGameStats, useHuntsDone, usePassed, useStars,
 import { dailyNumber, todayKey } from '../game/decks';
 import Hunt from '../components/Hunt';
 import ThisOrThat from '../components/ThisOrThat';
+import { TodayCard } from '../components/Today';
 import Breadcrumbs from '../components/Breadcrumbs';
 import { useTitle } from '../useTitle';
 
@@ -41,7 +42,9 @@ export function LevelCard() {
         <p className="level-xp"><Zap size={16} strokeWidth={2} aria-hidden /> {xp} XP</p>
       </div>
       <span className="meter meter-xp" aria-hidden><span style={{ width: `${pct}%` }} /></span>
-      <p className="small muted">{nextLevel ? `${toNext} XP to ${nextLevel.name}` : 'Top level. Legendary.'}</p>
+      <p className="small muted">
+        {nextLevel ? `${toNext} XP to ${nextLevel.name}` : 'Top level. Legendary.'} · <Link to="/play/card" className="level-card-link">Your player card</Link>
+      </p>
       <ul className="level-stats">
         <li><strong>{passed.length}/{patterns.length}</strong> cards</li>
         <li><strong>{starTotal}</strong> stars</li>
@@ -140,6 +143,7 @@ export default function Play() {
       </header>
       <div className="play-grid">
         <LevelCard />
+        <TodayCard />
         <DailyBanner />
         <GameTiles />
       </div>

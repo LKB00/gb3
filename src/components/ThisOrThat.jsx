@@ -4,7 +4,7 @@ import { ArrowRight, Check, Eye, Flame, RotateCcw, Trophy, X } from 'lucide-reac
 import { getCategory, getPattern } from '../data/patterns';
 import { makeDeck } from '../game/decks';
 import MockFrame, { MockBlock } from '../mock/Mock';
-import { saveStreak, useGameStats, XP } from '../progress';
+import { markPlayed, saveStreak, useGameStats, XP } from '../progress';
 import Burst from './Burst';
 
 // This or That: two versions of the same AI screen. Tap the better one.
@@ -55,6 +55,7 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
     (n) => {
       if (pick !== null || over) return;
       setPick(n);
+      markPlayed();
       const ok = sides[n] === 'good';
       setResults((r) => [...r, ok]);
       if (ok) {

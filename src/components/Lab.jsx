@@ -1,7 +1,7 @@
 import { ArrowLeft, ArrowRight, Check, RotateCcw, Star, TriangleAlert } from 'lucide-react';
 import { useState } from 'react';
 import MockFrame, { MockBlock, MockSlot } from '../mock/Mock';
-import { markPassed, saveStars, useStars, XP } from '../progress';
+import { markPassed, markPlayed, saveStars, useStars, XP } from '../progress';
 import Burst, { XpPop } from './Burst';
 
 // Challenge ("Fix it"), built as a guided flow:
@@ -28,6 +28,7 @@ export default function Lab({ id, lab, title, next }) {
   const stars = mistakes === 0 ? 3 : mistakes === 1 ? 2 : 1;
 
   const pick = (i) => {
+    markPlayed();
     setChoice((c) => ({ ...c, [d.id]: i }));
     setTried((t) => ({ ...t, [d.id]: (t[d.id] || []).includes(i) ? t[d.id] : [...(t[d.id] || []), i] }));
   };

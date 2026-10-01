@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { patterns } from '../data/patterns';
-import { usePassed, useXP } from '../progress';
+import { usePassed, useStreak, useXP } from '../progress';
 import ThisOrThat from '../components/ThisOrThat';
 import { DailyBanner, GameTiles } from './Play';
 import { useTitle } from '../useTitle';
@@ -11,6 +11,7 @@ export default function Home() {
   useTitle(null);
   const passed = usePassed();
   const { xp, level } = useXP();
+  const { streak } = useStreak();
 
   return (
     <div className="page page-wide">
@@ -20,7 +21,7 @@ export default function Home() {
         <p className="lead">Quick games about the patterns behind ChatGPT, Copilot, Perplexity and more. Play a round right now.</p>
         {xp > 0 && (
           <p className="home-me">
-            You’re a <strong>{level.name}</strong> · {xp} XP · {passed.length}/{patterns.length} cards
+            You’re a <strong>{level.name}</strong> · {xp} XP · {passed.length}/{patterns.length} cards{streak > 0 && ` · 🔥 ${streak}-day streak`} · <Link to="/play/card">Your player card</Link>
           </p>
         )}
       </header>
