@@ -17,7 +17,7 @@ export default function Practice() {
 
       <section className="practice-block">
         <div className="row space-between">
-          <h2>🔍 Mistake Hunt</h2>
+          <h2>Mistake Hunt</h2>
           <span className="demo-muted small">Screen {idx + 1} of {hunts.length}</span>
         </div>
         <div className="hunt-tabs" role="tablist" aria-label="Screens">
@@ -38,7 +38,7 @@ export default function Practice() {
 
       <section className="practice-block">
         <div className="row space-between">
-          <h2>🧪 Design Labs</h2>
+          <h2>Design Labs</h2>
           <span className="lab-count">{passed.length} / {patterns.length} passed</span>
         </div>
         <p className="demo-muted">Build each feature by picking options. The lab checks your design for common mistakes.</p>

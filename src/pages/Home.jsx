@@ -18,8 +18,8 @@ export default function Home() {
       <section className="hero">
         <div className="container hero-inner">
           <div className="hero-copy">
-            <p className="eyebrow eyebrow-pill">✦ For designers · Free · Hands-on</p>
-            <h1>Learn to design <span className="grad-text">great AI experiences</span></h1>
+            <p className="eyebrow">For designers · Free · Hands-on</p>
+            <h1>Learn to design great AI experiences</h1>
             <p className="lead">
               {patterns.length} AI design patterns, shown as pictures — not walls of text. Build each one yourself, and get told when you make a common mistake.
             </p>
@@ -47,7 +47,7 @@ export default function Home() {
                   <MockSlot state="good" marker={2} blocks={[{ type: 'buttons', items: ['-■ Stop'] }]} />
                 </MockFrame>
               </div>
-              <h3>🧪 Design Lab</h3>
+              <h3>Design Lab</h3>
               <p>Pick options to build an AI feature. Press <strong>Check</strong>: wrong parts turn red, with the reason why.</p>
             </Link>
             <Link to="/practice" className="card practice-card">
@@ -58,7 +58,7 @@ export default function Home() {
                   <MockBlock b={{ type: 'ai', text: 'They love it. Sales +40%.' }} state="found" marker={2} />
                 </MockFrame>
               </div>
-              <h3>🔍 Mistake Hunt</h3>
+              <h3>Mistake Hunt</h3>
               <p>Real-looking AI screens with hidden mistakes. Tap what is wrong and learn the pattern that fixes it.</p>
             </Link>
           </div>

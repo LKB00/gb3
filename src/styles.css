@@ -1,5 +1,5 @@
 /* ---------- Design tokens ----------
-   Pastel "AI product" look: soft aurora glow, gradient accents, pastel group colors. */
+   Minimal pastel look: flat pastel fills, thin neutral lines, no decoration. */
 :root {
   --bg: #fbfaff;
   --bg-alt: #f6f3ff;
@@ -11,8 +11,9 @@
   --accent: #6b4cf0;
   --accent-soft: #efeaff;
   --accent-text: #ffffff;
-  --grad: linear-gradient(120deg, #6b4cf0 0%, #a64fd8 55%, #d9588e 100%);
-  --grad-text: linear-gradient(100deg, #6b4cf0 0%, #c2549f 55%, #e07a3f 100%);
+  --primary-bg: #e2d9ff;
+  --primary-bg-hover: #d6caff;
+  --primary-text: #2a1f66;
   --ok: #16815a;
   --ok-soft: #e3f7ee;
   --warn: #a65c12;
@@ -27,9 +28,6 @@
   --p-peach: #ffe5d6;
   --p-pink: #ffe0ee;
   --p-butter: #fff3cc;
-  --glow-1: rgba(186, 160, 255, 0.45);
-  --glow-2: rgba(255, 190, 214, 0.4);
-  --glow-3: rgba(170, 225, 255, 0.4);
   /* category ink (text on pastel) */
   --c-input: #2f63c9;
   --c-output: #6b45d8;
@@ -39,7 +37,7 @@
   --c-agents: #7a6200;
   --radius: 18px;
   --radius-sm: 11px;
-  --shadow: 0 1px 2px rgba(60, 40, 120, 0.04), 0 8px 28px rgba(90, 60, 180, 0.08);
+  --shadow: none;
   --font: 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-display: 'Sora', 'DM Sans', system-ui, sans-serif;
   color-scheme: light;
@@ -57,8 +55,9 @@
   --accent: #b6a4ff;
   --accent-soft: #2a2350;
   --accent-text: #120f22;
-  --grad: linear-gradient(120deg, #a48dff 0%, #d79af2 55%, #ffaec4 100%);
-  --grad-text: linear-gradient(100deg, #b8a6ff 0%, #f0a3d0 55%, #ffc39b 100%);
+  --primary-bg: #c9bcff;
+  --primary-bg-hover: #d8ceff;
+  --primary-text: #1a1433;
   --ok: #7be0b0;
   --ok-soft: #143026;
   --warn: #ffc979;
@@ -72,16 +71,13 @@
   --p-peach: #3a2419;
   --p-pink: #3a1a2e;
   --p-butter: #332b10;
-  --glow-1: rgba(130, 100, 255, 0.28);
-  --glow-2: rgba(240, 120, 180, 0.18);
-  --glow-3: rgba(90, 170, 255, 0.18);
   --c-input: #9cc4ff;
   --c-output: #c3b0ff;
   --c-control: #86e6c0;
   --c-trust: #ffc29a;
   --c-feedback: #ffa6cc;
   --c-agents: #f1dc7a;
-  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 28px rgba(0, 0, 0, 0.25);
+  --shadow: none;
   color-scheme: dark;
   }
 }
@@ -97,8 +93,9 @@
   --accent: #b6a4ff;
   --accent-soft: #2a2350;
   --accent-text: #120f22;
-  --grad: linear-gradient(120deg, #a48dff 0%, #d79af2 55%, #ffaec4 100%);
-  --grad-text: linear-gradient(100deg, #b8a6ff 0%, #f0a3d0 55%, #ffc39b 100%);
+  --primary-bg: #c9bcff;
+  --primary-bg-hover: #d8ceff;
+  --primary-text: #1a1433;
   --ok: #7be0b0;
   --ok-soft: #143026;
   --warn: #ffc979;
@@ -112,16 +109,13 @@
   --p-peach: #3a2419;
   --p-pink: #3a1a2e;
   --p-butter: #332b10;
-  --glow-1: rgba(130, 100, 255, 0.28);
-  --glow-2: rgba(240, 120, 180, 0.18);
-  --glow-3: rgba(90, 170, 255, 0.18);
   --c-input: #9cc4ff;
   --c-output: #c3b0ff;
   --c-control: #86e6c0;
   --c-trust: #ffc29a;
   --c-feedback: #ffa6cc;
   --c-agents: #f1dc7a;
-  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 28px rgba(0, 0, 0, 0.25);
+  --shadow: none;
   color-scheme: dark;
 }
 
@@ -2203,23 +2197,10 @@ button.ai-badge {
 }
 
 /* =========================================================
-   Pastel AI-product theme layer
+   Minimal pastel layer
+   Flat pastel fills, thin neutral lines. Color outlines are used
+   only where they carry meaning (mistake = red, good = green).
    ========================================================= */
-body {
-  font-family: var(--font);
-}
-/* soft aurora glow behind the whole site */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background:
-    radial-gradient(40vw 32vw at 85% -6%, var(--glow-1), transparent 70%),
-    radial-gradient(34vw 28vw at 8% 4%, var(--glow-3), transparent 70%),
-    radial-gradient(30vw 26vw at 60% 30%, var(--glow-2), transparent 70%);
-}
 h1,
 h2,
 h3,
@@ -2227,74 +2208,62 @@ h3,
 .step-heading,
 .lab-score-num {
   font-family: var(--font-display);
-  letter-spacing: -0.025em;
+  letter-spacing: -0.02em;
+  font-weight: 600;
 }
 h1,
 h2 {
   text-wrap: balance;
 }
-.grad-text {
-  background: var(--grad-text);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-.eyebrow-pill {
-  display: inline-flex;
-  padding: 5px 12px;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--surface) 70%, transparent);
-  border: 1px solid var(--border);
-  letter-spacing: 0.04em;
-}
 .hero {
   background: none;
 }
+.section-alt {
+  background: var(--bg-alt);
+  border: none;
+}
 
-/* header: glass */
+/* header */
 .site-header {
-  background: color-mix(in srgb, var(--bg) 72%, transparent);
-  backdrop-filter: blur(14px) saturate(1.4);
-  -webkit-backdrop-filter: blur(14px) saturate(1.4);
-  border-bottom-color: color-mix(in srgb, var(--border) 70%, transparent);
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
 }
 .logo-mark {
-  background: var(--grad);
-  color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 14px var(--glow-1);
+  background: var(--primary-bg);
+  color: var(--primary-text);
+  border-radius: 9px;
 }
 .nav a.active {
   background: var(--p-lavender);
-  color: var(--accent);
-}
-.icon-btn {
-  border-radius: 10px;
+  color: var(--text);
 }
 
-/* buttons */
+/* buttons: flat pastel */
 .btn {
-  border-radius: 12px;
+  border-radius: 10px;
 }
 .btn-primary {
-  background: var(--grad);
-  color: var(--accent-text);
-  box-shadow: 0 4px 16px var(--glow-1);
+  background: var(--primary-bg);
+  color: var(--primary-text);
+  font-weight: 600;
 }
 .btn-primary:hover:not(:disabled) {
   filter: none;
-  box-shadow: 0 6px 24px var(--glow-1), 0 0 0 3px var(--p-lavender);
-}
-.btn-ghost {
-  background: color-mix(in srgb, var(--surface) 85%, transparent);
+  background: var(--primary-bg-hover);
 }
 .chip-on,
 .chip-on:disabled {
-  background: var(--grad);
-  border-color: transparent;
+  background: var(--primary-bg);
+  border-color: var(--primary-bg);
+  color: var(--primary-text);
+}
+.icon-on,
+.icon-btn:hover {
+  background: var(--p-lavender);
+  border-color: var(--border);
 }
 
-/* pastel group colors */
+/* pastel group colors (fills only) */
 .tag {
   background: var(--pc, var(--p-lavender));
 }
@@ -2306,18 +2275,15 @@ h2 {
 .tag-agents, .cat-agents, .thumb-agents { --pc: var(--p-butter); }
 .tag-done { --pc: var(--ok-soft); }
 
-/* cards */
-.card {
-  border-color: color-mix(in srgb, var(--border) 80%, transparent);
-  background: color-mix(in srgb, var(--surface) 88%, transparent);
-}
+/* cards: no shadows, no lift, no colored strokes */
 a.card:hover {
-  border-color: color-mix(in srgb, var(--accent) 35%, transparent);
-  box-shadow: 0 10px 34px var(--glow-1);
+  transform: none;
+  box-shadow: none;
+  border-color: var(--text-2);
 }
 .cat-card {
-  border-top: 1px solid var(--border);
-  background: linear-gradient(160deg, var(--pc) 0%, var(--surface) 75%);
+  border: none;
+  background: var(--pc);
 }
 .thumb {
   background: var(--pc, var(--bg-alt));
@@ -2326,95 +2292,95 @@ a.card:hover {
 .thumb::after {
   background: linear-gradient(transparent, var(--pc, var(--bg-alt)));
 }
-.section-alt {
-  background: linear-gradient(180deg, color-mix(in srgb, var(--p-lavender) 45%, transparent), transparent);
-  border: none;
-}
 .path-num,
-.lab-num {
-  background: var(--p-lavender);
-  color: var(--accent);
-}
+.lab-num,
 .step-heading span {
-  background: var(--grad);
-  color: #fff;
-  box-shadow: 0 4px 12px var(--glow-1);
-}
-.progress span {
-  background: var(--grad);
+  background: var(--p-lavender);
+  color: var(--primary-text);
 }
 .panel-accent {
-  background: linear-gradient(140deg, var(--p-lavender), var(--p-pink));
+  background: var(--p-lavender);
   border-color: transparent;
 }
-.more,
-.panel {
+.progress span {
+  background: var(--primary-bg-hover);
+}
+.panel,
+.more {
   border-radius: var(--radius);
 }
 
-/* mock screens: AI-app look */
+/* mock screens */
 .m-frame,
 .demo-frame {
-  border-radius: 16px;
+  border-radius: 14px;
+  box-shadow: none;
 }
 .m-top,
 .demo-bar {
-  background: linear-gradient(90deg, var(--p-lavender), var(--p-sky));
-  border-bottom-color: transparent;
-}
-.m-dots i,
-.demo-dots i {
-  background: color-mix(in srgb, var(--surface) 75%, transparent);
+  background: var(--bg-alt);
 }
 .m-user,
-.bubble-user {
-  background: var(--grad);
-  color: var(--accent-text);
+.bubble-user,
+.m-send,
+.m-chip-on,
+.m-btn-primary {
+  background: var(--primary-bg);
+  border-color: var(--primary-bg);
+  color: var(--primary-text);
 }
 .m-ai,
 .bubble-ai {
-  background: var(--p-lavender);
+  background: var(--surface-2);
 }
-.m-send {
-  background: var(--grad);
-}
-.m-chip-on,
-.m-btn-primary {
-  background: var(--grad);
-  border-color: transparent;
+.m-modal {
+  box-shadow: none;
 }
 
-/* compare */
-.compare-bad .m-frame { border-top: 3px solid var(--bad); }
-.compare-good .m-frame { border-top: 3px solid var(--ok); }
-.compare-bad .m-top { background: linear-gradient(90deg, var(--p-pink), var(--p-peach)); }
-.compare-good .m-top { background: linear-gradient(90deg, var(--p-mint), var(--p-sky)); }
+/* compare: the label says Avoid / Better; no colored frame strokes */
+.compare-bad .m-frame,
+.compare-good .m-frame {
+  border-top: 1px solid var(--border);
+}
+.cat-card {
+  border-top: none;
+}
 
-/* design lab: pastel workspace */
+/* meaning-only outlines: thinner */
+.mb-bad, .mb-good, .mb-found, .mb-missed, .mb-fine,
+.m-slot-good, .m-slot-bad {
+  outline-width: 1.5px;
+}
+
+/* design lab: one flat pastel surface */
 .lab {
-  border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
-  background:
-    radial-gradient(60% 80% at 100% 0%, var(--p-pink), transparent 70%),
-    radial-gradient(60% 80% at 0% 100%, var(--p-sky), transparent 70%),
-    var(--p-lavender);
+  border: none;
+  background: var(--bg-alt);
 }
 .lab-opt {
-  border-radius: 12px;
-  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  border-width: 1px;
+  border-radius: 10px;
 }
 .lab-opt-on {
-  background: var(--surface);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
+  background: var(--p-lavender);
+  border-color: var(--p-lavender);
+  box-shadow: none;
 }
-.lab-why,
-.lab-score {
-  border-radius: 12px;
+.lab-opt-good {
+  background: var(--ok-soft);
+  border-color: var(--ok-soft);
 }
-
-/* practice */
-.hunt-list li {
-  border-radius: 14px;
+.lab-opt-bad {
+  background: var(--bad-soft);
+  border-color: var(--bad-soft);
 }
-.lab-link {
-  border-radius: 12px;
+.practice-visual {
+  background: var(--bg-alt);
+}
+.m-banner,
+.error-box {
+  border-color: transparent;
+}
+.m-edit {
+  border-color: var(--border);
 }
