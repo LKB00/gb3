@@ -30,7 +30,7 @@ export default function Header() {
       <div className="container header-inner">
         <Link to="/" className="logo">
           <span className="logo-mark" aria-hidden>
-            <svg viewBox="0 0 32 32" width="22" height="22"><path d="M9 22l7-12 7 12" stroke="currentColor" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            <svg viewBox="0 0 32 32" width="18" height="18"><path d="M16 3c1 8 5 12 13 13-8 1-12 5-13 13-1-8-5-12-13-13 8-1 12-5 13-13z" fill="currentColor" /></svg>
           </span>
           <span className="logo-text">AI Patterns</span>
         </Link>

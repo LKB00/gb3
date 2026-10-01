@@ -8,7 +8,7 @@ export default function PatternCard({ pattern, passed }) {
   const good = visuals[pattern.id].compare.good;
   return (
     <Link to={`/patterns/${pattern.id}`} className="card pattern-card">
-      <div className="thumb" aria-hidden>
+      <div className={`thumb thumb-${pattern.category}`} aria-hidden>
         <MockFrame mini>
           {good.blocks.map((b, i) => <MockBlock key={i} b={b} />)}
         </MockFrame>

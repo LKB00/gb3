@@ -18,8 +18,8 @@ export default function Home() {
       <section className="hero">
         <div className="container hero-inner">
           <div className="hero-copy">
-            <p className="eyebrow">For designers · Free · Hands-on</p>
-            <h1>Learn to design great AI experiences</h1>
+            <p className="eyebrow eyebrow-pill">✦ For designers · Free · Hands-on</p>
+            <h1>Learn to design <span className="grad-text">great AI experiences</span></h1>
             <p className="lead">
               {patterns.length} AI design patterns, shown as pictures — not walls of text. Build each one yourself, and get told when you make a common mistake.
             </p>
