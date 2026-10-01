@@ -151,4 +151,30 @@ export const hunts = [
       },
     ],
   },
+  {
+    id: 'voice-assistant',
+    title: 'Voice shopping assistant',
+    app: 'Homey · voice assistant',
+    brief: 'A smart display where people shop and manage their home by voice.',
+    blocks: [
+      {
+        type: 'voice', state: 'idle', label: '…',
+        mistake: { text: 'No listening state. People cannot tell if they are being heard. Show who is talking.', pattern: 'voice-turn-taking' },
+      },
+      { type: 'user', text: 'Order more of the oat milk I usually get' },
+      {
+        type: 'voice', state: 'speaking', label: 'Speaking', text: 'I found nine options. Option one, Oatly Barista, one litre, three ninety-nine. Option two…',
+        mistake: { text: 'A long list read aloud. Say a short summary and show the options on screen.', pattern: 'mode-switch' },
+      },
+      {
+        type: 'toast', text: 'Ordered 12 × Oat milk 1L for $47.88', action: '',
+        mistake: { text: 'Ordered without reading back the item, quantity and price. Read it back and wait for a yes.', pattern: 'read-back' },
+      },
+      { type: 'chips', items: ['Track order', 'Reorder'] },
+      {
+        type: 'note', text: 'Please wait until I finish speaking.', tone: 'warn',
+        mistake: { text: 'People cannot interrupt. Stop speaking the moment the person talks.', pattern: 'voice-turn-taking' },
+      },
+    ],
+  },
 ];

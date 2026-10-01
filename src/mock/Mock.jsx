@@ -287,6 +287,36 @@ function Block({ b }) {
           )}
         </div>
       );
+    case 'voice': {
+      // A voice state: who is talking, shown with a small waveform and a label.
+      const bars = b.state === 'idle' ? 0 : 5;
+      return (
+        <div className={`m-voice m-voice-${b.state || 'listening'}`}>
+          <span className="m-wave" aria-hidden>
+            {Array.from({ length: bars }).map((_, i) => <i key={i} style={{ animationDelay: `${i * 0.12}s` }} />)}
+          </span>
+          <span className="m-voice-label">{b.label}</span>
+          {b.text && <span className="m-voice-text">{b.text}</span>}
+        </div>
+      );
+    }
+    case 'image':
+      // A stand-in photo with an optional selection area (x, y, w, h in %).
+      return (
+        <div className="m-image" style={{ height: b.height || 96 }}>
+          <span className="m-shape m-shape-a" aria-hidden />
+          <span className="m-shape m-shape-b" aria-hidden />
+          <span className="m-shape m-shape-c" aria-hidden />
+          {b.sel && (
+            <span
+              className="m-sel"
+              style={{ left: `${b.sel[0]}%`, top: `${b.sel[1]}%`, width: `${b.sel[2]}%`, height: `${b.sel[3]}%` }}
+            >
+              {b.selLabel && <span className="m-sel-label">{b.selLabel}</span>}
+            </span>
+          )}
+        </div>
+      );
     case 'blank':
       return <div className="m-blank" style={{ height: b.height || 56 }}>{b.text}</div>;
     case 'empty':

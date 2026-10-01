@@ -1,6 +1,6 @@
 import { useTitle } from '../useTitle';
 import { Link } from 'react-router-dom';
-import { ArrowRight, BookOpen, Brain, ChevronRight, FlaskConical, ScanSearch, ShieldAlert } from 'lucide-react';
+import { ArrowRight, BookOpen, Brain, ChevronRight, FlaskConical, Layers, ScanSearch, ShieldAlert } from 'lucide-react';
 import { categories, patterns } from '../data/patterns';
 import { lessons } from '../data/lessons';
 import { visuals } from '../data/visuals';
@@ -91,6 +91,14 @@ export default function Home() {
               <FlaskConical size={18} strokeWidth={1.5} aria-hidden />
               <span className="index-title">Design Labs</span>
               <span className="index-sum">Build a feature, then check it for common mistakes.</span>
+              <ChevronRight size={16} strokeWidth={1.75} className="index-chev" aria-hidden />
+            </Link>
+          </li>
+          <li>
+            <Link to="/teardowns" className="index-row index-row-icon">
+              <Layers size={18} strokeWidth={1.5} aria-hidden />
+              <span className="index-title">Teardowns</span>
+              <span className="index-sum">How ChatGPT, Perplexity, GitHub Copilot and Claude Code use the patterns.</span>
               <ChevronRight size={16} strokeWidth={1.75} className="index-chev" aria-hidden />
             </Link>
           </li>

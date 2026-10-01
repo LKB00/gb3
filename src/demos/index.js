@@ -4,6 +4,7 @@ import { EditableOutput, InlineSuggestion, StopAndUndo } from './ControlDemos';
 import { Citations, ConfidenceSignals, AiDisclosure } from './TrustDemos';
 import { FeedbackLoop, GracefulErrors } from './FeedbackDemos';
 import { AutonomyLevels, PauseRedirect } from './AgentDemos';
+import { VoiceTurns } from './VoiceDemos';
 
 // Maps the `demo` key in patterns.js to its component.
 export const demos = {
@@ -21,4 +22,5 @@ export const demos = {
   GracefulErrors,
   AutonomyLevels,
   PauseRedirect,
+  VoiceTurns,
 };

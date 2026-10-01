@@ -202,6 +202,34 @@ export const lessons = [
     exercise: 'Open the Anti-patterns page. Pick an AI product you use and check it against all eight. Which one does it come closest to?',
     patterns: ['confidence-signals', 'ai-disclosure', 'action-approval', 'memory-controls'],
   },
+  {
+    id: 'voice-and-vision',
+    level: 'Advanced',
+    minutes: 7,
+    title: 'Designing for voice and vision',
+    intro: 'When people talk to AI or show it a photo, there is less text on screen to rely on. These patterns keep it clear and safe.',
+    sections: [
+      {
+        heading: 'Make turns obvious', visual: 'voice-turn-taking',
+        text: 'Show clearly when the AI is listening, thinking and speaking, and let people interrupt by simply talking. That is how real conversations work.',
+      },
+      {
+        heading: 'Read back what matters', visual: 'read-back',
+        text: 'Speech recognition mishears names and numbers. Before sending money or messages, read back the key details in one short sentence and wait for a yes.',
+      },
+      {
+        heading: 'Point, don’t describe', visual: 'point-to-edit',
+        text: 'For images, let people circle the part they mean, then say what to do. Describing a location in words is slow and error-prone.',
+      },
+      {
+        heading: 'Use the screen for details', visual: 'mode-switch',
+        text: 'Speak a short summary and put lists, prices and options on a screen. People can only hold a few spoken items in mind.',
+      },
+    ],
+    takeaways: ['Distinct states for listening and speaking', 'Let people interrupt', 'Read back names and numbers', 'Let people point at images', 'Speak short, show details'],
+    exercise: 'Use a voice assistant to set a reminder with a time and a name. Did it read back the details? Could you interrupt it?',
+    patterns: ['voice-turn-taking', 'read-back', 'point-to-edit', 'mode-switch', 'show-understanding'],
+  },
 ];
 
 export const getLesson = (id) => lessons.find((l) => l.id === id);

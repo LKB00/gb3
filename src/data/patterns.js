@@ -8,6 +8,7 @@ export const categories = [
   { id: 'trust', name: 'Trust', blurb: 'Be honest about what the AI knows and does.' },
   { id: 'feedback', name: 'Feedback', blurb: 'Learn from people and recover from mistakes.' },
   { id: 'agents', name: 'Agents', blurb: 'Design AI that works on its own, safely.' },
+  { id: 'voice', name: 'Voice & vision', blurb: 'Design for speaking, listening and seeing.' },
 ];
 
 export const patterns = [
@@ -395,7 +396,7 @@ export const patterns = [
   {
     id: 'show-understanding',
     title: 'Show what it understood',
-    category: 'input',
+    category: 'voice',
     summary: 'For voice and images, show what the AI heard or saw before it acts.',
     problem:
       'Speech and images are easy to misread. If the AI acts on a wrong reading, people do not know why the result is off.',
@@ -467,6 +468,82 @@ export const patterns = [
     avoid: ['Free, instant actions where cost talk adds noise'],
     dos: ['Show the estimate next to the start button', 'Offer a cheaper draft option', 'Warn before limits are reached'],
     donts: ['Reveal the cost only after the task', 'Hide usage in a billing page'],
+    examples: [],
+  },
+  {
+    id: 'voice-turn-taking',
+    title: 'Show who is talking',
+    category: 'voice',
+    summary: 'Make it obvious when the AI is listening, thinking or speaking, and let people interrupt.',
+    problem:
+      'In voice, there is no screen of text to look at. People talk over the AI, wait in silence, or do not know if it heard them.',
+    solution:
+      'Show clear states for listening, thinking and speaking, with sound or motion cues. Let people interrupt the AI by simply talking (barge-in).',
+    when: ['Voice assistants and voice modes in chat apps', 'Hands-free use, like driving or cooking'],
+    avoid: ['Text-only experiences'],
+    dos: ['Use a distinct look for each state', 'Stop speaking the moment the person talks', 'Show the transcript for both sides'],
+    donts: ['Leave long silences with no cue', 'Force people to wait until the AI finishes'],
+    examples: [],
+    demo: 'VoiceTurns',
+  },
+  {
+    id: 'read-back',
+    title: 'Read it back before acting',
+    category: 'voice',
+    summary: 'For voice actions, repeat the key details and wait for a yes.',
+    problem:
+      'Speech recognition makes mistakes with names, numbers and times. A misheard detail can send money or messages to the wrong place.',
+    solution:
+      'Before acting, read back the important details in one short sentence (“Send $40 to Priya, right?”) and wait for a clear yes. Make “no” easy.',
+    when: ['Payments, messages, bookings, smart-home controls', 'Any action with names, numbers or times'],
+    avoid: ['Harmless actions like playing music, where read-back slows people down'],
+    dos: ['Read back only the details that matter', 'Accept natural answers like “yes” or “change the time”', 'Show the same details on screen if there is one'],
+    donts: ['Read back everything, every time', 'Act on unclear speech without asking'],
+    examples: [],
+  },
+  {
+    id: 'point-to-edit',
+    title: 'Point at what to change',
+    category: 'voice',
+    summary: 'Let people circle or select part of an image, then say what to do with it.',
+    problem:
+      'Describing a spot in an image with words is hard (“the second cup from the left”). The AI often edits the wrong thing.',
+    solution:
+      'Let people brush, circle or tap the area, then type or say the change. Edit only inside the selection and keep the rest untouched.',
+    when: ['Image editing and generation', 'Visual search and questions about photos'],
+    avoid: ['Changes to the whole image, like a new style'],
+    dos: ['Show the selection clearly', 'Edit only the selected area', 'Offer a few variations for the edit'],
+    donts: ['Make people describe locations in words', 'Change parts that were not selected'],
+    examples: [],
+  },
+  {
+    id: 'mode-switch',
+    title: 'Show it on screen',
+    category: 'voice',
+    summary: 'Use voice for quick asks and answers, and the screen for lists, choices and details.',
+    problem:
+      'Long lists, prices and choices are hard to remember when spoken. People lose track after the third option.',
+    solution:
+      'Speak a short summary, and put the details on a screen when one is available. Let people continue by touch, voice or typing, whichever is easiest.',
+    when: ['Devices with both voice and a screen', 'Answers with lists, numbers or several options'],
+    avoid: ['Truly screen-free moments, like driving, where you should keep lists very short'],
+    dos: ['Speak the headline, show the details', 'Keep spoken lists to 2–3 items', 'Let people switch input mode freely'],
+    donts: ['Read out long lists', 'Force voice when touch is faster'],
+    examples: [],
+  },
+  {
+    id: 'bias-check',
+    title: 'Check for bias',
+    category: 'trust',
+    summary: 'Show diverse, fair results by default, and let people report unfair output.',
+    problem:
+      'AI learns from data with human biases. It can repeat stereotypes in images, text or rankings, and harm the people it describes.',
+    solution:
+      'Test with diverse people and examples, show varied results by default when people are not specified, offer filters people can choose, and make reporting unfair output easy.',
+    when: ['Images or text about people', 'Rankings and decisions about people: hiring, lending, health'],
+    avoid: ['There is no case where bias does not matter; the effort just scales with the stakes'],
+    dos: ['Show variety when the prompt does not specify', 'Offer a one-click “Report unfair result”', 'Test with diverse users before launch'],
+    donts: ['Assume defaults are neutral', 'Hide how people can report harm'],
     examples: [],
   },
 ];
