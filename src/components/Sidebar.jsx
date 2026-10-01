@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { BookOpen, Check, FlaskConical, House, LayoutGrid, Menu, Moon, Sun, X } from 'lucide-react';
+import { BookOpen, Brain, Check, FlaskConical, House, LayoutGrid, Menu, Moon, Sun, X } from 'lucide-react';
 import { categories, patterns } from '../data/patterns';
 import { usePassed } from '../progress';
 import { useTheme } from '../theme';
@@ -56,6 +56,7 @@ export default function Sidebar() {
           <NavLink to="/" end className="sb-link"><House {...ICON} />Overview</NavLink>
           <NavLink to="/patterns" end className="sb-link"><LayoutGrid {...ICON} />All patterns</NavLink>
           <NavLink to="/practice" className="sb-link"><FlaskConical {...ICON} />Practice</NavLink>
+          <NavLink to="/principles" className="sb-link"><Brain {...ICON} />Principles</NavLink>
           <NavLink to="/learn" className="sb-link"><BookOpen {...ICON} />Learn</NavLink>
         </nav>
 
