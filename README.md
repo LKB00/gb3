@@ -22,6 +22,7 @@ A playground for AI interaction design. Not a course: quick games, instant wins,
 - **Backup code** (`/play` → Your progress): copy a code with all progress and paste it on another device. Restoring merges and never loses progress.
 - **Link previews**: Open Graph and Twitter tags with `public/og.png`, so shared links show a title card.
 - **“I disagree”** links on answers open a ready-to-send GitHub issue.
+- **Phone experience**: a bottom tab bar (Home, Play, Cards, Explore, Me), a back button instead of breadcrumbs, games edge to edge, both This or That screens on one screen, the main action (Next, Check) pinned near the thumb, a full-screen Speed round, tap feedback instead of hover, and a **Me** tab with level, today, badges, settings and backup.
 - Light and dark mode, works on phone and desktop. Progress is saved only in the browser.
 
 ## Visitor stats (optional)
@@ -81,6 +82,7 @@ Live at **https://lkb00.github.io/patricka/** — every push to `main` builds an
 | Four stories | Different products (agent, voice, support, coding) show the same trust ideas in new places. |
 | Challenge links | The fastest way for one player to bring the next one, with no accounts or server. |
 | Installable app + backup code | Feels like a real app on a phone, and progress isn't trapped in one browser. |
+| Phone: bottom tabs, back button, pinned actions | One-handed use: the main places and the next action sit where the thumb is. Games fit on one screen, so nothing needs scrolling mid-round. |
 | Levels and badges | Small, honest goals (next level, finish a group) instead of a syllabus. |
 | Confetti, XP pops, card unlocks | Short moments of delight on wins; turned off for people who prefer reduced motion. |
 | Breadcrumbs | Every inner page shows where you are and one step back. |

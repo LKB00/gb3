@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import TopBar from './components/TopBar';
+import BottomNav from './components/BottomNav';
+import Me from './pages/Me';
 import Footer from './components/Footer';
 import Home from './pages/Home';
 import Patterns from './pages/Patterns';
@@ -32,6 +34,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/patterns" element={<Patterns />} />
           <Route path="/patterns/:id" element={<PatternDetail />} />
+          <Route path="/me" element={<Me />} />
           <Route path="/play" element={<Play />} />
           <Route path="/play/this-or-that" element={<ThisOrThatPage />} />
           <Route path="/play/spot-the-flaw" element={<SpotTheFlaw />} />
@@ -53,6 +56,7 @@ export default function App() {
         </Routes>
         <Footer />
       </main>
+      <BottomNav />
     </div>
   );
 }
