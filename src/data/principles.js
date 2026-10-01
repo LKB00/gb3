@@ -37,6 +37,8 @@ export const principles = [
   { id: 'agency', type: 'psychology', name: 'Sense of agency', def: 'People need to feel that they, not the system, decide the outcome.' },
   { id: 'cognitive-load', type: 'psychology', name: 'Cognitive load', def: 'Every extra thing to read, type or remember costs mental effort.' },
   { id: 'habituation', type: 'psychology', name: 'Habituation', def: 'Warnings that appear too often stop being read.' },
+  { id: 'stereotype', type: 'psychology', name: 'Stereotype reinforcement', def: 'Repeated images of who does what shape what people believe is normal.' },
+  { id: 'working-memory', type: 'psychology', name: 'Working memory limits', def: 'People can hold only a few items in mind at once, especially when listening.' },
 ];
 
 export const getPrinciple = (id) => principles.find((p) => p.id === id);
@@ -180,6 +182,29 @@ export const patternPrinciples = {
     ['loss-aversion', 'Surprise charges feel like a loss; estimates prevent them.'],
     ['error-prevention', 'A warning before the limit prevents half-finished tasks.'],
   ],
+  'voice-turn-taking': [
+    ['visibility', 'Listening, thinking and speaking each look different.'],
+    ['match', 'Turn-taking and interrupting work like a real conversation.'],
+    ['control', 'Talking over the AI takes the turn back.'],
+  ],
+  'read-back': [
+    ['error-prevention', 'Misheard names and numbers are caught before acting.'],
+    ['cognitive-load', 'Only the key details are read back, so it stays short.'],
+  ],
+  'point-to-edit': [
+    ['cognitive-load', 'Pointing replaces describing a location in words.'],
+    ['control', 'Only the selected area changes.'],
+    ['agency', 'People decide exactly what the AI touches.'],
+  ],
+  'mode-switch': [
+    ['working-memory', 'Spoken lists overload memory; a screen holds the details.'],
+    ['recognition', 'Seeing options beats remembering them.'],
+  ],
+  'bias-check': [
+    ['stereotype', 'Varied defaults avoid teaching narrow pictures of who does what.'],
+    ['automation-bias', 'People tend to accept AI defaults as neutral, even when they are not.'],
+    ['agency', 'Filters let people choose instead of the model assuming.'],
+  ],
 };
 
 export const patternsUsing = (principleId) =>
@@ -196,8 +221,8 @@ export const haxGuidelines = [
   { n: 2, phase: 'Initially', name: 'Make clear how well the system can do what it can do', patterns: ['set-expectations', 'confidence-signals'] },
   { n: 3, phase: 'During interaction', name: 'Time services based on context', patterns: ['contextual-nudge', 'inline-suggestions'] },
   { n: 4, phase: 'During interaction', name: 'Show contextually relevant information', patterns: ['visible-context', 'citations'] },
-  { n: 5, phase: 'During interaction', name: 'Match relevant social norms', patterns: ['structured-controls'] },
-  { n: 6, phase: 'During interaction', name: 'Mitigate social biases', patterns: [] },
+  { n: 5, phase: 'During interaction', name: 'Match relevant social norms', patterns: ['structured-controls', 'voice-turn-taking'] },
+  { n: 6, phase: 'During interaction', name: 'Mitigate social biases', patterns: ['bias-check'] },
   { n: 7, phase: 'When wrong', name: 'Support efficient invocation', patterns: ['prompt-starters', 'reply-to-part'] },
   { n: 8, phase: 'When wrong', name: 'Support efficient dismissal', patterns: ['inline-suggestions', 'contextual-nudge'] },
   { n: 9, phase: 'When wrong', name: 'Support efficient correction', patterns: ['editable-output', 'reply-to-part', 'show-understanding'] },
@@ -207,7 +232,7 @@ export const haxGuidelines = [
   { n: 13, phase: 'Over time', name: 'Learn from user behavior', patterns: ['feedback-loop', 'memory-controls'] },
   { n: 14, phase: 'Over time', name: 'Update and adapt cautiously', patterns: ['autonomy-dial', 'preview-changes'] },
   { n: 15, phase: 'Over time', name: 'Encourage granular feedback', patterns: ['feedback-loop'] },
-  { n: 16, phase: 'Over time', name: 'Convey the consequences of user actions', patterns: ['action-approval', 'cost-estimate', 'preview-changes'] },
+  { n: 16, phase: 'Over time', name: 'Convey the consequences of user actions', patterns: ['action-approval', 'cost-estimate', 'preview-changes', 'read-back'] },
   { n: 17, phase: 'Over time', name: 'Provide global controls', patterns: ['memory-controls', 'autonomy-dial'] },
   { n: 18, phase: 'Over time', name: 'Notify users about changes', patterns: ['memory-controls', 'task-status'] },
 ];

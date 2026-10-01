@@ -11,6 +11,7 @@ import Practice from './pages/Practice';
 import Principles from './pages/Principles';
 import AntiPatterns from './pages/AntiPatterns';
 import Glossary from './pages/Glossary';
+import { TeardownDetail, TeardownList } from './pages/Teardowns';
 import NotFound from './pages/NotFound';
 
 export default function App() {
@@ -30,6 +31,8 @@ export default function App() {
           <Route path="/principles" element={<Principles />} />
           <Route path="/anti-patterns" element={<AntiPatterns />} />
           <Route path="/glossary" element={<Glossary />} />
+          <Route path="/teardowns" element={<TeardownList />} />
+          <Route path="/teardowns/:id" element={<TeardownDetail />} />
           <Route path="/learn" element={<Learn />} />
           <Route path="/learn/:id" element={<Lesson />} />
           <Route path="*" element={<NotFound />} />

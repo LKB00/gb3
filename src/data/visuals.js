@@ -1458,4 +1458,242 @@ export const visuals = {
       ],
     },
   },
+  /* ================= NEW: VOICE & VISION ================= */
+  'voice-turn-taking': {
+    compare: {
+      bad: {
+        caption: 'Silence, then talking over each other',
+        blocks: [{ type: 'voice', state: 'idle', label: '…' , pin: 'Is it listening?' }, note('AI keeps talking while you speak', { tone: 'warn' })],
+      },
+      good: {
+        caption: 'Clear turns, easy to interrupt',
+        blocks: [
+          { type: 'voice', state: 'speaking', label: 'Speaking', text: 'Your next meeting is at 3 pm…', pin: 'Clear state' },
+          note('Start talking to interrupt'),
+          { type: 'voice', state: 'listening', label: 'Listening', text: 'Move it to 4' },
+        ],
+      },
+    },
+    lab: {
+      goal: 'Design the voice mode of an assistant app.',
+      frame: [slot('listen'), slot('speak'), slot('barge')],
+      decisions: [
+        {
+          id: 'listen',
+          label: 'While it listens',
+          options: [
+            opt('No signal', false, 'People do not know if they are being heard, so they repeat themselves.', [{ type: 'voice', state: 'idle', label: '…' }]),
+            opt('Listening state + live words', true, 'People can see it is hearing them, and what it heard.', [{ type: 'voice', state: 'listening', label: 'Listening', text: 'What is on my calendar…' }]),
+          ],
+        },
+        {
+          id: 'speak',
+          label: 'While it speaks',
+          options: [
+            opt('Same look as listening', false, 'People cannot tell whose turn it is.', [{ type: 'voice', state: 'listening', label: 'Listening' }]),
+            opt('Distinct speaking state', true, 'Each turn looks different, so turn-taking feels natural.', [{ type: 'voice', state: 'speaking', label: 'Speaking', text: 'You have 3 meetings today…' }]),
+          ],
+        },
+        {
+          id: 'barge',
+          label: 'When people talk over it',
+          options: [
+            opt('It keeps talking', false, 'People must wait for long answers they do not need.', [note('Please wait until I finish.', { tone: 'warn' })]),
+            opt('It stops and listens', true, 'Interrupting is how people talk; the AI should allow it.', [note('Stopped. Listening…')]),
+          ],
+        },
+      ],
+    },
+  },
+
+  'read-back': {
+    compare: {
+      bad: {
+        caption: 'Acts on what it thinks it heard',
+        blocks: [user('Send forty dollars to Priya'), toast('Sent $14 to Pria K.', '', { pin: 'Misheard, already sent' })],
+      },
+      good: {
+        caption: 'One short read-back, then act',
+        blocks: [
+          user('Send forty dollars to Priya'),
+          { type: 'voice', state: 'speaking', label: 'Speaking', text: 'Send $40 to Priya Shah. Right?', pin: 'Key details only' },
+          buttons(['!Yes, send', 'Change']),
+        ],
+      },
+    },
+    lab: {
+      goal: 'A voice assistant can send money to contacts.',
+      frame: [user('Send forty dollars to Priya'), slot('confirm'), slot('detail'), slot('no')],
+      decisions: [
+        {
+          id: 'confirm',
+          label: 'Before sending',
+          options: [
+            opt('Send right away', false, 'A misheard amount or name sends money to the wrong place.', [toast('Sent $14 to Pria K.')]),
+            opt('Read back, wait for yes', true, 'People catch mistakes before money moves.', [{ type: 'voice', state: 'speaking', label: 'Speaking', text: 'Send $40 to Priya Shah. Right?' }]),
+          ],
+        },
+        {
+          id: 'detail',
+          label: 'What it reads back',
+          options: [
+            opt('Every detail', false, 'Long read-backs are hard to follow and get skipped.', [note('Sending forty point zero zero US dollars from checking account ending 4821 to Priya Shah, phone ending…')]),
+            opt('Amount + person', true, 'Only the details that are easy to mishear and costly to get wrong.', [note('$40 to Priya Shah')]),
+          ],
+        },
+        {
+          id: 'no',
+          label: 'If it is wrong',
+          options: [
+            opt('Start over', false, 'Repeating the whole request is tiring.', [note('Cancelled. What would you like to do?')]),
+            opt('“Change the amount”', true, 'People fix just the wrong part in natural words.', [buttons(['!Yes, send', 'Change amount', 'Change person'])]),
+          ],
+        },
+      ],
+    },
+  },
+
+  'point-to-edit': {
+    compare: {
+      bad: {
+        caption: 'Describe the spot in words',
+        blocks: [{ type: 'image' }, input('Remove the second cup from the left, not the one near the plate', { pin: 'Hard to describe' })],
+      },
+      good: {
+        caption: 'Circle it, then say what to do',
+        blocks: [
+          { type: 'image', sel: [40, 22, 24, 52], selLabel: 'Selected', pin: 'Point, don’t describe' },
+          input('Remove this'),
+        ],
+      },
+    },
+    lab: {
+      goal: 'People want to remove one object from a photo.',
+      frame: [slot('pick'), slot('ask'), slot('scope')],
+      decisions: [
+        {
+          id: 'pick',
+          label: 'How do people choose the object?',
+          options: [
+            opt('Describe it in words', false, 'Locations are hard to describe and easy to misread.', [{ type: 'image' }]),
+            opt('Brush or circle it', true, 'Pointing is fast and exact.', [{ type: 'image', sel: [40, 22, 24, 52], selLabel: 'Selected' }]),
+          ],
+        },
+        {
+          id: 'ask',
+          label: 'Then they…',
+          options: [
+            opt('Write a full prompt', false, 'Long prompts for a simple edit slow people down.', [ph('Describe the whole image you want…')]),
+            opt('Say a short action', true, 'The selection carries the “where”; words only need the “what”.', [chips(['Remove', 'Replace with…', 'Make it blue'])]),
+          ],
+        },
+        {
+          id: 'scope',
+          label: 'The AI changes…',
+          options: [
+            opt('The whole image', false, 'Parts people liked change too.', [note('Regenerated the full photo', { tone: 'warn' })]),
+            opt('Only the selection', true, 'Everything outside the circle stays the same.', [note('Edited only the selected area · 3 variations')]),
+          ],
+        },
+      ],
+    },
+  },
+
+  'mode-switch': {
+    compare: {
+      bad: {
+        caption: 'A long list, read out loud',
+        blocks: [{ type: 'voice', state: 'speaking', label: 'Speaking', text: 'Option one, the 7:05 flight for $212 with one stop in… option two…', pin: 'Too much to remember' }],
+      },
+      good: {
+        caption: 'Say the headline, show the details',
+        blocks: [
+          { type: 'voice', state: 'speaking', label: 'Speaking', text: 'I found 3 flights. The cheapest is $212.', pin: 'Short summary' },
+          rows([
+            { label: '7:05 · 1 stop', value: '$212' },
+            { label: '9:40 · direct', value: '$268' },
+            { label: '13:15 · direct', value: '$245' },
+          ]),
+          chips(['Book 7:05', 'More options']),
+        ],
+      },
+    },
+    lab: {
+      goal: 'Someone asks a smart display: “Find me a flight to Mumbai tomorrow.”',
+      frame: [slot('speak'), slot('screen'), slot('next')],
+      decisions: [
+        {
+          id: 'speak',
+          label: 'What it says',
+          options: [
+            opt('Reads all options', false, 'People forget the first option by the time the third is read.', [{ type: 'voice', state: 'speaking', label: 'Speaking', text: 'Option one, the 7:05 flight… option two… option three…' }]),
+            opt('A one-line summary', true, 'Short to hear, easy to remember.', [{ type: 'voice', state: 'speaking', label: 'Speaking', text: 'I found 3 flights. The cheapest is $212.' }]),
+          ],
+        },
+        {
+          id: 'screen',
+          label: 'On the screen',
+          options: [
+            opt('Just a voice animation', false, 'The screen is wasted while people strain to remember.', [{ type: 'voice', state: 'idle', label: '' }]),
+            opt('The options as a list', true, 'Details are easier to compare by eye.', [rows([{ label: '7:05 · 1 stop', value: '$212' }, { label: '9:40 · direct', value: '$268' }])]),
+          ],
+        },
+        {
+          id: 'next',
+          label: 'To choose',
+          options: [
+            opt('Voice only', false, 'Tapping is faster when the option is right there.', [note('Say “book the first one”')]),
+            opt('Tap or say it', true, 'People use whichever is easier in the moment.', [chips(['Book 7:05', 'More options']), note('Or say “book the first one”')]),
+          ],
+        },
+      ],
+    },
+  },
+
+  'bias-check': {
+    compare: {
+      bad: {
+        caption: 'Stereotypes by default',
+        blocks: [user('Show me a doctor and a nurse'), card('4 images', 'Every doctor is a man, every nurse is a woman.', { pin: 'Repeats a stereotype' })],
+      },
+      good: {
+        caption: 'Varied by default, easy to report',
+        blocks: [
+          user('Show me a doctor and a nurse'),
+          card('4 images', 'People of different genders, ages and skin tones in both roles.', { pin: 'Variety when not specified' }),
+          buttons(['Report unfair result']),
+        ],
+      },
+    },
+    lab: {
+      goal: 'An image generator gets a prompt about people: “a CEO giving a talk”.',
+      frame: [user('A CEO giving a talk'), slot('default'), slot('choose'), slot('report')],
+      decisions: [
+        {
+          id: 'default',
+          label: 'When the prompt does not say who',
+          options: [
+            opt('Use whatever the model gives', false, 'Models repeat the biases in their data, like “CEO = older white man”.', [card('4 images', 'All four show the same kind of person.')]),
+            opt('Show variety', true, 'Varied defaults avoid teaching stereotypes.', [card('4 images', 'Different genders, ages and skin tones.')]),
+          ],
+        },
+        {
+          id: 'choose',
+          label: 'If people want something specific',
+          options: [
+            opt('They must know prompt tricks', false, 'Only expert users get fair control.', []),
+            opt('Simple filters they choose', true, 'People choose, the product does not assume.', [chips(['Any', 'Woman', 'Man', 'Older', 'Younger'], { on: 0 })]),
+          ],
+        },
+        {
+          id: 'report',
+          label: 'When output is unfair',
+          options: [
+            opt('No way to report', false, 'The team never learns where the model is biased.', []),
+            opt('One-click report', true, 'Reports find problems tests missed.', [buttons(['Report unfair result'])]),
+          ],
+        },
+      ],
+    },
+  },
 };

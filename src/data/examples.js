@@ -118,4 +118,24 @@ export const realExamples = {
     { product: 'Replit Agent', company: 'Replit', what: 'Shows what each agent checkpoint cost, so you can see where credits go.' },
     { product: 'Firefly', company: 'Adobe', what: 'Shows the generative credits a premium action will use before you run it.' },
   ],
+  'voice-turn-taking': [
+    { product: 'ChatGPT voice', company: 'OpenAI', what: 'Shows when it is listening or speaking, and you can interrupt it mid-answer.' },
+    { product: 'Gemini Live', company: 'Google', what: 'A voice conversation you can interrupt at any time to change direction.' },
+  ],
+  'read-back': [
+    { product: 'Alexa', company: 'Amazon', what: 'Confirms before placing a voice order, and you can require a voice code for purchases.' },
+    { product: 'Google Assistant', company: 'Google', what: 'Reads a dictated message back and asks before sending it.' },
+  ],
+  'point-to-edit': [
+    { product: 'Generative Fill', company: 'Adobe Photoshop', what: 'Select an area, describe the change, and only that area is regenerated.' },
+    { product: 'Magic Editor', company: 'Google Photos', what: 'Tap or circle an object to move, resize or erase just that object.' },
+  ],
+  'mode-switch': [
+    { product: 'Echo Show', company: 'Amazon', what: 'Speaks a short answer and shows lists, recipes and details on its screen.' },
+    { product: 'Nest Hub', company: 'Google', what: 'Pairs spoken answers with on-screen cards you can tap.' },
+  ],
+  'bias-check': [
+    { product: 'Monk Skin Tone Scale', company: 'Google', what: 'A 10-shade scale Google uses to make skin tones better represented in products like Search and Photos.' },
+    { product: 'Skin tone ranges', company: 'Pinterest', what: 'Lets people narrow beauty searches by skin tone range, instead of one default.' },
+  ],
 };
