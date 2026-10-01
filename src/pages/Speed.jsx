@@ -158,7 +158,7 @@ export default function Speed() {
   const [copied, setCopied] = useState(false);
   const share = async () => {
     const link = challengeLink('/play/speed', { seed, vs: points });
-    const text = `⚡ I scored ${points} in the Good Bot, Bad Bot speed round. Same screens, same order. Can you beat me? ${link}`;
+    const text = `⚡ I scored ${points} in the AI Patterns speed round. Same screens, same order. Can you beat me? ${link}`;
     if (await copyText(text)) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
