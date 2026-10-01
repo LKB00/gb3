@@ -26,9 +26,12 @@ export default function TopBar() {
             <ChevronLeft size={20} strokeWidth={2} aria-hidden /> {parent.name}
           </Link>
         )}
-        <Link to="/" className="logo" aria-label="AI Patterns, home">
+        <Link to="/" className="logo" aria-label="Good Bot, Bad Bot, home">
           <LogoMark />
-          <span className="logo-text">AI Patterns</span>
+          <span className="logo-text">
+            <span className="logo-full">Good Bot, Bad Bot</span>
+            <span className="logo-short" aria-hidden="true">GB3</span>
+          </span>
         </Link>
         <nav className="topnav-links" aria-label="Main">
           <NavLink to="/play" className={() => (isPlay(pathname) ? 'active' : '')}>Play</NavLink>
