@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "smoke": "node scripts/smoke.mjs",
-    "check": "npm run lint && npm run build && npm run smoke"
+    "check": "npm run lint && npm run validate && npm run build && npm run smoke",
+    "validate": "node scripts/validate.mjs"
   },
   "dependencies": {
     "lucide-react": "^1.49.0",

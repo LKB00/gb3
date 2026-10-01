@@ -110,8 +110,10 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
   useEffect(() => {
     const onKey = (e) => {
       if (e.target.closest('input, textarea, [contenteditable]')) return;
-      if (e.key === 'ArrowLeft' || e.key === 'a') choose(0);
-      if (e.key === 'ArrowRight' || e.key === 'b') choose(1);
+      if (e.ctrlKey || e.metaKey || e.altKey || e.repeat) return; // browser shortcuts, held keys
+      const key = e.key.toLowerCase();
+      if (key === 'arrowleft' || key === 'a') choose(0);
+      if (key === 'arrowright' || key === 'b') choose(1);
       if (e.key === 'Enter' && pick !== null && !e.target.closest('button, a')) next();
     };
     window.addEventListener('keydown', onKey);
@@ -163,7 +165,7 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
           <span className={`tag tag-${p.category}`}>{getCategory(p.category).name}</span>
           {round.hard && <span className="tag tag-hard"><Eye size={11} strokeWidth={2} aria-hidden /> Hard · one detail differs</span>}
         </div>
-        <h3>Which one is better?</h3>
+        <h3 aria-level="2">Which one is better?</h3>
         <p>{round.brief}</p>
       </div>
 

@@ -46,6 +46,10 @@ export function dailyNumber(key = dayKey()) {
   return Math.floor((Date.UTC(y, m - 1, d) - EPOCH) / 86400000) + 1;
 }
 
+// What to show people. A device date before launch day (or a time zone behind it) would
+// give #0 or lower, so it shows #1.
+export const dailyLabel = (key = dayKey()) => Math.max(1, dailyNumber(key));
+
 export function dailyDeck(key = dayKey()) {
   const rng = seeded(`ai-patterns:${key}`);
   const easy = makeDeck('classic', 3, rng);

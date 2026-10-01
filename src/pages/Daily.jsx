@@ -2,12 +2,13 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { CalendarDays, Copy, Eye, Flame, Share2, Shuffle, Swords } from 'lucide-react';
 import { challengeLink, useChallenge, verdict } from '../game/challenge';
-import { dailyDeck, dailyNumber } from '../game/decks';
+import { dailyDeck, dailyLabel, dailyNumber } from '../game/decks';
 import { dayKey } from '../lib/dates';
 import { dailyStreak, saveDaily, useDaily, XP } from '../progress';
 import ThisOrThat from '../components/ThisOrThat';
 import Breadcrumbs from '../components/Breadcrumbs';
 import CountUp from '../components/CountUp';
+import { copyText } from '../lib/clipboard';
 import Burst, { XpPop } from '../components/Burst';
 import { useTitle } from '../lib/useTitle';
 
@@ -45,22 +46,16 @@ function Result({ num, day, results, streak, fresh, challenge, replay }) {
   const url = `${window.location.origin}${window.location.pathname}#/play/daily`;
 
   const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(text);
+    if (await copyText(text)) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch {
-      /* clipboard blocked: the text is still visible to copy by hand */
     }
   };
   const dare = async () => {
     const link = challengeLink('/play/daily', { d: day, vs: score, r: results.map((x) => (x ? 1 : 0)).join('') });
-    try {
-      await navigator.clipboard.writeText(`I got ${score}/${results.length} on AI Patterns Daily #${num}. Can you beat me? ${link}`);
+    if (await copyText(`I got ${score}/${results.length} on AI Patterns Daily #${num}. Can you beat me? ${link}`)) {
       setDared(true);
       setTimeout(() => setDared(false), 2000);
-    } catch {
-      /* blocked */
     }
   };
   const nativeShare = async () => {
@@ -127,7 +122,7 @@ export default function Daily() {
   // A challenge link for another day replays that day's rounds (not saved).
   const key = challenge?.day && challenge.day <= todayK && dailyNumber(challenge.day) >= 1 ? challenge.day : todayK;
   const replay = key !== todayK;
-  const num = dailyNumber(key);
+  const num = dailyLabel(key);
   const deck = useMemo(() => dailyDeck(key), [key]);
   const daily = useDaily();
   const [fresh, setFresh] = useState(false);

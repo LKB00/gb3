@@ -3,6 +3,7 @@ import { Copy, Download, Share2 } from 'lucide-react';
 import { patterns } from '../data/patterns';
 import { archetype, wonGroups } from '../game/archetype';
 import { useGameStats, usePassed, useStars, useStreak, useXP } from '../progress';
+import { copyText } from '../lib/clipboard';
 import Breadcrumbs from '../components/Breadcrumbs';
 import { useTitle } from '../lib/useTitle';
 
@@ -51,6 +52,17 @@ function useCardData() {
 }
 
 // Draws the same card on a canvas (1080 × 1350, good for LinkedIn and Instagram).
+// Draw text that shrinks until it fits the width (long names, long type names).
+function fillFit(g, text, x, y, maxWidth, weight, size, family, minSize = 24) {
+  let s = size;
+  g.font = `${weight} ${s}px ${family}`;
+  while (s > minSize && g.measureText(text).width > maxWidth) {
+    s -= 2;
+    g.font = `${weight} ${s}px ${family}`;
+  }
+  g.fillText(text, x, y);
+}
+
 async function drawCard(name, data) {
   await document.fonts?.ready;
   const W = 1080;
@@ -84,14 +96,11 @@ async function drawCard(name, data) {
 
   // name + type
   g.fillStyle = PAPER;
-  g.font = `800 64px ${display}`;
-  g.fillText(name || 'Player', 84, 290);
+  fillFit(g, name || 'Player', 84, 290, 912, 800, 64, display);
   g.fillStyle = LIME;
-  g.font = `800 96px ${display}`;
-  g.fillText(data.type.name, 84, 410);
+  fillFit(g, data.type.name, 84, 410, 912, 800, 96, display);
   g.fillStyle = '#c9ccc4';
-  g.font = `400 38px ${sans}`;
-  g.fillText(data.type.line, 84, 475);
+  fillFit(g, data.type.line, 84, 475, 912, 400, 38, sans);
 
   // level pill
   round(84, 540, 912, 130, 36, '#33383d');
@@ -172,6 +181,7 @@ export default function PlayerCard() {
   };
   const download = async () => {
     const blob = await toBlob();
+    if (!blob) return flash('Could not make the image');
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
     a.download = 'ai-patterns-player-card.png';
@@ -190,12 +200,7 @@ export default function PlayerCard() {
     }
   };
   const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(text);
-      flash('Text copied');
-    } catch {
-      /* blocked */
-    }
+    if (await copyText(text)) flash('Text copied');
   };
 
   return (

@@ -1,3 +1,8 @@
+import { useMemo } from 'react';
+import { patterns } from './data/patterns';
+import { hunts } from './data/hunts';
+import { builds } from './data/builds';
+import { stories } from './data/story';
 import { dayKey } from './lib/dates';
 import { CHANGE, readJSON, writeJSON, useStored } from './lib/storage';
 
@@ -13,10 +18,50 @@ export { dayKey };
 //   days         { 'YYYY-MM-DD': moves }              day streak and daily goal
 // Adding a new game score: add a saveBest('myBest') line and a line in xpParts().
 
-const read = (key) => readJSON(key, []);
+// Everything read from storage is cleaned first: wrong types, NaN and absurd numbers
+// are dropped or clamped, so broken saved data can't crash a page or inflate XP.
+const num = (x, min, max) => {
+  const n = Number(x);
+  return typeof x !== 'boolean' && x !== null && x !== '' && Number.isFinite(n) ? Math.min(max, Math.max(min, n)) : 0;
+};
+// Keep only keys that pass keyOk, with values cleaned by f (null = drop).
+const cleanMap = (o, f, keyOk = () => true) => Object.fromEntries(Object.entries(o).filter(([k]) => keyOk(k)).map(([k, v]) => [k, f(v)]).filter(([, v]) => v !== null));
+// Only ids that exist (a hand-edited or old save can't add cards that aren't there).
+const KNOWN = {
+  'labs-passed': new Set(patterns.map((p) => p.id)),
+  'hunts-done': new Set(hunts.map((h) => h.id)),
+  builds: new Set(builds.map((b) => b.id)),
+  stories: new Set(stories.map((s) => s.id)),
+};
+const isDay = (k) => /^\d{4}-\d{2}-\d{2}$/.test(k);
+const cleanList = (l, key) => [...new Set(l.filter((x) => typeof x === 'string' && (!KNOWN[key] || KNOWN[key].has(x))))];
+const cleanStars = (o) => cleanMap(o, (v) => Math.round(num(v, 1, 3)) || null, (k) => KNOWN['labs-passed'].has(k));
+const cleanDaily = (o) => cleanMap(o, (v) => (Array.isArray(v) ? v.slice(0, 20).map(Boolean) : null), isDay);
+const cleanDays = (o) => cleanMap(o, (v) => Math.round(num(v, 0, 100000)), isDay);
+function cleanStats(s) {
+  const out = {
+    bestStreak: Math.round(num(s.bestStreak, 0, 999)),
+    speedBest: Math.round(num(s.speedBest, 0, 999)),
+    powerBest: Math.round(num(s.powerBest, 0, 16)),
+    builds: cleanMap(s.builds && typeof s.builds === 'object' && !Array.isArray(s.builds) ? s.builds : {}, (v) => Math.round(num(v, 1, 3)) || null, (k) => KNOWN.builds.has(k)),
+    stories: cleanMap(s.stories && typeof s.stories === 'object' && !Array.isArray(s.stories) ? s.stories : {}, (v) => Math.round(num(v, 0, 100)), (k) => KNOWN.stories.has(k)),
+  };
+  // Older saves kept the first story's best here.
+  if (s.storyBest != null && Number.isFinite(Number(s.storyBest))) out.storyBest = Math.round(num(s.storyBest, 0, 100));
+  return out;
+}
+
+const read = (key) => cleanList(readJSON(key, []), key);
 const readObj = (key) => readJSON(key, {});
-const useList = (key) => useStored(key, []);
-const useObj = (key) => useStored(key, {});
+const readStats = () => cleanStats(readObj('game-stats'));
+const useCleaned = (key, clean) => {
+  const raw = useStored(key, {});
+  return useMemo(() => clean(raw), [raw, clean]);
+};
+const useList = (key) => {
+  const raw = useStored(key, []);
+  return useMemo(() => cleanList(raw, key), [raw, key]);
+};
 
 function add(key, id) {
   const list = read(key);
@@ -26,13 +71,13 @@ function add(key, id) {
 
 // Keep the best number only: game-stats[field] = max(old, value).
 function saveBest(field, value) {
-  const s = readObj('game-stats');
+  const s = readStats();
   if ((s[field] || 0) >= value) return;
   writeJSON('game-stats', { ...s, [field]: value });
 }
 // Same, per item: game-stats[field][id] = max(old, value).
 function saveBestIn(field, id, value, current = (s) => s[field] || {}) {
-  const s = readObj('game-stats');
+  const s = readStats();
   const map = { ...current(s) };
   if ((map[id] ?? -1) >= value) return;
   writeJSON('game-stats', { ...s, [field]: { ...map, [id]: value } });
@@ -47,14 +92,14 @@ export const useHuntsDone = () => useList('hunts-done');
 // ---- Stars, best scores, XP and levels ----
 // Stars per challenge: 3 = no mistakes, 2 = one mistake, 1 = more. Only the best is kept.
 export const saveStars = (id, stars) => {
-  const all = readObj('lab-stars');
+  const all = cleanStars(readObj('lab-stars'));
   if ((all[id] || 0) >= stars) return;
   writeJSON('lab-stars', { ...all, [id]: stars });
 };
-export const useStars = () => useObj('lab-stars');
+export const useStars = () => useCleaned('lab-stars', cleanStars);
 
 export const saveStreak = (n) => saveBest('bestStreak', n);
-export const useGameStats = () => useObj('game-stats');
+export const useGameStats = () => useCleaned('game-stats', cleanStats);
 
 export const LEVELS = [
   { xp: 0, name: 'Rookie' },
@@ -86,11 +131,11 @@ export const saveSpeed = (points) => saveBest('speedBest', points);
 
 // Daily challenge: { 'YYYY-MM-DD': [true, false, …] }. First result of the day counts.
 export function saveDaily(key, results) {
-  const all = readObj('daily');
+  const all = cleanDaily(readObj('daily'));
   if (all[key]) return;
   writeJSON('daily', { ...all, [key]: results });
 }
-export const useDaily = () => useObj('daily');
+export const useDaily = () => useCleaned('daily', cleanDaily);
 
 // Days in a row with a Daily played, ending today (or yesterday, so it isn't lost before you play).
 export function dailyStreak(daily, today = new Date()) {
@@ -142,13 +187,13 @@ export function useXP() {
 export const DAILY_GOAL = 10;
 
 export function markPlayed() {
-  const all = readObj('days');
+  const all = cleanDays(readObj('days'));
   const k = dayKey();
   const before = all[k] || 0;
   writeJSON('days', { ...all, [k]: before + 1 });
   if (before + 1 === DAILY_GOAL) window.dispatchEvent(new Event('goal-reached'));
 }
-export const useDays = () => useObj('days');
+export const useDays = () => useCleaned('days', cleanDays);
 
 // Streak with a gentle rule: one missed day per 7 days is covered by a "freeze",
 // so one busy day doesn't wipe out weeks of play. Today not played yet doesn't
@@ -196,7 +241,10 @@ const OBJECTS = ['lab-stars', 'game-stats', 'daily', 'days'];
 export function exportProgress() {
   const data = {};
   for (const k of LISTS) data[k] = read(k);
-  for (const k of OBJECTS) data[k] = readObj(k);
+  data['lab-stars'] = cleanStars(readObj('lab-stars'));
+  data['game-stats'] = readStats();
+  data.daily = cleanDaily(readObj('daily'));
+  data.days = cleanDays(readObj('days'));
   try {
     data.name = localStorage.getItem('player-name') || '';
   } catch {
@@ -211,6 +259,7 @@ export function exportProgress() {
 function mergeObj(a = {}, b = {}) {
   const out = { ...a };
   for (const [k, v] of Object.entries(b)) {
+    if (k === '__proto__' || k === 'constructor' || k === 'prototype') continue;
     if (typeof v === 'number') out[k] = Math.max(typeof a[k] === 'number' ? a[k] : -Infinity, v);
     else if (Array.isArray(v)) out[k] = a[k] ?? v;
     else if (v && typeof v === 'object') out[k] = mergeObj(a[k], v);
@@ -221,19 +270,27 @@ function mergeObj(a = {}, b = {}) {
 
 export function importProgress(code) {
   try {
-    const raw = code.trim();
+    const raw = String(code).trim();
+    if (raw.length > 200000) return { ok: false, error: 'That code is too long to be a backup code.' };
     if (!raw.startsWith('AIP1.')) return { ok: false, error: 'This doesn’t look like an AI Patterns backup code.' };
     let b64 = raw.slice(5).replace(/-/g, '+').replace(/_/g, '/');
     while (b64.length % 4) b64 += '=';
     const data = JSON.parse(decodeURIComponent(escape(atob(b64))));
-    if (!data || typeof data !== 'object') throw new Error('bad');
+    const plain = (x) => x && typeof x === 'object' && !Array.isArray(x);
+    if (!plain(data)) throw new Error('bad');
+    if (!LISTS.some((k) => Array.isArray(data[k])) && !OBJECTS.some((k) => plain(data[k]))) {
+      return { ok: false, error: 'That code has no progress in it.' };
+    }
+    // Clean what comes in, merge it with what is here (the best of both), clean again, save.
     for (const k of LISTS) {
       if (!Array.isArray(data[k])) continue;
-      const merged = [...new Set([...read(k), ...data[k].filter((x) => typeof x === 'string')])];
-      localStorage.setItem(k, JSON.stringify(merged));
+      localStorage.setItem(k, JSON.stringify(cleanList([...read(k), ...data[k]], k)));
     }
+    const CLEAN = { 'lab-stars': cleanStars, 'game-stats': cleanStats, daily: cleanDaily, days: cleanDays };
     for (const k of OBJECTS) {
-      if (data[k] && typeof data[k] === 'object') localStorage.setItem(k, JSON.stringify(mergeObj(readObj(k), data[k])));
+      if (!plain(data[k])) continue;
+      const here = CLEAN[k](readObj(k));
+      localStorage.setItem(k, JSON.stringify(CLEAN[k](mergeObj(here, CLEAN[k](data[k])))));
     }
     if (data.name && !localStorage.getItem('player-name')) localStorage.setItem('player-name', String(data.name).slice(0, 24));
     window.dispatchEvent(new Event(CHANGE));

@@ -31,12 +31,20 @@ const taps = [
   ['/patterns/citations', '.lab-opt'],
 ];
 
-const server = await preview({ preview: { port: 4174, strictPort: true }, logLevel: 'silent' });
-const base = 'http://localhost:4174/#';
+// Any free port, so a preview you already have running doesn't get in the way.
+const server = await preview({ preview: { port: 4180 }, logLevel: 'silent' });
+const base = `${server.resolvedUrls.local[0]}#`;
 const browser = await chromium.launch(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {});
 const problems = [];
 
-for (const [name, viewport] of [['desktop', { width: 1280, height: 860 }], ['phone', { width: 360, height: 760 }]]) {
+// Saved data that is the wrong shape must never break the site.
+const brokenSaves = {
+  'labs-passed': '123', 'hunts-done': '{}', 'lab-stars': '[1,2]', 'game-stats': '{"bestStreak":"x","builds":5,"speedBest":-1}',
+  daily: '{"2026-10-01":"yes"}', days: '[]', 'player-name': '{"a":1}',
+};
+const savedRoutes = ['/', '/me', '/play', '/play/daily', '/play/card', '/play/speed', '/play/power', '/play/story', '/patterns', '/patterns/citations'];
+
+for (const [name, viewport] of [['desktop', { width: 1280, height: 860 }], ['phone', { width: 320, height: 640 }]]) {
   const ctx = await browser.newContext({ viewport, serviceWorkers: 'block', isMobile: name === 'phone', hasTouch: name === 'phone' });
   const page = await ctx.newPage();
   let where = '';
@@ -47,8 +55,15 @@ for (const [name, viewport] of [['desktop', { width: 1280, height: 860 }], ['pho
   });
   const visit = async (route) => {
     where = route;
+    // Hash links don't reload the page. A new path remounts .route (mark the old one and wait for
+    // the new one); a query-only change (?view=) updates in place, so just give React a moment.
+    const samePath = new URL(page.url()).hash.split('?')[0] === `#${route.split('?')[0]}`;
+    if (!samePath) await page.evaluate(() => document.querySelector('.route')?.setAttribute('data-old', '1')).catch(() => {});
     await page.goto(base + route);
+    if (!samePath) await page.waitForSelector('.route:not([data-old])', { timeout: 5000 }).catch(() => {});
     await page.waitForSelector('#main');
+    await page.waitForTimeout(120);
+    if (await page.locator('.crash').count()) problems.push(`${name} ${route}: crash screen shown`);
     if (await page.locator('#main').innerText().then((t) => t.trim() === '')) problems.push(`${name} ${route}: empty page`);
     const extra = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     if (extra > 1) problems.push(`${name} ${route}: scrolls sideways by ${extra}px`);
@@ -59,13 +74,20 @@ for (const [name, viewport] of [['desktop', { width: 1280, height: 860 }], ['pho
     where = `${r} (tap ${sel})`;
     await page.locator(sel).first().click();
     await page.waitForTimeout(200);
+    if (await page.locator('.crash').count()) problems.push(`${name} ${r}: crash screen after tapping ${sel}`);
+  }
+  if (name === 'phone') {
+    await page.evaluate((saves) => { localStorage.clear(); for (const k in saves) localStorage.setItem(k, saves[k]); }, brokenSaves);
+    await page.reload();
+    for (const r of savedRoutes) await visit(r);
+    await page.evaluate(() => localStorage.clear());
   }
   await ctx.close();
 }
 
 await browser.close();
 await new Promise((r) => server.httpServer.close(r));
-console.log(`Checked ${routes.length} pages and ${taps.length} game taps, on desktop and phone.`);
+console.log(`Checked ${routes.length} pages, ${taps.length} game taps and ${savedRoutes.length} pages with broken saved data, on desktop and a small phone.`);
 if (problems.length) {
   console.error(`\n${problems.length} problem(s):\n- ` + problems.join('\n- '));
   process.exit(1);

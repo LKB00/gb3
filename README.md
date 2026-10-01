@@ -45,11 +45,12 @@ and soft pastels only for group tags and status. Icons are [Lucide](https://luci
 ```bash
 npm install
 npm run dev      # open the local link it prints; changes show up instantly
-npm run check    # before you push: lint + build + open every page in a real browser (~20 s)
+npm run validate # checks the content: broken links between data files, unwinnable briefs, story paths
+npm run check    # before you push: lint + validate + build + open every page in a real browser (~90 s)
 ```
 
 `npm run check` fails if any page crashes, logs an error or scrolls sideways on a phone.
-It needs Chromium; if Playwright can't find one, run `npx playwright install chromium` once.
+It also opens pages with damaged saved data, on a small 320px phone. It needs Chromium; if Playwright can't find one, run `npx playwright install chromium` once.
 
 ## How the code is organised
 
@@ -85,7 +86,7 @@ scripts/smoke.mjs  the browser check used by `npm run check`
 | Change a sound or vibration | `src/game/fx.js` (`SOUNDS`, `BUZZ`) |
 | Add a new kind of fake-screen block | builder in `mock/blocks.js` + a `case` in `mock/Mock.jsx` + styles in `styles/mock.css` |
 
-New patterns, teardowns, lessons, stories and briefs are checked by `npm run check` automatically.
+New patterns, teardowns, lessons, stories and briefs are checked by `npm run check` automatically (a typo in a pattern id, a story choice that leads nowhere, or a build brief you can't win will fail it).
 
 Built with React + Vite. Uses hash links (`/#/patterns`) so it works on GitHub Pages with no extra setup.
 

@@ -307,3 +307,11 @@
   .levelup-toast { top: calc(60px + env(safe-area-inset-top, 0px)); }
   .sound-hint { top: calc(60px + env(safe-area-inset-top, 0px)); }
 }
+
+/* Phone held sideways: very little height, so the bottom bar shrinks to icons only. */
+@media (max-width: 900px) and (max-height: 480px) {
+  :root { --bottomnav-h: 44px; }
+  .bottomnav { padding-top: 2px; padding-bottom: env(safe-area-inset-bottom, 0px); }
+  .bottomnav-tab { font-size: 0; gap: 0; }
+  .bottomnav-icon { height: 28px; }
+}

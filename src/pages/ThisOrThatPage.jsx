@@ -12,6 +12,7 @@ export default function ThisOrThatPage() {
   return (
     <div className="page page-wide">
       <Breadcrumbs items={[{ label: 'Play', to: '/play' }, { label: 'This or That' }]} />
+      <h1 className="sr-only">This or That</h1>
       <div className="tabs tot-modes" role="tablist" aria-label="Mode">
         <button role="tab" aria-selected={mode === 'classic'} className="tab" onClick={() => setParams({}, { replace: true })}>
           <Shuffle size={15} strokeWidth={1.75} aria-hidden /> Classic
