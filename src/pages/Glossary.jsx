@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ArrowUpRight, Search } from 'lucide-react';
 import { furtherReading, glossary } from '../data/glossary';
 import { useTitle } from '../useTitle';
+import LibraryTabs from '../components/LibraryTabs';
 
 export default function Glossary() {
   useTitle('Glossary');
@@ -10,9 +11,9 @@ export default function Glossary() {
   const list = glossary.filter((g) => !query || (g.term + ' ' + g.def).toLowerCase().includes(query));
 
   return (
-    <div className="page">
+    <div className="page page-wide page-lib-read">
+      <LibraryTabs />
       <header className="page-head">
-        <p className="label">Glossary</p>
         <h1 className="display">AI words, in plain English</h1>
         <p className="lead">The terms you will hear when designing AI features, and why each one matters for design.</p>
       </header>

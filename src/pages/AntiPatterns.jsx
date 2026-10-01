@@ -4,13 +4,14 @@ import { antipatterns, antipatternSources } from '../data/antipatterns';
 import { getPattern } from '../data/patterns';
 import MockFrame, { MockBlock } from '../mock/Mock';
 import { useTitle } from '../useTitle';
+import LibraryTabs from '../components/LibraryTabs';
 
 export default function AntiPatterns() {
   useTitle('Anti-patterns');
   return (
     <div className="page page-wide">
+      <LibraryTabs />
       <header className="page-head">
-        <p className="label">Anti-patterns</p>
         <h1 className="display">AI dark patterns to avoid</h1>
         <p className="lead">
           Designs that make an AI product look good in a demo but harm the people using it. Learn to spot them, and what to do instead.

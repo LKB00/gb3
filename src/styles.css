@@ -39,7 +39,7 @@
   --lime: #c2ef72;
   --lime-badge: rgba(132, 204, 22, 0.15);
 
-  /* pastel group fills + slightly stronger dots for the sidebar */
+  /* pastel group fills + slightly stronger dots */
   --p-input: #e5eef7;
   --p-output: #eeedf5;
   --p-control: #eef3dc;
@@ -57,7 +57,6 @@
   --serif: 'Libre Baskerville', ui-serif, Georgia, serif;
   --mono: ui-monospace, 'SFMono-Regular', Menlo, monospace;
 
-  --sidebar-w: 264px;
   --hair: 0.5px;
   color-scheme: light;
 }
@@ -256,29 +255,30 @@ kbd {
   text-underline-offset: 3px;
 }
 
-/* ---------- Shell: sidebar + main ---------- */
+/* ---------- Shell: one top bar + centered page ---------- */
+/* Why: a long sidebar of 34 links made people feel lost. Three places only
+   (Learn, Practice, Library) are easy to remember, and work the same on phones. */
 .shell {
   min-height: 100vh;
-}
-.sidebar {
-  position: fixed;
-  inset: 0 auto 0 0;
-  z-index: 30;
-  width: var(--sidebar-w);
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: env(safe-area-inset-top, 0px) 12px env(safe-area-inset-bottom, 0px);
-  background: var(--sand);
-  border-right: var(--hair) solid var(--line);
 }
-.sb-head {
-  height: 60px;
-  flex: none;
+.topnav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  padding-top: env(safe-area-inset-top, 0px);
+  background: var(--paper);
+  border-bottom: var(--hair) solid var(--line);
+}
+.topnav-inner {
+  max-width: 1128px;
+  height: 56px;
+  margin: 0 auto;
+  padding: 0 24px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 8px;
+  gap: 24px;
 }
 .logo {
   display: inline-flex;
@@ -288,6 +288,7 @@ kbd {
   font-weight: 700;
   color: var(--ink);
   text-decoration: none;
+  flex: none;
 }
 .logo-mark {
   width: 18px;
@@ -296,143 +297,221 @@ kbd {
   background: radial-gradient(circle, var(--lime) 0 3.5px, #24282c 4px);
   box-shadow: 0 0 0 var(--hair) var(--line);
 }
-.sb-nav {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.sb-link {
+.topnav-links {
   display: flex;
   align-items: center;
-  gap: 8px;
-  width: 100%;
-  height: 32px;
-  padding: 0 8px;
-  border: none;
-  border-radius: 9999px;
-  background: none;
-  color: var(--ink-2);
-  font-size: 13px;
-  text-decoration: none;
-  text-align: left;
-  cursor: pointer;
+  gap: 4px;
 }
-.sb-link:hover,
-.sb-row:hover {
+.topnav-links a {
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 12px;
+  border-radius: 9999px;
+  color: var(--ink-2);
+  font-size: 14px;
+  text-decoration: none;
+}
+.topnav-links a:hover {
   background: var(--sand-dark);
   color: var(--ink);
 }
-.sb-link.active,
-.sb-row.active {
+.topnav-links a.active {
   background: var(--sand-dark);
   color: var(--ink);
   font-weight: 700;
 }
-.sb-groups {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 8px 0 8px;
-  border-top: var(--hair) solid var(--line);
-  scrollbar-width: none;
-}
-.sb-groups::-webkit-scrollbar {
-  width: 0;
-}
-.sb-group {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-}
-.sb-label {
-  padding: 0 8px 4px;
-}
-.sb-row {
+.topnav-right {
+  margin-left: auto;
   display: flex;
   align-items: center;
   gap: 8px;
-  min-height: 28px;
-  padding: 4px 8px;
+}
+.progress-pill {
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 12px 0 8px;
   border-radius: 9999px;
-  color: var(--ink-2);
-  font-size: 13px;
-  line-height: 18px;
+  background: var(--sand);
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 700;
   text-decoration: none;
 }
-.sb-row-text {
-  flex: 1;
-  min-width: 0;
+.progress-pill:hover {
+  background: var(--sand-dark);
 }
-.sb-dot {
-  width: 6px;
-  height: 6px;
-  flex: none;
-  border-radius: 50%;
+.progress-pill svg {
+  transform: rotate(-90deg);
 }
-.dot-input { background: var(--d-input); }
-.dot-output { background: var(--d-output); }
-.dot-control { background: var(--d-control); }
-.dot-trust { background: var(--d-trust); }
-.dot-feedback { background: var(--d-feedback); }
-.dot-agents { background: var(--d-agents); }
-.sb-done {
-  color: var(--positive);
+.ring-bg,
+.ring-fg {
+  fill: none;
+  stroke-width: 2.5;
 }
-.sb-foot {
-  flex: none;
-  padding: 8px 0 12px;
-  border-top: var(--hair) solid var(--line);
+.ring-bg {
+  stroke: var(--sand-dark);
 }
-.sidebar .sb-close,
-.topbar {
-  display: none;
-}
-.scrim {
-  position: fixed;
-  inset: 0;
-  z-index: 25;
-  background: rgba(20, 23, 26, 0.32);
+.ring-fg {
+  stroke: var(--positive);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.4s ease;
 }
 .main {
-  margin-left: var(--sidebar-w);
+  flex: 1;
+  width: 100%;
   min-width: 0;
 }
+@media (max-width: 600px) {
+  .topnav-inner {
+    padding: 0 12px;
+    gap: 8px;
+  }
+  .topnav-links a {
+    padding: 0 10px;
+  }
+}
+@media (max-width: 440px) {
+  .logo-text {
+    display: none;
+  }
+  .progress-pill {
+    padding: 0 8px;
+  }
+}
 
-@media (max-width: 959px) {
-  .main {
-    margin-left: 0;
-  }
-  .topbar {
-    position: sticky;
-    top: env(safe-area-inset-top, 0px);
-    z-index: 20;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 56px;
-    padding: 0 16px;
-    background: var(--paper);
-    border-bottom: var(--hair) solid var(--line);
-  }
-  .sidebar {
-    transform: translateX(-100%);
-    transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
-  }
-  .sidebar-open {
-    transform: none;
-  }
-  .sidebar .sb-close {
-    display: inline-flex;
-  }
+/* Breadcrumbs: always show where you are and one step back. */
+.crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 24px;
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--ink-3);
+}
+.crumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+.crumb a {
+  color: var(--ink-2);
+  text-decoration: none;
+}
+.crumb a:hover {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.crumb [aria-current] {
+  color: var(--ink);
+}
+
+/* Tabs: used for Library sections, pattern views and Practice modes. */
+.tabs {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-bottom: var(--hair) solid var(--line);
+}
+.tabs::-webkit-scrollbar {
+  height: 0;
+}
+.tab {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 12px;
+  margin-bottom: -1px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: var(--ink-2);
+  font: inherit;
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.tab:hover {
+  color: var(--ink);
+}
+.tab.active,
+.tab[aria-selected='true'] {
+  color: var(--ink);
+  font-weight: 700;
+  border-bottom-color: var(--ink);
+}
+.tab-num {
+  width: 20px;
+  height: 20px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--sand-dark);
+  color: var(--ink-2);
+  font-size: 11px;
+  font-weight: 700;
+}
+.tab[aria-selected='true'] .tab-num,
+.tab.active .tab-num {
+  background: var(--ink);
+  color: var(--paper);
+}
+.tab-count {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--ink-3);
+}
+.view-tabs {
+  margin-top: 32px;
+}
+.view {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+}
+.view > .block {
+  margin-top: 48px;
+}
+.view > .block:first-child {
+  margin-top: 0;
+}
+.lib-head {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 40px;
+}
+.page-head-tight {
+  gap: 8px;
+}
+.next-step {
+  margin-top: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 20px;
+  border-radius: 14px;
+  background: var(--sand);
+  font-size: 14px;
+  line-height: 22px;
 }
 
 /* ---------- Page ---------- */
 .page {
   max-width: 808px;
-  padding: 64px 48px 32px;
+  margin: 0 auto;
+  padding: 40px 48px 32px;
 }
 .page-wide {
   max-width: 1128px;
@@ -479,7 +558,7 @@ kbd {
 }
 .site-footer {
   max-width: 712px;
-  margin: 48px 48px 0;
+  margin: 48px auto 0;
   padding: 16px 0 32px;
   border-top: var(--hair) solid var(--divider);
   font-size: 12px;
@@ -489,6 +568,7 @@ kbd {
 @media (max-width: 720px) {
   .site-footer {
     margin: 32px 16px 0;
+    max-width: none;
   }
 }
 
@@ -3015,50 +3095,6 @@ button.ai-badge {
 }
 
 /* ---------- Progress (learning by doing) ---------- */
-.sb-progress {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin: 4px 0;
-  padding: 8px 12px;
-  border-radius: 12px;
-  background: var(--card);
-  border: var(--hair) solid var(--line);
-  color: var(--ink);
-  text-decoration: none;
-}
-.sb-progress:hover {
-  border-color: var(--ink-3);
-}
-.sb-progress-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.sb-progress-num {
-  font-size: 12px;
-  font-weight: 700;
-}
-.sb-bar,
-.meter {
-  display: block;
-  height: 4px;
-  border-radius: 9999px;
-  background: var(--sand-dark);
-  overflow: hidden;
-}
-.sb-bar span,
-.meter span {
-  display: block;
-  height: 100%;
-  border-radius: 9999px;
-  background: var(--positive);
-  transition: width 0.4s ease;
-}
-.sb-progress-sub {
-  font-size: 12px;
-  color: var(--ink-3);
-}
 .index-check-on {
   color: var(--positive);
 }
@@ -3086,4 +3122,90 @@ button.ai-badge {
 }
 .index-row-icon > svg.index-check-off {
   color: var(--ink-3);
+}
+.meter {
+  display: block;
+  height: 4px;
+  border-radius: 9999px;
+  background: var(--sand-dark);
+  overflow: hidden;
+}
+.meter span {
+  display: block;
+  height: 100%;
+  border-radius: 9999px;
+  background: var(--positive);
+  transition: width 0.4s ease;
+}
+/* Library pages share one width so the tabs never jump; text stays readable. */
+.page-lib-read > :not(.lib-head) {
+  max-width: 712px;
+}
+
+/* ---------- Home: one main action, then three places ---------- */
+.home-hero {
+  padding-top: 24px;
+}
+.btn-lg {
+  height: auto;
+  min-height: 44px;
+  padding: 12px 20px;
+  font-size: 14px;
+  white-space: normal;
+  text-align: left;
+}
+.places {
+  margin-top: 48px;
+  display: grid;
+  gap: 12px;
+}
+@media (min-width: 640px) {
+  .places {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.place {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 20px;
+  border-radius: 14px;
+  background: var(--sand);
+  color: var(--ink-2);
+  font-size: 14px;
+  line-height: 22px;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+.place:hover {
+  background: var(--sand-dark);
+}
+.place svg {
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+.place strong {
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 24px;
+}
+.place-meta {
+  margin-top: auto;
+  padding-top: 12px;
+  font-size: 12px;
+  color: var(--ink-3);
+}
+
+/* ---------- Practice: two modes as tabs ---------- */
+.practice-tabs {
+  margin-top: 32px;
+}
+.view {
+  gap: 16px;
+}
+.view > .section-sub:first-child {
+  margin-top: 0;
+}
+.view > .next-step {
+  margin-top: 8px;
 }
