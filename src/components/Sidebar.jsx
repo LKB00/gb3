@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { BookOpen, BookText, Brain, Layers, Check, FlaskConical, House, LayoutGrid, Menu, Moon, ShieldAlert, Sun, X } from 'lucide-react';
 import { categories, patterns } from '../data/patterns';
-import { usePassed } from '../progress';
+import { useHuntsDone, usePassed } from '../progress';
+import { hunts } from '../data/hunts';
 import { useTheme } from '../theme';
 
 const ICON = { size: 16, strokeWidth: 1.75, 'aria-hidden': true };
@@ -22,6 +23,9 @@ export default function Sidebar() {
   const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
   const passed = usePassed();
+  const huntsDone = useHuntsDone();
+  const doneCount = passed.length + huntsDone.length;
+  const total = patterns.length + hunts.length;
   const [isDark, toggleTheme] = useTheme();
 
   const groupsRef = useRef(null);
@@ -54,14 +58,23 @@ export default function Sidebar() {
 
         <nav className="sb-nav" aria-label="Main">
           <NavLink to="/" end className="sb-link"><House {...ICON} />Overview</NavLink>
+          <NavLink to="/practice" className="sb-link"><FlaskConical {...ICON} />Practice</NavLink>
           <NavLink to="/patterns" end className="sb-link"><LayoutGrid {...ICON} />All patterns</NavLink>
           <NavLink to="/teardowns" className="sb-link"><Layers {...ICON} />Teardowns</NavLink>
           <NavLink to="/anti-patterns" className="sb-link"><ShieldAlert {...ICON} />Anti-patterns</NavLink>
           <NavLink to="/principles" className="sb-link"><Brain {...ICON} />Principles</NavLink>
-          <NavLink to="/practice" className="sb-link"><FlaskConical {...ICON} />Practice</NavLink>
           <NavLink to="/learn" className="sb-link"><BookOpen {...ICON} />Learn</NavLink>
           <NavLink to="/glossary" className="sb-link"><BookText {...ICON} />Glossary</NavLink>
         </nav>
+
+        <Link to="/practice" className="sb-progress" aria-label={`Your progress: ${passed.length} of ${patterns.length} labs passed, ${huntsDone.length} of ${hunts.length} hunts done`}>
+          <span className="sb-progress-top">
+            <span className="label">Your progress</span>
+            <span className="sb-progress-num">{Math.round((doneCount / total) * 100)}%</span>
+          </span>
+          <span className="sb-bar" aria-hidden><span style={{ width: `${(doneCount / total) * 100}%` }} /></span>
+          <span className="sb-progress-sub">{passed.length}/{patterns.length} labs · {huntsDone.length}/{hunts.length} hunts</span>
+        </Link>
 
         <nav className="sb-groups" aria-label="Patterns" ref={groupsRef}>
           {categories.map((c) => (

@@ -1,6 +1,6 @@
 # AI Patterns
 
-A free learning website for designers about **AI design patterns** and **AI interaction design**.
+A free website where designers **learn AI interaction design by doing**: you make the design decisions first, get instant feedback on common mistakes, and only then see the expert answer and the reasons behind it.
 
 - **Pattern library**: 34 patterns in 7 groups (Input, Output, Control, Trust, Feedback, Agents, Voice & vision), including agentic patterns (autonomy dial, activity log & undo, pause & redirect, cost estimates), voice and image patterns, and a bias check.
 - **Visual first**: every pattern shows a ✕ bad and a ✓ better screen, with short labels on the screen itself.

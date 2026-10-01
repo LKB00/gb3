@@ -4,13 +4,14 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Check, Circle } from 'lucide-react';
 import { hunts } from '../data/hunts';
 import { categories, patterns } from '../data/patterns';
-import { usePassed } from '../progress';
+import { useHuntsDone, usePassed } from '../progress';
 import Hunt from '../components/Hunt';
 
 export default function Practice() {
   useTitle('Practice');
   const [idx, setIdx] = useState(0);
   const passed = usePassed();
+  const huntsDone = useHuntsDone();
   const scenario = hunts[idx];
 
   return (
@@ -24,11 +25,12 @@ export default function Practice() {
       <section className="block">
         <div className="row space-between">
           <h2>Mistake Hunt</h2>
-          <span className="muted small">Screen {idx + 1} of {hunts.length}</span>
+          <span className="muted small">{huntsDone.length} of {hunts.length} done</span>
         </div>
         <div className="chips hunt-tabs" role="tablist" aria-label="Screens">
           {hunts.map((h, i) => (
             <button key={h.id} role="tab" aria-selected={i === idx} className={'chip' + (i === idx ? ' chip-on' : '')} onClick={() => setIdx(i)}>
+              {huntsDone.includes(h.id) && <Check size={12} strokeWidth={2.5} aria-label="Done" />}
               {h.title}
             </button>
           ))}

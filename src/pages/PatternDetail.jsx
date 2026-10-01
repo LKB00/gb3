@@ -48,11 +48,11 @@ export default function PatternDetail() {
   const next = patterns[idx + 1];
   const relatedLessons = lessons.filter((l) => l.patterns.includes(p.id));
   const sections = [
-    { id: 'difference', label: 'Difference' },
+    { id: 'lab', label: 'Build it' },
+    { id: 'difference', label: 'Answer' },
     { id: 'examples', label: 'Real examples' },
     { id: 'principles', label: 'Principles' },
     p.demo && { id: 'try', label: 'Try it' },
-    { id: 'lab', label: 'Design Lab' },
     { id: 'rules', label: 'Rules' },
     { id: 'details', label: 'Details' },
   ].filter(Boolean);
@@ -81,7 +81,11 @@ export default function PatternDetail() {
         ))}
       </nav>
 
-      <Section id="difference" title="See the difference" sub="The same moment, designed two ways. The notes point to what matters.">
+      <Section id="lab" title="Build it first" sub="Start by doing. Make the design decisions yourself; the lab checks them and explains every mistake. The answer is further down.">
+        <Lab key={p.id} id={p.id} lab={v.lab} />
+      </Section>
+
+      <Section id="difference" title="Compare with the expert answer" sub="The same moment designed two ways. Did your design avoid the mistakes on the left?">
         <Compare data={v.compare} />
       </Section>
 
@@ -94,14 +98,10 @@ export default function PatternDetail() {
       </Section>
 
       {p.demo && (
-        <Section id="try" title="Try it" sub="A small working demo. Click around and see how it feels.">
+        <Section id="try" title="Try it live" sub="A working version of the better design. Click around and feel the difference.">
           <DemoFrame name={p.demo} />
         </Section>
       )}
-
-      <Section id="lab" title="Design Lab" sub="Make the design decisions yourself. The lab points out common mistakes and explains them.">
-        <Lab key={p.id} id={p.id} lab={v.lab} />
-      </Section>
 
       <Section id="rules" title="Rules of thumb" sub="A short checklist to use in your own work.">
         <div className="rules">
