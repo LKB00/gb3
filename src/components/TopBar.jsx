@@ -2,6 +2,7 @@ import { Link, NavLink, useLocation } from 'react-router-dom';
 import { Moon, Sun, Zap } from 'lucide-react';
 import { useXP } from '../progress';
 import { useTheme } from '../theme';
+import { GoalToast, StreakPill } from './Today';
 
 const PLAY = ['/play', '/practice'];
 const EXPLORE = ['/teardowns', '/anti-patterns', '/principles', '/glossary', '/learn'];
@@ -26,6 +27,7 @@ export default function TopBar() {
           <NavLink to="/teardowns" className={() => (on(EXPLORE) ? 'active' : '')}>Explore</NavLink>
         </nav>
         <div className="topnav-right">
+          <StreakPill />
           <Link to="/play" className="xp-pill" aria-label={`${xp} XP, level: ${level.name}`} title={level.name}>
             <Zap size={14} strokeWidth={2} aria-hidden />
             <span key={xp} className="xp-num">{xp}</span>
@@ -36,6 +38,7 @@ export default function TopBar() {
           </button>
         </div>
       </div>
+      <GoalToast />
     </header>
   );
 }

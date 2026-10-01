@@ -139,3 +139,58 @@ export function useXP() {
   const nextLevel = LEVELS[i + 1];
   return { xp, starTotal, level, levelNum: i + 1, nextLevel, toNext: nextLevel ? nextLevel.xp - xp : 0 };
 }
+
+// ---- Days played, day streak and daily goal ----
+// 'days' = { 'YYYY-MM-DD': number of moves that day }. A move is any answer in
+// any game (a This or That pick, a Fix it step, a flaw found, a story choice).
+export const DAILY_GOAL = 10;
+
+export function dayKey(d = new Date()) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+export function markPlayed() {
+  const all = readObj('days');
+  const k = dayKey();
+  const before = all[k] || 0;
+  writeObj('days', { ...all, [k]: before + 1 });
+  if (before + 1 === DAILY_GOAL) window.dispatchEvent(new Event('goal-reached'));
+}
+export const useDays = () => useObj('days');
+
+// Streak with a gentle rule: one missed day per 7 days is covered by a "freeze",
+// so one busy day doesn't wipe out weeks of play. Today not played yet doesn't
+// break the streak either (you still have time).
+export function streakInfo(days, today = new Date()) {
+  const d = new Date(today);
+  const played = (x) => (days[dayKey(x)] || 0) > 0;
+  const frozen = [];
+  let count = 0;
+  let lastFreeze = -Infinity; // index (in counted days) of the last freeze used
+  const todayOpen = !played(d);
+  if (todayOpen) d.setDate(d.getDate() - 1);
+  for (;;) {
+    if (played(d)) {
+      count++;
+      d.setDate(d.getDate() - 1);
+      continue;
+    }
+    // A single missed day, with a played day before it, and no freeze in the last 7 days.
+    const before = new Date(d);
+    before.setDate(before.getDate() - 1);
+    if ((count > 0 || todayOpen) && played(before) && count - lastFreeze >= 7) {
+      frozen.push(dayKey(d));
+      lastFreeze = count;
+      d.setDate(d.getDate() - 1);
+      continue;
+    }
+    break;
+  }
+  const freezeReady = count - lastFreeze >= 7;
+  return { streak: count, frozen, freezeReady, todayMoves: days[dayKey(today)] || 0 };
+}
+
+export function useStreak() {
+  const days = useDays();
+  return { ...streakInfo(days), days };
+}

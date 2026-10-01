@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Angry, ArrowRight, Frown, Meh, RotateCcw, Smile } from 'lucide-react';
 import { story } from '../data/story';
 import { getPattern } from '../data/patterns';
-import { saveStory, useGameStats } from '../progress';
+import { markPlayed, saveStory, useGameStats } from '../progress';
 import MockFrame, { MockBlock } from '../mock/Mock';
 import Breadcrumbs from '../components/Breadcrumbs';
 import Burst, { XpPop } from '../components/Burst';
@@ -57,6 +57,7 @@ export default function Story() {
     if (picked !== null) return;
     const c = scene.choices[i];
     setPicked(i);
+    markPlayed();
     setTrust((t) => clamp(t + c.trust));
     setHistory((h) => [...h, { scene: sceneId, choice: i }]);
   };

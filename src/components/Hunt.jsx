@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import MockFrame, { MockBlock } from '../mock/Mock';
 import { getPattern } from '../data/patterns';
-import { markHuntDone, useHuntsDone, XP } from '../progress';
+import { markHuntDone, markPlayed, useHuntsDone, XP } from '../progress';
 import Burst, { XpPop } from './Burst';
 
 // Spot the flaw: tap the parts of the screen that are wrong.
@@ -26,7 +26,10 @@ export default function Hunt({ scenario }) {
   const click = (i) => {
     const b = scenario.blocks[i];
     if (b.mistake) {
-      if (!found.includes(i)) setFound((f) => [...f, i]);
+      if (!found.includes(i)) {
+        setFound((f) => [...f, i]);
+        markPlayed();
+      }
       setFine(null);
     } else {
       setFine(i);

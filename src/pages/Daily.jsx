@@ -90,6 +90,7 @@ function Result({ num, results, streak, fresh }) {
         <Link to="/play/this-or-that" className="text-link"><Shuffle size={14} strokeWidth={1.75} aria-hidden /> Classic</Link>
         <Link to="/play/this-or-that?mode=hard" className="text-link"><Eye size={14} strokeWidth={1.75} aria-hidden /> Hard mode</Link>
         <Link to="/play/story" className="text-link">Agent on duty</Link>
+        <Link to="/play/card" className="text-link">Your player card</Link>
       </div>
     </div>
   );
