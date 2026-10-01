@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import LogoMark from './LogoMark';
 import { Star } from 'lucide-react';
 import { getCategory, getPattern, patterns } from '../data/patterns';
 import { visuals } from '../data/visuals';
@@ -24,8 +25,8 @@ export default function FlipCard({ id, stars = 1 }) {
     <div className={'flip' + (flipped ? ' is-flipped' : '')} aria-label={`Card won: ${p.title}, ${stars} of 3 stars`}>
       <div className="flip-inner">
         <div className="flip-face flip-back" aria-hidden>
-          <span className="logo-mark" />
-          <span>AI PATTERNS</span>
+          <LogoMark />
+          <span>GOOD BOT · BAD BOT</span>
         </div>
         <div className={`flip-face flip-front thumb-${p.category}`}>
           <div className="flip-thumb" aria-hidden>

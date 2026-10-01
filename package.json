@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "smoke": "node scripts/smoke.mjs",
     "check": "npm run lint && npm run validate && npm run build && npm run smoke",
-    "validate": "node scripts/validate.mjs"
+    "validate": "node scripts/validate.mjs",
+    "brand": "node scripts/make-brand-images.mjs"
   },
   "dependencies": {
     "lucide-react": "^1.49.0",

@@ -1,4 +1,6 @@
-# AI Patterns
+# Good Bot, Bad Bot (GB3)
+
+*Can you spot good AI design?* (Formerly “AI Patterns”. The repo and the web address stay `patricka`.)
 
 A playground for AI interaction design. Not a course: quick games, instant wins, pattern cards to collect, XP and levels. Anyone curious about AI design patterns can jump in and play in one second.
 
@@ -50,6 +52,7 @@ For the full picture (owner preferences, how to ship, game rules, decisions, his
 npm install
 npm run dev      # open the local link it prints; changes show up instantly
 npm run validate # checks the content: broken links between data files, unwinnable briefs, story paths
+npm run brand    # remakes the icons and the link-preview image in public/ from one logo drawing
 npm run check    # before you push: lint + validate + build + open every page in a real browser (~90 s)
 ```
 
@@ -83,6 +86,7 @@ scripts/smoke.mjs  the browser check used by `npm run check`
 | Add a task to How much power? | `data/autonomy.js` → `tasks` |
 | Add a game | page in `src/pages/`, route in `App.jsx`, tile in `config/games.js` (steps are in that file) |
 | Add an Explore page | page in `src/pages/`, route in `App.jsx`, tab in `config/nav.js` |
+| Change the name or logo | Name: search for `Good Bot` in `src/`, `index.html` and `public/manifest.webmanifest`. Logo: `src/components/LogoMark.jsx`, then `npm run brand` for the icons and share image (see docs/PROJECT_CONTEXT.md, section 8b) |
 | Change a colour or font | `src/styles/tokens.css` (light and dark mode) |
 | Change how one area looks | the matching file in `src/styles/` (each file says what it covers at the top); phone rules for older areas are in `phone.css` |
 | Change how things move (page fades, staggers, pops, shakes) | `src/styles/motion.css`. It is all wrapped in "no-preference", so people who ask for less motion get none. A number that rolls up: `<CountUp value={n} />` |

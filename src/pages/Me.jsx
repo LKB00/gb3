@@ -61,7 +61,7 @@ export default function Me() {
         <AppAndBackup />
       </section>
 
-      <p className="small muted me-credits">AI Patterns · a playground for AI interaction design. Progress is saved only in your browser. Icons by Lucide (ISC license).</p>
+      <p className="small muted me-credits">Good Bot, Bad Bot · games about AI interaction design. Progress is saved only in your browser. Icons by Lucide (ISC license).</p>
     </div>
   );
 }
