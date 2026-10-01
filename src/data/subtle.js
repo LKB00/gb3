@@ -3,20 +3,9 @@
 // Each pair is built from shared blocks plus the one block that changes.
 //   bad / good: the changed block, with a short pin shown after answering.
 
-const user = (text) => ({ type: 'user', text });
-const ai = (text, x) => ({ type: 'ai', text, ...x });
-const note = (text, x) => ({ type: 'note', text, ...x });
-const buttons = (items, x) => ({ type: 'buttons', items, ...x });
-const chips = (items, x) => ({ type: 'chips', items, ...x });
-const ph = (placeholder, x) => ({ type: 'input', placeholder, ...x });
-const toast = (text, action, x) => ({ type: 'toast', text, action, ...x });
-const banner = (tone, title, text, x) => ({ type: 'banner', tone, title, text, ...x });
-const modal = (title, text, btns, x) => ({ type: 'modal', title, text, buttons: btns, ...x });
-const rows = (items, x) => ({ type: 'rows', items, ...x });
-const steps = (items, x) => ({ type: 'steps', items: items.map(([label, state]) => ({ label, state })), ...x });
-const card = (title, text, x) => ({ type: 'card', title, text, ...x });
-
 // pair(id, pattern, brief, before[], bad, good, after[])
+import { user, ai, note, buttons, chips, ph, toast, banner, modal, rows, steps, card } from '../mock/blocks.js';
+
 const pair = (id, pattern, brief, before, bad, good, after = []) => ({
   id,
   pattern,

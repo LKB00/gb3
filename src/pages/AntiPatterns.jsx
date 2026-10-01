@@ -3,7 +3,7 @@ import { ArrowUpRight, Check } from 'lucide-react';
 import { antipatterns, antipatternSources } from '../data/antipatterns';
 import { getPattern } from '../data/patterns';
 import MockFrame, { MockBlock } from '../mock/Mock';
-import { useTitle } from '../useTitle';
+import { useTitle } from '../lib/useTitle';
 import LibraryTabs from '../components/LibraryTabs';
 
 export default function AntiPatterns() {

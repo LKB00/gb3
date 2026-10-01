@@ -1,0 +1,430 @@
+/* Fix it (Lab.jsx) and Spot the flaw (Hunt.jsx). */
+
+/* ---------- Design Lab (guided: one step at a time) ---------- */
+.lab {
+  display: grid;
+  grid-template-areas: 'head' 'preview' 'panel';
+  gap: 24px;
+  align-items: start;
+  padding: 20px 16px;
+  border-radius: 14px;
+  background: var(--sand);
+}
+@media (min-width: 900px) {
+  .lab {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: 'head head' 'panel preview';
+    column-gap: 32px;
+    padding: 24px;
+  }
+  .lab-preview {
+    position: sticky;
+    top: 80px;
+  }
+}
+.lab-head {
+  grid-area: head;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.lab-goal {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 28px;
+  color: var(--ink);
+}
+/* Step tracker: where you are, what is done, what is next */
+.lab-steps {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.lab-steps::-webkit-scrollbar {
+  height: 0;
+}
+.lab-step {
+  flex: 1 1 0;
+  min-width: 0;
+}
+.lab-step button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 4px 0 0;
+  border: none;
+  border-top: 3px solid var(--sand-dark);
+  background: none;
+  color: var(--ink-3);
+  font: inherit;
+  font-size: 12px;
+  line-height: 16px;
+  text-align: left;
+  cursor: pointer;
+}
+.lab-step button:disabled {
+  cursor: default;
+}
+.lab-step.is-done button {
+  border-top-color: var(--positive);
+  color: var(--ink-2);
+}
+.lab-step.is-current button {
+  border-top-color: var(--ink);
+  color: var(--ink);
+  font-weight: 700;
+}
+.lab-step-dot {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--sand-dark);
+  font-size: 11px;
+  font-weight: 700;
+}
+.lab-step.is-done .lab-step-dot {
+  background: var(--positive-soft);
+  color: var(--positive);
+}
+.lab-step.is-current .lab-step-dot {
+  background: var(--ink);
+  color: var(--paper);
+}
+.lab-step-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+@media (max-width: 560px) {
+  .lab-step:not(.is-current) .lab-step-label {
+    display: none;
+  }
+  .lab-step.is-current {
+    flex: 3 1 0;
+  }
+}
+.lab-preview {
+  grid-area: preview;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.lab-panel {
+  grid-area: panel;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+.lab-count {
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--ink-3);
+}
+.lab-q {
+  margin-top: -8px;
+  font-size: 20px;
+  line-height: 28px;
+}
+.lab-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+/* Big, full-width radio rows: obvious that you pick exactly one */
+.lab-opt {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.lab-opt:hover {
+  background: var(--paper);
+}
+.lab-radio {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1.5px var(--ink-3);
+}
+.lab-opt[aria-checked='true'] .lab-radio {
+  box-shadow: inset 0 0 0 5px currentColor;
+}
+.lab-opt-good {
+  background: var(--positive-soft);
+  color: var(--positive);
+  font-weight: 700;
+}
+.lab-opt-bad {
+  background: var(--negative-soft);
+  color: var(--negative);
+  font-weight: 700;
+}
+.lab-opt-good:hover { background: var(--positive-soft); }
+.lab-opt-bad:hover { background: var(--negative-soft); }
+.lab-opt-tried {
+  color: var(--ink-3);
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+.lab-hint {
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--ink-3);
+}
+.lab-why {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: var(--card);
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--ink);
+}
+.lab-why strong {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.lab-why-good strong { color: var(--positive); }
+.lab-why-bad strong { color: var(--negative); }
+.lab-why-try {
+  color: var(--ink-2);
+  font-weight: 700;
+}
+.lab-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+.lab-skip {
+  margin-left: auto;
+  padding: 8px 0;
+  border: none;
+  background: none;
+  color: var(--ink-3);
+  font: inherit;
+  font-size: 12px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.lab-skip:hover {
+  color: var(--ink);
+}
+.lab-summary {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.lab-summary li {
+  display: flex;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: var(--card);
+  font-size: 14px;
+  line-height: 20px;
+}
+.lab-summary li > span:last-child {
+  display: flex;
+  flex-direction: column;
+}
+.lab-sum-icon {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--positive-soft);
+  color: var(--positive);
+}
+.lab-sum-icon.is-fixed {
+  background: var(--attention-soft);
+  color: var(--attention);
+}
+.lab-sum-q,
+.lab-sum-note {
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--ink-3);
+}
+.lab-sum-note {
+  color: var(--attention);
+}
+/* Preview: the part you are designing right now */
+.m-slot-focus {
+  --st: var(--ink);
+  --tint: var(--sand-dark);
+}
+.m-slot-empty.m-slot-focus {
+  background: var(--sand-dark);
+  box-shadow: 0 0 0 6px var(--sand-dark);
+  color: var(--ink-2);
+  font-weight: 700;
+}
+.m-slot-empty.m-slot-good,
+.m-slot-empty.m-slot-bad {
+  color: var(--st);
+}
+
+/* ---------- Mistake Hunt + Practice ---------- */
+.hunt-tabs {
+  margin-top: -4px;
+}
+.hunt {
+  display: grid;
+  gap: 24px;
+  align-items: start;
+}
+@media (min-width: 900px) {
+  .hunt {
+    grid-template-columns: 1.1fr 1fr;
+  }
+}
+.hunt-screen {
+  min-width: 0;
+}
+.hunt-screen .m-body {
+  gap: 12px;
+  padding: 16px;
+}
+.hunt-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+}
+.hunt-progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+.hunt-progress strong {
+  margin-left: 8px;
+}
+.hunt-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: var(--hair) solid var(--ink-3);
+}
+.hunt-dot-on {
+  background: var(--negative);
+  border-color: var(--negative);
+}
+.hunt-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+.hunt-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+.hunt-list li {
+  display: flex;
+  gap: 12px;
+  padding: 12px 12px;
+  border-radius: 10px;
+  background: var(--negative-soft);
+  font-size: 14px;
+  line-height: 21px;
+}
+.hunt-list li.hunt-item-missed {
+  background: var(--attention-soft);
+}
+.hunt-list p {
+  margin-bottom: 4px;
+}
+.hunt-num {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  border-radius: 50%;
+  background: var(--negative);
+  color: var(--card);
+  font-size: 10px;
+  font-weight: 700;
+}
+.hunt-item-missed .hunt-num {
+  background: var(--attention);
+}
+.hunt-fix {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: var(--hair);
+  text-underline-offset: 3px;
+}
+.lab-groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 24px 32px;
+}
+.lab-groups .label {
+  margin-bottom: 8px;
+}
+.lab-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 4px;
+  color: var(--ink);
+  font-size: 14px;
+  text-decoration: none;
+}
+.lab-link:hover {
+  color: var(--ink-2);
+}
+.lab-link svg {
+  color: var(--ink-3);
+}
+.lab-link-done svg {
+  color: var(--positive);
+}

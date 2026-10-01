@@ -9,7 +9,9 @@ import Patterns from './pages/Patterns';
 import PatternDetail from './pages/PatternDetail';
 import Learn from './pages/Learn';
 import Lesson from './pages/Lesson';
-import Play, { SpotTheFlaw, ThisOrThatPage } from './pages/Play';
+import Play from './pages/Play';
+import ThisOrThatPage from './pages/ThisOrThatPage';
+import SpotTheFlaw from './pages/SpotTheFlaw';
 import Daily from './pages/Daily';
 import Story from './pages/Story';
 import PlayerCard from './pages/PlayerCard';
@@ -25,13 +27,14 @@ import NotFound from './pages/NotFound';
 
 export default function App() {
   const { pathname } = useLocation();
-  useEffect(() => window.scrollTo(0, 0), [pathname]);
+  useEffect(() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' }), [pathname]);
 
   return (
     <div className="shell">
       <a href="#main" className="skip-link">Skip to content</a>
       <TopBar />
       <main id="main" className="main">
+        <div className="route" key={pathname}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/patterns" element={<Patterns />} />
@@ -58,6 +61,7 @@ export default function App() {
           <Route path="/learn/:id" element={<Lesson />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        </div>
         <Footer />
       </main>
       <BottomNav />

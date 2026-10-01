@@ -4,7 +4,7 @@ import { getLesson, lessons } from '../data/lessons';
 import { getPattern } from '../data/patterns';
 import { visuals } from '../data/visuals';
 import Compare from '../components/Compare';
-import { useTitle } from '../useTitle';
+import { useTitle } from '../lib/useTitle';
 import { usePassed } from '../progress';
 import NotFound from './NotFound';
 import Breadcrumbs from '../components/Breadcrumbs';

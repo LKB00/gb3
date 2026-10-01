@@ -1,30 +1,20 @@
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { ChevronLeft, Moon, Sun, Volume2, VolumeX, Zap } from 'lucide-react';
 import { useXP } from '../progress';
-import { useTheme } from '../theme';
+import { useTheme } from '../lib/theme';
 import { GoalToast, LevelUpToast, SoundHint, StreakPill } from './Today';
 import { useFx } from '../game/fx';
-
-const PLAY = ['/play', '/practice'];
-const EXPLORE = ['/autonomy', '/teardowns', '/anti-patterns', '/principles', '/glossary', '/learn'];
-
-// Where the phone back button goes from an inner page (desktop uses breadcrumbs).
-const PARENT_NAMES = { '/play': 'Play', '/play/story': 'Stories', '/patterns': 'Cards', '/learn': 'Deep dives', '/teardowns': 'Teardowns' };
-function parentOf(pathname) {
-  const parts = pathname.split('/').filter(Boolean);
-  if (parts.length < 2) return null;
-  const to = '/' + parts.slice(0, -1).join('/');
-  return { to, name: PARENT_NAMES[to] || 'Back' };
-}
+import { useCountUp } from '../lib/useCountUp';
+import { EXPLORE_HOME, isExplore, isPlay, parentOf } from '../config/nav';
 
 // Three places only: Play (games), Cards (the pattern collection), Explore (go deeper).
 // On phones the places move to the bottom bar (BottomNav) and this bar gets simpler.
 export default function TopBar() {
   const { pathname } = useLocation();
   const { xp, level } = useXP();
+  const shownXp = useCountUp(xp);
   const [isDark, toggleTheme] = useTheme();
   const [sound, toggleSound] = useFx();
-  const on = (list) => list.some((p) => pathname.startsWith(p));
   const parent = parentOf(pathname);
 
   return (
@@ -40,15 +30,15 @@ export default function TopBar() {
           <span className="logo-text">AI Patterns</span>
         </Link>
         <nav className="topnav-links" aria-label="Main">
-          <NavLink to="/play" className={() => (on(PLAY) ? 'active' : '')}>Play</NavLink>
+          <NavLink to="/play" className={() => (isPlay(pathname) ? 'active' : '')}>Play</NavLink>
           <NavLink to="/patterns">Cards</NavLink>
-          <NavLink to="/teardowns" className={() => (on(EXPLORE) ? 'active' : '')}>Explore</NavLink>
+          <NavLink to={EXPLORE_HOME} className={() => (isExplore(pathname) ? 'active' : '')}>Explore</NavLink>
         </nav>
         <div className="topnav-right">
           <StreakPill />
           <Link to="/me" className="xp-pill" aria-label={`${xp} XP, level: ${level.name}`} title={level.name}>
             <Zap size={14} strokeWidth={2} aria-hidden />
-            <span key={xp} className="xp-num">{xp}</span>
+            <span key={xp} className="xp-num">{shownXp}</span>
             <span className="xp-unit">XP</span>
           </Link>
           <button className="icon-btn hide-phone" onClick={toggleSound} aria-pressed={sound} aria-label={sound ? 'Turn sound and vibration off' : 'Turn sound and vibration on'} title={sound ? 'Sound on' : 'Sound off'}>

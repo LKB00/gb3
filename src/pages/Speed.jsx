@@ -1,15 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { RotateCcw, Swords, Timer, X, Zap } from 'lucide-react';
-import { makeDeck, seeded } from '../game/decks';
+import { makeDeck } from '../game/decks';
+import { seeded, shuffle } from '../lib/random';
 import { challengeLink, useChallenge, verdict } from '../game/challenge';
 import { fx } from '../game/fx';
 import { track } from '../game/track';
 import { markPlayed, saveSpeed, useGameStats, XP } from '../progress';
 import MockFrame, { MockBlock } from '../mock/Mock';
 import Breadcrumbs from '../components/Breadcrumbs';
+import CountUp from '../components/CountUp';
 import Burst, { XpPop } from '../components/Burst';
-import { useTitle } from '../useTitle';
+import { useTitle } from '../lib/useTitle';
 
 // Speed round: 60 seconds, as many "which is better?" picks as you can.
 // 3 right in a row turns on a ×2 combo; a wrong pick costs 1 point. No explanations mid-round, just pace;
@@ -20,12 +22,7 @@ const SECONDS = 60;
 const newSeed = () => Math.random().toString(36).slice(2, 10);
 function freshDeck(seed) {
   const rng = seeded(`speed:${seed}`);
-  const all = [...makeDeck('classic', 999, rng), ...makeDeck('hard', 999, rng)];
-  for (let i = all.length - 1; i > 0; i--) {
-    const j = Math.floor(rng() * (i + 1));
-    [all[i], all[j]] = [all[j], all[i]];
-  }
-  return all;
+  return shuffle([...makeDeck('classic', 999, rng), ...makeDeck('hard', 999, rng)], rng);
 }
 
 export default function Speed() {
@@ -117,7 +114,7 @@ export default function Speed() {
   const choose = useCallback(
     (n) => {
       if (phase !== 'play' || flash) return;
-      const ok = sides[n] === 'good';
+      const ok = (n === 0) === round.goodFirst;
       markPlayed();
       if (!ok) fx('wrong');
       else if (combo + 1 >= 3) fx('combo', { streak: combo + 1 });
@@ -141,7 +138,7 @@ export default function Speed() {
         setI((x) => x + 1);
       }, ok ? 320 : 650);
     },
-    [phase, flash, sides, combo]
+    [phase, flash, round.goodFirst, combo]
   );
 
   useEffect(() => {
@@ -230,7 +227,7 @@ export default function Speed() {
         <div className="tot tot-over speed-over">
           {result.record && points > 0 && <Burst count={28} />}
           <p className="label">Time’s up</p>
-          <p className="tot-big">{points}<span> pts</span>{result.gain > 0 && <XpPop amount={result.gain} />}</p>
+          <p className="tot-big"><CountUp value={points} /><span> pts</span>{result.gain > 0 && <XpPop amount={result.gain} />}</p>
           <p className="tot-verdict">
             {right} right out of {answered} · {answered ? Math.round((right / answered) * 100) : 0}% accuracy
           </p>

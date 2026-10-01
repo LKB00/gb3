@@ -2,12 +2,14 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { CalendarDays, Copy, Eye, Flame, Share2, Shuffle, Swords } from 'lucide-react';
 import { challengeLink, useChallenge, verdict } from '../game/challenge';
-import { dailyDeck, dailyNumber, todayKey } from '../game/decks';
+import { dailyDeck, dailyNumber } from '../game/decks';
+import { dayKey } from '../lib/dates';
 import { dailyStreak, saveDaily, useDaily, XP } from '../progress';
 import ThisOrThat from '../components/ThisOrThat';
 import Breadcrumbs from '../components/Breadcrumbs';
+import CountUp from '../components/CountUp';
 import Burst, { XpPop } from '../components/Burst';
-import { useTitle } from '../useTitle';
+import { useTitle } from '../lib/useTitle';
 
 // Daily challenge: 5 rounds, the same for everyone today, one try.
 // Why: a small reason to come back each day, and a result grid worth sharing.
@@ -73,7 +75,7 @@ function Result({ num, day, results, streak, fresh, challenge, replay }) {
     <div className="tot tot-over daily-result">
       {fresh && score >= 4 && <Burst count={26} />}
       <p className="label">Daily #{num}</p>
-      <p className="tot-big">{score}<span>/{results.length}</span>{fresh && score > 0 && <XpPop amount={score * XP.daily} />}</p>
+      <p className="tot-big"><CountUp value={score} /><span>/{results.length}</span>{fresh && score > 0 && <XpPop amount={score * XP.daily} />}</p>
       <div className="daily-grid" aria-label={`${score} of ${results.length} right`}>
         {results.map((r, i) => <span key={i} className={r ? 'is-right' : 'is-wrong'} />)}
       </div>
@@ -121,7 +123,7 @@ function Result({ num, day, results, streak, fresh, challenge, replay }) {
 export default function Daily() {
   useTitle('Daily challenge');
   const challenge = useChallenge();
-  const todayK = todayKey();
+  const todayK = dayKey();
   // A challenge link for another day replays that day's rounds (not saved).
   const key = challenge?.day && challenge.day <= todayK && dailyNumber(challenge.day) >= 1 ? challenge.day : todayK;
   const replay = key !== todayK;

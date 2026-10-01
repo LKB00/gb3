@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { haxGuidelines, haxPhases, principleTypes, principles, patternsUsing } from '../data/principles';
 import { getPattern } from '../data/patterns';
-import { useTitle } from '../useTitle';
+import { useTitle } from '../lib/useTitle';
 import LibraryTabs from '../components/LibraryTabs';
 
 export default function Principles() {

@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom';
 import { ChevronRight, IdCard, Moon, Smartphone, Sun, Volume2, VolumeX } from 'lucide-react';
 import { useHaptic, useSound } from '../game/fx';
-import { useTheme } from '../theme';
+import { useTheme } from '../lib/theme';
 import { TodayCard } from '../components/Today';
-import { AppAndBackup, Badges, LevelCard } from './Play';
-import { useTitle } from '../useTitle';
+import AppAndBackup from '../components/play/AppAndBackup';
+import Badges from '../components/play/Badges';
+import LevelCard from '../components/play/LevelCard';
+import { useTitle } from '../lib/useTitle';
 
 // "Me": your level, today, badges, settings and backup in one place.
 // On phones it's a bottom tab; on desktop the XP pill opens it.

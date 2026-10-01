@@ -6,7 +6,7 @@ import { getPattern } from '../data/patterns';
 import { fx } from '../game/fx';
 import MockFrame, { MockBlock } from '../mock/Mock';
 import LibraryTabs from '../components/LibraryTabs';
-import { useTitle } from '../useTitle';
+import { useTitle } from '../lib/useTitle';
 
 // The autonomy ladder: five levels of AI power, from "suggest" to "act alone".
 // Tap a step to see what it looks like and which patterns it needs.

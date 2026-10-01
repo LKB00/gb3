@@ -1,0 +1,22 @@
+/* All styles, in cascade order. Order matters: later files win on ties.
+   Find the area you want to change below; each file starts with what it covers.
+   Phone rules for older areas live in phone.css, which must stay near the end.
+   New areas can keep their phone rules in their own file (see autonomy.css). */
+@import './tokens.css';
+@import './base.css';
+@import './shell.css';
+@import './controls.css';
+@import './mock.css';
+@import './demos.css';
+@import './lab.css';
+@import './pattern.css';
+@import './explore.css';
+@import './home.css';
+@import './game-core.css';
+@import './play.css';
+@import './daily-story.css';
+@import './card-speed.css';
+@import './build.css';
+@import './phone.css';
+@import './autonomy.css';
+@import './motion.css';

@@ -2,20 +2,7 @@
 // screen, leave the traps out, then check your design.
 //   kind: 'need' (the design isn't good without it), 'nice' (bonus), 'trap' (common mistake)
 
-const user = (text) => ({ type: 'user', text });
-const ai = (text, x) => ({ type: 'ai', text, ...x });
-const note = (text, x) => ({ type: 'note', text, ...x });
-const buttons = (items) => ({ type: 'buttons', items });
-const chips = (items) => ({ type: 'chips', items });
-const steps = (items) => ({ type: 'steps', items: items.map(([label, state]) => ({ label, state })) });
-const spinner = (text) => ({ type: 'spinner', text });
-const banner = (tone, title, text) => ({ type: 'banner', tone, title, text });
-const modal = (title, text, btns) => ({ type: 'modal', title, text, buttons: btns });
-const card = (title, text) => ({ type: 'card', title, text });
-const rows = (items) => ({ type: 'rows', items });
-const toast = (text, action) => ({ type: 'toast', text, action });
-const voice = (state, label, text) => ({ type: 'voice', state, label, text });
-const list = (items) => ({ type: 'list', items });
+import { user, ai, note, buttons, chips, steps, spinner, banner, modal, card, rows, toast, voice, list } from '../mock/blocks.js';
 
 const piece = (id, label, kind, pattern, why, block) => ({ id, label, kind, pattern, why, block });
 

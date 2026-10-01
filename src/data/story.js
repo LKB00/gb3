@@ -4,21 +4,7 @@
 // moment where you decide what the screen does. Choices move Priya's trust
 // up or down, and one early choice changes the path of the story.
 
-const user = (text) => ({ type: 'user', text });
-const ai = (text, x) => ({ type: 'ai', text, ...x });
-const note = (text, x) => ({ type: 'note', text, ...x });
-const buttons = (items, x) => ({ type: 'buttons', items, ...x });
-const steps = (items, x) => ({ type: 'steps', items: items.map(([label, state]) => ({ label, state })), ...x });
-const spinner = (text) => ({ type: 'spinner', text });
-const banner = (tone, title, text) => ({ type: 'banner', tone, title, text });
-const modal = (title, text, btns) => ({ type: 'modal', title, text, buttons: btns });
-const rows = (items) => ({ type: 'rows', items });
-const toast = (text, action) => ({ type: 'toast', text, action });
-const list = (items) => ({ type: 'list', items });
-const voice = (state, label, text) => ({ type: 'voice', state, label, text });
-const card = (title, text) => ({ type: 'card', title, text });
-const chips = (items) => ({ type: 'chips', items });
-const diff = (items) => ({ type: 'diff', items });
+import { user, ai, note, buttons, steps, spinner, banner, modal, rows, toast, list, voice, card, diff } from '../mock/blocks.js';
 
 const tidy = {
   id: 'tidy',

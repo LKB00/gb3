@@ -1,14 +1,14 @@
 import { NavLink, useLocation } from 'react-router-dom';
 import { Compass, Gamepad2, House, Layers, UserRound } from 'lucide-react';
+import { EXPLORE_HOME, isCards, isExplore, isPlay } from '../config/nav';
 
 // Phone only (hidden on bigger screens by CSS): the main places sit at the
 // bottom, where thumbs can reach them, like in most mobile apps.
-const EXPLORE = ['/autonomy', '/teardowns', '/anti-patterns', '/principles', '/glossary', '/learn'];
 const tabs = [
   { to: '/', label: 'Home', icon: House, match: (p) => p === '/' },
-  { to: '/play', label: 'Play', icon: Gamepad2, match: (p) => p.startsWith('/play') || p.startsWith('/practice') },
-  { to: '/patterns', label: 'Cards', icon: Layers, match: (p) => p.startsWith('/patterns') },
-  { to: '/teardowns', label: 'Explore', icon: Compass, match: (p) => EXPLORE.some((x) => p.startsWith(x)) },
+  { to: '/play', label: 'Play', icon: Gamepad2, match: isPlay },
+  { to: '/patterns', label: 'Cards', icon: Layers, match: isCards },
+  { to: EXPLORE_HOME, label: 'Explore', icon: Compass, match: isExplore },
   { to: '/me', label: 'Me', icon: UserRound, match: (p) => p.startsWith('/me') },
 ];
 

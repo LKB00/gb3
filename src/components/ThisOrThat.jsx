@@ -7,6 +7,7 @@ import MockFrame, { MockBlock } from '../mock/Mock';
 import { markPlayed, saveStreak, useGameStats, XP } from '../progress';
 import Burst from './Burst';
 import { fx } from '../game/fx';
+import CountUp from './CountUp';
 import { track } from '../game/track';
 import Disagree from './Disagree';
 
@@ -59,7 +60,7 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
       if (pick !== null || over) return;
       setPick(n);
       markPlayed();
-      const ok = sides[n] === 'good';
+      const ok = (n === 0) === round.goodFirst;
       if (!ok) fx('wrong');
       else if (streak + 1 >= 3) fx('combo', { streak: streak + 1 });
       else fx('right', { streak });
@@ -72,7 +73,7 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
         setStreak(0);
       }
     },
-    [pick, over, sides, streak]
+    [pick, over, round.goodFirst, streak]
   );
 
   const next = useCallback(() => {
@@ -87,7 +88,7 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
     track('Game finished', { game: onDone ? 'daily' : `this-or-that-${mode}`, score: results.filter(Boolean).length });
     if (onDone) onDone(results);
     else setOver(true);
-  }, [pick, i, deck.length, runBest, stats.bestStreak, onDone, results]);
+  }, [pick, i, deck.length, runBest, stats.bestStreak, onDone, results, mode]);
 
   const again = () => {
     setDeck(makeDeck(mode, rounds));
@@ -123,7 +124,7 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
       <div className="tot tot-over">
         {score >= deck.length * 0.8 && <Burst count={24} />}
         <Trophy size={28} strokeWidth={1.5} aria-hidden />
-        <p className="tot-big">{score}<span>/{deck.length}</span></p>
+        <p className="tot-big"><CountUp value={score} /><span>/{deck.length}</span></p>
         <p className="tot-verdict">{verdict}</p>
         <div className="tot-stats">
           <span><Flame size={14} strokeWidth={1.75} aria-hidden /> Best streak this run: <strong>{runBest}</strong></span>

@@ -2,15 +2,7 @@
 // Idea: power is a product choice, not a model skill. Just because the AI *can*
 // do something doesn't mean the product should *let* it. Match power to risk.
 
-const user = (text) => ({ type: 'user', text });
-const ai = (text, x) => ({ type: 'ai', text, ...x });
-const buttons = (items) => ({ type: 'buttons', items });
-const chips = (items) => ({ type: 'chips', items });
-const modal = (title, text, btns) => ({ type: 'modal', title, text, buttons: btns });
-const card = (title, text) => ({ type: 'card', title, text });
-const rows = (items) => ({ type: 'rows', items });
-const toast = (text, action) => ({ type: 'toast', text, action });
-const note = (text, x) => ({ type: 'note', text, ...x });
+import { user, ai, buttons, chips, modal, card, rows, toast, note } from '../mock/blocks.js';
 
 export const levels = [
   {

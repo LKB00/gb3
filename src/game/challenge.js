@@ -2,6 +2,8 @@ import { useSearchParams } from 'react-router-dom';
 
 // "Challenge a friend": everything lives in the link (no server).
 // The friend plays the exact same rounds and sees the score to beat.
+// Strips invisible control characters from names typed by people.
+// eslint-disable-next-line no-control-regex
 const cleanName = (s) => String(s || '').replace(/[\u0000-\u001f]/g, '').trim().slice(0, 24);
 
 export function playerName() {

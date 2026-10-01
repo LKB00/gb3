@@ -4,12 +4,14 @@ import { ArrowRight, Check, Gauge, RotateCcw, Star, X } from 'lucide-react';
 import { getLevel, levels, TAGS, tasks } from '../data/autonomy';
 import { getPattern } from '../data/patterns';
 import { fx } from '../game/fx';
+import { shuffle } from '../lib/random';
 import { track } from '../game/track';
 import { markPlayed, savePower, useGameStats, XP } from '../progress';
 import Breadcrumbs from '../components/Breadcrumbs';
+import CountUp from '../components/CountUp';
 import Disagree from '../components/Disagree';
 import Burst, { XpPop } from '../components/Burst';
-import { useTitle } from '../useTitle';
+import { useTitle } from '../lib/useTitle';
 
 // "How much power?": a task, five levels, pick the right one.
 // Exact = 2 points, one step off = 1 point. 8 tasks, so 16 is perfect.
@@ -17,20 +19,11 @@ const ROUNDS = 8;
 const MAX = ROUNDS * 2;
 
 function deal() {
-  // Mix the levels: shuffle, then make sure most levels show up.
-  const a = [...tasks];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  const first = levels.map((l) => a.find((t) => t.level === l.n)).filter(Boolean);
-  const rest = a.filter((t) => !first.includes(t)).slice(0, ROUNDS - first.length);
-  const hand = [...first, ...rest];
-  for (let i = hand.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [hand[i], hand[j]] = [hand[j], hand[i]];
-  }
-  return hand;
+  // One task for each level first, so every level shows up, then random ones.
+  const all = shuffle(tasks);
+  const first = levels.map((l) => all.find((t) => t.level === l.n)).filter(Boolean);
+  const rest = all.filter((t) => !first.includes(t)).slice(0, ROUNDS - first.length);
+  return shuffle([...first, ...rest]);
 }
 
 const starsFor = (pts) => (pts >= 14 ? 3 : pts >= 10 ? 2 : 1);
@@ -105,7 +98,7 @@ export default function Power() {
           <span className="lab-stars" aria-label={`${stars} of 3 stars`}>
             {[1, 2, 3].map((n) => <Star key={n} size={28} strokeWidth={1.5} className={n <= stars ? 'is-on' : ''} style={{ animationDelay: `${n * 120}ms` }} aria-hidden />)}
           </span>
-          <p className="tot-big">{points}<span>/{MAX}</span>{result.gain > 0 && <XpPop amount={result.gain} />}</p>
+          <p className="tot-big"><CountUp value={points} /><span>/{MAX}</span>{result.gain > 0 && <XpPop amount={result.gain} />}</p>
           <p className="tot-verdict">
             {stars === 3 ? 'You know when to trust the AI. Great instincts.' : stars === 2 ? 'Good sense of risk. A few levels off.' : 'Tricky! Look at the clues: money, undo, how often.'}
           </p>
@@ -160,7 +153,7 @@ export default function Power() {
           </div>
         </div>
 
-        <div className="power-opts" role="radiogroup" aria-label="Pick a level">
+        <div className="power-opts" key={t.id} role="radiogroup" aria-label="Pick a level">
           {levels.map((l) => {
             let cls = '';
             if (answered) {

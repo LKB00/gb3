@@ -8,7 +8,7 @@ import { markPlayed, saveStoryBest, storyBests, useGameStats } from '../progress
 import MockFrame, { MockBlock } from '../mock/Mock';
 import Breadcrumbs from '../components/Breadcrumbs';
 import Burst, { XpPop } from '../components/Burst';
-import { useTitle } from '../useTitle';
+import { useTitle } from '../lib/useTitle';
 import { fx } from '../game/fx';
 import { track } from '../game/track';
 import Disagree from '../components/Disagree';
@@ -181,7 +181,7 @@ function Story({ story }) {
       </header>
 
       <div className="story">
-        <div className="story-panel">
+        <div className="story-panel" key={sceneNo}>
           <p className="story-setup">{scene.setup}</p>
           <h2 className="story-q">{scene.question}</h2>
           <div className="story-choices">
@@ -215,7 +215,7 @@ function Story({ story }) {
           )}
         </div>
 
-        <div className="story-screen">
+        <div className="story-screen" key={sceneNo}>
           <p className="label">What {story.person} sees</p>
           <MockFrame title={story.app}>
             {scene.screen.map((b, k) => <MockBlock key={k} b={b} />)}
