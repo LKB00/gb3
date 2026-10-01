@@ -90,4 +90,32 @@ export const realExamples = {
     { product: 'ChatGPT deep research', company: 'OpenAI', what: 'Works for several minutes in the background, so you can come back to the report.' },
     { product: 'Fin', company: 'Intercom', what: 'An AI support agent that hands the chat to a human when it cannot help.' },
   ],
+  'contextual-nudge': [
+    { product: 'Gmail Smart Reply', company: 'Google', what: 'Offers short reply suggestions at the bottom of an email, right where you reply.' },
+    { product: 'Grammarly', company: 'Grammarly', what: 'Underlines text as you write and offers a fix only where it applies.' },
+  ],
+  'reply-to-part': [
+    { product: 'ChatGPT', company: 'OpenAI', what: 'Select text in an answer and ask about just that part; it is quoted in your next message.' },
+    { product: 'Notion AI', company: 'Notion', what: 'Select text and choose “Ask AI” to work on only that selection.' },
+  ],
+  'show-understanding': [
+    { product: 'Google Lens', company: 'Google', what: 'Highlights the text and objects it found in a photo, so you can pick what you mean.' },
+    { product: 'Google Assistant', company: 'Google', what: 'Shows your words on screen as you speak, so you can see what it heard.' },
+  ],
+  'autonomy-dial': [
+    { product: 'Claude Code', company: 'Anthropic', what: 'Permission modes range from asking before every edit to auto-accepting edits, plus a plan-only mode.' },
+    { product: 'SAE driving levels', company: 'SAE International', what: 'Cars describe automation as levels 0 to 5, a well-known model for “how much the machine does”.' },
+  ],
+  'action-log': [
+    { product: 'Claude Code', company: 'Anthropic', what: 'Shows each command and file edit as it happens, with checkpoints you can rewind to.' },
+    { product: 'Copilot coding agent', company: 'GitHub', what: 'Works in a pull request with a session log of what it did, so changes can be reviewed.' },
+  ],
+  'interrupt-redirect': [
+    { product: 'ChatGPT agent', company: 'OpenAI', what: 'You can interrupt at any time, take over the browser, then hand control back.' },
+    { product: 'Claude Code', company: 'Anthropic', what: 'Press Esc to stop mid-task, add a new instruction, and continue.' },
+  ],
+  'cost-estimate': [
+    { product: 'Replit Agent', company: 'Replit', what: 'Shows what each agent checkpoint cost, so you can see where credits go.' },
+    { product: 'Firefly', company: 'Adobe', what: 'Shows the generative credits a premium action will use before you run it.' },
+  ],
 };

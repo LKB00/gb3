@@ -1104,4 +1104,358 @@ export const visuals = {
       ],
     },
   },
+  /* ================= NEW: INPUT ================= */
+  'contextual-nudge': {
+    compare: {
+      bad: {
+        caption: 'Interrupts, then repeats',
+        blocks: [modal('Try our new AI assistant!', 'It can do so much for you.', ['!Try now', 'Later'], { pin: 'Pop-up mid-task' }), note('Shown again on every page', { tone: 'warn' })],
+      },
+      good: {
+        caption: 'Small, in context, easy to skip',
+        blocks: [
+          text('Re: Q3 roadmap (14 replies)'),
+          chips([':sparkle Summarize this thread', ':x'], { pin: 'Right place, right time' }),
+          note('Not shown again if you skip it'),
+        ],
+      },
+    },
+    lab: {
+      goal: 'Help people discover AI summaries in an email app.',
+      frame: [text('Re: Q3 roadmap (14 replies)'), slot('where'), slot('when'), slot('after')],
+      decisions: [
+        {
+          id: 'where',
+          label: 'Where does the offer appear?',
+          options: [
+            opt('Pop-up over the screen', false, 'Interrupts the task and feels like an ad.', [modal('Try our new AI assistant!', '', ['!Try now', 'Later'])]),
+            opt('Small chip in the thread', true, 'Sits right where the help is useful.', [chips([':sparkle Summarize this thread'])]),
+          ],
+        },
+        {
+          id: 'when',
+          label: 'When is it shown?',
+          options: [
+            opt('On every email', false, 'Constant offers turn into noise people ignore.', [note('Shown on all 214 emails')]),
+            opt('Only on long threads', true, 'Shown when it clearly saves time.', [note('Shown on threads with 10+ replies')]),
+          ],
+        },
+        {
+          id: 'after',
+          label: 'After people skip it',
+          options: [
+            opt('Keep asking', false, 'Repeating a “no” feels pushy and erodes trust.', [note('Asks again tomorrow', { tone: 'warn' })]),
+            opt('Back off', true, 'Respecting the choice keeps the feature welcome.', [note('Hidden for this thread · Turn off in Settings')]),
+          ],
+        },
+      ],
+    },
+  },
+
+  'reply-to-part': {
+    compare: {
+      bad: {
+        caption: 'Retype and hope',
+        blocks: [ai('Plan: 1) Interview 5 users. 2) Run a survey with 200 people. 3) Build a prototype.'), user('Can you change the second step to something cheaper?', { pin: 'Must describe the part' })],
+      },
+      good: {
+        caption: 'Point at the exact part',
+        blocks: [
+          edit('Plan: 1) Interview 5 users. 2) Run a survey with 200 people. 3) Build a prototype.', { sel: '2) Run a survey with 200 people.' }),
+          buttons([':sparkle Ask about this', 'Shorten', 'Explain'], { pin: 'Acts on the selection' }),
+          note('Quoting: “Run a survey with 200 people”'),
+        ],
+      },
+    },
+    lab: {
+      goal: 'People want to change one step in a long AI answer.',
+      frame: [slot('select'), slot('quote'), slot('scope')],
+      decisions: [
+        {
+          id: 'select',
+          label: 'When people select text…',
+          options: [
+            opt('Nothing happens', false, 'People must copy, paste and describe the part themselves.', [edit('Plan: 1) Interview 5 users. 2) Run a survey with 200 people. 3) Build a prototype.')]),
+            opt('Show quick actions', true, 'The selection becomes the starting point.', [
+              edit('Plan: 1) Interview 5 users. 2) Run a survey with 200 people. 3) Build a prototype.', { sel: '2) Run a survey with 200 people.' }),
+              buttons([':sparkle Ask about this', 'Shorten', 'Explain']),
+            ]),
+          ],
+        },
+        {
+          id: 'quote',
+          label: 'In the message box',
+          options: [
+            opt('Empty box', false, 'People forget what they selected, and so might the AI.', [ph('Ask anything…')]),
+            opt('Show the quoted part', true, 'Both the person and the AI know exactly what is meant.', [note('Quoting: “Run a survey with 200 people”'), input('Make this cheaper')]),
+          ],
+        },
+        {
+          id: 'scope',
+          label: 'The AI changes…',
+          options: [
+            opt('The whole answer', false, 'Parts people liked change too.', [ai('New plan: 1) Talk to 3 users. 2) Post a quick poll. 3) Sketch ideas.')]),
+            opt('Only that part', true, 'The rest stays exactly as it was.', [diff([['Run a survey with 200 people', 'Post a 3-question poll in the app']])]),
+          ],
+        },
+      ],
+    },
+  },
+
+  'show-understanding': {
+    compare: {
+      bad: {
+        caption: 'Acts on a silent guess',
+        blocks: [spinner('Listening…'), ai('Booked a table for 14 people.', { pin: 'Heard “14”, not “4”' })],
+      },
+      good: {
+        caption: 'Shows what it heard, then acts',
+        blocks: [
+          note('Heard:', { tone: 'accent' }),
+          edit('Book a table for 4 people at 7 pm', { sel: '4', pin: 'Transcript you can fix' }),
+          buttons(['!Book it', 'Edit']),
+        ],
+      },
+    },
+    lab: {
+      goal: 'Someone says “Book a table for four at seven” to a voice assistant.',
+      frame: [slot('state'), slot('show'), slot('confirm')],
+      decisions: [
+        {
+          id: 'state',
+          label: 'While it listens',
+          options: [
+            opt('No signal', false, 'People do not know if they are being heard.', [blank('')]),
+            opt('Clear listening state', true, 'People know when to talk and when to stop.', [spinner('Listening… tap to stop')]),
+          ],
+        },
+        {
+          id: 'show',
+          label: 'Show what it understood?',
+          options: [
+            opt('No, just act', false, 'A misheard number becomes a wrong booking.', []),
+            opt('Live transcript', true, 'Mistakes are visible before anything happens.', [edit('Book a table for 4 people at 7 pm', { sel: '4' })]),
+          ],
+        },
+        {
+          id: 'confirm',
+          label: 'Before booking',
+          options: [
+            opt('Book right away', false, 'No chance to catch a mistake in the reading.', [toast('Booked for 14 people at 7 pm')]),
+            opt('Quick confirm + edit', true, 'One tap to go, one tap to fix.', [buttons(['!Book it', 'Edit'])]),
+          ],
+        },
+      ],
+    },
+  },
+
+  /* ================= NEW: AGENTS ================= */
+  'autonomy-dial': {
+    compare: {
+      bad: {
+        caption: 'One setting for everything',
+        blocks: [toggle('AI agent', true), note('The agent acts on everything automatically.', { pin: 'All or nothing' })],
+      },
+      good: {
+        caption: 'Freedom set per task',
+        blocks: [
+          rows(
+            [
+              { label: 'Draft replies', value: '', tag: 'Act on its own', tone: 'ok' },
+              { label: 'Send emails', value: '', tag: 'Ask first', tone: 'warn' },
+              { label: 'Delete files', value: '', tag: 'Suggest only', tone: 'accent' },
+            ],
+            { pin: 'Risky tasks stay supervised' }
+          ),
+        ],
+      },
+    },
+    lab: {
+      goal: 'Set up how much freedom an email agent gets.',
+      frame: [slot('levels'), slot('default'), slot('change')],
+      decisions: [
+        {
+          id: 'levels',
+          label: 'How are levels set?',
+          options: [
+            opt('One on/off switch', false, 'Safe and risky tasks get the same freedom.', [toggle('AI agent', true)]),
+            opt('Per task, in plain words', true, 'Risk differs by task, so freedom should too.', [
+              rows([
+                { label: 'Draft replies', value: '', tag: 'Act on its own', tone: 'ok' },
+                { label: 'Send emails', value: '', tag: 'Ask first', tone: 'warn' },
+              ]),
+            ]),
+          ],
+        },
+        {
+          id: 'default',
+          label: 'Default for new tasks',
+          options: [
+            opt('Act on its own', false, 'A risky default makes the first mistake a big one.', [note('New tasks: Act on its own', { tone: 'warn' })]),
+            opt('Ask first', true, 'Start safe, let people loosen it as trust grows.', [note('New tasks: Ask first')]),
+          ],
+        },
+        {
+          id: 'change',
+          label: 'Changing the level later',
+          options: [
+            opt('Deep in Settings', false, 'Hard-to-reach controls feel like no control.', [note('Settings › Advanced › Agents › Permissions')]),
+            opt('Right where the agent works', true, 'People adjust in the moment they need it.', [buttons([':more Ask first'])]),
+          ],
+        },
+      ],
+    },
+  },
+
+  'action-log': {
+    compare: {
+      bad: {
+        caption: '“Done.” But what changed?',
+        blocks: [toast('Agent finished. 37 actions completed.', '', { pin: 'No record, no undo' })],
+      },
+      good: {
+        caption: 'A record you can read and reverse',
+        blocks: [
+          rows(
+            [
+              { label: '10:02 Renamed 24 layers', value: '', action: 'Undo' },
+              { label: '10:03 Merged 6 color styles', value: '', action: 'Undo' },
+              { label: '10:04 Moved 3 icons to Assets', value: '', action: 'Undo' },
+            ],
+            { pin: 'Each step, in plain words' }
+          ),
+          buttons([':retry Restore to 10:00']),
+        ],
+      },
+    },
+    lab: {
+      goal: 'An agent tidied a design file while you were away.',
+      frame: [slot('record'), slot('words'), slot('undo')],
+      decisions: [
+        {
+          id: 'record',
+          label: 'After the run, show…',
+          options: [
+            opt('“Done” only', false, 'People cannot check or fix what they cannot see.', [toast('Agent finished. 37 actions completed.')]),
+            opt('A step-by-step log', true, 'Every change can be checked.', [
+              rows([
+                { label: '10:02 Renamed 24 layers', value: '' },
+                { label: '10:03 Merged 6 color styles', value: '' },
+              ]),
+            ]),
+          ],
+        },
+        {
+          id: 'words',
+          label: 'Log lines are written…',
+          options: [
+            opt('As raw system logs', false, 'Technical logs are unreadable for most people.', [note('PATCH /nodes/4:12 {"name":"Card"} 200 OK')]),
+            opt('In plain words', true, 'Anyone can understand what happened.', [note('Renamed “Rectangle 42” to “Card”')]),
+          ],
+        },
+        {
+          id: 'undo',
+          label: 'Reversing changes',
+          options: [
+            opt('Not possible', false, 'Without undo, people stop letting the agent act.', []),
+            opt('Undo each step or restore', true, 'Mistakes are cheap, so people trust the agent more.', [buttons(['Undo step', ':retry Restore to 10:00'])]),
+          ],
+        },
+      ],
+    },
+  },
+
+  'interrupt-redirect': {
+    compare: {
+      bad: {
+        caption: 'Wait it out, or lose everything',
+        blocks: [steps([['Research 12 competitors', 'active']]), buttons(['-Cancel'], { pin: 'Cancel deletes all progress' })],
+      },
+      good: {
+        caption: 'Pause, correct, continue',
+        blocks: [
+          steps([['Found 5 of 12 competitors', 'done'], ['Paused', 'todo']]),
+          input('Only include companies in India', { pin: 'Correct mid-task' }),
+          buttons(['!Resume with this change']),
+        ],
+      },
+    },
+    lab: {
+      goal: 'An agent is researching competitors and is going the wrong way.',
+      frame: [steps([['Found 5 of 12 competitors', 'done'], ['Searching more…', 'active']]), slot('stop'), slot('correct'), slot('resume')],
+      decisions: [
+        {
+          id: 'stop',
+          label: 'The control to stop',
+          options: [
+            opt('Cancel (deletes progress)', false, 'Losing all work punishes people for correcting the agent.', [buttons(['-Cancel'])]),
+            opt('Pause (keeps progress)', true, 'People can stop without losing anything.', [buttons(['Pause'])]),
+          ],
+        },
+        {
+          id: 'correct',
+          label: 'While paused',
+          options: [
+            opt('Nothing to do', false, 'Pausing is useless if you cannot change direction.', []),
+            opt('Type a correction', true, 'Turns a stop into a steer.', [input('Only include companies in India')]),
+          ],
+        },
+        {
+          id: 'resume',
+          label: 'After the correction',
+          options: [
+            opt('Start over', false, 'Throws away the 5 good results.', [note('Restarting from step 1…', { tone: 'warn' })]),
+            opt('Resume from here', true, 'Keeps good work, applies the change going forward.', [buttons(['!Resume with this change'])]),
+          ],
+        },
+      ],
+    },
+  },
+
+  'cost-estimate': {
+    compare: {
+      bad: {
+        caption: 'The bill is the surprise',
+        blocks: [buttons(['!Generate video']), toast('Used 480 credits. 20 left this month.', '', { pin: 'Cost shown too late' })],
+      },
+      good: {
+        caption: 'Know before you go',
+        blocks: [
+          rows([{ label: 'Video, 30 sec', value: '~120 credits' }, { label: 'Draft preview', value: '~10 credits' }], { pin: 'Estimate up front' }),
+          buttons(['Draft preview', '!Generate · ~120 credits']),
+          note('500 credits left this month'),
+        ],
+      },
+    },
+    lab: {
+      goal: 'A 30-second AI video uses a lot of credits.',
+      frame: [slot('when'), slot('cheaper'), slot('limit')],
+      decisions: [
+        {
+          id: 'when',
+          label: 'Show the cost…',
+          options: [
+            opt('After it is done', false, 'Surprise costs feel like a trick.', [toast('Used 480 credits.')]),
+            opt('On the start button', true, 'People decide with the cost in view.', [buttons(['!Generate · ~120 credits'])]),
+          ],
+        },
+        {
+          id: 'cheaper',
+          label: 'Offer a cheaper option?',
+          options: [
+            opt('No', false, 'People who just want to explore pay full price.', []),
+            opt('Draft preview first', true, 'Cheap drafts let people explore before they spend.', [buttons(['Draft preview · ~10 credits'])]),
+          ],
+        },
+        {
+          id: 'limit',
+          label: 'Near the monthly limit',
+          options: [
+            opt('Fail when it runs out', false, 'A task stopping halfway wastes time and credits.', [banner('bad', 'Out of credits', 'Task stopped at 80%.')]),
+            opt('Warn before starting', true, 'People can plan instead of being cut off.', [banner('warn', 'This uses most of your remaining credits', '120 of 140 left.')]),
+          ],
+        },
+      ],
+    },
+  },
 };

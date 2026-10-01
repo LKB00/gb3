@@ -125,4 +125,30 @@ export const hunts = [
       { type: 'buttons', items: ['!Use A', 'More like A'] },
     ],
   },
+  {
+    id: 'coding-agent',
+    title: 'AI coding agent',
+    app: 'Forge · coding agent',
+    brief: 'A developer asks an agent to upgrade a project’s libraries.',
+    blocks: [
+      { type: 'user', text: 'Upgrade all our libraries to the latest versions.' },
+      {
+        type: 'toggle', label: 'Agent mode: Full auto (all projects)', on: true,
+        mistake: { text: 'One “full auto” switch for everything. Let people set freedom per task, starting low.', pattern: 'autonomy-dial' },
+      },
+      {
+        type: 'buttons', items: ['-Cancel (discards work)'],
+        mistake: { text: 'The only way to stop throws work away. Offer Pause that keeps progress.', pattern: 'interrupt-redirect' },
+      },
+      { type: 'steps', items: [{ label: 'Updated 14 of 40 packages', state: 'done' }, { label: 'Running tests', state: 'active' }] },
+      {
+        type: 'toast', text: 'Used 2,400 credits. 100 left this month.', action: '',
+        mistake: { text: 'The cost appears only afterwards. Show an estimate before starting.', pattern: 'cost-estimate' },
+      },
+      {
+        type: 'note', text: 'Task complete. 212 actions taken.',
+        mistake: { text: 'No record of what changed and no undo. Keep a readable log with restore points.', pattern: 'action-log' },
+      },
+    ],
+  },
 ];

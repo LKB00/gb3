@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { BookOpen, Brain, Check, FlaskConical, House, LayoutGrid, Menu, Moon, Sun, X } from 'lucide-react';
+import { BookOpen, BookText, Brain, Check, FlaskConical, House, LayoutGrid, Menu, Moon, ShieldAlert, Sun, X } from 'lucide-react';
 import { categories, patterns } from '../data/patterns';
 import { usePassed } from '../progress';
 import { useTheme } from '../theme';
@@ -55,9 +55,11 @@ export default function Sidebar() {
         <nav className="sb-nav" aria-label="Main">
           <NavLink to="/" end className="sb-link"><House {...ICON} />Overview</NavLink>
           <NavLink to="/patterns" end className="sb-link"><LayoutGrid {...ICON} />All patterns</NavLink>
-          <NavLink to="/practice" className="sb-link"><FlaskConical {...ICON} />Practice</NavLink>
+          <NavLink to="/anti-patterns" className="sb-link"><ShieldAlert {...ICON} />Anti-patterns</NavLink>
           <NavLink to="/principles" className="sb-link"><Brain {...ICON} />Principles</NavLink>
+          <NavLink to="/practice" className="sb-link"><FlaskConical {...ICON} />Practice</NavLink>
           <NavLink to="/learn" className="sb-link"><BookOpen {...ICON} />Learn</NavLink>
+          <NavLink to="/glossary" className="sb-link"><BookText {...ICON} />Glossary</NavLink>
         </nav>
 
         <nav className="sb-groups" aria-label="Patterns" ref={groupsRef}>

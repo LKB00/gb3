@@ -2,11 +2,14 @@
 
 A free learning website for designers about **AI design patterns** and **AI interaction design**.
 
-- **Pattern library**: 22 patterns in 6 groups (Input, Output, Control, Trust, Feedback, Agents).
+- **Pattern library**: 29 patterns in 6 groups (Input, Output, Control, Trust, Feedback, Agents), including agentic patterns: autonomy dial, activity log & undo, pause & redirect, cost estimates.
 - **Visual first**: every pattern shows a ✕ bad and a ✓ better screen, with short labels on the screen itself.
 - **Design Lab**: on every pattern page, people build the feature by picking options. "Check my design" marks common mistakes in red and explains why.
 - **Mistake Hunt** (`/practice`): realistic AI screens with hidden mistakes. Click what is wrong, then jump to the pattern that fixes it.
-- **Live demos** for 12 patterns, and a **learning path** of 7 short visual lessons.
+- **Live demos** for 14 patterns (including an interactive L1–L5 autonomy explainer), and a **learning path** of 8 short visual lessons.
+- **Anti-patterns**: 8 AI dark patterns (from CDT and DarkBench research), with the fix for each.
+- **Principles**: UX heuristics, Laws of UX and psychology per pattern, plus Microsoft's 18 Human-AI guidelines mapped to patterns.
+- **Glossary** of plain-English AI terms, and further reading.
 - Light and dark mode, works on phone and desktop. Lab progress is saved in the browser.
 
 ## Design
