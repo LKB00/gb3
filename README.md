@@ -21,3 +21,8 @@ npm run build    # makes the final site in /dist
 - New lesson: add an item to `src/data/lessons.js`.
 
 Built with React + Vite. Uses hash links (`/#/patterns`) so it works on GitHub Pages with no extra setup.
+
+## Website
+
+Live at **https://lkb00.github.io/patricka/** — every push to `main` builds and publishes the site automatically
+(`.github/workflows/deploy.yml`). One-time setup: repo **Settings → Pages → Source: GitHub Actions**.
