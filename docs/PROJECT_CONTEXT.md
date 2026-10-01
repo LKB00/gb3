@@ -1,13 +1,13 @@
-# AI Patterns: full project context (handoff file)
+# Good Bot, Bad Bot: full project context (handoff file)
 
 > **Read this first in a new session.** It is written so a fresh AI session (or a new person) can continue the work
 > with the same context: what the site is, what the owner wants, how to work, how to ship, what was decided and why,
 > and what is still open. Keep it up to date (see [Keeping this file current](#14-keeping-this-file-current)).
 >
-> Last updated: **2026-10-01**, after PR #22 (edge-case fixes). Live site: <https://lkb00.github.io/patricka/>
+> Last updated: **2026-10-01**, after the rename to **Good Bot, Bad Bot** (formerly "AI Patterns"). Live site: <https://lkb00.github.io/patricka/>
 
 ## Contents
-1. [Snapshot](#1-snapshot)
+1. [Snapshot](#1-snapshot) (name and brand: see [section 8b](#8b-brand))
 2. [The owner and how to work with them](#2-the-owner-and-how-to-work-with-them)
 3. [Runbooks: develop, check, preview, ship](#3-runbooks-develop-check-preview-ship)
 4. [Sandbox environment gotchas](#4-sandbox-environment-gotchas)
@@ -29,6 +29,7 @@
 
 | | |
 |---|---|
+| **Name** | **Good Bot, Bad Bot** (tagline: *Can you spot good AI design?*). Formerly "AI Patterns". The repo and address stay `patricka`. |
 | **What** | A playful website about **AI design patterns, AI interaction design and agentic UX**. A game, not a course. |
 | **Live** | <https://lkb00.github.io/patricka/> (GitHub Pages, hash routes like `/#/play`) |
 | **Repo** | `LKB00/patricka`. Work branch: `claude/awesome-rubin-9zmea8`. Live branch: `main` |
@@ -107,10 +108,10 @@ Individual parts: `npm run lint`, `npm run validate`, `npm run build`, `npm run 
 ### Preview (so the owner can try before "Make live")
 The owner looks at a **private Claude Artifact**. It is one self-contained HTML page, republished to the **same URL** each time:
 1. `npm run build`
-2. Inline the build output into one file in the scratchpad (`ai-patterns.html`): put the built CSS in a `<style>`, the built JS in a
+2. Inline the build output into one file in the scratchpad (`ai-patterns.html`, an old file name, any name works): put the built CSS in a `<style>`, the built JS in a
    `<script type="module">` (escape `</script`), and **remove the `<link rel="manifest">`** tag.
 3. Publish with the Artifact tool using the **same file path** and the existing artifact `url` (find it with `action: "list"`; the
-   title is "AI Patterns"). Warning shown about downloads is expected and harmless (downloads do not work in the preview).
+   title is "Good Bot, Bad Bot", earlier "AI Patterns"). Warning shown about downloads is expected and harmless (downloads do not work in the preview).
 4. In the preview, downloads (e.g. "Save player card") and the service worker do not work. That is normal.
 
 ### Ship ("Make live")
@@ -202,7 +203,7 @@ yet, the streak is still kept (you still have time). Streak math is `streakInfo`
 per pattern (visuals), Hard uses the 30 "one small detail differs" pairs (`data/subtle.js`). Pins/captions appear after answering. Keys: Left/Right (or A/B), Enter for next.
 Shortcuts with Ctrl/Cmd/Alt and held keys are ignored. Streak of 3+ plays the combo sound.
 
-**Daily** (`pages/Daily.jsx`): 5 rounds: easy, easy, hard, easy, hard. Same for everyone on the same date (seeded with `ai-patterns:<YYYY-MM-DD>`).
+**Daily** (`pages/Daily.jsx`): 5 rounds: easy, easy, hard, easy, hard. Same for everyone on the same date (seeded with `ai-patterns:<YYYY-MM-DD>`; the seed text keeps the old name on purpose, because changing it would change every day's rounds).
 **One try per day**; the first result of the day is saved. Daily #1 = **1 Oct 2026**; the displayed number is never below 1 (`dailyLabel`). Result shows a Wordle-style
 grid, share/copy, countdown to the next Daily, and "challenge a friend". Playing a friend's challenge for a past day replays it but does not save it.
 
@@ -247,6 +248,7 @@ index.html                 fonts, Open Graph/Twitter tags, manifest link, theme 
 public/                    og.png, icons, manifest.webmanifest, sw.js (service worker)
 scripts/smoke.mjs          browser test of every page (npm run smoke)
 scripts/validate.mjs       content checker (npm run validate)
+scripts/make-brand-images.mjs   makes icons and the share image in public/ (npm run brand)
 eslint.config.js           lint rules (npm run lint)
 .github/workflows/deploy.yml   CI: install, lint, build, publish to Pages
 src/
@@ -295,7 +297,7 @@ src/
 - **Error screen**: `components/ErrorBoundary.jsx` wraps the whole app and each page; offers Try again, Go home and (with a confirm) Clear saved data.
 - **Games registry**: `config/games.js` defines the tiles (title, text, icon, tone class, meta line). To add a game: page in `pages/`, route in `App.jsx`, entry in `games.js`.
 - **Count-up numbers**: `<CountUp value={n} />` or `useCountUp(n)`.
-- **Service worker** (`public/sw.js`, cache `ai-patterns-v1`): pages network-first, built files and fonts cache-first. Registered only in production.
+- **Service worker** (`public/sw.js`, cache `good-bot-bad-bot-v2`; bump it when brand files or the app shell must refresh for installed apps): pages network-first, built files and fonts cache-first. Registered only in production.
 
 ---
 
@@ -335,6 +337,18 @@ On by default; two separate switches on the Me page; the top-bar speaker toggles
 **Phone experience** (<= 720px, `styles/phone.css`): bottom nav, back button, edge-to-edge games, sticky action bars above the nav (Next/Check), `focus-mode` for Speed, `hover: none` press feedback, compact top bar below 440px, and a **landscape** compaction (`max-width: 900px` and `max-height: 480px`: icon-only bottom bar, 44px). `pointer: coarse` makes small targets at least 32px.
 
 **Accessibility**: skip link, one `h1` per page (a visually hidden one on This or That), `aria-level` fixes for card/Lab headings, `role=tablist/tab/radio` patterns, `aria-live` for feedback, keyboard support for all games, focus ring, `prefers-reduced-motion`. An audit found no missing names, alt text or duplicate ids. Colour contrast was **not** formally measured.
+
+---
+
+## 8b. Brand
+
+- **Name:** Good Bot, Bad Bot. Short name for installed apps (home screen label): **Good Bot** (the full name is too long for phone home screens).
+- **Logo:** two round faces side by side: a **good bot** (lime `#c2ef72`, smiling) and a **bad bot** (soft red `#f6a5a0`, frowning, angry brows), with a small overlap and a gap line between them. Colours are fixed (same in light and dark mode).
+- **One drawing, four copies** (keep them in step if the logo changes): `src/components/LogoMark.jsx` (React SVG, used in the top bar, flip-card back and player card), the favicon SVG in `index.html`, `drawLogo()` in `src/pages/PlayerCard.jsx` (canvas image), and `scripts/make-brand-images.mjs`.
+- **Brand images in `public/`** (`icon-192.png`, `icon-512.png`, `icon-maskable-512.png`, `apple-touch-icon.png`, `og.png` for link previews) are **generated**: run `npm run brand` (in the sandbox: `CHROMIUM_PATH=/opt/pw-browsers/chromium npm run brand`). Edit the script, not the PNGs.
+- **Top bar on phones:** the name shortens with "..." when streak and XP numbers are big; `npm run smoke` checks that the pills never run off the screen.
+- **Kept on purpose after the rename** (so nobody loses anything): backup code prefix `AIP1.`, all `localStorage` keys, the Daily seed text, repo name and URL, `package.json` name.
+- Names that were considered: Botch or Bravo, Hunch, UX Arcade, Pattern Deck, and others. The owner chose **Good Bot, Bad Bot**.
 
 ---
 
@@ -396,8 +410,11 @@ Things the repo does **not** have: unit tests, visual regression, a real-device 
 | #20 | Autonomy ladder + "How much power?" game (ideas from aiuxplayground.com research) |
 | #21 | Code restructure (CSS split, config registries, shared helpers, ESLint, smoke test, docs) + smooth motion |
 | #22 | Edge cases: corrupt saved data crash, clipboard fallbacks, long names, key shortcuts, tap targets, landscape, stronger tests |
+| #23 | Added this context file |
+| #24 | Rename to **Good Bot, Bad Bot**: new two-bot logo, icons, share image, name everywhere, `npm run brand` |
 
 ### Decisions worth remembering
+- **Name: Good Bot, Bad Bot** (chosen by the owner from a short list). It matches the main game (pick the better screen). Renamed from "AI Patterns", which was clear but easy to forget.
 - **No backend, no accounts.** Progress is per browser; the backup code moves it. Challenge links carry all data in the URL.
 - **Hash routing** for static hosting.
 - **Games over lessons.** The pattern knowledge is delivered by playing; reading pages live under Explore.

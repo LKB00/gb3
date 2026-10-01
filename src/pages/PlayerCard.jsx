@@ -4,6 +4,7 @@ import { patterns } from '../data/patterns';
 import { archetype, wonGroups } from '../game/archetype';
 import { useGameStats, usePassed, useStars, useStreak, useXP } from '../progress';
 import { copyText } from '../lib/clipboard';
+import LogoMark from '../components/LogoMark';
 import Breadcrumbs from '../components/Breadcrumbs';
 import { useTitle } from '../lib/useTitle';
 
@@ -52,6 +53,24 @@ function useCardData() {
 }
 
 // Draws the same card on a canvas (1080 × 1350, good for LinkedIn and Instagram).
+// The two-bot logo (same drawing as components/LogoMark.jsx), top-left at (x, y), scaled.
+function drawLogo(g, x, y, k) {
+  const c = (cx, cy, r, fill) => { g.beginPath(); g.arc(x + cx * k, y + cy * k, r * k, 0, Math.PI * 2); g.fillStyle = fill; g.fill(); };
+  const curve = (x1, y1, cx, cy, x2, y2) => { g.beginPath(); g.moveTo(x + x1 * k, y + y1 * k); g.quadraticCurveTo(x + cx * k, y + cy * k, x + x2 * k, y + y2 * k); g.stroke(); };
+  const line = (x1, y1, x2, y2) => { g.beginPath(); g.moveTo(x + x1 * k, y + y1 * k); g.lineTo(x + x2 * k, y + y2 * k); g.stroke(); };
+  c(13, 14, 12, LIME);
+  c(31, 14, 13, INK); // dark gap between the bots
+  c(31, 14, 12, '#f6a5a0');
+  for (const [cx, cy] of [[9.5, 12], [16.5, 12], [27.5, 12.5], [34.5, 12.5]]) c(cx, cy, 1.8, INK);
+  g.strokeStyle = INK;
+  g.lineWidth = 2 * k;
+  g.lineCap = 'round';
+  curve(8.5, 17, 13, 21.6, 17.5, 17);
+  curve(26.5, 20.8, 31, 16.2, 35.5, 20.8);
+  line(26.2, 8.4, 29.6, 10.2);
+  line(35.8, 8.4, 32.4, 10.2);
+}
+
 // Draw text that shrinks until it fits the width (long names, long type names).
 function fillFit(g, text, x, y, maxWidth, weight, size, family, minSize = 24) {
   let s = size;
@@ -82,17 +101,10 @@ async function drawCard(name, data) {
 
   round(0, 0, W, H, 64, INK);
   // header
-  g.fillStyle = LIME;
-  g.beginPath();
-  g.arc(108, 120, 22, 0, Math.PI * 2);
-  g.fill();
-  g.fillStyle = INK;
-  g.beginPath();
-  g.arc(108, 120, 9, 0, Math.PI * 2);
-  g.fill();
+  drawLogo(g, 84, 96, 2.1);
   g.fillStyle = '#c9ccc4';
   g.font = `700 30px ${sans}`;
-  g.fillText('AI PATTERNS · PLAYER CARD', 150, 131);
+  g.fillText('GOOD BOT, BAD BOT · PLAYER CARD', 200, 131);
 
   // name + type
   g.fillStyle = PAPER;
@@ -184,15 +196,15 @@ export default function PlayerCard() {
     if (!blob) return flash('Could not make the image');
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = 'ai-patterns-player-card.png';
+    a.download = 'good-bot-bad-bot-player-card.png';
     a.click();
     setTimeout(() => URL.revokeObjectURL(a.href), 1000);
     flash('Image saved');
   };
-  const text = `I’m “${data.type.name}” on AI Patterns: level ${data.levelNum} ${data.level.name}, ${data.xp} XP. What kind of AI designer are you? ${window.location.origin}${window.location.pathname}`;
+  const text = `I’m “${data.type.name}” on Good Bot, Bad Bot: level ${data.levelNum} ${data.level.name}, ${data.xp} XP. What kind of AI designer are you? ${window.location.origin}${window.location.pathname}`;
   const share = async () => {
     try {
-      const file = new File([await toBlob()], 'ai-patterns-player-card.png', { type: 'image/png' });
+      const file = new File([await toBlob()], 'good-bot-bad-bot-player-card.png', { type: 'image/png' });
       if (navigator.canShare?.({ files: [file] })) await navigator.share({ files: [file], text });
       else await navigator.share({ text });
     } catch {
@@ -208,7 +220,7 @@ export default function PlayerCard() {
       <Breadcrumbs items={[{ label: 'Play', to: '/play' }, { label: 'Player card' }]} />
       <div className="pc-layout">
         <div className="pc-card" aria-label="Your player card">
-          <p className="pc-brand"><span className="logo-mark" aria-hidden /> AI PATTERNS · PLAYER CARD</p>
+          <p className="pc-brand"><LogoMark /> GOOD BOT, BAD BOT · PLAYER CARD</p>
           <p className="pc-name">{name.trim() || 'Player'}</p>
           <p className="pc-type">{data.type.name}</p>
           <p className="pc-line">{data.type.line}</p>

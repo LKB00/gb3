@@ -87,6 +87,10 @@
   }
   .topnav-back:active { background: var(--sand-dark); }
   .logo-text { display: inline !important; }
+  /* The name is the part that gives way when streak and XP are big: it shortens with "…". */
+  .logo { flex: 0 1 auto; min-width: 0; }
+  .logo-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .topnav-right { flex: none; }
   .bottomnav {
     position: fixed;
     left: 0;

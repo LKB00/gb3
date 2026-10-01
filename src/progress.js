@@ -272,7 +272,7 @@ export function importProgress(code) {
   try {
     const raw = String(code).trim();
     if (raw.length > 200000) return { ok: false, error: 'That code is too long to be a backup code.' };
-    if (!raw.startsWith('AIP1.')) return { ok: false, error: 'This doesn’t look like an AI Patterns backup code.' };
+    if (!raw.startsWith('AIP1.')) return { ok: false, error: 'This doesn’t look like a Good Bot, Bad Bot backup code.' };
     let b64 = raw.slice(5).replace(/-/g, '+').replace(/_/g, '/');
     while (b64.length % 4) b64 += '=';
     const data = JSON.parse(decodeURIComponent(escape(atob(b64))));

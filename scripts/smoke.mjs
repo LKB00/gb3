@@ -77,6 +77,19 @@ for (const [name, viewport] of [['desktop', { width: 1280, height: 860 }], ['pho
     if (await page.locator('.crash').count()) problems.push(`${name} ${r}: crash screen after tapping ${sel}`);
   }
   if (name === 'phone') {
+    // A long streak and big XP make the top bar's right side wide; it must still fit on screen.
+    await page.evaluate(() => {
+      const days = {};
+      for (let i = 0; i < 150; i++) { const d = new Date(); d.setDate(d.getDate() - i); days[`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`] = 12; }
+      localStorage.clear();
+      localStorage.setItem('days', JSON.stringify(days));
+      localStorage.setItem('game-stats', JSON.stringify({ bestStreak: 300, speedBest: 500, powerBest: 16 }));
+    });
+    await page.reload();
+    await visit('/');
+    await page.waitForTimeout(900); // numbers roll up
+    const edge = await page.evaluate(() => Math.round(document.querySelector('.topnav-right').getBoundingClientRect().right - window.innerWidth));
+    if (edge > 0) problems.push(`phone top bar: streak and XP pills run ${edge}px off the screen with big numbers`);
     await page.evaluate((saves) => { localStorage.clear(); for (const k in saves) localStorage.setItem(k, saves[k]); }, brokenSaves);
     await page.reload();
     for (const r of savedRoutes) await visit(r);

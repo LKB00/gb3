@@ -51,6 +51,7 @@ export function dailyNumber(key = dayKey()) {
 export const dailyLabel = (key = dayKey()) => Math.max(1, dailyNumber(key));
 
 export function dailyDeck(key = dayKey()) {
+  // The seed text keeps the old product name on purpose: changing it would change every Daily's rounds.
   const rng = seeded(`ai-patterns:${key}`);
   const easy = makeDeck('classic', 3, rng);
   const hard = makeDeck('hard', 2, rng);
