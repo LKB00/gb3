@@ -122,6 +122,15 @@ export default function PatternDetail() {
               <DemoFrame name={p.demo} />
             </Section>
           )}
+          {p.category === 'agents' && (
+            <Link to="/autonomy" className="ladder-cta ladder-cta-sm">
+              <span>
+                <strong>How much power should an agent have?</strong>
+                <span>See the 5-step autonomy ladder.</span>
+              </span>
+              <ArrowRight size={16} strokeWidth={1.75} aria-hidden />
+            </Link>
+          )}
           <Section title="Seen in real products">
             <RealExamples id={p.id} />
           </Section>

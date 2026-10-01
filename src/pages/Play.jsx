@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useInstall } from '../game/install';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowRight, BookOpenText, Hammer, Copy, Download, Smartphone, Upload, CalendarDays, Check, Eye, Flame, Puzzle, ScanSearch, Shuffle, Star, Timer, Zap } from 'lucide-react';
+import { ArrowRight, BookOpenText, Hammer, Copy, Download, Smartphone, Upload, CalendarDays, Check, Gauge, Eye, Flame, Puzzle, ScanSearch, Shuffle, Star, Timer, Zap } from 'lucide-react';
 import { categories, patterns } from '../data/patterns';
 import { hunts } from '../data/hunts';
 import { dailyStreak, exportProgress, importProgress, storyBests, useDaily, useGameStats, useHuntsDone, usePassed, useStars, useXP } from '../progress';
@@ -82,6 +82,13 @@ export function GameTiles() {
   const stats = useGameStats();
   return (
     <div className="games">
+      <Link to="/play/power" className="game game-g game-wide">
+        <span className="game-new">New</span>
+        <Gauge size={22} strokeWidth={1.75} aria-hidden />
+        <strong>How much power?</strong>
+        <span>Should the AI suggest, ask first or just do it? Pick the right level for 8 real tasks.</span>
+        <span className="game-meta"><Star size={13} strokeWidth={1.75} aria-hidden /> Best {stats.powerBest || 0}/16</span>
+      </Link>
       <Link to="/play/speed" className="game game-e">
         <Timer size={22} strokeWidth={1.75} aria-hidden />
         <strong>Speed round</strong>
