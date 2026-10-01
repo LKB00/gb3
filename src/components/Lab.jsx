@@ -84,9 +84,9 @@ export default function Lab({ id, lab, title }) {
 
         <div className="lab-actions">
           <button className="btn btn-primary" onClick={runCheck} disabled={!allPicked}>
-            {allPicked ? 'Check my design' : `Pick all ${decisions.length} to check`}
+            {allPicked ? 'Check my design' : `Answer all ${decisions.length} to check`}
           </button>
-          <button className="btn btn-ghost" onClick={showBest}>Show best design</button>
+          <button className="btn btn-ghost" onClick={showBest}>Show the best answer</button>
           {Object.keys(choice).length > 0 && (
             <button className="btn btn-ghost" onClick={() => { setChoice({}); setChecked(false); }}><RotateCcw size={14} strokeWidth={1.75} aria-hidden /> Start over</button>
           )}
@@ -97,7 +97,7 @@ export default function Lab({ id, lab, title }) {
             <span className="lab-score-num">{score}/{decisions.length}</span>
             {perfect
               ? 'Great design. No common mistakes, so this lab is passed.'
-              : `${decisions.length - score} common mistake${decisions.length - score > 1 ? 's' : ''} found. Look at the red parts and try again.`}
+              : `${decisions.length - score} common mistake${decisions.length - score > 1 ? 's' : ''} found. Look at the parts marked in red and try again.`}
           </div>
         )}
       </div>

@@ -31,7 +31,7 @@ export default function Patterns() {
       <header className="page-head">
         <p className="label">Library</p>
         <h1 className="display">All patterns</h1>
-        <p className="lead">{patterns.length} ways to solve common problems in AI products.</p>
+        <p className="lead">{patterns.length} patterns for designing AI features, grouped by the problem they solve.</p>
       </header>
 
       <div className="filters">

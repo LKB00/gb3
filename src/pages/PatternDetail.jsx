@@ -8,10 +8,25 @@ import { usePassed } from '../progress';
 import DemoFrame from '../components/DemoFrame';
 import Compare from '../components/Compare';
 import Lab from '../components/Lab';
+import RealExamples from '../components/RealExamples';
+import PrincipleList from '../components/PrincipleList';
 import { useTitle } from '../useTitle';
 import NotFound from './NotFound';
 
 const ICON = { size: 14, strokeWidth: 2, 'aria-hidden': true };
+
+// Section headings, each with one line saying why it is on the page.
+function Section({ id, title, sub, children }) {
+  return (
+    <section className="block" id={id}>
+      <div className="section-head">
+        <h2>{title}</h2>
+        {sub && <p className="section-sub">{sub}</p>}
+      </div>
+      {children}
+    </section>
+  );
+}
 
 export default function PatternDetail() {
   const { id } = useParams();
@@ -33,13 +48,15 @@ export default function PatternDetail() {
   const next = patterns[idx + 1];
   const relatedLessons = lessons.filter((l) => l.patterns.includes(p.id));
   const sections = [
-    { id: 'difference', label: 'See the difference' },
+    { id: 'difference', label: 'Difference' },
+    { id: 'examples', label: 'Real examples' },
+    { id: 'principles', label: 'Principles' },
     p.demo && { id: 'try', label: 'Try it' },
     { id: 'lab', label: 'Design Lab' },
     { id: 'rules', label: 'Rules' },
     { id: 'details', label: 'Details' },
   ].filter(Boolean);
-  // Hash links are used by the router, so in-page jumps scroll directly.
+  // The router uses the URL hash, so in-page jumps scroll directly.
   const jump = (sid) => document.getElementById(sid)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
   return (
@@ -64,26 +81,29 @@ export default function PatternDetail() {
         ))}
       </nav>
 
-      <section className="block" id="difference">
-        <h2>See the difference</h2>
+      <Section id="difference" title="See the difference" sub="The same moment, designed two ways. The notes point to what matters.">
         <Compare data={v.compare} />
-      </section>
+      </Section>
+
+      <Section id="examples" title="Real examples" sub="Products you may already use that follow this pattern.">
+        <RealExamples id={p.id} />
+      </Section>
+
+      <Section id="principles" title="Principles behind it" sub="The UX and psychology ideas that make this pattern work.">
+        <PrincipleList id={p.id} />
+      </Section>
 
       {p.demo && (
-        <section className="block" id="try">
-          <h2>Try it</h2>
+        <Section id="try" title="Try it" sub="A small working demo. Click around and see how it feels.">
           <DemoFrame name={p.demo} />
-        </section>
+        </Section>
       )}
 
-      <section className="block" id="lab">
-        <h2>Design Lab</h2>
-        <p className="section-sub">Build it yourself. The lab checks your design for common mistakes.</p>
+      <Section id="lab" title="Design Lab" sub="Make the design decisions yourself. The lab points out common mistakes and explains them.">
         <Lab key={p.id} id={p.id} lab={v.lab} />
-      </section>
+      </Section>
 
-      <section className="block" id="rules">
-        <h2>Rules of thumb</h2>
+      <Section id="rules" title="Rules of thumb" sub="A short checklist to use in your own work.">
         <div className="rules">
           <div>
             <p className="label">Do</p>
@@ -98,10 +118,9 @@ export default function PatternDetail() {
             </ul>
           </div>
         </div>
-      </section>
+      </Section>
 
-      <section className="block" id="details">
-        <h2>Details</h2>
+      <Section id="details" title="Details">
         <dl className="details">
           <dt>Solution</dt>
           <dd>{p.solution}</dd>
@@ -109,8 +128,6 @@ export default function PatternDetail() {
           <dd><ul>{p.when.map((w) => <li key={w}>{w}</li>)}</ul></dd>
           <dt>Avoid it when</dt>
           <dd><ul>{p.avoid.map((w) => <li key={w}>{w}</li>)}</ul></dd>
-          <dt>Seen in</dt>
-          <dd><ul>{p.examples.map((e) => <li key={e}>{e}</li>)}</ul></dd>
           {relatedLessons.length > 0 && (
             <>
               <dt>Lessons</dt>
@@ -120,7 +137,7 @@ export default function PatternDetail() {
             </>
           )}
         </dl>
-      </section>
+      </Section>
 
       <nav className="pager" aria-label="More patterns">
         {prev ? (

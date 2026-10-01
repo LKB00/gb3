@@ -16,7 +16,7 @@ export default function Home() {
         <p className="label">AI interaction design</p>
         <h1 className="display">Design AI that people understand and trust.</h1>
         <p className="lead">
-          {patterns.length} patterns for AI features. Each one is shown as a picture, with a hands-on lab that points out the mistakes designers make most.
+          {patterns.length} patterns for designing AI features. See each one as a picture, learn why it works, then practice it in a lab that points out common mistakes.
         </p>
         <div className="actions">
           <Link to="/learn" className="btn btn-primary">Start learning <ArrowRight {...ARROW} /></Link>
@@ -30,17 +30,17 @@ export default function Home() {
           <li>
             <span className="index-num">1</span>
             <strong>See the difference</strong>
-            <span>A bad and a better screen, side by side.</span>
+            <span>A weak and a better screen, side by side, with notes on what matters.</span>
           </li>
           <li>
             <span className="index-num">2</span>
-            <strong>Know why</strong>
-            <span>The problem it solves, in one short paragraph.</span>
+            <strong>Understand why</strong>
+            <span>The problem it solves, real products that use it, and the principles behind it.</span>
           </li>
           <li>
             <span className="index-num">3</span>
             <strong>Build it yourself</strong>
-            <span>The Design Lab checks your choices for common mistakes.</span>
+            <span>Make the decisions in the Design Lab. It explains every mistake.</span>
           </li>
         </ol>
         <div className="example">
