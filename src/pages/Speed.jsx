@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Copy, RotateCcw, Timer, Zap } from 'lucide-react';
-import { makeDeck } from '../game/decks';
+import { RotateCcw, Swords, Timer, Zap } from 'lucide-react';
+import { makeDeck, seeded } from '../game/decks';
+import { challengeLink, useChallenge, verdict } from '../game/challenge';
 import { fx } from '../game/fx';
+import { track } from '../game/track';
 import { markPlayed, saveSpeed, useGameStats, XP } from '../progress';
 import MockFrame, { MockBlock } from '../mock/Mock';
 import Breadcrumbs from '../components/Breadcrumbs';
@@ -14,10 +16,13 @@ import { useTitle } from '../useTitle';
 // the patterns are linked on the score screen.
 const SECONDS = 60;
 
-function freshDeck() {
-  const all = [...makeDeck('classic', 34), ...makeDeck('hard', 20)];
+// Same seed = same rounds in the same order, so a friend can play your exact run.
+const newSeed = () => Math.random().toString(36).slice(2, 10);
+function freshDeck(seed) {
+  const rng = seeded(`speed:${seed}`);
+  const all = [...makeDeck('classic', 999, rng), ...makeDeck('hard', 999, rng)];
   for (let i = all.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(rng() * (i + 1));
     [all[i], all[j]] = [all[j], all[i]];
   }
   return all;
@@ -26,9 +31,11 @@ function freshDeck() {
 export default function Speed() {
   useTitle('Speed round');
   const stats = useGameStats();
+  const challenge = useChallenge();
+  const [seed, setSeed] = useState(() => challenge?.seed || newSeed());
   const [phase, setPhase] = useState('ready'); // ready | count | play | over
   const [count, setCount] = useState(3);
-  const [deck, setDeck] = useState(freshDeck);
+  const [deck, setDeck] = useState(() => freshDeck(seed));
   const [i, setI] = useState(0);
   const [left, setLeft] = useState(SECONDS * 1000);
   const [points, setPoints] = useState(0);
@@ -41,8 +48,11 @@ export default function Speed() {
   const lastTick = useRef(SECONDS);
   const pointsRef = useRef(0);
 
-  const start = () => {
-    setDeck(freshDeck());
+  // The first run of a challenge uses the friend's seed; "Play again" gets a new one.
+  const start = (sameSeed = false) => {
+    const s = sameSeed ? seed : newSeed();
+    setSeed(s);
+    setDeck(freshDeck(s));
     setI(0);
     setPoints(0);
     pointsRef.current = 0;
@@ -85,6 +95,7 @@ export default function Speed() {
         const final = pointsRef.current;
         setResult({ record: final > best, gain: Math.max(0, final - best) * XP.speed });
         saveSpeed(final);
+        track('Game finished', { game: 'speed', score: final });
         if (final > best && final > 0) fx('win');
         setPhase('over');
       }
@@ -134,7 +145,8 @@ export default function Speed() {
 
   const [copied, setCopied] = useState(false);
   const share = async () => {
-    const text = `⚡ I scored ${points} in the AI Patterns speed round (${right}/${answered} right in 60s). Can you beat it? ${window.location.origin}${window.location.pathname}#/play/speed`;
+    const link = challengeLink('/play/speed', { seed, vs: points });
+    const text = `⚡ I scored ${points} in the AI Patterns speed round. Same screens, same order. Can you beat me? ${link}`;
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
@@ -155,8 +167,13 @@ export default function Speed() {
           <Timer size={36} strokeWidth={1.5} aria-hidden />
           <h1 className="display">Speed round</h1>
           <p className="lead">60 seconds. Tap the better AI screen, as fast as you can. 3 in a row = ×2 points. A wrong tap costs 1 point.</p>
-          <button type="button" className="btn btn-primary btn-lg" onClick={start}>
-            <Zap size={15} strokeWidth={2} aria-hidden /> Start
+          {challenge && (
+            <p className="challenge-banner">
+              <Swords size={16} strokeWidth={1.75} aria-hidden /> <strong>{challenge.from}</strong> scored <strong>{challenge.score}</strong>. Same screens, same order. Beat it!
+            </p>
+          )}
+          <button type="button" className="btn btn-primary btn-lg" onClick={() => start(!!challenge)}>
+            <Zap size={15} strokeWidth={2} aria-hidden /> {challenge ? 'Accept challenge' : 'Start'}
           </button>
           <p className="small muted">Best: {stats.speedBest || 0} points · Keys: ← / →</p>
         </div>
@@ -204,15 +221,20 @@ export default function Speed() {
           <p className="tot-verdict">
             {right} right out of {answered} · {answered ? Math.round((right / answered) * 100) : 0}% accuracy
           </p>
+          {challenge && seed === challenge.seed && (
+            <p className={'challenge-result is-' + verdict(points, challenge.score, challenge.from).tone}>
+              <Swords size={16} strokeWidth={1.75} aria-hidden /> {verdict(points, challenge.score, challenge.from).text}
+            </p>
+          )}
           <div className="tot-stats">
             {result.record && points > 0 ? <span className="pill-new">New best!</span> : <span>Best: {stats.speedBest || 0} pts</span>}
           </div>
           <div className="row wrap center">
-            <button type="button" className="btn btn-primary btn-lg" onClick={start}>
+            <button type="button" className="btn btn-primary btn-lg" onClick={() => start(false)}>
               <RotateCcw size={15} strokeWidth={1.75} aria-hidden /> Play again
             </button>
             <button type="button" className="btn btn-ghost btn-lg" onClick={share}>
-              <Copy size={15} strokeWidth={1.75} aria-hidden /> {copied ? 'Copied!' : 'Copy score'}
+              <Swords size={15} strokeWidth={1.75} aria-hidden /> {copied ? 'Link copied!' : 'Challenge a friend'}
             </button>
             <Link to="/play/this-or-that" className="btn btn-ghost btn-lg">Learn them slowly</Link>
           </div>

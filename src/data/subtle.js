@@ -49,7 +49,7 @@ export const subtle = [
     'stop-button',
     'stop-and-undo',
     'The AI is writing a long report.',
-    [user('Write a 10-page market report.'), steps([['Collecting data', 'done'], ['Writing sections', 'now']])],
+    [user('Write a 10-page market report.'), steps([['Collecting data', 'done'], ['Writing sections', 'active']])],
     note('Writing… 2 of 10 pages', { pin: 'Can’t stop it' }),
     note('Writing… 2 of 10 pages · ■ Stop', { pin: 'Stop any time' })
   ),
@@ -165,13 +165,13 @@ export const subtle = [
     'An agent is booking 3 flights in the background.',
     [user('Book flights for the team offsite.')],
     note('Working on it…', { pin: 'Can’t tell how far along' }),
-    steps([['Alex · booked', 'done'], ['Priya · booked', 'done'], ['Sam · waiting for seat choice', 'now']], { pin: 'Clear status for each task' })
+    steps([['Alex · booked', 'done'], ['Priya · booked', 'done'], ['Sam · waiting for seat choice', 'active']], { pin: 'Clear status for each task' })
   ),
   pair(
     'redirect',
     'interrupt-redirect',
     'An agent is halfway through a big edit.',
-    [steps([['Rename layers', 'done'], ['Rebuild components', 'now']])],
+    [steps([['Rename layers', 'done'], ['Rebuild components', 'active']])],
     buttons(['-Cancel all'], { pin: 'Only all-or-nothing' }),
     buttons(['Pause', 'Change instructions', '-Stop'], { pin: 'Pause and steer it' })
   ),
@@ -191,6 +191,86 @@ export const subtle = [
     buttons(['!Apply all'], { pin: 'Changes without a look' }),
     { type: 'diff', items: [['recieve', 'receive'], ['seperate', 'separate']], pin: 'Preview before applying' },
     [buttons(['Review all 9', '!Apply'])]
+  ),
+  pair(
+    'handoff',
+    'agent-handoff',
+    'Three agents write a report together.',
+    [user('Write a report on AI note apps')],
+    steps([['Agents working…', 'active']], { pin: 'Can’t see who does what' }),
+    steps([['Research agent · done', 'done'], ['Writer agent · drafting', 'active'], ['Checker agent · next', 'todo']], { pin: 'Each agent and its job' })
+  ),
+  pair(
+    'site-scope',
+    'screen-control',
+    'A browser agent asks for access before shopping.',
+    [user('Order printer paper')],
+    modal('Allow control of your computer?', 'All sites and apps.', ['No', '!Allow'], { pin: 'Asks for everything' }),
+    modal('Let the agent use officesupply.com?', 'Only this site, until the order is done.', ['No', '!Allow'], { pin: 'Just what the task needs' })
+  ),
+  pair(
+    'take-over',
+    'screen-control',
+    'An agent is clicking through a website for you.',
+    [banner('info', 'Agent is in control', 'officesupply.com')],
+    note('Please don’t touch the mouse.', { pin: 'Locks the person out' }),
+    buttons(['!Take over'], { pin: 'Grab control any time' })
+  ),
+  pair(
+    'app-source',
+    'connected-apps',
+    'An assistant connected to your calendar answers a question.',
+    [user('When am I free tomorrow?')],
+    ai('You’re free after 3 pm.', { pin: 'Where did that come from?' }),
+    ai('You’re free after 3 pm. (from Google Calendar)', { pin: 'Names the source app' })
+  ),
+  pair(
+    'read-only',
+    'connected-apps',
+    'Connecting an AI to someone’s email.',
+    [note('Connect Gmail')],
+    modal('Allow access to Gmail?', 'Read, send and delete email.', ['No', '!Allow'], { pin: 'More than needed' }),
+    modal('Allow read-only access to Gmail?', 'It can’t send or delete.', ['No', '!Allow'], { pin: 'Smallest access first' })
+  ),
+  pair(
+    'thumbs-undo',
+    'feedback-loop',
+    'A thumbs-down was tapped by mistake.',
+    [ai('Here’s your summary.')],
+    toast('Feedback sent', null, { pin: 'Can’t take it back' }),
+    toast('Feedback sent', 'Undo', { pin: 'Easy to take back' })
+  ),
+  pair(
+    'edit-inline',
+    'editable-output',
+    'The AI drafted a reply email.',
+    [user('Reply yes to the meeting')],
+    buttons(['Copy', ':retry Regenerate'], { pin: 'Fix = start over' }),
+    buttons(['Edit', 'Copy', ':retry Regenerate'], { pin: 'Edit in place' })
+  ),
+  pair(
+    'nudge-timing',
+    'contextual-nudge',
+    'A writing app offers AI help.',
+    [{ type: 'edit', text: 'Our Q3 results were', sel: '' }],
+    banner('info', 'Try AI! ✨', 'Upgrade to write 10× faster', { pin: 'Interrupts with an ad' }),
+    note('Stuck? Press Tab to continue the sentence.', { tone: 'faint', pin: 'Quiet help, right on time' })
+  ),
+  pair(
+    'bias',
+    'bias-check',
+    'An AI makes images for a careers page.',
+    [user('Images of engineers at work')],
+    note('4 images · all men in their 30s', { pin: 'Repeats one stereotype' }),
+    note('4 images · varied ages, genders and backgrounds', { pin: 'Shows real variety' })
+  ),
+  pair(
+    'autonomy',
+    'autonomy-dial',
+    'Settings for an email agent.',
+    [note('Email agent settings')],
+    { type: 'toggle', label: 'Let the agent handle my email', on: true, pin: 'All or nothing' },
+    rows([{ label: 'Sort and label', value: 'Auto' }, { label: 'Draft replies', value: 'Ask me' }, { label: 'Send', value: 'Never' }], { pin: 'Choose how much it does' })
   ),
 ];
 

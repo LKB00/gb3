@@ -118,6 +118,18 @@ export const realExamples = {
     { product: 'Replit Agent', company: 'Replit', what: 'Shows what each agent checkpoint cost, so you can see where credits go.' },
     { product: 'Firefly', company: 'Adobe', what: 'Shows the generative credits a premium action will use before you run it.' },
   ],
+  'agent-handoff': [
+    { product: 'GitHub Copilot coding agent', company: 'GitHub', what: 'Works on an assigned issue in the background and shows its session log in the pull request.' },
+    { product: 'Claude Code', company: 'Anthropic', what: 'Shows when it hands part of a task to a sub-agent, and what that sub-agent is doing.' },
+  ],
+  'screen-control': [
+    { product: 'ChatGPT agent', company: 'OpenAI', what: 'Works in its own browser you can watch, and asks you to take over for logins.' },
+    { product: 'Claude for Chrome', company: 'Anthropic', what: 'Asks for permission per site and checks with you before high-risk actions like purchases.' },
+  ],
+  'connected-apps': [
+    { product: 'ChatGPT connectors', company: 'OpenAI', what: 'Lists connected apps like Google Drive in settings, where you can disconnect them.' },
+    { product: 'Claude connectors', company: 'Anthropic', what: 'Shows which tools a connector offers, and asks before using them.' },
+  ],
   'voice-turn-taking': [
     { product: 'ChatGPT voice', company: 'OpenAI', what: 'Shows when it is listening or speaking, and you can interrupt it mid-answer.' },
     { product: 'Gemini Live', company: 'Google', what: 'A voice conversation you can interrupt at any time to change direction.' },

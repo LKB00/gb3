@@ -1,0 +1,119 @@
+// Build mode: you get a brief and a box of pieces. Put the right pieces on the
+// screen, leave the traps out, then check your design.
+//   kind: 'need' (the design isn't good without it), 'nice' (bonus), 'trap' (common mistake)
+
+const user = (text) => ({ type: 'user', text });
+const ai = (text, x) => ({ type: 'ai', text, ...x });
+const note = (text, x) => ({ type: 'note', text, ...x });
+const buttons = (items) => ({ type: 'buttons', items });
+const chips = (items) => ({ type: 'chips', items });
+const steps = (items) => ({ type: 'steps', items: items.map(([label, state]) => ({ label, state })) });
+const spinner = (text) => ({ type: 'spinner', text });
+const banner = (tone, title, text) => ({ type: 'banner', tone, title, text });
+const modal = (title, text, btns) => ({ type: 'modal', title, text, buttons: btns });
+const card = (title, text) => ({ type: 'card', title, text });
+const rows = (items) => ({ type: 'rows', items });
+const toast = (text, action) => ({ type: 'toast', text, action });
+const voice = (state, label, text) => ({ type: 'voice', state, label, text });
+const list = (items) => ({ type: 'list', items });
+
+const piece = (id, label, kind, pattern, why, block) => ({ id, label, kind, pattern, why, block });
+
+export const builds = [
+  {
+    id: 'research',
+    title: 'Research answer',
+    app: 'Research AI',
+    brief: 'A product team asks the AI about their own user research. Make the answer one they can trust.',
+    base: [user('Why are users dropping off at checkout?')],
+    pieces: [
+      piece('answer-cited', 'Answer with numbered sources', 'need', 'citations', 'People can check every claim in one tap.',
+        ai('Most drop off at the shipping step [1]. Surprise fees are the top reason [2].')),
+      piece('sources', 'Source list with quotes', 'need', 'citations', 'Seeing the quote makes checking instant.',
+        card('[1] Checkout study, May', '“6 of 8 left when shipping costs appeared.”')),
+      piece('unsure', '“Not sure” flag on a weak claim', 'need', 'confidence-signals', 'Honest gaps build trust; fake certainty breaks it.',
+        note('Only 2 interviews mention payment errors. Treat that part as a hunch.', { tone: 'warn' })),
+      piece('followups', 'Follow-up suggestions', 'nice', 'prompt-starters', 'Helps people dig deeper without writing a new prompt.',
+        chips(['Show all quotes about fees', 'Compare with last quarter'])),
+      piece('stat', 'Bold, round statistic', 'trap', 'citations', 'A confident number with no source looks true even when it’s made up.',
+        ai('Fixing checkout will lift revenue by 40%.')),
+      piece('rate', '“Rate this chat 1–10 to continue”', 'trap', 'feedback-loop', 'Blocking people to ask for ratings annoys them and teaches you nothing.',
+        modal('Rate this chat (1–10) to continue', '', ['!Submit'])),
+      piece('autosend', 'Auto-email summary to the whole company', 'trap', 'action-approval', 'Sharing without asking is a risky action. Ask first.',
+        toast('Summary emailed to all@company.com')),
+    ],
+  },
+  {
+    id: 'travel',
+    title: 'Travel agent',
+    app: 'Trip agent',
+    brief: 'An AI agent books a 3-day team trip: flights, hotel and dinner. Keep people in control.',
+    base: [user('Book our team offsite in Goa, 12–14 Nov, 6 people.')],
+    pieces: [
+      piece('plan', 'Plan to review before starting', 'need', 'plan-first', 'People can fix the plan before anything is booked.',
+        steps([['Find flights for 6', 'todo'], ['Hotel near the beach', 'todo'], ['Dinner for 6 on day 2', 'todo']])),
+      piece('cost', 'Total cost estimate', 'need', 'cost-estimate', 'No surprise bills: people see the money before it’s spent.',
+        rows([{ label: 'Estimated total', value: '₹1,84,000' }, { label: 'Budget', value: '₹2,00,000', tag: 'OK', tone: 'ok' }])),
+      piece('approve', 'Clear approval before paying', 'need', 'action-approval', 'Spending money is risky; the question says exactly what will happen.',
+        modal('Pay ₹1,84,000 with the company card?', 'Flights + hotel for 6. Free cancellation for 24 hours.', ['Cancel', '!Pay ₹1,84,000'])),
+      piece('log', 'Activity log with undo', 'need', 'action-log', 'People can see and reverse what the agent did.',
+        list(['✓ Booked IndiGo 6E-512 · Undo', '✓ Held 3 rooms at Sea Breeze · Undo'])),
+      piece('status', 'Live status per task', 'nice', 'task-status', 'People know what’s done while they get on with their day.',
+        steps([['Flights', 'done'], ['Hotel', 'active'], ['Dinner', 'todo']])),
+      piece('sure', '“Are you sure?” popup', 'trap', 'action-approval', 'Vague. Sure about what? People click OK out of habit.',
+        modal('Are you sure?', 'This action cannot be undone.', ['Cancel', '!OK'])),
+      piece('lock', 'Lock the screen until finished', 'trap', 'task-status', 'People can’t do anything else, and can’t tell if it’s stuck.',
+        banner('warn', 'Please wait', 'The agent is working. Don’t close this page.')),
+      piece('cheapest', 'Auto-book the cheapest option', 'trap', 'autonomy-dial', 'Acting on big choices without asking. Cheapest isn’t always right.',
+        toast('Booked the cheapest flights (2 stops, 14 h)')),
+    ],
+  },
+  {
+    id: 'writer',
+    title: 'Long writing task',
+    app: 'Doc AI',
+    brief: 'The AI writes a 6-page report in someone’s doc. It takes 2 minutes. Design what they see.',
+    base: [user('Write the Q3 product report from my notes.')],
+    pieces: [
+      piece('steps', 'Live progress steps', 'need', 'streaming-response', 'People see real progress, not a frozen screen.',
+        steps([['Reading 14 notes', 'done'], ['Writing section 2 of 6', 'active']])),
+      piece('stop', 'Stop button', 'need', 'stop-and-undo', 'People can stop a wrong direction instead of waiting.',
+        buttons(['-■ Stop'])),
+      piece('preview', 'Show changes before applying', 'need', 'preview-changes', 'Nothing in their doc changes without a look first.',
+        { type: 'diff', items: [['Q3 was fine', 'Q3 revenue grew 12%'], ['(empty)', 'Risks: churn in SMB']] }),
+      piece('versions', 'Try again with versions kept', 'nice', 'regenerate-history', 'People can compare and go back to an earlier draft.',
+        note('Draft 2 of 2 · ‹ ›  · Try again')),
+      piece('spinner', '“Loading…” spinner only', 'trap', 'streaming-response', 'Says “wait” but not what or how long. Feels broken.',
+        spinner('Loading…')),
+      piece('overwrite', 'Replace the doc directly', 'trap', 'preview-changes', 'Overwrites the person’s work with no way to review.',
+        toast('Your document was replaced')),
+      piece('done', 'Just “Done!” at the end', 'trap', 'action-log', 'Done… what? People have to check every page themselves.',
+        note('Done! ✨')),
+    ],
+  },
+  {
+    id: 'car',
+    title: 'Voice assistant in a car',
+    app: 'Car assistant',
+    brief: 'A driver asks the car to send money to a friend. Eyes on the road, so voice comes first.',
+    base: [voice('listening', 'Driver', 'Send fifteen hundred to Ravi')],
+    pieces: [
+      piece('readback', 'Read back before sending', 'need', 'read-back', 'Voice mishears. Confirming the name and amount prevents costly errors.',
+        voice('speaking', 'Car', 'Send ₹1,500 to Ravi Kumar? Say yes to confirm.')),
+      piece('states', 'Clear listening / speaking state', 'need', 'voice-turn-taking', 'The driver knows who is talking without looking long.',
+        note('🎙 Listening… speak any time to interrupt')),
+      piece('glance', 'Short summary on screen', 'nice', 'mode-switch', 'A 1-second glance confirms it, details stay off the main view.',
+        rows([{ label: 'To', value: 'Ravi Kumar' }, { label: 'Amount', value: '₹1,500' }])),
+      piece('undo', 'Undo for 10 seconds', 'need', 'stop-and-undo', 'A safety net if the driver changes their mind.',
+        toast('₹1,500 sent to Ravi', 'Undo · 10s')),
+      piece('silent', 'Send right away, say “Done.”', 'trap', 'read-back', 'No check of what it heard. “Fifteen” vs “fifty” is a big difference.',
+        voice('speaking', 'Car', 'Done.')),
+      piece('menu', 'Read out 6 payment options', 'trap', 'voice-turn-taking', 'Too much to remember while driving.',
+        voice('speaking', 'Car', 'Option one, UPI. Option two, card ending 4421. Option three…')),
+      piece('screen', 'Long form on the car screen', 'trap', 'mode-switch', 'Forces the driver to read and tap while driving.',
+        card('Payment details', 'Recipient · Account · IFSC · Note · Category · Schedule')),
+    ],
+  },
+];
+
+export const getBuild = (id) => builds.find((b) => b.id === id);

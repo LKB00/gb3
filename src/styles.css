@@ -3689,7 +3689,6 @@ button.ai-badge {
 @media (min-width: 1040px) {
   .games { grid-template-columns: repeat(6, 1fr); }
   .games .game { grid-column: span 2; }
-  .games .game:nth-child(-n + 2) { grid-column: span 3; }
 }
 .game {
   display: flex;
@@ -3732,6 +3731,7 @@ button.ai-badge {
 .game-c { background: var(--p-trust); }
 .game-d { background: var(--p-agents); }
 .game-e { background: var(--p-input); }
+.game-f { background: var(--p-feedback); }
 
 /* ---- Play hub ---- */
 .play-grid {
@@ -4650,3 +4650,186 @@ a.pattern-card:hover { transform: translateY(-3px); }
   .streak-pill, .xp-pill { padding: 0 8px; gap: 3px; }
 }
 .tot-big .xp-pop { letter-spacing: normal; font-weight: 700; }
+
+/* ---- App install + backup ---- */
+.tools {
+  display: grid;
+  gap: 12px;
+}
+@media (min-width: 900px) {
+  .tools { grid-template-columns: 1fr 1fr; align-items: start; }
+}
+.tool {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px 12px;
+  padding: 20px;
+  border-radius: 20px;
+  background: var(--sand);
+}
+.tool > svg { margin-top: 2px; }
+.tool > :nth-child(n + 3) { grid-column: 1 / -1; }
+.tool strong { font-family: var(--display); font-size: 17px; }
+.tool-restore { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+.tool-restore textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: var(--hair) solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--ink);
+  font: 12px/18px ui-monospace, SFMono-Regular, Menlo, monospace;
+  resize: vertical;
+}
+
+/* ---- Challenge a friend ---- */
+.challenge-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 16px 0 0;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 15px;
+}
+.challenge-banner svg { color: var(--lime); }
+.speed-intro .challenge-banner { margin: 0; }
+.challenge-result {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  font-size: 16px;
+  font-weight: 700;
+}
+.challenge-result.is-good { background: var(--positive-soft); color: var(--positive); }
+.challenge-result.is-ok { background: var(--sand-dark); color: var(--ink); }
+.challenge-result.is-bad { background: var(--negative-soft); color: var(--negative); }
+
+/* ---- Build mode ---- */
+.build {
+  display: grid;
+  gap: 24px;
+  padding: 20px;
+  border-radius: 20px;
+  background: var(--sand);
+  align-items: start;
+}
+@media (min-width: 900px) {
+  .build { grid-template-columns: 1fr 1fr; padding: 28px; column-gap: 32px; }
+  .build-result { grid-column: 1 / -1; }
+}
+.build-box, .build-screen { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.build-box-label { margin-top: 12px; }
+.build-pieces {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.build-piece {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 46px;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: left;
+  cursor: grab;
+  transition: transform 0.15s, background 0.2s, opacity 0.2s;
+}
+.build-piece:hover { transform: translateX(4px); }
+.build-piece.is-on { cursor: pointer; background: var(--sand-dark); color: var(--ink-3); text-decoration: line-through; text-decoration-thickness: 1px; }
+.build-piece.is-on svg { color: var(--positive); }
+.build-drop {
+  border-radius: 16px;
+  transition: box-shadow 0.15s, background 0.15s;
+}
+.build-drop.is-over { box-shadow: 0 0 0 3px var(--lime); background: var(--lime-badge); }
+.build-placed { position: relative; animation: xp-rise 0.3s ease; }
+.build-remove {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--paper);
+  cursor: pointer;
+  opacity: 0.75;
+}
+.build-remove:hover { opacity: 1; }
+.build-result {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  border-radius: 16px;
+  background: var(--card);
+}
+.build-result-head { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.build-result-head h3 { font-size: 20px; }
+.build-notes { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.build-notes li { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; line-height: 21px; }
+.build-notes li > svg { flex: none; margin-top: 3px; }
+.build-notes a { color: var(--ink-2); font-weight: 700; white-space: nowrap; }
+.build-notes .is-good > svg { color: var(--positive); }
+.build-notes .is-bad > svg { color: var(--negative); }
+.build-notes .is-missing > svg { color: var(--attention); }
+.story-picks {
+  display: grid;
+  gap: 12px;
+  margin-top: 24px;
+}
+@media (min-width: 720px) {
+  .story-picks { grid-template-columns: 1fr 1fr; }
+}
+.story-pick {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 20px;
+  border-radius: 20px;
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 14px;
+  line-height: 21px;
+  transition: transform 0.18s cubic-bezier(0.2, 0.9, 0.3, 1.3);
+}
+.story-pick:hover { transform: translateY(-3px); }
+.story-pick strong { font-family: var(--display); font-size: 22px; line-height: 28px; font-weight: 800; }
+.story-pick > span:not(.story-avatar):not(.game-meta) { color: var(--ink-2); }
+.story-pick .story-avatar { background: var(--card); }
+.story-pick .game-meta { padding-top: 10px; }
+.disagree {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--ink-3);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.disagree:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+.lab-why .disagree { align-self: flex-start; margin-top: 2px; }
+.page-head + .tabs { margin-top: 24px; }

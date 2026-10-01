@@ -177,6 +177,21 @@ export const patternPrinciples = {
     ['loss-aversion', 'Progress is kept, so stopping costs nothing.'],
     ['agency', 'People steer the task while it runs.'],
   ],
+  'agent-handoff': [
+    ['visibility', 'People can see which agent is doing which step right now.'],
+    ['mental-model', 'A visible team of agents matches how the work really happens.'],
+    ['calibrated-trust', 'Knowing which agent made a claim helps people judge it.'],
+  ],
+  'screen-control': [
+    ['control', 'A big Take over button keeps the person in charge.'],
+    ['error-prevention', 'Pausing at logins and payments stops costly mistakes.'],
+    ['agency', 'People choose what the agent may touch, site by site.'],
+  ],
+  'connected-apps': [
+    ['visibility', 'One list shows everything the AI can reach.'],
+    ['transparency', 'Showing the source app next to an answer explains where it came from.'],
+    ['control', 'One-tap disconnect makes it easy to say no.'],
+  ],
   'cost-estimate': [
     ['visibility', 'The cost is visible before the action.'],
     ['loss-aversion', 'Surprise charges feel like a loss; estimates prevent them.'],

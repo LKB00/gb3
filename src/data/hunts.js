@@ -177,4 +177,79 @@ export const hunts = [
       },
     ],
   },
+  {
+    id: 'meeting-notes',
+    title: 'AI meeting notes',
+    app: 'Notely · meeting AI',
+    brief: 'An AI joins video calls and writes the notes for the team.',
+    blocks: [
+      {
+        type: 'note', text: 'Recording and taking notes',
+        mistake: { text: 'Other people in the call aren’t told an AI is listening. Say it to everyone, clearly.', pattern: 'ai-disclosure' },
+      },
+      { type: 'card', title: 'Decisions', text: 'Launch moves to 14 Nov. Priya owns the beta.' },
+      {
+        type: 'list', items: ['• Ravi will fix the pricing page', '• Budget approved: ₹40 lakh'],
+        mistake: { text: 'A big number, stated as fact. Flag what the AI isn’t sure it heard right.', pattern: 'confidence-signals' },
+      },
+      {
+        type: 'toast', text: 'Notes sent to all 48 attendees',
+        mistake: { text: 'Shared automatically, before anyone could check. Ask first.', pattern: 'action-approval' },
+      },
+      { type: 'buttons', items: ['Edit notes', 'Copy'] },
+      {
+        type: 'note', text: 'Notely remembers everything said in your meetings.',
+        mistake: { text: 'Memory with no controls. Show what it keeps and let people delete it.', pattern: 'memory-controls' },
+      },
+    ],
+  },
+  {
+    id: 'browser-agent',
+    title: 'Browser shopping agent',
+    app: 'Runner · browser agent',
+    brief: 'An AI agent buys things online by using the browser for you.',
+    blocks: [
+      { type: 'user', text: 'Buy a birthday gift for my sister, under ₹3,000' },
+      {
+        type: 'modal', title: 'Allow Runner to control your computer?', text: 'All apps and sites.', buttons: ['No', '!Allow'],
+        mistake: { text: 'Asks for everything at once. Ask per site, for this task only.', pattern: 'screen-control' },
+      },
+      { type: 'steps', items: [{ label: 'Searching 3 shops', state: 'done' }, { label: 'Comparing 12 gifts', state: 'active' }] },
+      {
+        type: 'note', text: 'Typing your saved password for shop.com…',
+        mistake: { text: 'Agents shouldn’t handle passwords. Hand control back for logins.', pattern: 'screen-control' },
+      },
+      {
+        type: 'toast', text: 'Bought: smart mug, ₹2,950',
+        mistake: { text: 'Paid without a final check. Stop at checkout and let the person decide.', pattern: 'action-approval' },
+      },
+      { type: 'rows', items: [{ label: 'Delivery', value: 'Fri, 14 Nov' }] },
+    ],
+  },
+  {
+    id: 'photo-editor',
+    title: 'AI photo editor',
+    app: 'Lumo · photo AI',
+    brief: 'A phone app that edits photos when you describe the change.',
+    blocks: [
+      { type: 'image', height: 90, sel: [55, 20, 30, 45], selLabel: 'Selected' },
+      {
+        type: 'input', value: 'make it better',
+        mistake: { text: 'A blank box with no ideas. Offer quick edit chips people can tap.', pattern: 'prompt-starters' },
+      },
+      {
+        type: 'note', text: 'Edit applied to your original photo',
+        mistake: { text: 'Overwrote the original. Keep it and show before → after.', pattern: 'preview-changes' },
+      },
+      {
+        type: 'buttons', items: [':retry Try again'],
+        mistake: { text: 'Each try replaces the last. Keep versions people can flip between.', pattern: 'regenerate-history' },
+      },
+      { type: 'chips', items: ['Brighter', 'Remove background', 'Warmer'] },
+      {
+        type: 'buttons', items: ['!Share'],
+        mistake: { text: 'Shared AI-edited photos carry no label. Mark AI edits.', pattern: 'ai-disclosure' },
+      },
+    ],
+  },
 ];

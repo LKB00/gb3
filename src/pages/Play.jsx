@@ -1,9 +1,10 @@
 import { useState } from 'react';
+import { useInstall } from '../game/install';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowRight, BookOpenText, CalendarDays, Check, Eye, Flame, Puzzle, ScanSearch, Shuffle, Star, Timer, Zap } from 'lucide-react';
+import { ArrowRight, BookOpenText, Hammer, Copy, Download, Smartphone, Upload, CalendarDays, Check, Eye, Flame, Puzzle, ScanSearch, Shuffle, Star, Timer, Zap } from 'lucide-react';
 import { categories, patterns } from '../data/patterns';
 import { hunts } from '../data/hunts';
-import { dailyStreak, useDaily, useGameStats, useHuntsDone, usePassed, useStars, useXP } from '../progress';
+import { dailyStreak, exportProgress, importProgress, storyBests, useDaily, useGameStats, useHuntsDone, usePassed, useStars, useXP } from '../progress';
 import { dailyNumber, todayKey } from '../game/decks';
 import Hunt from '../components/Hunt';
 import ThisOrThat from '../components/ThisOrThat';
@@ -87,11 +88,17 @@ export function GameTiles() {
         <span>60 seconds. Tap the better screen, fast. 3 in a row = ×2 points.</span>
         <span className="game-meta"><Zap size={13} strokeWidth={1.75} aria-hidden /> Best {stats.speedBest || 0} pts</span>
       </Link>
+      <Link to="/play/build" className="game game-f">
+        <Hammer size={22} strokeWidth={1.75} aria-hidden />
+        <strong>Build mode</strong>
+        <span>A blank AI screen and a box of pieces. Build it right, skip the traps.</span>
+        <span className="game-meta"><Star size={13} strokeWidth={1.75} aria-hidden /> {Object.keys(stats.builds || {}).length}/4 briefs</span>
+      </Link>
       <Link to="/play/story" className="game game-d">
         <BookOpenText size={22} strokeWidth={1.75} aria-hidden />
-        <strong>Agent on duty</strong>
-        <span>A short story: design an AI agent and keep the user’s trust. 4 endings.</span>
-        <span className="game-meta"><Star size={13} strokeWidth={1.75} aria-hidden /> {stats.storyBest != null ? `Best trust ${stats.storyBest}` : 'New'}</span>
+        <strong>Stories</strong>
+        <span>Design an AI product through a short story. Keep a real person’s trust. 4 stories.</span>
+        <span className="game-meta"><Star size={13} strokeWidth={1.75} aria-hidden /> {Object.keys(storyBests(stats)).length}/4 played</span>
       </Link>
       <Link to="/play/this-or-that" className="game game-a">
         <Shuffle size={22} strokeWidth={1.75} aria-hidden />
@@ -139,6 +146,73 @@ export function Badges() {
   );
 }
 
+// Install as an app + move progress to another device.
+export function AppAndBackup() {
+  const install = useInstall();
+  const [code, setCode] = useState('');
+  const [msg, setMsg] = useState(null);
+  const [open, setOpen] = useState(false);
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(exportProgress());
+      setMsg({ ok: true, text: 'Backup code copied. Paste it on your other device.' });
+    } catch {
+      setCode(exportProgress());
+      setOpen(true);
+      setMsg({ ok: true, text: 'Copy the code below.' });
+    }
+  };
+  const restore = () => {
+    const r = importProgress(code);
+    setMsg(r.ok ? { ok: true, text: 'Progress restored and merged. Nothing was lost.' } : { ok: false, text: r.error });
+    if (r.ok) setCode('');
+  };
+
+  return (
+    <div className="tools">
+      <div className="tool">
+        <Smartphone size={20} strokeWidth={1.75} aria-hidden />
+        <div>
+          <strong>Play it like an app</strong>
+          <p className="small muted">
+            {install.installed
+              ? 'Installed. Open AI Patterns from your home screen.'
+              : install.iosHint
+                ? 'On iPhone: tap Share, then “Add to Home Screen”.'
+                : 'Add it to your home screen or dock. Works offline too.'}
+          </p>
+        </div>
+        {install.canPrompt && (
+          <button type="button" className="btn btn-primary" onClick={install.prompt}>
+            <Download size={14} strokeWidth={1.75} aria-hidden /> Install
+          </button>
+        )}
+      </div>
+      <div className="tool">
+        <Upload size={20} strokeWidth={1.75} aria-hidden />
+        <div>
+          <strong>Move your progress</strong>
+          <p className="small muted">Your XP, cards and streak live in this browser. A backup code moves them to another device. No account.</p>
+        </div>
+        <div className="row">
+          <button type="button" className="btn btn-ghost" onClick={copy}>
+            <Copy size={14} strokeWidth={1.75} aria-hidden /> Copy backup code
+          </button>
+          <button type="button" className="btn btn-ghost" onClick={() => setOpen((o) => !o)} aria-expanded={open}>Restore</button>
+        </div>
+        {open && (
+          <div className="tool-restore">
+            <textarea value={code} onChange={(e) => setCode(e.target.value)} placeholder="Paste a backup code (starts with AIP1.)" rows={3} aria-label="Backup code" />
+            <button type="button" className="btn btn-primary" onClick={restore} disabled={!code.trim()}>Restore progress</button>
+          </div>
+        )}
+        {msg && <p className={'small tool-msg ' + (msg.ok ? 'txt-good' : 'txt-bad')} role="status">{msg.text}</p>}
+      </div>
+    </div>
+  );
+}
+
 export default function Play() {
   useTitle('Play');
   return (
@@ -159,6 +233,10 @@ export default function Play() {
           <p className="section-sub">Collect every card in a group to win its badge. All 3 stars on each makes it gold.</p>
         </div>
         <Badges />
+      </section>
+      <section className="block">
+        <h2>Your progress</h2>
+        <AppAndBackup />
       </section>
     </div>
   );
