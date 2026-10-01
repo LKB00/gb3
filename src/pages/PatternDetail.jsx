@@ -90,15 +90,16 @@ export default function PatternDetail() {
 
       {view === 'do' && (
         <div className="view">
-          <Lab key={p.id} id={p.id} lab={v.lab} />
-          {done && (
-            <div className="next-step">
-              <p><strong>Lab passed.</strong> Now see the expert answer and why it works.</p>
-              <button className="btn btn-primary" onClick={() => go('understand')}>
-                See the answer <ArrowRight size={14} strokeWidth={1.75} aria-hidden />
+          <Lab
+            key={p.id}
+            id={p.id}
+            lab={v.lab}
+            next={
+              <button type="button" className="btn btn-primary" onClick={() => go('understand')}>
+                See why it works <ArrowRight size={14} strokeWidth={1.75} aria-hidden />
               </button>
-            </div>
-          )}
+            }
+          />
         </div>
       )}
 

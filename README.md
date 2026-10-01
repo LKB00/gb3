@@ -4,7 +4,7 @@ A free website where designers **learn AI interaction design by doing**: you mak
 
 - **Pattern library**: 34 patterns in 7 groups (Input, Output, Control, Trust, Feedback, Agents, Voice & vision), including agentic patterns (autonomy dial, activity log & undo, pause & redirect, cost estimates), voice and image patterns, and a bias check.
 - **Visual first**: every pattern shows a ✕ bad and a ✓ better screen, with short labels on the screen itself.
-- **Design Lab**: on every pattern page, people build the feature by picking options. "Check my design" marks common mistakes in red and explains why.
+- **Design Lab**: on every pattern page, people build the feature one step at a time. Each pick shows in the live preview with instant feedback; a common mistake is explained and you try again.
 - **Mistake Hunt** (`/practice`): realistic AI screens with hidden mistakes. Click what is wrong, then jump to the pattern that fixes it.
 - **Live demos** for 15 patterns (including an L1–L5 autonomy explainer and a simulated voice conversation), and a **learning path** of 9 short visual lessons.
 - **Teardowns**: stage-by-stage breakdowns of ChatGPT, Perplexity, GitHub Copilot and Claude Code.
@@ -57,6 +57,7 @@ Live at **https://lkb00.github.io/patricka/** — every push to `main` builds an
 | Principles behind it | Shows the UX heuristic, law or psychology that makes the pattern work. |
 | Reference tab | Rules of thumb and details for later, out of the way while learning. |
 | Library tabs | Patterns, Teardowns, Anti-patterns, Principles and Glossary feel like one place. |
+| Guided Design Lab | One decision at a time with a step tracker; the part you are designing is highlighted in the preview; feedback comes the moment you pick; a summary shows what you got right first time. |
 | Practice tabs | Design Labs and Mistake Hunt are two modes; only one is on screen at a time. |
 | Mistake Hunt | Builds the skill of spotting problems in real screens, and links each mistake to its fix. |
 | Light tints instead of outlines | Mistakes and good choices are marked with a soft background and a short note, not heavy strokes. |
