@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import TopBar from './components/TopBar';
+import ErrorBoundary from './components/ErrorBoundary';
 import BottomNav from './components/BottomNav';
 import Me from './pages/Me';
 import Footer from './components/Footer';
@@ -34,7 +35,8 @@ export default function App() {
       <a href="#main" className="skip-link">Skip to content</a>
       <TopBar />
       <main id="main" className="main">
-        <div className="route" key={pathname}>
+        <ErrorBoundary key={pathname}>
+        <div className="route">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/patterns" element={<Patterns />} />
@@ -62,6 +64,7 @@ export default function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
         </div>
+        </ErrorBoundary>
         <Footer />
       </main>
       <BottomNav />

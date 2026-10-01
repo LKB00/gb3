@@ -27,7 +27,7 @@ export default function PatternCard({ pattern, number, passed, stars = 0 }) {
             <span className="card-lock"><Lock size={12} strokeWidth={1.75} aria-hidden /> Play to collect</span>
           )}
         </div>
-        <h3>{pattern.title}</h3>
+        <h3 aria-level="2">{pattern.title}</h3>
         <p>{pattern.summary}</p>
       </div>
     </Link>

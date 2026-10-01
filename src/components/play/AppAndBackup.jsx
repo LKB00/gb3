@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Copy, Download, Smartphone, Upload } from 'lucide-react';
 import { useInstall } from '../../game/install';
+import { copyText } from '../../lib/clipboard';
 import { exportProgress, importProgress } from '../../progress';
 
 // Install as an app + move progress to another device.
@@ -11,11 +12,11 @@ export default function AppAndBackup() {
   const [open, setOpen] = useState(false);
 
   const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(exportProgress());
+    const code = exportProgress();
+    if (await copyText(code, { prompt: false })) {
       setMsg({ ok: true, text: 'Backup code copied. Paste it on your other device.' });
-    } catch {
-      setCode(exportProgress());
+    } else {
+      setCode(code);
       setOpen(true);
       setMsg({ ok: true, text: 'Copy the code below.' });
     }

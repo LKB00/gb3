@@ -5,6 +5,7 @@ import { makeDeck } from '../game/decks';
 import { seeded, shuffle } from '../lib/random';
 import { challengeLink, useChallenge, verdict } from '../game/challenge';
 import { fx } from '../game/fx';
+import { copyText } from '../lib/clipboard';
 import { track } from '../game/track';
 import { markPlayed, saveSpeed, useGameStats, XP } from '../progress';
 import MockFrame, { MockBlock } from '../mock/Mock';
@@ -28,7 +29,9 @@ function freshDeck(seed) {
 export default function Speed() {
   useTitle('Speed round');
   const stats = useGameStats();
-  const challenge = useChallenge();
+  // A speed challenge needs the friend's seed, or the rounds wouldn't match.
+  const found = useChallenge();
+  const challenge = found?.seed ? found : null;
   const [seed, setSeed] = useState(() => challenge?.seed || newSeed());
   const [phase, setPhase] = useState('ready'); // ready | count | play | over
   const [count, setCount] = useState(3);
@@ -143,8 +146,10 @@ export default function Speed() {
 
   useEffect(() => {
     const onKey = (e) => {
-      if (e.key === 'ArrowLeft' || e.key === 'a') choose(0);
-      if (e.key === 'ArrowRight' || e.key === 'b') choose(1);
+      if (e.ctrlKey || e.metaKey || e.altKey || e.repeat) return; // browser shortcuts, held keys
+      const key = e.key.toLowerCase();
+      if (key === 'arrowleft' || key === 'a') choose(0);
+      if (key === 'arrowright' || key === 'b') choose(1);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
@@ -154,12 +159,9 @@ export default function Speed() {
   const share = async () => {
     const link = challengeLink('/play/speed', { seed, vs: points });
     const text = `⚡ I scored ${points} in the AI Patterns speed round. Same screens, same order. Can you beat me? ${link}`;
-    try {
-      await navigator.clipboard.writeText(text);
+    if (await copyText(text)) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch {
-      /* blocked */
     }
   };
 

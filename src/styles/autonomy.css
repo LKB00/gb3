@@ -241,7 +241,8 @@
 
 @media (max-width: 720px) {
   .ladder { grid-template-columns: 1fr; gap: 6px; }
-  .ladder-step { flex-direction: row; align-items: center; min-height: 0; margin-left: calc((var(--step) - 1) * 10px); }
+  /* width:auto so the staircase indent shrinks the step instead of pushing it off screen */
+  .ladder-step { flex-direction: row; align-items: center; min-height: 0; width: auto; margin-left: calc((var(--step) - 1) * 10px); }
   .ladder-step:hover { transform: none; }
   .ladder-detail { padding: 18px; border-radius: 16px; }
   .ladder-title { font-size: 26px; line-height: 30px; }

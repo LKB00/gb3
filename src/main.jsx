@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { HashRouter } from 'react-router-dom';
 import App from './App';
+import ErrorBoundary from './components/ErrorBoundary';
 import './styles/index.css';
 import { listenForInstall } from './game/install';
 import { startTracking } from './game/track';
@@ -10,9 +11,11 @@ import { listenForTaps } from './game/fx';
 // HashRouter so the site works on static hosting (GitHub Pages) without server rules.
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <HashRouter>
-      <App />
-    </HashRouter>
+    <ErrorBoundary>
+      <HashRouter>
+        <App />
+      </HashRouter>
+    </ErrorBoundary>
   </React.StrictMode>
 );
 

@@ -23,8 +23,8 @@ export function useChallenge() {
   const [params] = useSearchParams();
   const vs = params.get('vs');
   if (vs === null) return null;
+  if (!/^\d{1,3}$/.test(vs)) return null; // whole numbers only: not "", "1e2", "0x10", "-5"
   const n = Number(vs);
-  if (!Number.isFinite(n) || n < 0 || n > 999) return null;
   return {
     score: Math.round(n),
     from: cleanName(params.get('from')) || 'A friend',

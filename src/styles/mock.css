@@ -621,3 +621,7 @@
 }
 .m-slot-good { --st: var(--positive); --tint: var(--positive-soft); }
 .m-slot-bad { --st: var(--negative); --tint: var(--negative-soft); }
+
+@media (pointer: coarse) {
+  .mb-click { min-height: 36px; }
+}

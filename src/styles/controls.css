@@ -313,3 +313,8 @@ a.card:hover {
   margin-top: 32px;
   color: var(--ink-2);
 }
+
+/* Fingers need bigger targets than mouse pointers (at least 24px, we use 32px). */
+@media (pointer: coarse) {
+  a.tag { height: auto; min-height: 32px; padding: 0 12px; }
+}

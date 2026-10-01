@@ -5,9 +5,14 @@ import { useEffect, useState } from 'react';
 // whole page updates at once (XP pill, streak, tiles…).
 export const CHANGE = 'progress-change';
 
+// Saved data can be broken (edited by hand, an old version, another site on the same
+// address). If it isn't the same kind of thing as `fallback` (a list or a plain object),
+// the fallback is used, so one bad value can never crash the site.
 export function readJSON(key, fallback) {
   try {
-    return JSON.parse(localStorage.getItem(key)) || fallback;
+    const v = JSON.parse(localStorage.getItem(key));
+    if (Array.isArray(fallback)) return Array.isArray(v) ? v : fallback;
+    return v && typeof v === 'object' && !Array.isArray(v) ? v : fallback;
   } catch {
     return fallback;
   }

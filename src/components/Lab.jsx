@@ -1,5 +1,5 @@
 import { ArrowLeft, ArrowRight, Check, RotateCcw, Star, TriangleAlert } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import MockFrame, { MockBlock, MockSlot } from '../mock/Mock';
 import { markPassed, markPlayed, saveStars, useStars, XP } from '../progress';
 import Burst, { XpPop } from './Burst';
@@ -20,6 +20,9 @@ export default function Lab({ id, lab, title, next }) {
   const [choice, setChoice] = useState({});
   const [tried, setTried] = useState({});
   const [finished, setFinished] = useState(false);
+  // Star chimes are timed; stop them if the person leaves the page first.
+  const chimes = useRef([]);
+  useEffect(() => () => chimes.current.forEach(clearTimeout), []);
   const [skipped, setSkipped] = useState(false);
   const [gained, setGained] = useState(0);
   const savedStars = useStars();
@@ -49,7 +52,7 @@ export default function Lab({ id, lab, title, next }) {
     if (skipped) return;
     setGained(Math.max(0, stars - (savedStars[id] || 0)) * XP.star);
     fx('win');
-    for (let n = 1; n <= stars; n++) setTimeout(() => fx('star', { n }), 450 + n * 160);
+    for (let n = 1; n <= stars; n++) chimes.current.push(setTimeout(() => fx('star', { n }), 450 + n * 160));
     track('Game finished', { game: 'fix-it', stars });
     saveStars(id, stars);
     markPassed(id);
@@ -123,7 +126,7 @@ export default function Lab({ id, lab, title, next }) {
       <div className="lab-panel" aria-live="polite">
         {!finished ? (
           <>
-            <h3 className="lab-q lab-q-step" key={`q-${d.id}`}>{d.label}</h3>
+            <h3 className="lab-q lab-q-step" aria-level="2" key={`q-${d.id}`}>{d.label}</h3>
             <div className="lab-options" key={`o-${d.id}`} role="radiogroup" aria-label={d.label}>
               {d.options.map((o, i) => {
                 const on = picked === i;
@@ -176,7 +179,7 @@ export default function Lab({ id, lab, title, next }) {
           <>
             {!skipped && <Burst count={stars === 3 ? 26 : 16} />}
             <p className="lab-count">{skipped ? 'The answer' : 'Card collected'}</p>
-            <h3 className="lab-q">
+            <h3 className="lab-q" aria-level="2">
               {skipped ? 'Here’s the winning design.' : stars === 3 ? 'Perfect run!' : stars === 2 ? 'Nice save!' : 'Got there!'}
               {gained > 0 && <XpPop amount={gained} />}
             </h3>
