@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { BookOpen, Check, FlaskConical, House, LayoutGrid, Menu, Moon, Sun, X } from 'lucide-react';
 import { categories, patterns } from '../data/patterns';
@@ -24,7 +24,16 @@ export default function Sidebar() {
   const passed = usePassed();
   const [isDark, toggleTheme] = useTheme();
 
+  const groupsRef = useRef(null);
+
   useEffect(() => setOpen(false), [pathname]);
+
+  // Keep the current pattern visible in the long list, so people never lose their place.
+  useEffect(() => {
+    const active = groupsRef.current?.querySelector('.sb-row.active');
+    if (active) active.scrollIntoView({ block: 'nearest' });
+    else if (groupsRef.current) groupsRef.current.scrollTop = 0;
+  }, [pathname]);
 
   return (
     <>
@@ -50,7 +59,7 @@ export default function Sidebar() {
           <NavLink to="/learn" className="sb-link"><BookOpen {...ICON} />Learn</NavLink>
         </nav>
 
-        <nav className="sb-groups" aria-label="Patterns">
+        <nav className="sb-groups" aria-label="Patterns" ref={groupsRef}>
           {categories.map((c) => (
             <div key={c.id} className="sb-group">
               <p className="label sb-label">{c.name}</p>

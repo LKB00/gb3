@@ -23,7 +23,7 @@
   --ink: #24282c;
   --ink-hover: #14171a;
   --ink-2: #5b5e61;
-  --ink-3: #919395;
+  --ink-3: #707377;
   --line: #deddd8;
   --divider: #e8e4d8;
   --on-ink: #fbfbf7;
@@ -2273,4 +2273,115 @@ button.ai-badge {
     animation: none !important;
     transition: none !important;
   }
+}
+
+/* ---------- UX additions ---------- */
+/* "Why it matters": the reason for the pattern, right under the title */
+.why {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 65ch;
+  margin-top: 8px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: var(--sand);
+}
+.why p:last-child {
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 25px;
+}
+/* "On this page": quick jumps through a long pattern page */
+.on-page {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 32px;
+  padding: 8px 0;
+  overflow-x: auto;
+  background: var(--paper);
+  border-bottom: var(--hair) solid var(--divider);
+  scrollbar-width: none;
+}
+.on-page::-webkit-scrollbar {
+  height: 0;
+}
+.on-page .label {
+  flex: none;
+  margin-right: 8px;
+}
+.on-page-link {
+  flex: none;
+  height: 28px;
+  padding: 0 10px;
+  border: none;
+  border-radius: 9999px;
+  background: none;
+  color: var(--ink-2);
+  font-size: 13px;
+  cursor: pointer;
+}
+.on-page-link:hover {
+  background: var(--sand-dark);
+  color: var(--ink);
+}
+@media (max-width: 959px) {
+  .on-page {
+    top: calc(56px + env(safe-area-inset-top, 0px));
+  }
+  .on-page .label {
+    display: none;
+  }
+}
+.block[id] {
+  scroll-margin-top: 72px;
+}
+@media (max-width: 959px) {
+  .block[id] {
+    scroll-margin-top: 128px;
+  }
+}
+/* Home: how each pattern works (a real 1-2-3 sequence) */
+.steps-how {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+@media (min-width: 720px) {
+  .steps-how {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.steps-how li {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  border: var(--hair) solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+  font-size: 14px;
+  line-height: 21px;
+  color: var(--ink-2);
+}
+.steps-how strong {
+  margin-top: 6px;
+  font-size: 15px;
+  color: var(--ink);
+}
+.example {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 16px;
+}
+.example .compare {
+  width: 100%;
 }

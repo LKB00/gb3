@@ -1,3 +1,4 @@
+import { useTitle } from '../useTitle';
 import { useSearchParams } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import { categories, patterns } from '../data/patterns';
@@ -5,6 +6,7 @@ import PatternCard from '../components/PatternCard';
 import { usePassed } from '../progress';
 
 export default function Patterns() {
+  useTitle('All patterns');
   const [params, setParams] = useSearchParams();
   const passed = usePassed();
   const category = params.get('category') || 'all';

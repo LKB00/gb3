@@ -1,3 +1,4 @@
+import { useTitle } from '../useTitle';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Check, Circle } from 'lucide-react';
@@ -7,6 +8,7 @@ import { usePassed } from '../progress';
 import Hunt from '../components/Hunt';
 
 export default function Practice() {
+  useTitle('Practice');
   const [idx, setIdx] = useState(0);
   const passed = usePassed();
   const scenario = hunts[idx];

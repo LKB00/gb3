@@ -1,6 +1,8 @@
+import { useTitle } from '../useTitle';
 import { Link } from 'react-router-dom';
 
 export default function NotFound() {
+  useTitle('Page not found');
   return (
     <div className="page">
       <header className="page-head">

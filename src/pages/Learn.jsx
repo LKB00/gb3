@@ -1,3 +1,4 @@
+import { useTitle } from '../useTitle';
 import { Link } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
 import { lessons } from '../data/lessons';
@@ -5,6 +6,7 @@ import { lessons } from '../data/lessons';
 const levels = ['Basics', 'Core', 'Advanced'];
 
 export default function Learn() {
+  useTitle('Learning path');
   return (
     <div className="page">
       <header className="page-head">

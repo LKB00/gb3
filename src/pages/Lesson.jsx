@@ -4,11 +4,13 @@ import { getLesson, lessons } from '../data/lessons';
 import { getPattern } from '../data/patterns';
 import { visuals } from '../data/visuals';
 import Compare from '../components/Compare';
+import { useTitle } from '../useTitle';
 import NotFound from './NotFound';
 
 export default function Lesson() {
   const { id } = useParams();
   const lesson = getLesson(id);
+  useTitle(lesson?.title);
   if (!lesson) return <NotFound />;
 
   const idx = lessons.indexOf(lesson);
