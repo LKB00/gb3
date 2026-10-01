@@ -1,6 +1,6 @@
 {
   "name": "Good Bot, Bad Bot",
-  "short_name": "Good Bot",
+  "short_name": "GB3",
   "description": "Quick games about AI interaction design. Play, collect pattern cards, keep your streak.",
   "start_url": "./#/",
   "scope": "./",

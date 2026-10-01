@@ -29,7 +29,7 @@
 
 | | |
 |---|---|
-| **Name** | **Good Bot, Bad Bot** (tagline: *Can you spot good AI design?*). Formerly "AI Patterns". The repo and address stay `patricka`. |
+| **Name** | **Good Bot, Bad Bot**, short name **GB3** (tagline: *Can you spot good AI design?*). Formerly "AI Patterns". The repo and address stay `patricka`. |
 | **What** | A playful website about **AI design patterns, AI interaction design and agentic UX**. A game, not a course. |
 | **Live** | <https://lkb00.github.io/patricka/> (GitHub Pages, hash routes like `/#/play`) |
 | **Repo** | `LKB00/patricka`. Work branch: `claude/awesome-rubin-9zmea8`. Live branch: `main` |
@@ -342,7 +342,7 @@ On by default; two separate switches on the Me page; the top-bar speaker toggles
 
 ## 8b. Brand
 
-- **Name:** Good Bot, Bad Bot. Short name for installed apps (home screen label): **Good Bot** (the full name is too long for phone home screens).
+- **Name:** Good Bot, Bad Bot. Short name: **GB3** ("G + B cubed": Good Bot, Bad Bot = G, B, B, B), chosen by the owner. It is the home-screen name of the installed app (`short_name` in `public/manifest.webmanifest` and `apple-mobile-web-app-title` in `index.html`), and the top-bar name on phones narrower than 340px. The full name stays the main name everywhere else.
 - **Logo:** two round faces side by side: a **good bot** (lime `#c2ef72`, smiling) and a **bad bot** (soft red `#f6a5a0`, frowning, angry brows), with a small overlap and a gap line between them. Colours are fixed (same in light and dark mode).
 - **One drawing, four copies** (keep them in step if the logo changes): `src/components/LogoMark.jsx` (React SVG, used in the top bar, flip-card back and player card), the favicon SVG in `index.html`, `drawLogo()` in `src/pages/PlayerCard.jsx` (canvas image), and `scripts/make-brand-images.mjs`.
 - **Brand images in `public/`** (`icon-192.png`, `icon-512.png`, `icon-maskable-512.png`, `apple-touch-icon.png`, `og.png` for link previews) are **generated**: run `npm run brand` (in the sandbox: `CHROMIUM_PATH=/opt/pw-browsers/chromium npm run brand`). Edit the script, not the PNGs.

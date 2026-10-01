@@ -28,7 +28,10 @@ export default function TopBar() {
         )}
         <Link to="/" className="logo" aria-label="Good Bot, Bad Bot, home">
           <LogoMark />
-          <span className="logo-text">Good Bot, Bad Bot</span>
+          <span className="logo-text">
+            <span className="logo-full">Good Bot, Bad Bot</span>
+            <span className="logo-short" aria-hidden="true">GB3</span>
+          </span>
         </Link>
         <nav className="topnav-links" aria-label="Main">
           <NavLink to="/play" className={() => (isPlay(pathname) ? 'active' : '')}>Play</NavLink>

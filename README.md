@@ -1,4 +1,4 @@
-# Good Bot, Bad Bot
+# Good Bot, Bad Bot (GB3)
 
 *Can you spot good AI design?* (Formerly “AI Patterns”. The repo and the web address stay `patricka`.)
 
