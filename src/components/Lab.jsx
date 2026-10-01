@@ -3,6 +3,8 @@ import { useState } from 'react';
 import MockFrame, { MockBlock, MockSlot } from '../mock/Mock';
 import { markPassed, markPlayed, saveStars, useStars, XP } from '../progress';
 import Burst, { XpPop } from './Burst';
+import FlipCard from './FlipCard';
+import { fx } from '../game/fx';
 
 // Challenge ("Fix it"), built as a guided flow:
 //   one decision at a time → instant feedback → fix mistakes → next step → summary.
@@ -29,6 +31,7 @@ export default function Lab({ id, lab, title, next }) {
 
   const pick = (i) => {
     markPlayed();
+    fx(d.options[i].ok ? 'right' : 'wrong');
     setChoice((c) => ({ ...c, [d.id]: i }));
     setTried((t) => ({ ...t, [d.id]: (t[d.id] || []).includes(i) ? t[d.id] : [...(t[d.id] || []), i] }));
   };
@@ -43,6 +46,7 @@ export default function Lab({ id, lab, title, next }) {
     setFinished(true);
     if (skipped) return;
     setGained(Math.max(0, stars - (savedStars[id] || 0)) * XP.star);
+    fx('win');
     saveStars(id, stars);
     markPassed(id);
   };
@@ -179,6 +183,7 @@ export default function Lab({ id, lab, title, next }) {
                 <span>{mistakes === 0 ? 'No mistakes' : `${mistakes} mistake${mistakes > 1 ? 's' : ''} fixed`}</span>
               </p>
             )}
+            {!skipped && <FlipCard id={id} stars={stars} />}
             {skipped && <p className="lab-hint">No card this time. Play again to collect it.</p>}
             <ul className="lab-summary">
               {decisions.map((x) => {

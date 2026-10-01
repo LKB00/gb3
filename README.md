@@ -8,6 +8,9 @@ A playground for AI interaction design. Not a course: quick games, instant wins,
 - **Fix it** (the Play tab on each card): build an AI feature one decision at a time with instant feedback. Win the card with 1–3 stars.
 - **Spot the flaw** (`/play/spot-the-flaw`): realistic AI screens with hidden mistakes. Tap what is wrong.
 - **Cards** (`/patterns`): 34 pattern cards in 7 groups (Input, Output, Control, Trust, Feedback, Agents, Voice & vision). Each has Play, Why it works and Cheat sheet tabs.
+- **Speed round** (`/play/speed`): 60 seconds of quick "which is better?" picks (classic + hard mixed). 3 in a row = ×2 points; a wrong tap costs 1 point, so random tapping doesn't pay. 3-2-1 countdown, ticking last 5 seconds, copyable score.
+- **Card flip**: winning a Fix it challenge flips your new pattern card over with a glow.
+- **Sound and vibration** (speaker button in the top bar, off by default): short sounds made with Web Audio (no files) and phone vibration on right, wrong, win and card flip.
 - **Day streak + daily goal** (`/play`, flame in the top bar): any answer in any game is a "move"; 10 moves is the daily goal. One missed day per week is covered by a free skip day, so one busy day doesn't wipe out a streak. A toast celebrates the goal.
 - **Player card** (`/play/card`): your name, AI-designer type (from the group you've mastered most, e.g. "The Trust Keeper"), level, XP, stats and badges. Save as a 1080×1350 image or share; made in the browser, nothing uploaded.
 - **XP, levels and badges** (`/play`): stars, flaws found and best streak add up to XP; 6 levels from Rookie to Legend; a badge per group (gold with all 3 stars).
@@ -57,6 +60,8 @@ Live at **https://lkb00.github.io/patricka/** — every push to `main` builds an
 | Hard mode | Near-identical screens train the eye for small details, like a design review. |
 | Day streak with a free skip day | Builds a habit without guilt: one busy day doesn't reset weeks of play, and today not played yet never shows as broken. |
 | Player card + designer type | Something personal to keep and show off; the type changes as you play, so it's a reason to explore other groups. |
+| Speed round | Pace and pressure for players who already know the basics; the wrong-tap cost keeps it about skill, not luck. |
+| Card flip, sounds, vibration | Small sensory rewards at the moment of a win; sound is off by default and motion respects reduced-motion settings. |
 | Levels and badges | Small, honest goals (next level, finish a group) instead of a syllabus. |
 | Confetti, XP pops, card unlocks | Short moments of delight on wins; turned off for people who prefer reduced motion. |
 | Breadcrumbs | Every inner page shows where you are and one step back. |

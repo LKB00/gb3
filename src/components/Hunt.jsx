@@ -5,6 +5,7 @@ import MockFrame, { MockBlock } from '../mock/Mock';
 import { getPattern } from '../data/patterns';
 import { markHuntDone, markPlayed, useHuntsDone, XP } from '../progress';
 import Burst, { XpPop } from './Burst';
+import { fx } from '../game/fx';
 
 // Spot the flaw: tap the parts of the screen that are wrong.
 export default function Hunt({ scenario }) {
@@ -29,9 +30,11 @@ export default function Hunt({ scenario }) {
       if (!found.includes(i)) {
         setFound((f) => [...f, i]);
         markPlayed();
+        fx(found.length + 1 === mistakes.length ? 'win' : 'right');
       }
       setFine(null);
     } else {
+      fx('wrong');
       setFine(i);
     }
   };
