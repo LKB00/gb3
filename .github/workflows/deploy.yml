@@ -24,6 +24,8 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      # Stops the deploy if the code has mistakes (unused or undefined names, hook errors).
+      - run: npm run lint
       - run: npm run build
         env:
           # Optional Plausible stats; empty = off. Set it in Settings → Secrets and variables → Actions → Variables.

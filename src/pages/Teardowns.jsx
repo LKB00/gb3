@@ -2,7 +2,7 @@ import { Link, useParams } from 'react-router-dom';
 import { ChevronRight, Lightbulb, ThumbsUp } from 'lucide-react';
 import { getTeardown, teardowns } from '../data/teardowns';
 import { getPattern } from '../data/patterns';
-import { useTitle } from '../useTitle';
+import { useTitle } from '../lib/useTitle';
 import NotFound from './NotFound';
 import LibraryTabs from '../components/LibraryTabs';
 import Breadcrumbs from '../components/Breadcrumbs';

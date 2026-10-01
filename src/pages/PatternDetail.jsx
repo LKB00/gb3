@@ -10,7 +10,7 @@ import Lab from '../components/Lab';
 import RealExamples from '../components/RealExamples';
 import PrincipleList from '../components/PrincipleList';
 import Breadcrumbs from '../components/Breadcrumbs';
-import { useTitle } from '../useTitle';
+import { useTitle } from '../lib/useTitle';
 import NotFound from './NotFound';
 
 const ICON = { size: 14, strokeWidth: 2, 'aria-hidden': true };

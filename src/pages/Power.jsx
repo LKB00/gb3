@@ -4,12 +4,13 @@ import { ArrowRight, Check, Gauge, RotateCcw, Star, X } from 'lucide-react';
 import { getLevel, levels, TAGS, tasks } from '../data/autonomy';
 import { getPattern } from '../data/patterns';
 import { fx } from '../game/fx';
+import { shuffle } from '../lib/random';
 import { track } from '../game/track';
 import { markPlayed, savePower, useGameStats, XP } from '../progress';
 import Breadcrumbs from '../components/Breadcrumbs';
 import Disagree from '../components/Disagree';
 import Burst, { XpPop } from '../components/Burst';
-import { useTitle } from '../useTitle';
+import { useTitle } from '../lib/useTitle';
 
 // "How much power?": a task, five levels, pick the right one.
 // Exact = 2 points, one step off = 1 point. 8 tasks, so 16 is perfect.
@@ -17,20 +18,11 @@ const ROUNDS = 8;
 const MAX = ROUNDS * 2;
 
 function deal() {
-  // Mix the levels: shuffle, then make sure most levels show up.
-  const a = [...tasks];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  const first = levels.map((l) => a.find((t) => t.level === l.n)).filter(Boolean);
-  const rest = a.filter((t) => !first.includes(t)).slice(0, ROUNDS - first.length);
-  const hand = [...first, ...rest];
-  for (let i = hand.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [hand[i], hand[j]] = [hand[j], hand[i]];
-  }
-  return hand;
+  // One task for each level first, so every level shows up, then random ones.
+  const all = shuffle(tasks);
+  const first = levels.map((l) => all.find((t) => t.level === l.n)).filter(Boolean);
+  const rest = all.filter((t) => !first.includes(t)).slice(0, ROUNDS - first.length);
+  return shuffle([...first, ...rest]);
 }
 
 const starsFor = (pts) => (pts >= 14 ? 3 : pts >= 10 ? 2 : 1);

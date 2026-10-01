@@ -44,16 +44,47 @@ and soft pastels only for group tags and status. Icons are [Lucide](https://luci
 
 ```bash
 npm install
-npm run dev      # open the local link it prints
-npm run build    # makes the final site in /dist
+npm run dev      # open the local link it prints; changes show up instantly
+npm run check    # before you push: lint + build + open every page in a real browser (~20 s)
 ```
 
-## Add content
+`npm run check` fails if any page crashes, logs an error or scrolls sideways on a phone.
+It needs Chromium; if Playwright can't find one, run `npx playwright install chromium` once.
 
-- New pattern: add text to `src/data/patterns.js` and its pictures + Design Lab to `src/data/visuals.js`
-  (screens are plain data, drawn by `src/mock/Mock.jsx`). A live demo in `src/demos/` is optional.
-- New Mistake Hunt screen: add it to `src/data/hunts.js`.
-- New lesson: add an item to `src/data/lessons.js`.
+## How the code is organised
+
+```
+src/
+  data/        all the content (patterns, stories, briefs, teardowns…) as plain JS. Most changes are here.
+  config/      lists that drive the UI: nav.js (menus, Explore tabs), games.js (game tiles)
+  pages/       one file per page (route). Routes are listed in App.jsx
+  components/  pieces used by pages; components/play/ = Play hub parts (level card, tiles, badges…)
+  mock/        fake app screens: blocks.js builds them, Mock.jsx draws them
+  demos/       small working demos on pattern pages
+  game/        game logic: decks, sound + haptics (fx.js), challenge links, install, stats
+  lib/         small helpers: storage, random, dates, theme, page title
+  progress.js  everything a visitor earns (XP, stars, streaks), saved in their browser
+  styles/      CSS split by area; index.css lists the files in order
+scripts/smoke.mjs  the browser check used by `npm run check`
+```
+
+## Common changes
+
+| I want to… | Change this |
+|---|---|
+| Fix a typo or change any text | Search for the words in `src/data/` (content) or `src/pages/` (page titles) |
+| Add a pattern | `src/data/patterns.js` (text) + `src/data/visuals.js` (compare screens + Fix it steps). A demo in `src/demos/` is optional |
+| Add a story / Build brief / flaw screen / hard pair | `data/story.js` / `data/builds.js` / `data/hunts.js` / `data/subtle.js` |
+| Add a task to How much power? | `data/autonomy.js` → `tasks` |
+| Add a game | page in `src/pages/`, route in `App.jsx`, tile in `config/games.js` (steps are in that file) |
+| Add an Explore page | page in `src/pages/`, route in `App.jsx`, tab in `config/nav.js` |
+| Change a colour or font | `src/styles/tokens.css` (light and dark mode) |
+| Change how one area looks | the matching file in `src/styles/` (each file says what it covers at the top); phone rules for older areas are in `phone.css` |
+| Change XP, levels or the daily goal | `src/progress.js` (`XP`, `LEVELS`, `DAILY_GOAL`, `xpParts`) |
+| Change a sound or vibration | `src/game/fx.js` (`SOUNDS`, `BUZZ`) |
+| Add a new kind of fake-screen block | builder in `mock/blocks.js` + a `case` in `mock/Mock.jsx` + styles in `styles/mock.css` |
+
+New patterns, teardowns, lessons, stories and briefs are checked by `npm run check` automatically.
 
 Built with React + Vite. Uses hash links (`/#/patterns`) so it works on GitHub Pages with no extra setup.
 

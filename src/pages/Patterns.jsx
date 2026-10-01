@@ -1,10 +1,10 @@
-import { useTitle } from '../useTitle';
+import { useTitle } from '../lib/useTitle';
 import { useSearchParams } from 'react-router-dom';
 import { Puzzle, Search } from 'lucide-react';
 import { categories, patterns } from '../data/patterns';
 import PatternCard from '../components/PatternCard';
 import { usePassed, useStars } from '../progress';
-import { useRandomChallenge } from './Play';
+import { useRandomChallenge } from '../game/useRandomChallenge';
 
 export default function Patterns() {
   useTitle('Cards');

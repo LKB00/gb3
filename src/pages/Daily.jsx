@@ -2,12 +2,13 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { CalendarDays, Copy, Eye, Flame, Share2, Shuffle, Swords } from 'lucide-react';
 import { challengeLink, useChallenge, verdict } from '../game/challenge';
-import { dailyDeck, dailyNumber, todayKey } from '../game/decks';
+import { dailyDeck, dailyNumber } from '../game/decks';
+import { dayKey } from '../lib/dates';
 import { dailyStreak, saveDaily, useDaily, XP } from '../progress';
 import ThisOrThat from '../components/ThisOrThat';
 import Breadcrumbs from '../components/Breadcrumbs';
 import Burst, { XpPop } from '../components/Burst';
-import { useTitle } from '../useTitle';
+import { useTitle } from '../lib/useTitle';
 
 // Daily challenge: 5 rounds, the same for everyone today, one try.
 // Why: a small reason to come back each day, and a result grid worth sharing.
@@ -121,7 +122,7 @@ function Result({ num, day, results, streak, fresh, challenge, replay }) {
 export default function Daily() {
   useTitle('Daily challenge');
   const challenge = useChallenge();
-  const todayK = todayKey();
+  const todayK = dayKey();
   // A challenge link for another day replays that day's rounds (not saved).
   const key = challenge?.day && challenge.day <= todayK && dailyNumber(challenge.day) >= 1 ? challenge.day : todayK;
   const replay = key !== todayK;

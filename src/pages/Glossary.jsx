@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ArrowUpRight, Search } from 'lucide-react';
 import { furtherReading, glossary } from '../data/glossary';
-import { useTitle } from '../useTitle';
+import { useTitle } from '../lib/useTitle';
 import LibraryTabs from '../components/LibraryTabs';
 
 export default function Glossary() {

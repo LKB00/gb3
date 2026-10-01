@@ -1,36 +1,41 @@
-import { useEffect, useState } from 'react';
+import { dayKey } from './lib/dates';
+import { CHANGE, readJSON, writeJSON, useStored } from './lib/storage';
 
-// Learning-by-doing progress, kept only in this visitor's browser:
-// which Design Labs they passed and which Mistake Hunt screens they finished.
-const EVENT = 'progress-change';
+export { dayKey };
 
-function read(key) {
-  try {
-    return JSON.parse(localStorage.getItem(key)) || [];
-  } catch {
-    return [];
-  }
-}
+// Everything a visitor earns, saved in their browser (see lib/storage.js).
+// Keys in localStorage:
+//   labs-passed  ['citations', …]        cards collected (Fix it)
+//   hunts-done   ['chat', …]             Spot the flaw screens finished
+//   lab-stars    { citations: 3, … }     best stars per card
+//   game-stats   { bestStreak, speedBest, powerBest, builds: {id: stars}, stories: {id: trust} }
+//   daily        { 'YYYY-MM-DD': [true, false, …] }   Daily challenge results
+//   days         { 'YYYY-MM-DD': moves }              day streak and daily goal
+// Adding a new game score: add a saveBest('myBest') line and a line in xpParts().
+
+const read = (key) => readJSON(key, []);
+const readObj = (key) => readJSON(key, {});
+const useList = (key) => useStored(key, []);
+const useObj = (key) => useStored(key, {});
 
 function add(key, id) {
   const list = read(key);
   if (list.includes(id)) return;
-  try {
-    localStorage.setItem(key, JSON.stringify([...list, id]));
-  } catch {
-    /* storage blocked — progress just isn't saved */
-  }
-  window.dispatchEvent(new Event(EVENT));
+  writeJSON(key, [...list, id]);
 }
 
-function useList(key) {
-  const [list, setList] = useState(() => read(key));
-  useEffect(() => {
-    const update = () => setList(read(key));
-    window.addEventListener(EVENT, update);
-    return () => window.removeEventListener(EVENT, update);
-  }, [key]);
-  return list;
+// Keep the best number only: game-stats[field] = max(old, value).
+function saveBest(field, value) {
+  const s = readObj('game-stats');
+  if ((s[field] || 0) >= value) return;
+  writeJSON('game-stats', { ...s, [field]: value });
+}
+// Same, per item: game-stats[field][id] = max(old, value).
+function saveBestIn(field, id, value, current = (s) => s[field] || {}) {
+  const s = readObj('game-stats');
+  const map = { ...current(s) };
+  if ((map[id] ?? -1) >= value) return;
+  writeJSON('game-stats', { ...s, [field]: { ...map, [id]: value } });
 }
 
 export const markPassed = (id) => add('labs-passed', id);
@@ -39,45 +44,16 @@ export const usePassed = () => useList('labs-passed');
 export const markHuntDone = (id) => add('hunts-done', id);
 export const useHuntsDone = () => useList('hunts-done');
 
-// ---- Game layer: stars, best streak, XP and levels ----
-function readObj(key) {
-  try {
-    return JSON.parse(localStorage.getItem(key)) || {};
-  } catch {
-    return {};
-  }
-}
-function writeObj(key, value) {
-  try {
-    localStorage.setItem(key, JSON.stringify(value));
-  } catch {
-    /* storage blocked */
-  }
-  window.dispatchEvent(new Event(EVENT));
-}
-function useObj(key) {
-  const [obj, setObj] = useState(() => readObj(key));
-  useEffect(() => {
-    const update = () => setObj(readObj(key));
-    window.addEventListener(EVENT, update);
-    return () => window.removeEventListener(EVENT, update);
-  }, [key]);
-  return obj;
-}
-
+// ---- Stars, best scores, XP and levels ----
 // Stars per challenge: 3 = no mistakes, 2 = one mistake, 1 = more. Only the best is kept.
-export function saveStars(id, stars) {
+export const saveStars = (id, stars) => {
   const all = readObj('lab-stars');
   if ((all[id] || 0) >= stars) return;
-  writeObj('lab-stars', { ...all, [id]: stars });
-}
+  writeJSON('lab-stars', { ...all, [id]: stars });
+};
 export const useStars = () => useObj('lab-stars');
 
-export function saveStreak(n) {
-  const s = readObj('game-stats');
-  if ((s.bestStreak || 0) >= n) return;
-  writeObj('game-stats', { ...s, bestStreak: n });
-}
+export const saveStreak = (n) => saveBest('bestStreak', n);
 export const useGameStats = () => useObj('game-stats');
 
 export const LEVELS = [
@@ -91,22 +67,11 @@ export const LEVELS = [
 export const XP = { star: 10, hunt: 30, streak: 5, daily: 10, speed: 2, power: 2 };
 
 // Build mode: best stars per brief, in game-stats.builds = { briefId: 1–3 }.
-export function saveBuild(id, stars) {
-  const s = readObj('game-stats');
-  const builds = s.builds || {};
-  if ((builds[id] || 0) >= stars) return;
-  writeObj('game-stats', { ...s, builds: { ...builds, [id]: stars } });
-}
+export const saveBuild = (id, stars) => saveBestIn('builds', id, stars);
 
 // Stories: best trust per story, in game-stats.stories = { storyId: 0–100 }.
 // (The first story used to save game-stats.storyBest; it still counts.)
-export function saveStoryBest(id, trust) {
-  const s = readObj('game-stats');
-  const stories = { ...(s.stories || {}) };
-  if (id === 'tidy' && s.storyBest != null && stories.tidy == null) stories.tidy = s.storyBest;
-  if ((stories[id] ?? -1) >= trust) return;
-  writeObj('game-stats', { ...s, stories: { ...stories, [id]: trust } });
-}
+export const saveStoryBest = (id, trust) => saveBestIn('stories', id, trust, storyBests);
 export function storyBests(stats) {
   const out = { ...(stats.stories || {}) };
   if (stats.storyBest != null && out.tidy == null) out.tidy = stats.storyBest;
@@ -114,65 +79,56 @@ export function storyBests(stats) {
 }
 
 // How much power?: best points out of 16.
-export function savePower(points) {
-  const s = readObj('game-stats');
-  if ((s.powerBest || 0) >= points) return;
-  writeObj('game-stats', { ...s, powerBest: points });
-}
+export const savePower = (points) => saveBest('powerBest', points);
 
 // Speed round: best points in 60 seconds.
-export function saveSpeed(points) {
-  const s = readObj('game-stats');
-  if ((s.speedBest || 0) >= points) return;
-  writeObj('game-stats', { ...s, speedBest: points });
-}
+export const saveSpeed = (points) => saveBest('speedBest', points);
 
 // Daily challenge: { 'YYYY-MM-DD': [true, false, …] }. First result of the day counts.
 export function saveDaily(key, results) {
   const all = readObj('daily');
   if (all[key]) return;
-  writeObj('daily', { ...all, [key]: results });
+  writeJSON('daily', { ...all, [key]: results });
 }
 export const useDaily = () => useObj('daily');
 
 // Days in a row with a Daily played, ending today (or yesterday, so it isn't lost before you play).
 export function dailyStreak(daily, today = new Date()) {
-  const key = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
   const d = new Date(today);
-  if (!daily[key(d)]) d.setDate(d.getDate() - 1);
+  if (!daily[dayKey(d)]) d.setDate(d.getDate() - 1);
   let n = 0;
-  while (daily[key(d)]) {
+  while (daily[dayKey(d)]) {
     n++;
     d.setDate(d.getDate() - 1);
   }
   return n;
 }
 
-// Story mode: best trust score reached at the end (0–100).
-export function saveStory(trust) {
-  const s = readObj('game-stats');
-  if ((s.storyBest ?? -1) >= trust) return;
-  writeObj('game-stats', { ...s, storyBest: trust });
+// Where XP comes from. One line per source; the total is the sum.
+export function xpParts({ stars, hunts, stats, passed, daily }) {
+  // A collected card always counts at least one star (older saves had no stars).
+  const starTotal = passed.reduce((n, id) => n + Math.max(stars[id] || 1, 1), 0);
+  const dailyRight = Object.values(daily).reduce((n, r) => n + r.filter(Boolean).length, 0);
+  const sum = (obj, f) => Object.values(obj).reduce((n, v) => n + f(v), 0);
+  return {
+    starTotal,
+    parts: {
+      cards: starTotal * XP.star,
+      hunts: hunts.length * XP.hunt,
+      streak: (stats.bestStreak || 0) * XP.streak,
+      daily: dailyRight * XP.daily,
+      stories: sum(storyBests(stats), (t) => Math.round(Math.max(0, t) / 2)),
+      builds: sum(stats.builds || {}, (st) => st * XP.star),
+      speed: (stats.speedBest || 0) * XP.speed,
+      power: (stats.powerBest || 0) * XP.power,
+    },
+  };
 }
 
 export function useXP() {
-  const stars = useStars();
-  const hunts = useHuntsDone();
-  const stats = useGameStats();
-  const passed = usePassed();
-  const daily = useDaily();
-  const dailyRight = Object.values(daily).reduce((n, r) => n + r.filter(Boolean).length, 0);
-  // A collected card always counts at least one star (older saves had no stars).
-  const starTotal = passed.reduce((n, id) => n + Math.max(stars[id] || 1, 1), 0);
-  const xp =
-    starTotal * XP.star +
-    hunts.length * XP.hunt +
-    (stats.bestStreak || 0) * XP.streak +
-    dailyRight * XP.daily +
-    Object.values(storyBests(stats)).reduce((n, t) => n + Math.round(Math.max(0, t) / 2), 0) +
-    Object.values(stats.builds || {}).reduce((n, st) => n + st * XP.star, 0) +
-    (stats.speedBest || 0) * XP.speed +
-    (stats.powerBest || 0) * XP.power;
+  const input = { stars: useStars(), hunts: useHuntsDone(), stats: useGameStats(), passed: usePassed(), daily: useDaily() };
+  const { starTotal, parts } = xpParts(input);
+  const xp = Object.values(parts).reduce((n, v) => n + v, 0);
   let i = LEVELS.length - 1;
   while (LEVELS[i].xp > xp) i--;
   const level = LEVELS[i];
@@ -185,15 +141,11 @@ export function useXP() {
 // any game (a This or That pick, a Fix it step, a flaw found, a story choice).
 export const DAILY_GOAL = 10;
 
-export function dayKey(d = new Date()) {
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-}
-
 export function markPlayed() {
   const all = readObj('days');
   const k = dayKey();
   const before = all[k] || 0;
-  writeObj('days', { ...all, [k]: before + 1 });
+  writeJSON('days', { ...all, [k]: before + 1 });
   if (before + 1 === DAILY_GOAL) window.dispatchEvent(new Event('goal-reached'));
 }
 export const useDays = () => useObj('days');
@@ -284,7 +236,7 @@ export function importProgress(code) {
       if (data[k] && typeof data[k] === 'object') localStorage.setItem(k, JSON.stringify(mergeObj(readObj(k), data[k])));
     }
     if (data.name && !localStorage.getItem('player-name')) localStorage.setItem('player-name', String(data.name).slice(0, 24));
-    window.dispatchEvent(new Event(EVENT));
+    window.dispatchEvent(new Event(CHANGE));
     return { ok: true };
   } catch {
     return { ok: false, error: 'That code didn’t work. Check that you copied all of it.' };

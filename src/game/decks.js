@@ -1,6 +1,8 @@
 import { patterns } from '../data/patterns';
 import { visuals } from '../data/visuals';
 import { subtle } from '../data/subtle';
+import { seeded, shuffle } from '../lib/random';
+import { dayKey } from '../lib/dates';
 
 // Rounds for This or That. Every round has the same shape, whatever its source:
 // { key, pattern, brief, good: { blocks, caption }, bad: { blocks, caption }, goodFirst, hard }
@@ -29,15 +31,6 @@ export function hardRound(s, goodFirst) {
   };
 }
 
-function shuffle(list, rng) {
-  const a = [...list];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(rng() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
-
 export function makeDeck(mode = 'classic', n = 10, rng = Math.random) {
   const classic = () => shuffle(patterns.map((p) => p.id), rng).map((id) => classicRound(id, rng() < 0.5));
   const hard = () => shuffle(subtle, rng).map((s) => hardRound(s, rng() < 0.5));
@@ -48,31 +41,12 @@ export function makeDeck(mode = 'classic', n = 10, rng = Math.random) {
 // ---- Daily challenge: the same 5 rounds for everyone on the same day ----
 const EPOCH = Date.UTC(2026, 9, 1); // Daily #1 = 1 Oct 2026
 
-export function todayKey(d = new Date()) {
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  return `${y}-${m}-${day}`;
-}
-
-export function dailyNumber(key = todayKey()) {
+export function dailyNumber(key = dayKey()) {
   const [y, m, d] = key.split('-').map(Number);
   return Math.floor((Date.UTC(y, m - 1, d) - EPOCH) / 86400000) + 1;
 }
 
-// Small seeded random number generator (mulberry32), seeded from the date.
-export function seeded(key) {
-  let h = 2166136261;
-  for (const ch of key) h = Math.imul(h ^ ch.charCodeAt(0), 16777619);
-  return () => {
-    h = (h + 0x6d2b79f5) | 0;
-    let t = Math.imul(h ^ (h >>> 15), 1 | h);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
-export function dailyDeck(key = todayKey()) {
+export function dailyDeck(key = dayKey()) {
   const rng = seeded(`ai-patterns:${key}`);
   const easy = makeDeck('classic', 3, rng);
   const hard = makeDeck('hard', 2, rng);

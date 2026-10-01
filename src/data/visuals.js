@@ -4,32 +4,7 @@
 //         common mistakes, and `why` explains them after "Check my design".
 // Blocks are drawn by src/mock/Mock.jsx.
 
-// ---- block helpers (keep the data short) ----
-const user = (text, x) => ({ type: 'user', text, ...x });
-const ai = (text, x) => ({ type: 'ai', text, ...x });
-const note = (text, x) => ({ type: 'note', text, ...x });
-const text = (t, x) => ({ type: 'text', text: t, ...x });
-const chips = (items, x) => ({ type: 'chips', items, ...x });
-const buttons = (items, x) => ({ type: 'buttons', items, ...x });
-const input = (value, x) => ({ type: 'input', value, ...x });
-const ph = (placeholder, x) => ({ type: 'input', placeholder, ...x });
-const ghost = (value, g, x) => ({ type: 'ghost', value, ghost: g, ...x });
-const edit = (t, x) => ({ type: 'edit', text: t, ...x });
-const steps = (items, x) => ({ type: 'steps', items: items.map(([label, state]) => ({ label, state })), ...x });
-const spinner = (t, x) => ({ type: 'spinner', text: t, ...x });
-const banner = (tone, title, t, x) => ({ type: 'banner', tone, title, text: t, ...x });
-const toast = (t, action, x) => ({ type: 'toast', text: t, action, ...x });
-const variants = (items, x) => ({ type: 'variants', items, ...x });
-const rows = (items, x) => ({ type: 'rows', items, ...x });
-const card = (title, t, x) => ({ type: 'card', title, text: t, ...x });
-const list = (items, x) => ({ type: 'list', items, ...x });
-const check = (items, x) => ({ type: 'check', items, ...x });
-const diff = (items, x) => ({ type: 'diff', items, ...x });
-const modal = (title, t, btns, x) => ({ type: 'modal', title, text: t, buttons: btns, ...x });
-const slider = (label, value, left, right, x) => ({ type: 'slider', label, value, left, right, ...x });
-const toggle = (label, on, x) => ({ type: 'toggle', label, on, ...x });
-const avatar = (name, role, badge, x) => ({ type: 'avatar', name, role, badge, ...x });
-const blank = (t, x) => ({ type: 'blank', text: t, ...x });
+import { user, ai, note, text, chips, buttons, input, ph, ghost, edit, steps, spinner, banner, toast, variants, rows, card, list, check, diff, modal, slider, toggle, avatar, blank } from '../mock/blocks.js';
 
 const opt = (label, ok, why, blocks) => ({ label, ok, why, blocks });
 const slot = (id) => ({ slot: id });

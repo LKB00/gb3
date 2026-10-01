@@ -1,4 +1,4 @@
-import { useTitle } from '../useTitle';
+import { useTitle } from '../lib/useTitle';
 import { Link } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
 import { lessons } from '../data/lessons';

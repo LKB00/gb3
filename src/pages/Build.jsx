@@ -4,26 +4,18 @@ import { AlertTriangle, Check, CircleDashed, Hammer, Plus, RotateCcw, Star, X } 
 import { builds, getBuild } from '../data/builds';
 import { getPattern } from '../data/patterns';
 import { fx } from '../game/fx';
+import { shuffle } from '../lib/random';
 import { track } from '../game/track';
 import Disagree from '../components/Disagree';
 import { markPlayed, saveBuild, useGameStats, XP } from '../progress';
 import MockFrame, { MockBlock } from '../mock/Mock';
 import Breadcrumbs from '../components/Breadcrumbs';
 import Burst, { XpPop } from '../components/Burst';
-import { useTitle } from '../useTitle';
+import { useTitle } from '../lib/useTitle';
 
 // Build mode: a blank AI screen and a box of pieces. Tap (or drag) pieces onto
 // the screen, then check. Good pieces are patterns; traps are common mistakes.
 // Why: designing from scratch is the closest thing to real work, and the most creative game here.
-function shuffled(list) {
-  const a = [...list];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
-
 function score(build, placed) {
   const needs = build.pieces.filter((p) => p.kind === 'need');
   const have = needs.filter((p) => placed.includes(p.id));
@@ -36,7 +28,7 @@ function score(build, placed) {
 
 function Builder({ build }) {
   const stats = useGameStats();
-  const pieces = useMemo(() => shuffled(build.pieces), [build]);
+  const pieces = useMemo(() => shuffle(build.pieces), [build]);
   const [placed, setPlaced] = useState([]);
   const [result, setResult] = useState(null);
   const [gain, setGain] = useState(0);

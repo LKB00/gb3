@@ -4,7 +4,7 @@ import { patterns } from '../data/patterns';
 import { archetype, wonGroups } from '../game/archetype';
 import { useGameStats, usePassed, useStars, useStreak, useXP } from '../progress';
 import Breadcrumbs from '../components/Breadcrumbs';
-import { useTitle } from '../useTitle';
+import { useTitle } from '../lib/useTitle';
 
 // Player card: your level, AI-designer type, stats and badges on one card
 // you can save as an image or share. Built from local progress only.

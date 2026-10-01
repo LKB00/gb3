@@ -59,7 +59,7 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
       if (pick !== null || over) return;
       setPick(n);
       markPlayed();
-      const ok = sides[n] === 'good';
+      const ok = (n === 0) === round.goodFirst;
       if (!ok) fx('wrong');
       else if (streak + 1 >= 3) fx('combo', { streak: streak + 1 });
       else fx('right', { streak });
@@ -72,7 +72,7 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
         setStreak(0);
       }
     },
-    [pick, over, sides, streak]
+    [pick, over, round.goodFirst, streak]
   );
 
   const next = useCallback(() => {
@@ -87,7 +87,7 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
     track('Game finished', { game: onDone ? 'daily' : `this-or-that-${mode}`, score: results.filter(Boolean).length });
     if (onDone) onDone(results);
     else setOver(true);
-  }, [pick, i, deck.length, runBest, stats.bestStreak, onDone, results]);
+  }, [pick, i, deck.length, runBest, stats.bestStreak, onDone, results, mode]);
 
   const again = () => {
     setDeck(makeDeck(mode, rounds));

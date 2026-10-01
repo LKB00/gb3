@@ -3,8 +3,9 @@ import { ArrowRight } from 'lucide-react';
 import { patterns } from '../data/patterns';
 import { usePassed, useStreak, useXP } from '../progress';
 import ThisOrThat from '../components/ThisOrThat';
-import { DailyBanner, GameTiles } from './Play';
-import { useTitle } from '../useTitle';
+import DailyBanner from '../components/play/DailyBanner';
+import GameTiles from '../components/play/GameTiles';
+import { useTitle } from '../lib/useTitle';
 
 // Home = play in one second. The first game starts right here, no reading needed.
 export default function Home() {

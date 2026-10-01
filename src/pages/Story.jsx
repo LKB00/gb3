@@ -8,7 +8,7 @@ import { markPlayed, saveStoryBest, storyBests, useGameStats } from '../progress
 import MockFrame, { MockBlock } from '../mock/Mock';
 import Breadcrumbs from '../components/Breadcrumbs';
 import Burst, { XpPop } from '../components/Burst';
-import { useTitle } from '../useTitle';
+import { useTitle } from '../lib/useTitle';
 import { fx } from '../game/fx';
 import { track } from '../game/track';
 import Disagree from '../components/Disagree';
