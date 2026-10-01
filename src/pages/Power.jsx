@@ -8,6 +8,7 @@ import { shuffle } from '../lib/random';
 import { track } from '../game/track';
 import { markPlayed, savePower, useGameStats, XP } from '../progress';
 import Breadcrumbs from '../components/Breadcrumbs';
+import CountUp from '../components/CountUp';
 import Disagree from '../components/Disagree';
 import Burst, { XpPop } from '../components/Burst';
 import { useTitle } from '../lib/useTitle';
@@ -97,7 +98,7 @@ export default function Power() {
           <span className="lab-stars" aria-label={`${stars} of 3 stars`}>
             {[1, 2, 3].map((n) => <Star key={n} size={28} strokeWidth={1.5} className={n <= stars ? 'is-on' : ''} style={{ animationDelay: `${n * 120}ms` }} aria-hidden />)}
           </span>
-          <p className="tot-big">{points}<span>/{MAX}</span>{result.gain > 0 && <XpPop amount={result.gain} />}</p>
+          <p className="tot-big"><CountUp value={points} /><span>/{MAX}</span>{result.gain > 0 && <XpPop amount={result.gain} />}</p>
           <p className="tot-verdict">
             {stars === 3 ? 'You know when to trust the AI. Great instincts.' : stars === 2 ? 'Good sense of risk. A few levels off.' : 'Tricky! Look at the clues: money, undo, how often.'}
           </p>
@@ -152,7 +153,7 @@ export default function Power() {
           </div>
         </div>
 
-        <div className="power-opts" role="radiogroup" aria-label="Pick a level">
+        <div className="power-opts" key={t.id} role="radiogroup" aria-label="Pick a level">
           {levels.map((l) => {
             let cls = '';
             if (answered) {

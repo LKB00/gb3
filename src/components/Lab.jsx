@@ -123,8 +123,8 @@ export default function Lab({ id, lab, title, next }) {
       <div className="lab-panel" aria-live="polite">
         {!finished ? (
           <>
-            <h3 className="lab-q lab-q-step">{d.label}</h3>
-            <div className="lab-options" role="radiogroup" aria-label={d.label}>
+            <h3 className="lab-q lab-q-step" key={`q-${d.id}`}>{d.label}</h3>
+            <div className="lab-options" key={`o-${d.id}`} role="radiogroup" aria-label={d.label}>
               {d.options.map((o, i) => {
                 const on = picked === i;
                 const wasWrong = !on && (tried[d.id] || []).includes(i) && !o.ok;

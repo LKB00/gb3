@@ -4,6 +4,7 @@ import { useXP } from '../progress';
 import { useTheme } from '../lib/theme';
 import { GoalToast, LevelUpToast, SoundHint, StreakPill } from './Today';
 import { useFx } from '../game/fx';
+import { useCountUp } from '../lib/useCountUp';
 import { EXPLORE_HOME, isExplore, isPlay, parentOf } from '../config/nav';
 
 // Three places only: Play (games), Cards (the pattern collection), Explore (go deeper).
@@ -11,6 +12,7 @@ import { EXPLORE_HOME, isExplore, isPlay, parentOf } from '../config/nav';
 export default function TopBar() {
   const { pathname } = useLocation();
   const { xp, level } = useXP();
+  const shownXp = useCountUp(xp);
   const [isDark, toggleTheme] = useTheme();
   const [sound, toggleSound] = useFx();
   const parent = parentOf(pathname);
@@ -36,7 +38,7 @@ export default function TopBar() {
           <StreakPill />
           <Link to="/me" className="xp-pill" aria-label={`${xp} XP, level: ${level.name}`} title={level.name}>
             <Zap size={14} strokeWidth={2} aria-hidden />
-            <span key={xp} className="xp-num">{xp}</span>
+            <span key={xp} className="xp-num">{shownXp}</span>
             <span className="xp-unit">XP</span>
           </Link>
           <button className="icon-btn hide-phone" onClick={toggleSound} aria-pressed={sound} aria-label={sound ? 'Turn sound and vibration off' : 'Turn sound and vibration on'} title={sound ? 'Sound on' : 'Sound off'}>

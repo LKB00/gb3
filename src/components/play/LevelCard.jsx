@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Zap } from 'lucide-react';
+import CountUp from '../CountUp';
 import { patterns } from '../../data/patterns';
 import { hunts } from '../../data/hunts';
 import { useGameStats, useHuntsDone, usePassed, useXP } from '../../progress';
@@ -20,7 +21,7 @@ export default function LevelCard() {
           <p className="label">Level {levelNum}</p>
           <p className="level-name">{level.name}</p>
         </div>
-        <p className="level-xp"><Zap size={16} strokeWidth={2} aria-hidden /> {xp} XP</p>
+        <p className="level-xp"><Zap size={16} strokeWidth={2} aria-hidden /> <CountUp value={xp} /> XP</p>
       </div>
       <span className="meter meter-xp" aria-hidden><span style={{ width: `${pct}%` }} /></span>
       <p className="small muted">

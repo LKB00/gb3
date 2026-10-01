@@ -7,6 +7,7 @@ import { dayKey } from '../lib/dates';
 import { dailyStreak, saveDaily, useDaily, XP } from '../progress';
 import ThisOrThat from '../components/ThisOrThat';
 import Breadcrumbs from '../components/Breadcrumbs';
+import CountUp from '../components/CountUp';
 import Burst, { XpPop } from '../components/Burst';
 import { useTitle } from '../lib/useTitle';
 
@@ -74,7 +75,7 @@ function Result({ num, day, results, streak, fresh, challenge, replay }) {
     <div className="tot tot-over daily-result">
       {fresh && score >= 4 && <Burst count={26} />}
       <p className="label">Daily #{num}</p>
-      <p className="tot-big">{score}<span>/{results.length}</span>{fresh && score > 0 && <XpPop amount={score * XP.daily} />}</p>
+      <p className="tot-big"><CountUp value={score} /><span>/{results.length}</span>{fresh && score > 0 && <XpPop amount={score * XP.daily} />}</p>
       <div className="daily-grid" aria-label={`${score} of ${results.length} right`}>
         {results.map((r, i) => <span key={i} className={r ? 'is-right' : 'is-wrong'} />)}
       </div>

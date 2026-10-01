@@ -7,6 +7,7 @@ import MockFrame, { MockBlock } from '../mock/Mock';
 import { markPlayed, saveStreak, useGameStats, XP } from '../progress';
 import Burst from './Burst';
 import { fx } from '../game/fx';
+import CountUp from './CountUp';
 import { track } from '../game/track';
 import Disagree from './Disagree';
 
@@ -123,7 +124,7 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
       <div className="tot tot-over">
         {score >= deck.length * 0.8 && <Burst count={24} />}
         <Trophy size={28} strokeWidth={1.5} aria-hidden />
-        <p className="tot-big">{score}<span>/{deck.length}</span></p>
+        <p className="tot-big"><CountUp value={score} /><span>/{deck.length}</span></p>
         <p className="tot-verdict">{verdict}</p>
         <div className="tot-stats">
           <span><Flame size={14} strokeWidth={1.75} aria-hidden /> Best streak this run: <strong>{runBest}</strong></span>

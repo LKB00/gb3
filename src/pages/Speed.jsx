@@ -9,6 +9,7 @@ import { track } from '../game/track';
 import { markPlayed, saveSpeed, useGameStats, XP } from '../progress';
 import MockFrame, { MockBlock } from '../mock/Mock';
 import Breadcrumbs from '../components/Breadcrumbs';
+import CountUp from '../components/CountUp';
 import Burst, { XpPop } from '../components/Burst';
 import { useTitle } from '../lib/useTitle';
 
@@ -226,7 +227,7 @@ export default function Speed() {
         <div className="tot tot-over speed-over">
           {result.record && points > 0 && <Burst count={28} />}
           <p className="label">Time’s up</p>
-          <p className="tot-big">{points}<span> pts</span>{result.gain > 0 && <XpPop amount={result.gain} />}</p>
+          <p className="tot-big"><CountUp value={points} /><span> pts</span>{result.gain > 0 && <XpPop amount={result.gain} />}</p>
           <p className="tot-verdict">
             {right} right out of {answered} · {answered ? Math.round((right / answered) * 100) : 0}% accuracy
           </p>

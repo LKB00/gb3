@@ -80,6 +80,7 @@ scripts/smoke.mjs  the browser check used by `npm run check`
 | Add an Explore page | page in `src/pages/`, route in `App.jsx`, tab in `config/nav.js` |
 | Change a colour or font | `src/styles/tokens.css` (light and dark mode) |
 | Change how one area looks | the matching file in `src/styles/` (each file says what it covers at the top); phone rules for older areas are in `phone.css` |
+| Change how things move (page fades, staggers, pops, shakes) | `src/styles/motion.css`. It is all wrapped in "no-preference", so people who ask for less motion get none. A number that rolls up: `<CountUp value={n} />` |
 | Change XP, levels or the daily goal | `src/progress.js` (`XP`, `LEVELS`, `DAILY_GOAL`, `xpParts`) |
 | Change a sound or vibration | `src/game/fx.js` (`SOUNDS`, `BUZZ`) |
 | Add a new kind of fake-screen block | builder in `mock/blocks.js` + a `case` in `mock/Mock.jsx` + styles in `styles/mock.css` |
