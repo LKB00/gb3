@@ -1,3 +1,4 @@
+import { Sparkles, Square, Undo2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
 /* ---------- Editable output ---------- */
@@ -39,8 +40,8 @@ export function EditableOutput() {
   return (
     <div className="demo-stack">
       <div className="row space-between">
-        <span className="ai-badge">✨ {edited ? 'AI draft · edited by you' : 'AI draft'}</span>
-        <button className="btn btn-ghost btn-sm" onClick={undo} disabled={!history.length}>↶ Undo</button>
+        <span className="ai-badge"><Sparkles size={12} strokeWidth={2} aria-hidden /> {edited ? 'AI draft · edited by you' : 'AI draft'}</span>
+        <button className="btn btn-ghost btn-sm" onClick={undo} disabled={!history.length}><Undo2 size={14} strokeWidth={1.75} aria-hidden /> Undo</button>
       </div>
       <div className="editable-doc">
         {lines.map((line, i) => (
@@ -55,7 +56,7 @@ export function EditableOutput() {
                 setEdited(true);
               }}
             />
-            <button className="btn btn-ghost btn-sm" onClick={() => rewrite(i)} title="Rewrite only this sentence">✨ Rewrite this</button>
+            <button className="btn btn-ghost btn-sm" onClick={() => rewrite(i)} title="Rewrite only this sentence"><Sparkles size={14} strokeWidth={1.75} aria-hidden /> Rewrite this</button>
           </div>
         ))}
       </div>
@@ -162,22 +163,22 @@ export function StopAndUndo() {
       <ul className="layers">
         {layers.map((l, i) => (
           <li key={i} className={l === cleanLayers[i] ? 'layer-new' : ''}>
-            <span aria-hidden>▢</span> {l}
+            <Square size={12} strokeWidth={1.75} aria-hidden /> {l}
             {running && count.current === i && <span className="layer-working">renaming…</span>}
           </li>
         ))}
       </ul>
       <div className="row">
         {running ? (
-          <button className="btn btn-danger" onClick={finish}>■ Stop</button>
+          <button className="btn btn-danger" onClick={finish}><Square size={14} strokeWidth={1.75} aria-hidden /> Stop</button>
         ) : (
-          <button className="btn btn-primary" onClick={start} disabled={done !== null}>✨ Rename layers with AI</button>
+          <button className="btn btn-primary" onClick={start} disabled={done !== null}><Sparkles size={14} strokeWidth={1.75} aria-hidden /> Rename layers with AI</button>
         )}
       </div>
       {done !== null && (
         <div className="toast" role="status">
           <span>Renamed {done} of {messyLayers.length} layers.</span>
-          <button className="btn btn-ghost btn-sm" onClick={undo}>↶ Undo all</button>
+          <button className="btn btn-ghost btn-sm" onClick={undo}><Undo2 size={14} strokeWidth={1.75} aria-hidden /> Undo all</button>
         </div>
       )}
     </div>

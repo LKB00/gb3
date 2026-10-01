@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
-import Header from './components/Header';
+import Sidebar from './components/Sidebar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
 import Patterns from './pages/Patterns';
@@ -15,10 +15,10 @@ export default function App() {
   useEffect(() => window.scrollTo(0, 0), [pathname]);
 
   return (
-    <>
+    <div className="shell">
       <a href="#main" className="skip-link">Skip to content</a>
-      <Header />
-      <main id="main">
+      <Sidebar />
+      <main id="main" className="main">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/patterns" element={<Patterns />} />
@@ -28,8 +28,8 @@ export default function App() {
           <Route path="/learn/:id" element={<Lesson />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <Footer />
       </main>
-      <Footer />
-    </>
+    </div>
   );
 }

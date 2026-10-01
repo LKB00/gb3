@@ -1,3 +1,4 @@
+import { Sparkles, ThumbsDown, ThumbsUp } from 'lucide-react';
 import { useState } from 'react';
 import { useTypewriter } from './useTypewriter';
 
@@ -21,8 +22,8 @@ export function FeedbackLoop() {
         <p>A good empty state has: a short title, one sentence on why it is empty, a clear main action, and optionally a helpful illustration. It should also explain what will appear here later, guide new users, and avoid blaming them, and it can include tips, links to docs, sample data, or a video tutorial for more complex features.</p>
         {tw.output && <p className="stream-text"><strong>Shorter:</strong> {tw.output}</p>}
         <div className="row feedback-row">
-          <button className={'icon-btn' + (vote === 'up' ? ' icon-on' : '')} aria-label="Good answer" aria-pressed={vote === 'up'} onClick={() => { reset(); setVote('up'); }}>👍</button>
-          <button className={'icon-btn' + (vote === 'down' ? ' icon-on' : '')} aria-label="Bad answer" aria-pressed={vote === 'down'} onClick={() => { reset(); setVote('down'); }}>👎</button>
+          <button className={'icon-btn' + (vote === 'up' ? ' icon-on' : '')} aria-label="Good answer" aria-pressed={vote === 'up'} onClick={() => { reset(); setVote('up'); }}><ThumbsUp size={15} strokeWidth={1.75} aria-hidden /></button>
+          <button className={'icon-btn' + (vote === 'down' ? ' icon-on' : '')} aria-label="Bad answer" aria-pressed={vote === 'down'} onClick={() => { reset(); setVote('down'); }}><ThumbsDown size={15} strokeWidth={1.75} aria-hidden /></button>
           {vote === 'up' && <span className="demo-ok">Thanks! Glad it helped.</span>}
         </div>
       </div>
@@ -44,11 +45,11 @@ export function FeedbackLoop() {
         <div className="toast" role="status">
           <span>Thanks — this helps us improve.</span>
           {picked.includes('Too long') && !tw.output && (
-            <button className="btn btn-ghost btn-sm" onClick={() => tw.start('Title + one-line reason + one clear action. That\'s it.')}>✨ Make it shorter</button>
+            <button className="btn btn-ghost btn-sm" onClick={() => tw.start('Title + one-line reason + one clear action. That\'s it.')}><Sparkles size={14} strokeWidth={1.75} aria-hidden /> Make it shorter</button>
           )}
         </div>
       )}
-      <p className="demo-note">Try 👎 and choose “Too long” — the AI offers a fix right away.</p>
+      <p className="demo-note">Try thumbs down and choose “Too long” — the AI offers a fix right away.</p>
     </div>
   );
 }
@@ -79,8 +80,8 @@ export function GracefulErrors() {
   return (
     <div className="demo-stack">
       <div className="segmented" role="tablist" aria-label="Error style">
-        <button role="tab" aria-selected={mode === 'bad'} className={mode === 'bad' ? 'seg-on' : ''} onClick={() => switchTo('bad')}>❌ Bad error</button>
-        <button role="tab" aria-selected={mode === 'good'} className={mode === 'good' ? 'seg-on' : ''} onClick={() => switchTo('good')}>✅ Good error</button>
+        <button role="tab" aria-selected={mode === 'bad'} className={mode === 'bad' ? 'seg-on' : ''} onClick={() => switchTo('bad')}>Bad error</button>
+        <button role="tab" aria-selected={mode === 'good'} className={mode === 'good' ? 'seg-on' : ''} onClick={() => switchTo('good')}>Good error</button>
       </div>
       <form className="composer" onSubmit={(e) => { e.preventDefault(); send(); }}>
         <input value={prompt} onChange={(e) => setPrompt(e.target.value)} aria-label="Prompt" />
@@ -102,7 +103,7 @@ export function GracefulErrors() {
           </div>
         </div>
       )}
-      {state === 'ok' && <div className="toast" role="status">✓ Working with pages 1–30…</div>}
+      {state === 'ok' && <div className="toast" role="status">Working with pages 1–30…</div>}
       <p className="demo-note">Switch between the two styles and press Send. Notice the bad one even clears your text.</p>
     </div>
   );

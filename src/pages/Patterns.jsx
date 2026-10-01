@@ -1,4 +1,5 @@
 import { useSearchParams } from 'react-router-dom';
+import { Search } from 'lucide-react';
 import { categories, patterns } from '../data/patterns';
 import PatternCard from '../components/PatternCard';
 import { usePassed } from '../progress';
@@ -24,20 +25,26 @@ export default function Patterns() {
   );
 
   return (
-    <div className="container page">
-      <h1>Pattern library</h1>
-      <p className="lead">{patterns.length} proven ways to solve common problems in AI products. Each one has a visual example and a Design Lab.</p>
+    <div className="page page-wide">
+      <header className="page-head">
+        <p className="label">Library</p>
+        <h1 className="display">All patterns</h1>
+        <p className="lead">{patterns.length} ways to solve common problems in AI products.</p>
+      </header>
 
       <div className="filters">
-        <input
-          type="search"
-          className="search"
-          placeholder="Search patterns…"
-          value={query}
-          onChange={(e) => update('q', e.target.value)}
-          aria-label="Search patterns"
-        />
-        <div className="chips" role="group" aria-label="Filter by category">
+        <label className="search">
+          <Search size={15} strokeWidth={1.75} aria-hidden />
+          <input
+            type="search"
+            id="pattern-search"
+            placeholder="Search patterns"
+            value={query}
+            onChange={(e) => update('q', e.target.value)}
+            aria-label="Search patterns"
+          />
+        </label>
+        <div className="chips" role="group" aria-label="Filter by group">
           {[{ id: 'all', name: 'All' }, ...categories].map((c) => (
             <button key={c.id} className={'chip' + (category === c.id ? ' chip-on' : '')} aria-pressed={category === c.id} onClick={() => update('category', c.id)}>
               {c.name}
@@ -52,7 +59,7 @@ export default function Patterns() {
         </div>
       ) : (
         <div className="empty">
-          <p><strong>No patterns match “{query}”.</strong></p>
+          <p>No patterns match “{query}”.</p>
           <button className="btn btn-ghost" onClick={() => setParams({}, { replace: true })}>Clear filters</button>
         </div>
       )}

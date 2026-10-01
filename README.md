@@ -9,6 +9,12 @@ A free learning website for designers about **AI design patterns** and **AI inte
 - **Live demos** for 12 patterns, and a **learning path** of 7 short visual lessons.
 - Light and dark mode, works on phone and desktop. Lab progress is saved in the browser.
 
+## Design
+
+Docs-style layout (sidebar + reading column), in the same design language as the Refund Agent and
+Instead projects: sand paper, charcoal ink, 0.5px hairlines, pill controls, Lato + Libre Baskerville,
+and soft pastels only for group tags and status. Icons are [Lucide](https://lucide.dev) (ISC license).
+
 ## Run it
 
 ```bash

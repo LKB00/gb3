@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom';
+import { Check } from 'lucide-react';
 import { getCategory } from '../data/patterns';
 import { visuals } from '../data/visuals';
 import MockFrame, { MockBlock } from '../mock/Mock';
 
-// Card with a small picture of the "good" design as a thumbnail.
+// Card with a small picture of the "better" design.
 export default function PatternCard({ pattern, passed }) {
   const good = visuals[pattern.id].compare.good;
   return (
@@ -16,7 +17,7 @@ export default function PatternCard({ pattern, passed }) {
       <div className="pattern-card-body">
         <div className="row">
           <span className={`tag tag-${pattern.category}`}>{getCategory(pattern.category).name}</span>
-          {passed && <span className="tag tag-done">✓ Passed</span>}
+          {passed && <span className="tag tag-done"><Check size={10} strokeWidth={2.5} aria-hidden /> Passed</span>}
         </div>
         <h3>{pattern.title}</h3>
         <p>{pattern.summary}</p>
