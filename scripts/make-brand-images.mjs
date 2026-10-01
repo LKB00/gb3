@@ -8,11 +8,9 @@ import { fileURLToPath } from 'url';
 
 const OUT = fileURLToPath(new URL('../public/', import.meta.url));
 const INK = '#24282c';
-const logo = (gap) => `<svg viewBox="0 0 44 28" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:auto">
-  <circle cx="13" cy="14" r="12" fill="#c2ef72"/>
-  <circle cx="31" cy="14" r="12" fill="#f6a5a0" stroke="${gap}" stroke-width="2"/>
-  <g fill="${INK}"><circle cx="9.5" cy="12" r="1.8"/><circle cx="16.5" cy="12" r="1.8"/><circle cx="27.5" cy="12.5" r="1.8"/><circle cx="34.5" cy="12.5" r="1.8"/></g>
-  <g fill="none" stroke="${INK}" stroke-width="2" stroke-linecap="round"><path d="M8.5 17Q13 21.6 17.5 17"/><path d="M26.5 20.8Q31 16.2 35.5 20.8"/><path d="M26.2 8.4L29.6 10.2"/><path d="M35.8 8.4L32.4 10.2"/></g>
+const LIME = '#c2ef72';
+const logo = (gap) => `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:auto">
+  <circle cx="12" cy="12" r="10" fill="${LIME}" stroke="${gap}" stroke-width="1"/>
 </svg>`;
 
 // App icon: dark tile with the logo. `round` = rounded corners with see-through outside; `scale` = logo width as a share of the tile.
