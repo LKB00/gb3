@@ -4,10 +4,10 @@ A playground for AI interaction design. Not a course: quick games, instant wins,
 
 - **Daily challenge** (`/play/daily`): 5 rounds, the same for everyone each day (3 classic + 2 hard), one try. Wordle-style share grid (copy, X, LinkedIn), days-in-a-row streak, countdown to the next Daily.
 - **Agent on duty** (`/play/story`): a short branching story. You design Tidy, a file-cleanup agent; each choice moves Priya's trust meter, and trust decides one of 4 endings.
-- **This or That** (`/play/this-or-that`, and a 5-round version right on Home): two versions of the same AI screen, tap the better one. Score, streak, keyboard ← / →. **Hard mode** (`?mode=hard`): 20 near-identical pairs where only one detail differs.
+- **This or That** (`/play/this-or-that`, and a 5-round version right on Home): two versions of the same AI screen, tap the better one. Score, streak, keyboard ← / →. **Hard mode** (`?mode=hard`): 30 near-identical pairs where only one detail differs.
 - **Fix it** (the Play tab on each card): build an AI feature one decision at a time with instant feedback. Win the card with 1–3 stars.
 - **Spot the flaw** (`/play/spot-the-flaw`): realistic AI screens with hidden mistakes. Tap what is wrong.
-- **Cards** (`/patterns`): 34 pattern cards in 7 groups (Input, Output, Control, Trust, Feedback, Agents, Voice & vision). Each has Play, Why it works and Cheat sheet tabs.
+- **Cards** (`/patterns`): 37 pattern cards in 7 groups (Input, Output, Control, Trust, Feedback, Agents, Voice & vision). Each has Play, Why it works and Cheat sheet tabs.
 - **How much power?**: pick how much an AI should do on its own (suggest → act alone) for 8 real tasks.
 - **Build mode** (`/play/build`): a blank AI screen and a box of pieces. Tap or drag the right pieces on, leave the traps out, then check. 4 briefs (research answer, travel agent, long writing task, voice in a car), 1–3 stars each.
 - **Stories** (`/play/story`): 4 branching stories with a trust meter and 4 endings each: a file-cleanup agent (Priya), a kitchen voice assistant (Arjun), a bank help bot (Meera) and a coding agent (Kabir).
@@ -20,7 +20,7 @@ A playground for AI interaction design. Not a course: quick games, instant wins,
 - **XP, levels and badges** (`/play`): stars, flaws found and best streak add up to XP; 6 levels from Rookie to Legend; a badge per group (gold with all 3 stars).
 - **Explore**: the Autonomy ladder (5 levels of AI power, with a level finder); Teardowns of ChatGPT, Perplexity, GitHub Copilot and Claude Code; 8 AI dark patterns; Principles (UX heuristics, psychology, Microsoft's 18 Human-AI guidelines); Glossary; Deep dives (9 short reads).
 - **Installable app**: add it to the home screen or dock; works offline (service worker in `public/sw.js`).
-- **Backup code** (`/play` → Your progress): copy a code with all progress and paste it on another device. Restoring merges and never loses progress.
+- **Backup code** (`/me`, “Move your progress”): copy a code with all progress and paste it on another device. Restoring merges and never loses progress.
 - **Link previews**: Open Graph and Twitter tags with `public/og.png`, so shared links show a title card.
 - **“I disagree”** links on answers open a ready-to-send GitHub issue.
 - **Phone experience**: a bottom tab bar (Home, Play, Cards, Explore, Me), a back button instead of breadcrumbs, games edge to edge, both This or That screens on one screen, the main action (Next, Check) pinned near the thumb, a full-screen Speed round, tap feedback instead of hover, and a **Me** tab with level, today, badges, settings and backup.
@@ -39,6 +39,10 @@ Off by default. To turn on privacy-friendly stats with [Plausible](https://plaus
 Simple layout (one top bar + one centered reading column), in the same design language as the Refund Agent and
 Instead projects: sand paper, charcoal ink, 0.5px hairlines, pill controls, Bricolage Grotesque for headings + Lato for text,
 and soft pastels only for group tags and status. Icons are [Lucide](https://lucide.dev) (ISC license).
+
+## More context
+
+For the full picture (owner preferences, how to ship, game rules, decisions, history, open ideas) read **[docs/PROJECT_CONTEXT.md](docs/PROJECT_CONTEXT.md)**.
 
 ## Run it
 
