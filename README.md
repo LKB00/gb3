@@ -2,7 +2,9 @@
 
 A playground for AI interaction design. Not a course: quick games, instant wins, pattern cards to collect, XP and levels. Anyone curious about AI design patterns can jump in and play in one second.
 
-- **This or That** (`/play/this-or-that`, and a 5-round version right on Home): two versions of the same AI screen, tap the better one. Score, streak, keyboard ← / →.
+- **Daily challenge** (`/play/daily`): 5 rounds, the same for everyone each day (3 classic + 2 hard), one try. Wordle-style share grid (copy, X, LinkedIn), days-in-a-row streak, countdown to the next Daily.
+- **Agent on duty** (`/play/story`): a short branching story. You design Tidy, a file-cleanup agent; each choice moves Priya's trust meter, and trust decides one of 4 endings.
+- **This or That** (`/play/this-or-that`, and a 5-round version right on Home): two versions of the same AI screen, tap the better one. Score, streak, keyboard ← / →. **Hard mode** (`?mode=hard`): 20 near-identical pairs where only one detail differs.
 - **Fix it** (the Play tab on each card): build an AI feature one decision at a time with instant feedback. Win the card with 1–3 stars.
 - **Spot the flaw** (`/play/spot-the-flaw`): realistic AI screens with hidden mistakes. Tap what is wrong.
 - **Cards** (`/patterns`): 34 pattern cards in 7 groups (Input, Output, Control, Trust, Feedback, Agents, Voice & vision). Each has Play, Why it works and Cheat sheet tabs.
@@ -48,6 +50,9 @@ Live at **https://lkb00.github.io/patricka/** — every push to `main` builds an
 | This or That | The fastest way in: two screens, one tap, instant answer, a streak to protect. |
 | Fix it, one step at a time | One decision at a time with instant feedback; a slip is explained and you try again. Stars reward a clean run. |
 | Cards to collect | Patterns become collectible cards (locked until you win them), which gives a reason to come back. |
+| Daily challenge + share grid | A small reason to come back every day, and a result people want to post. No fake leaderboards: we have no server, so we never invent numbers. |
+| Story mode with a trust meter | Choices with visible consequences (and a branch when things go wrong) are more gripping than single questions. |
+| Hard mode | Near-identical screens train the eye for small details, like a design review. |
 | Levels and badges | Small, honest goals (next level, finish a group) instead of a syllabus. |
 | Confetti, XP pops, card unlocks | Short moments of delight on wins; turned off for people who prefer reduced motion. |
 | Breadcrumbs | Every inner page shows where you are and one step back. |
