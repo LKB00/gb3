@@ -45,11 +45,12 @@ function Builder({ build }) {
   const add = (id) => {
     if (placed.includes(id)) return;
     markPlayed();
-    fx('flip');
+    fx('place');
     setPlaced((p) => [...p, id]);
     setResult(null);
   };
   const remove = (id) => {
+    fx('remove');
     setPlaced((p) => p.filter((x) => x !== id));
     setResult(null);
   };

@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Flame, Snowflake, Target } from 'lucide-react';
-import { DAILY_GOAL, dayKey, useStreak } from '../progress';
+import { Flame, Snowflake, Target, TrendingUp, Volume2 } from 'lucide-react';
+import { DAILY_GOAL, dayKey, useStreak, useXP } from '../progress';
 import Burst from './Burst';
-import { fx } from '../game/fx';
+import { fx, turnAllOff } from '../game/fx';
 
 // Small flame in the top bar: your day streak. Grey until you play today.
 export function StreakPill() {
@@ -29,7 +29,7 @@ export function GoalToast() {
   useEffect(() => {
     let t;
     const on = () => {
-      fx('win');
+      fx('goal');
       setShow(true);
       clearTimeout(t);
       t = setTimeout(() => setShow(false), 3500);
@@ -47,6 +47,68 @@ export function GoalToast() {
       <Target size={18} strokeWidth={1.75} aria-hidden />
       <span>
         <strong>Daily goal done!</strong> {streak > 1 ? `🔥 ${streak}-day streak` : 'Streak started 🔥'}
+      </span>
+    </div>
+  );
+}
+
+// One-time hint the first time a sound plays, since sound is on by default.
+export function SoundHint() {
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    let t;
+    const on = () => {
+      setShow(true);
+      t = setTimeout(() => setShow(false), 5000);
+    };
+    window.addEventListener('fx-hint', on);
+    return () => {
+      window.removeEventListener('fx-hint', on);
+      clearTimeout(t);
+    };
+  }, []);
+  if (!show) return null;
+  return (
+    <div className="goal-toast sound-hint" role="status">
+      <Volume2 size={16} strokeWidth={2} aria-hidden />
+      <span>Sound and vibration are on.</span>
+      <button
+        type="button"
+        className="sound-hint-off"
+        data-fx="off"
+        onClick={() => {
+          turnAllOff();
+          setShow(false);
+        }}
+      >
+        Turn off
+      </button>
+    </div>
+  );
+}
+
+// "Level up!" the moment XP crosses into a new level, wherever you are.
+export function LevelUpToast() {
+  const { levelNum, level } = useXP();
+  const prev = useRef(levelNum);
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    if (levelNum > prev.current) {
+      fx('levelup');
+      setShow(true);
+      const t = setTimeout(() => setShow(false), 4000);
+      prev.current = levelNum;
+      return () => clearTimeout(t);
+    }
+    prev.current = levelNum;
+  }, [levelNum]);
+  if (!show) return null;
+  return (
+    <div className="goal-toast levelup-toast" role="status">
+      <Burst count={28} />
+      <TrendingUp size={18} strokeWidth={2} aria-hidden />
+      <span>
+        <strong>Level up!</strong> You’re now a {level.name}.
       </span>
     </div>
   );

@@ -49,6 +49,7 @@ export default function Lab({ id, lab, title, next }) {
     if (skipped) return;
     setGained(Math.max(0, stars - (savedStars[id] || 0)) * XP.star);
     fx('win');
+    for (let n = 1; n <= stars; n++) setTimeout(() => fx('star', { n }), 450 + n * 160);
     track('Game finished', { game: 'fix-it', stars });
     saveStars(id, stars);
     markPassed(id);

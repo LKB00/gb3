@@ -60,7 +60,9 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
       setPick(n);
       markPlayed();
       const ok = sides[n] === 'good';
-      fx(ok ? 'right' : 'wrong');
+      if (!ok) fx('wrong');
+      else if (streak + 1 >= 3) fx('combo', { streak: streak + 1 });
+      else fx('right', { streak });
       setResults((r) => [...r, ok]);
       if (ok) {
         const s = streak + 1;
