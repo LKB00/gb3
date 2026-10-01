@@ -1,8 +1,62 @@
-// Tiny "fake app screen" renderer.
-// Screens are described as data (see src/data/visuals.js) and drawn here,
-// so comparisons, Design Labs and the Mistake Hunt all share one look.
+import {
+  ArrowUp,
+  Bookmark,
+  Check,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  FileText,
+  Palette,
+  PenLine,
+  Pencil,
+  Plus,
+  RotateCcw,
+  Sparkles,
+  Square,
+  ThumbsDown,
+  ThumbsUp,
+  X,
+} from 'lucide-react';
 
-// Turns "[1]" into citation pills and "**x**" into bold text.
+// Tiny "fake app screen" renderer.
+// Screens are described as data (src/data/visuals.js, src/data/hunts.js) and
+// drawn here, so comparisons, Design Labs and the Mistake Hunt share one look.
+// The look follows the Refund Agent / Instead products: the AI speaks with a
+// small mark and no bubble, the person's words are set in the serif.
+
+const ICONS = {
+  file: FileText,
+  pen: PenLine,
+  palette: Palette,
+  up: ThumbsUp,
+  down: ThumbsDown,
+  stop: Square,
+  retry: RotateCcw,
+  sparkle: Sparkles,
+  plus: Plus,
+  x: X,
+  check: Check,
+  left: ChevronLeft,
+  right: ChevronRight,
+  edit: Pencil,
+  save: Bookmark,
+  more: ChevronDown,
+};
+
+// ":name rest" → icon + text. Lets screen data use real icons, not emoji.
+function withIcon(str = '') {
+  const m = /^:(\w+) ?(.*)$/.exec(str);
+  if (!m) return str;
+  const Icon = ICONS[m[1]];
+  return (
+    <>
+      {Icon && <Icon size={12} strokeWidth={1.75} aria-hidden />}
+      {m[2] && <span>{m[2]}</span>}
+    </>
+  );
+}
+
+// "[1]" → citation pill, "**x**" → bold.
 function rich(text = '') {
   return text.split(/(\[\d+\]|\*\*[^*]+\*\*)/g).map((part, i) => {
     if (/^\[\d+\]$/.test(part)) return <span key={i} className="m-cite">{part.slice(1, -1)}</span>;
@@ -11,32 +65,43 @@ function rich(text = '') {
   });
 }
 
-// Button labels: "!Send" = primary, "-Stop" = danger, anything else = plain.
+// "!Label" = primary, "-Label" = danger, anything else = plain.
 function Btn({ label }) {
   const kind = label[0] === '!' ? 'primary' : label[0] === '-' ? 'danger' : 'plain';
-  return <span className={`m-btn m-btn-${kind}`}>{kind === 'plain' ? label : label.slice(1)}</span>;
+  return <span className={`m-btn m-btn-${kind}`}>{withIcon(kind === 'plain' ? label : label.slice(1))}</span>;
+}
+
+export function AgentMark() {
+  return (
+    <span className="m-mark" aria-hidden>
+      <Sparkles size={10} strokeWidth={2} />
+    </span>
+  );
 }
 
 function Block({ b }) {
   switch (b.type) {
     case 'user':
-      return <div className="m-bubble m-user">{b.text}</div>;
+      return <p className="m-turn">{b.text}</p>;
     case 'ai':
       return (
-        <div className="m-bubble m-ai">
-          {rich(b.text)}
-          {b.caret && <span className="caret" />}
+        <div className="m-agent">
+          <AgentMark />
+          <p>
+            {rich(b.text)}
+            {b.caret && <span className="caret" />}
+          </p>
         </div>
       );
     case 'note':
-      return <p className={`m-note m-tone-${b.tone || 'plain'}`}>{rich(b.text)}</p>;
+      return <p className={`m-note m-tone-${b.tone || 'plain'}`}>{withIcon(b.text)}</p>;
     case 'text':
       return <p className="m-text">{b.text}</p>;
     case 'chips':
       return (
         <div className="m-chips">
           {b.items.map((c, i) => (
-            <span key={i} className={'m-chip' + (b.on === i ? ' m-chip-on' : '')}>{c}</span>
+            <span key={i} className={'m-chip' + (b.on === i ? ' m-chip-on' : '')}>{withIcon(c)}</span>
           ))}
         </div>
       );
@@ -50,7 +115,9 @@ function Block({ b }) {
       return (
         <div className="m-input">
           <span className={b.value ? '' : 'm-ph'}>{b.value || b.placeholder || 'Ask anything…'}</span>
-          <span className="m-send" aria-hidden>↑</span>
+          <span className={'m-send' + (b.value ? ' m-send-ready' : '')} aria-hidden>
+            <ArrowUp size={12} strokeWidth={2} />
+          </span>
         </div>
       );
     case 'ghost':
@@ -69,7 +136,7 @@ function Block({ b }) {
           {before}
           {b.sel && <mark>{b.sel}</mark>}
           {after}
-          <span className="m-edit-icon" aria-hidden>✎</span>
+          <Pencil size={11} strokeWidth={1.75} className="m-edit-icon" aria-hidden />
         </div>
       );
     }
@@ -78,7 +145,9 @@ function Block({ b }) {
         <ul className="m-steps">
           {b.items.map((s, i) => (
             <li key={i} className={`m-step-${s.state || 'todo'}`}>
-              <span className="m-step-dot" aria-hidden />
+              <span className="m-step-dot" aria-hidden>
+                {s.state === 'done' && <Check size={9} strokeWidth={2.5} />}
+              </span>
               {s.label}
             </li>
           ))}
@@ -141,8 +210,15 @@ function Block({ b }) {
       return (
         <ul className="m-list">
           {b.items.map((t, i) => {
-            const tone = t.startsWith('✓') ? 'ok' : t.startsWith('✕') ? 'bad' : 'plain';
-            return <li key={i} className={`m-tone-${tone}`}>{t}</li>;
+            const yes = t.startsWith('✓ ');
+            const no = t.startsWith('✕ ');
+            const label = yes || no || t.startsWith('• ') ? t.slice(2) : t;
+            return (
+              <li key={i} className={yes ? 'm-tone-ok' : no ? 'm-tone-bad' : ''}>
+                {yes ? <Check size={12} strokeWidth={2} aria-hidden /> : no ? <X size={12} strokeWidth={2} aria-hidden /> : <span className="m-bullet" aria-hidden />}
+                {label}
+              </li>
+            );
           })}
         </ul>
       );
@@ -151,7 +227,7 @@ function Block({ b }) {
         <ul className="m-check">
           {b.items.map((t, i) => (
             <li key={i}>
-              <span className="m-box" aria-hidden>✓</span>
+              <span className="m-box" aria-hidden><Check size={9} strokeWidth={2.5} /></span>
               {t}
             </li>
           ))}
@@ -163,7 +239,7 @@ function Block({ b }) {
           {b.items.map(([del, add], i) => (
             <div key={i} className="m-diff-row">
               <del>{del}</del>
-              <span aria-hidden>→</span>
+              <ChevronRight size={11} strokeWidth={1.75} aria-hidden />
               <ins>{add}</ins>
             </div>
           ))}
@@ -203,7 +279,12 @@ function Block({ b }) {
             <strong>{b.name}</strong>
             <small>{b.role}</small>
           </span>
-          {b.badge && <span className="m-badge">✨ {b.badge}</span>}
+          {b.badge && (
+            <span className="m-badge">
+              <Sparkles size={10} strokeWidth={2} aria-hidden />
+              {b.badge}
+            </span>
+          )}
         </div>
       );
     case 'blank':
@@ -215,8 +296,8 @@ function Block({ b }) {
   }
 }
 
-// One block, with optional state outline (bad/good/found/missed), a pin label,
-// a number marker, and click handling (for the Mistake Hunt).
+// One block with optional state outline (bad/good/found/missed/fine), a pin
+// label, a number marker, and click handling (for the Mistake Hunt).
 export function MockBlock({ b, state, pin, marker, onClick, label }) {
   const cls = ['mb', state && `mb-${state}`, onClick && 'mb-click'].filter(Boolean).join(' ');
   const interactive = onClick
@@ -253,12 +334,11 @@ export function MockSlot({ blocks, state, marker, placeholder }) {
   );
 }
 
-// The device frame around a screen.
+// The app frame around a screen.
 export default function MockFrame({ title = 'AI assistant', mini, children }) {
   return (
     <div className={'m-frame' + (mini ? ' m-mini' : '')}>
       <div className="m-top">
-        <span className="m-dots" aria-hidden><i /><i /><i /></span>
         <span className="m-title">{title}</span>
       </div>
       <div className="m-body">{children}</div>

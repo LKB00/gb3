@@ -44,9 +44,9 @@ const invoiceRows = (tags) =>
     { label: 'Total', value: '₹ 48,500', ...tags[2] },
     { label: 'Tax ID', value: '29AB…C1Z?', ...tags[3] },
   ]);
-const sure = { tag: '● Sure', tone: 'ok' };
-const checkIt = { tag: '◐ Check this', tone: 'warn' };
-const notSure = { tag: '○ Not sure', tone: 'bad' };
+const sure = { tag: 'Sure', tone: 'ok' };
+const checkIt = { tag: 'Check this', tone: 'warn' };
+const notSure = { tag: 'Not sure', tone: 'bad' };
 
 export const visuals = {
   /* ================= INPUT ================= */
@@ -57,7 +57,7 @@ export const visuals = {
         caption: 'Examples teach what is possible',
         blocks: [
           note('Write, summarize or brainstorm. Try one:'),
-          chips(['✍️ Write onboarding copy', '📄 Summarize research', '🎨 Suggest palettes'], { pin: 'Real, specific examples' }),
+          chips([':pen Write onboarding copy', ':file Summarize research', ':palette Suggest palettes'], { pin: 'Real, specific examples' }),
           ph('Ask, or pick an example…'),
         ],
       },
@@ -70,7 +70,7 @@ export const visuals = {
           id: 'message',
           label: 'Welcome message',
           options: [
-            opt('"Hello! I am an AI."', false, 'Says nothing useful. Tell people what the AI is for.', [note('Hello! I am an AI. 🤖')]),
+            opt('"Hello! I am an AI."', false, 'Says nothing useful. Tell people what the AI is for.', [note('Hello! I am an AI.')]),
             opt('"Write, summarize or brainstorm"', true, 'States the purpose in a few words.', [note('Write, summarize or brainstorm. Try one:')]),
           ],
         },
@@ -83,7 +83,7 @@ export const visuals = {
               chips(['Ask me', 'Help', 'Write', 'Ideas', 'Fix', 'Explain', 'Plan', 'Chat', 'Code', 'Learn', 'Create', 'More…']),
             ]),
             opt('3 specific ones', true, 'Specific examples show the range in one look.', [
-              chips(['✍️ Write onboarding copy', '📄 Summarize research', '🎨 Suggest palettes']),
+              chips([':pen Write onboarding copy', ':file Summarize research', ':palette Suggest palettes']),
             ]),
           ],
         },
@@ -108,7 +108,7 @@ export const visuals = {
         caption: 'AI guesses, person starts over',
         blocks: [
           user('Make a launch post for the dashboard.'),
-          ai('Big news, everyone! 🎉 Our dashboard just got better…', { pin: 'Guessed the audience' }),
+          ai('Big news, everyone! Our dashboard just got better…', { pin: 'Guessed the audience' }),
           user('No… this is for investors.', { pin: 'Wasted round' }),
         ],
       },
@@ -117,7 +117,7 @@ export const visuals = {
         blocks: [
           user('Make a launch post for the dashboard.'),
           ai('Quick check: **who is this for?**'),
-          chips(['Customers', 'Team', 'Investors', 'Just guess →'], { pin: 'Tap, don\'t type' }),
+          chips(['Customers', 'Team', 'Investors', 'Just guess'], { pin: 'Tap, don\'t type' }),
         ],
       },
     },
@@ -129,7 +129,7 @@ export const visuals = {
           id: 'first',
           label: 'The AI first…',
           options: [
-            opt('Guesses and writes it all', false, 'If the guess is wrong, the person must start over.', [ai('Big news, everyone! 🎉 Our dashboard…')]),
+            opt('Guesses and writes it all', false, 'If the guess is wrong, the person must start over.', [ai('Big news, everyone! Our dashboard…')]),
             opt('Asks 5 questions', false, 'Feels like filling a form. People give up.', [
               ai('Who is the audience? What tone? How long? Which channel? Emoji or not?'),
             ]),
@@ -149,7 +149,7 @@ export const visuals = {
           label: 'Can they skip?',
           options: [
             opt('No, they must answer', false, 'Forcing answers blocks people who just want a quick draft.', []),
-            opt('"Just guess" option', true, 'Respect people who want speed over precision.', [chips(['Just guess →'])]),
+            opt('"Just guess" option', true, 'Respect people who want speed over precision.', [chips(['Just guess'])]),
           ],
         },
       ],
@@ -164,7 +164,7 @@ export const visuals = {
       },
       good: {
         caption: 'You see what the AI sees',
-        blocks: [chips(['📄 Q3-report.pdf  ✕', '+ Add'], { pin: 'Visible + removable' }), input('Summarize this.')],
+        blocks: [chips([':file Q3-report.pdf', ':plus Add'], { pin: 'Visible + removable' }), input('Summarize this.')],
       },
     },
     lab: {
@@ -176,7 +176,7 @@ export const visuals = {
           label: 'Show what the AI will use?',
           options: [
             opt('No, the AI decides', false, 'People cannot catch the AI using the wrong file.', []),
-            opt('Context chips', true, 'People can see the AI is using the right file.', [chips(['📄 Q3-report.pdf'])]),
+            opt('Context chips', true, 'People can see the AI is using the right file.', [chips([':file Q3-report.pdf'])]),
           ],
         },
         {
@@ -184,7 +184,7 @@ export const visuals = {
           label: 'Can people change it?',
           options: [
             opt('No', false, 'If the AI picked wrong, people are stuck.', []),
-            opt('Remove ✕ / + Add', true, 'People stay in charge of what the AI reads.', [buttons(['✕ Remove', '+ Add file'])]),
+            opt('Remove or add', true, 'People stay in charge of what the AI reads.', [buttons([':x Remove', ':plus Add file'])]),
           ],
         },
         {
@@ -235,15 +235,15 @@ export const visuals = {
           options: [
             opt('15 up front', false, 'A wall of controls is harder than the prompt.', [
               rows([
-                { label: 'Tone', value: 'Formal ▾' },
-                { label: 'Length', value: '80 words ▾' },
-                { label: 'Format', value: 'Bullets ▾' },
-                { label: 'Emoji', value: 'Off ▾' },
-                { label: 'Spelling', value: 'UK ▾' },
+                { label: 'Tone', value: 'Formal' },
+                { label: 'Length', value: '80 words' },
+                { label: 'Format', value: 'Bullets' },
+                { label: 'Emoji', value: 'Off' },
+                { label: 'Spelling', value: 'UK' },
                 { label: '+ 10 more…', value: '' },
               ]),
             ]),
-            opt('2–3 + "More"', true, 'Show the common ones. Hide the rest.', [buttons(['More options ▾'])]),
+            opt('2–3 + "More"', true, 'Show the common ones. Hide the rest.', [buttons([':more More options'])]),
           ],
         },
       ],
@@ -263,7 +263,7 @@ export const visuals = {
           user('Summarize my 3 interviews.'),
           steps([['Reading 3 notes', 'done'], ['Finding themes', 'done'], ['Writing summary', 'active']], { pin: 'Plain-word steps' }),
           ai('Top themes: (1) People cannot find saved items…', { caret: true }),
-          buttons(['-■ Stop']),
+          buttons(['-:stop Stop']),
         ],
       },
     },
@@ -295,7 +295,7 @@ export const visuals = {
           label: 'Can people stop it?',
           options: [
             opt('No', false, 'If it goes the wrong way, people must wait it out.', []),
-            opt('Stop button', true, 'People stay in control.', [buttons(['-■ Stop'])]),
+            opt('Stop button', true, 'People stay in control.', [buttons(['-:stop Stop'])]),
           ],
         },
       ],
@@ -353,11 +353,11 @@ export const visuals = {
     compare: {
       bad: {
         caption: 'Retry deletes the old answer',
-        blocks: [ai('Fresh beans, warm hearts.'), buttons(['↻ Regenerate'], { pin: 'Old answer lost' })],
+        blocks: [ai('Fresh beans, warm hearts.'), buttons([':retry Regenerate'], { pin: 'Old answer lost' })],
       },
       good: {
         caption: 'Every version is kept',
-        blocks: [ai('Fresh beans, warm hearts.'), buttons(['‹', '2 / 3', '›', '↻ Retry'], { pin: 'Go back anytime' }), chips(['Shorter', 'Funnier', 'Formal'])],
+        blocks: [ai('Fresh beans, warm hearts.'), buttons([':left', '2 / 3', ':right', ':retry Retry'], { pin: 'Go back anytime' }), chips(['Shorter', 'Funnier', 'Formal'])],
       },
     },
     lab: {
@@ -368,8 +368,8 @@ export const visuals = {
           id: 'regen',
           label: 'When people retry…',
           options: [
-            opt('Replace the answer', false, 'If the new one is worse, the better one is gone forever.', [buttons(['↻ Regenerate'])]),
-            opt('Keep versions ‹ 2/3 ›', true, 'People can go back and compare.', [buttons(['‹', '2 / 3', '›', '↻ Retry'])]),
+            opt('Replace the answer', false, 'If the new one is worse, the better one is gone forever.', [buttons([':retry Regenerate'])]),
+            opt('Keep versions ‹ 2/3 ›', true, 'People can go back and compare.', [buttons([':left', '2 / 3', ':right', ':retry Retry'])]),
           ],
         },
         {
@@ -389,14 +389,14 @@ export const visuals = {
     compare: {
       bad: {
         caption: 'Fix 1 word = redo everything',
-        blocks: [ai(email), buttons(['Copy', '↻ Regenerate all'], { pin: 'Only all-or-nothing' })],
+        blocks: [ai(email), buttons(['Copy', ':retry Regenerate all'], { pin: 'Only all-or-nothing' })],
       },
       good: {
         caption: 'A draft you can shape',
         blocks: [
-          note('✨ AI draft · review before sending', { tone: 'accent' }),
+          note(':sparkle AI draft · review before sending', { tone: 'accent' }),
           edit(email, { sel: 'Your notes on checkout helped a lot.', pin: 'Edit directly' }),
-          buttons(['✨ Rewrite selection']),
+          buttons([':sparkle Rewrite selection']),
         ],
       },
     },
@@ -416,8 +416,8 @@ export const visuals = {
           id: 'part',
           label: 'AI help for one part',
           options: [
-            opt('Regenerate all', false, 'Everything changes, even the parts people liked.', [buttons(['↻ Regenerate all'])]),
-            opt('Rewrite selection', true, 'Change only what needs fixing.', [buttons(['✨ Rewrite selection'])]),
+            opt('Regenerate all', false, 'Everything changes, even the parts people liked.', [buttons([':retry Regenerate all'])]),
+            opt('Rewrite selection', true, 'Change only what needs fixing.', [buttons([':sparkle Rewrite selection'])]),
           ],
         },
         {
@@ -425,7 +425,7 @@ export const visuals = {
           label: 'Mark it as a draft?',
           options: [
             opt('No', false, 'People may send AI text without reading it.', []),
-            opt('"AI draft · review"', true, 'A gentle reminder to check before sending.', [note('✨ AI draft · review before sending', { tone: 'accent' })]),
+            opt('"AI draft · review"', true, 'A gentle reminder to check before sending.', [note(':sparkle AI draft · review before sending', { tone: 'accent' })]),
           ],
         },
       ],
@@ -436,7 +436,7 @@ export const visuals = {
     compare: {
       bad: {
         caption: 'AI changes your words',
-        blocks: [edit('Thanks for the feedback! I will update the design today. Kind regards, The Team'), note('✨ AI improved your text', { pin: 'Changed without asking' })],
+        blocks: [edit('Thanks for the feedback! I will update the design today. Kind regards, The Team'), note(':sparkle AI improved your text', { pin: 'Changed without asking' })],
       },
       good: {
         caption: 'Grey = only an idea',
@@ -459,7 +459,7 @@ export const visuals = {
           id: 'accept',
           label: 'It is accepted…',
           options: [
-            opt('Automatically', false, 'Takes control away. People must undo what they never asked for.', [note('✓ Applied automatically')]),
+            opt('Automatically', false, 'Takes control away. People must undo what they never asked for.', [note('Applied automatically')]),
             opt('By a pop-up each time', false, 'Interrupts typing every few seconds.', [modal('Use the AI suggestion?', '', ['Yes', 'No'])]),
             opt('With Tab', true, 'Easy to take, easy to ignore.', [note('Tab accept · Esc ignore')]),
           ],
@@ -486,7 +486,7 @@ export const visuals = {
         caption: 'Mistakes are cheap',
         blocks: [
           steps([['Renaming 24 layers', 'active']]),
-          buttons(['-■ Stop'], { pin: 'Stop anytime' }),
+          buttons(['-:stop Stop'], { pin: 'Stop anytime' }),
           toast('Renamed 24 layers', 'Undo', { pin: 'One-click undo' }),
         ],
       },
@@ -500,7 +500,7 @@ export const visuals = {
           label: 'While it runs',
           options: [
             opt('No controls', false, 'If it goes wrong, people can only watch.', [steps([['Renaming 24 layers', 'active']])]),
-            opt('Stop button', true, 'People can stop it the moment it goes wrong.', [steps([['Renaming 24 layers', 'active']]), buttons(['-■ Stop'])]),
+            opt('Stop button', true, 'People can stop it the moment it goes wrong.', [steps([['Renaming 24 layers', 'active']]), buttons(['-:stop Stop'])]),
           ],
         },
         {
@@ -527,13 +527,13 @@ export const visuals = {
     compare: {
       bad: {
         caption: 'What changed? Nobody knows',
-        blocks: [edit('We use this tool to plan work and share it with the team.'), toast('Document improved ✓', '', { pin: 'Changed silently' })],
+        blocks: [edit('We use this tool to plan work and share it with the team.'), toast('Document improved', '', { pin: 'Changed silently' })],
       },
       good: {
         caption: 'Before → after, you decide',
         blocks: [
           diff([['utilize', 'use'], ['in order to', 'to'], ['a large number of', 'many']], { pin: 'See every change' }),
-          buttons(['✓ Accept', '✕ Reject', 'Next ›']),
+          buttons([':check Accept', ':x Reject', 'Next']),
           note('3 changes · 1 reviewed'),
         ],
       },
@@ -555,7 +555,7 @@ export const visuals = {
           label: 'People can…',
           options: [
             opt('Accept all or nothing', false, 'One bad change forces people to reject the good ones too.', [buttons(['!Accept all', 'Reject all'])]),
-            opt('Accept each change', true, 'Keep the good, drop the bad.', [buttons(['✓ Accept', '✕ Reject', 'Next ›'])]),
+            opt('Accept each change', true, 'Keep the good, drop the bad.', [buttons([':check Accept', ':x Reject', 'Next'])]),
           ],
         },
         {
@@ -575,7 +575,7 @@ export const visuals = {
     compare: {
       bad: {
         caption: 'Over-promise → blind trust',
-        blocks: [banner('info', 'Meet Max 🚀', 'The AI that knows everything!', { pin: 'Not true' }), ph('Ask Max anything…')],
+        blocks: [banner('info', 'Meet Max', 'The AI that knows everything!', { pin: 'Not true' }), ph('Ask Max anything…')],
       },
       good: {
         caption: 'Honest strengths and limits',
@@ -594,7 +594,7 @@ export const visuals = {
           id: 'promise',
           label: 'Headline',
           options: [
-            opt('"Knows everything!"', false, 'Over-promising leads to blind trust, then disappointment.', [banner('info', 'Meet Max 🚀', 'The AI that knows everything!')]),
+            opt('"Knows everything!"', false, 'Over-promising leads to blind trust, then disappointment.', [banner('info', 'Meet Max', 'The AI that knows everything!')]),
             opt('"Your research assistant"', true, 'Names a clear, honest role.', [card('Your research assistant', 'Works with your uploaded notes.')]),
           ],
         },
@@ -659,7 +659,7 @@ export const visuals = {
           id: 'preview',
           label: 'Tapping a source…',
           options: [
-            opt('Opens a new tab', false, 'Leaves the flow, so most people never check.', [note('↗ Opens report.pdf in a new tab')]),
+            opt('Opens a new tab', false, 'Leaves the flow, so most people never check.', [note('Opens report.pdf in a new tab')]),
             opt('Shows the quote here', true, 'Checking takes one second.', [card('[1] Q3 research report', '"7 of 10 could not find export."')]),
           ],
         },
@@ -683,7 +683,7 @@ export const visuals = {
       },
       good: {
         caption: 'Words + color show where to look',
-        blocks: [invoiceRows([sure, sure, checkIt, notSure]), buttons(['Show only "check" (2)'], { pin: 'Review faster' })],
+        blocks: [invoiceRows([sure, sure, checkIt, notSure]), buttons(['Show only "check this" (2)'], { pin: 'Review faster' })],
       },
     },
     lab: {
@@ -712,7 +712,7 @@ export const visuals = {
           label: 'Help review',
           options: [
             opt('Nothing', false, 'Reviewers must re-check every field.', []),
-            opt('"Show only check (2)"', true, 'People spend time where it matters.', [buttons(['Show only "check" (2)'])]),
+            opt('"Show only check (2)"', true, 'People spend time where it matters.', [buttons(['Show only "check this" (2)'])]),
           ],
         },
       ],
@@ -747,7 +747,7 @@ export const visuals = {
               avatar('Asha K', 'Product designer'),
               note('ai', { tone: 'faint' }),
             ]),
-            opt('✨ Badge by the name', true, 'Seen at the same moment as the author.', [avatar('Asha K', 'Product designer', 'AI-assisted')]),
+            opt('Badge by the name', true, 'Seen at the same moment as the author.', [avatar('Asha K', 'Product designer', 'AI-assisted')]),
           ],
         },
         {
@@ -811,7 +811,7 @@ export const visuals = {
       good: {
         caption: 'People see and control memory',
         blocks: [
-          note('💾 Memory updated: "Prefers short answers"', { tone: 'accent', pin: 'Says when it saves' }),
+          note(':save Memory updated: "Prefers short answers"', { tone: 'accent', pin: 'Says when it saves' }),
           rows([
             { label: 'Prefers short answers', value: '', action: 'Delete' },
             { label: 'Works in Figma', value: '', action: 'Delete' },
@@ -829,7 +829,7 @@ export const visuals = {
           label: 'When it saves something',
           options: [
             opt('Save silently', false, 'People feel watched when the AI "knows" things.', []),
-            opt('Small "Memory updated" note', true, 'No surprises later.', [note('💾 Memory updated: "Prefers short answers"', { tone: 'accent' })]),
+            opt('Small "Memory updated" note', true, 'No surprises later.', [note(':save Memory updated: "Prefers short answers"', { tone: 'accent' })]),
           ],
         },
         {
@@ -867,7 +867,7 @@ export const visuals = {
       },
       good: {
         caption: 'One tap, quick reasons',
-        blocks: [ai('Here are 4 ideas for your empty state…'), buttons(['👍', '👎'], { pin: 'One click' }), chips(['Not accurate', 'Too long', 'Wrong tone'])],
+        blocks: [ai('Here are 4 ideas for your empty state…'), buttons([':up', ':down'], { pin: 'One click' }), chips(['Not accurate', 'Too long', 'Wrong tone'])],
       },
     },
     lab: {
@@ -880,12 +880,12 @@ export const visuals = {
           options: [
             opt('No way', false, 'Your team never learns where the AI fails.', []),
             opt('Pop-up survey', false, 'Interrupts the task. Most people close it.', [modal('Rate your experience (1–10)', '', ['!Submit'])]),
-            opt('👍 👎 on each answer', true, 'One click, right where the answer is.', [buttons(['👍', '👎'])]),
+            opt('Thumbs up / down', true, 'One click, right where the answer is.', [buttons([':up', ':down'])]),
           ],
         },
         {
           id: 'reason',
-          label: 'After 👎',
+          label: 'After thumbs down',
           options: [
             opt('Required text box', false, 'Required typing kills most feedback.', [ph('Describe the problem (required)')]),
             opt('Optional quick reasons', true, 'Fast for people, useful for your team.', [chips(['Not accurate', 'Too long', 'Wrong tone'])]),
@@ -964,7 +964,7 @@ export const visuals = {
           user('Clean up our design system file'),
           card('Plan · about 5 min', ''),
           check(['Find unused components', 'Rename layers to match', 'Group colors into styles', 'Show me before deleting'], { pin: 'Short + editable' }),
-          buttons(['✎ Edit', '!Start']),
+          buttons([':edit Edit', '!Start']),
         ],
       },
     },
@@ -996,7 +996,7 @@ export const visuals = {
           label: 'Can people change it?',
           options: [
             opt('Only approve / cancel', false, 'One wrong step means rejecting the whole plan.', [buttons(['Approve', 'Cancel'])]),
-            opt('Edit, add, remove steps', true, 'People fix just the wrong part.', [buttons(['✎ Edit steps', '+ Add step'])]),
+            opt('Edit, add, remove steps', true, 'People fix just the wrong part.', [buttons([':edit Edit steps', ':plus Add step'])]),
           ],
         },
       ],
@@ -1022,7 +1022,7 @@ export const visuals = {
           id: 'ask',
           label: 'Before sending',
           options: [
-            opt('Just send', false, 'Sending to 240 people cannot be undone.', [toast('Sent to 240 customers ✓')]),
+            opt('Just send', false, 'Sending to 240 people cannot be undone.', [toast('Sent to 240 customers')]),
             opt('Ask "Proceed?"', false, 'Vague questions get blind "OK" clicks.', [modal('Proceed?', '', ['!OK'])]),
             opt('Show who, what, how many', true, 'People can really check before it happens.', [
               modal('Send email to 240 customers?', 'Subject: "Price update in October"', ['Cancel', 'Review', '!Send to 240']),

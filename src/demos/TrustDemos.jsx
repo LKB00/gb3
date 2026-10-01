@@ -1,3 +1,4 @@
+import { Check, Sparkles, X } from 'lucide-react';
 import { useState } from 'react';
 
 /* ---------- Citations ---------- */
@@ -29,7 +30,7 @@ export function Citations() {
         <div className="source-card" role="region" aria-label="Source preview">
           <div className="row space-between">
             <strong>[{open}] {sources[open - 1].title}</strong>
-            <button className="btn btn-ghost btn-sm" onClick={() => setOpen(null)} aria-label="Close source">✕</button>
+            <button className="btn btn-ghost btn-sm" onClick={() => setOpen(null)} aria-label="Close source"><X size={14} strokeWidth={1.75} aria-hidden /></button>
           </div>
           <p>{sources[open - 1].quote}</p>
           <span className="link-like">Open original →</span>
@@ -75,9 +76,9 @@ export function ConfidenceSignals() {
               <td>
                 <div className="conf-cell">
                   {checked[f.label] ? (
-                    <span className="conf conf-high">✓ Checked</span>
+                    <span className="conf conf-high"><Check size={12} strokeWidth={2} aria-hidden /> Checked</span>
                   ) : (
-                    <span className={'conf conf-' + f.level}>{f.level === 'high' ? '●' : f.level === 'medium' ? '◐' : '○'} {levelText[f.level]}</span>
+                    <span className={'conf conf-' + f.level}>{levelText[f.level]}</span>
                   )}
                   {f.level !== 'high' && !checked[f.label] && (
                     <button className="btn btn-ghost btn-sm" onClick={() => setChecked({ ...checked, [f.label]: true })}>Mark OK</button>
@@ -113,7 +114,7 @@ export function AiDisclosure() {
           </div>
           <span className="disclose-wrap">
             <button className="ai-badge" onClick={() => setInfo(!info)} aria-expanded={info}>
-              ✨ {edited ? 'AI-assisted' : 'AI generated'}
+              <Sparkles size={12} strokeWidth={2} aria-hidden /> {edited ? 'AI-assisted' : 'AI generated'}
             </button>
             {info && (
               <span className="disclose-pop" role="tooltip">

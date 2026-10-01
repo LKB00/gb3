@@ -1,3 +1,4 @@
+import { Check, RotateCcw, TriangleAlert, X } from 'lucide-react';
 import { useState } from 'react';
 import MockFrame, { MockBlock, MockSlot } from '../mock/Mock';
 import { markPassed } from '../progress';
@@ -37,7 +38,7 @@ export default function Lab({ id, lab, title }) {
     <div className="lab">
       <div className="lab-controls">
         <p className="lab-goal">
-          <span className="lab-goal-tag">Your task</span>
+          <span className="label">Your task</span>
           {lab.goal}
         </p>
 
@@ -61,6 +62,7 @@ export default function Lab({ id, lab, title }) {
                       className={'lab-opt' + (on ? ' lab-opt-on' : '') + verdict}
                       onClick={() => pick(d.id, i)}
                     >
+                      {checked && on && (o.ok ? <Check size={13} strokeWidth={2.25} aria-hidden /> : <X size={13} strokeWidth={2.25} aria-hidden />)}
                       {o.label}
                     </button>
                   );
@@ -69,10 +71,10 @@ export default function Lab({ id, lab, title }) {
               {checked && picked !== undefined && (
                 <p className={'lab-why ' + (d.options[picked].ok ? 'lab-why-good' : 'lab-why-bad')}>
                   {d.options[picked].ok ? (
-                    <strong>✓ Good choice. </strong>
+                    <strong><Check size={13} strokeWidth={2.25} aria-hidden /> Good choice.</strong>
                   ) : (
-                    <strong>⚠ Common mistake. </strong>
-                  )}
+                    <strong><TriangleAlert size={13} strokeWidth={2} aria-hidden /> Common mistake.</strong>
+                  )}{' '}
                   {d.options[picked].why}
                 </p>
               )}
@@ -86,7 +88,7 @@ export default function Lab({ id, lab, title }) {
           </button>
           <button className="btn btn-ghost" onClick={showBest}>Show best design</button>
           {Object.keys(choice).length > 0 && (
-            <button className="btn btn-ghost" onClick={() => { setChoice({}); setChecked(false); }}>↺ Start over</button>
+            <button className="btn btn-ghost" onClick={() => { setChoice({}); setChecked(false); }}><RotateCcw size={14} strokeWidth={1.75} aria-hidden /> Start over</button>
           )}
         </div>
 
@@ -94,14 +96,14 @@ export default function Lab({ id, lab, title }) {
           <div className={'lab-score ' + (perfect ? 'lab-score-good' : 'lab-score-bad')} role="status">
             <span className="lab-score-num">{score}/{decisions.length}</span>
             {perfect
-              ? 'Great design! No common mistakes. Lab passed ✓'
+              ? 'Great design. No common mistakes, so this lab is passed.'
               : `${decisions.length - score} common mistake${decisions.length - score > 1 ? 's' : ''} found. Look at the red parts and try again.`}
           </div>
         )}
       </div>
 
       <div className="lab-preview">
-        <p className="lab-preview-label">Live preview</p>
+        <p className="label">Live preview</p>
         <MockFrame title={title}>
           {layout.map((item, i) => {
             if (!item.slot) return <MockBlock key={i} b={item} />;

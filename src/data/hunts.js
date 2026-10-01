@@ -10,7 +10,7 @@ export const hunts = [
     brief: 'A team uses this AI to ask questions about their user research.',
     blocks: [
       {
-        type: 'banner', tone: 'info', title: 'Meet Max 🚀', text: 'The AI that knows everything!',
+        type: 'banner', tone: 'info', title: 'Meet Max', text: 'The AI that knows everything!',
         mistake: { text: 'Over-promise. Say what it is good at, and that it can be wrong.', pattern: 'set-expectations' },
       },
       { type: 'user', text: 'What did users say about the new checkout?' },
@@ -19,12 +19,12 @@ export const hunts = [
         mistake: { text: 'A big claim with no source. Add citations next to claims.', pattern: 'citations' },
       },
       {
-        type: 'buttons', items: ['↻ Regenerate'],
+        type: 'buttons', items: [':retry Regenerate'],
         mistake: { text: 'Regenerate throws the old answer away. Keep versions ‹ 1/2 ›.', pattern: 'regenerate-history' },
       },
       {
         type: 'modal', title: 'Rate this chat (1–10) to continue', text: '', buttons: ['!Submit'],
-        mistake: { text: 'A forced survey blocks the task. Use one-click 👍 👎 instead.', pattern: 'feedback-loop' },
+        mistake: { text: 'A forced survey blocks the task. Use one-click thumbs up / down instead.', pattern: 'feedback-loop' },
       },
       { type: 'input', placeholder: 'Ask Max…' },
     ],
@@ -46,7 +46,7 @@ export const hunts = [
       },
       { type: 'rows', items: [{ label: 'Layers renamed', value: '24' }, { label: 'Styles created', value: '6' }] },
       {
-        type: 'toast', text: 'Deleted 112 components ✓', action: '',
+        type: 'toast', text: 'Deleted 112 components', action: '',
         mistake: { text: 'Deleted with no confirm and no undo.', pattern: 'stop-and-undo' },
       },
       {
@@ -75,7 +75,7 @@ export const hunts = [
         mistake: { text: 'An error code with no next step. Say what to do.', pattern: 'graceful-errors' },
       },
       {
-        type: 'toast', text: 'Auto-approved and paid ₹ 48,500 ✓', action: '',
+        type: 'toast', text: 'Auto-approved and paid ₹ 48,500', action: '',
         mistake: { text: 'Paid money without asking, even though the total was unsure.', pattern: 'action-approval' },
       },
       { type: 'buttons', items: ['Download PDF', 'Share'] },
@@ -91,8 +91,8 @@ export const hunts = [
         type: 'avatar', name: 'Ravi M', role: 'Design lead',
         mistake: { text: 'This post was written by AI, but there is no label.', pattern: 'ai-disclosure' },
       },
-      { type: 'text', text: 'Thrilled to share our Q3 design wins — synergy, innovation and impact! 🚀' },
-      { type: 'buttons', items: ['👏 12', '💬 Comment'] },
+      { type: 'text', text: 'Thrilled to share our Q3 design wins — synergy, innovation and impact!' },
+      { type: 'buttons', items: [':up 12', 'Comment'] },
       {
         type: 'ai', text: 'Since your divorce last year, here are some solo events nearby…',
         mistake: { text: 'Uses a private memory the person never knew was saved.', pattern: 'memory-controls' },
@@ -110,14 +110,14 @@ export const hunts = [
     brief: 'A tool where marketers create images with AI.',
     blocks: [
       {
-        type: 'note', text: 'Ask me anything! 🤖',
+        type: 'note', text: 'Ask me anything!',
         mistake: { text: 'Vague. Show 3 specific example prompts instead.', pattern: 'prompt-starters' },
       },
       {
         type: 'input', value: 'photo, 4k, ultra detailed, soft light, 16:9, --style raw --v 6 --no text',
         mistake: { text: '"Prompt magic". Offer style and size controls instead.', pattern: 'structured-controls' },
       },
-      { type: 'chips', items: ['📄 brand-guide.pdf'], on: null },
+      { type: 'chips', items: [':file brand-guide.pdf'], on: null },
       {
         type: 'variants', items: ['Red mug', 'Red mug.', 'A red mug', 'Red mug 2', 'Mug, red', 'Red cup'],
         mistake: { text: 'Six near-copies. Show 3 truly different options.', pattern: 'multiple-variants' },

@@ -1,3 +1,4 @@
+import { Check, Play, RotateCcw, Square } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTypewriter } from './useTypewriter';
 
@@ -59,9 +60,9 @@ export function StreamingResponse() {
       )}
       <div className="row">
         {busy ? (
-          <button className="btn btn-danger" onClick={stop}>■ Stop</button>
+          <button className="btn btn-danger" onClick={stop}><Square size={14} strokeWidth={1.75} aria-hidden /> Stop</button>
         ) : (
-          <button className="btn btn-primary" onClick={run}>{phase === 'idle' ? '▶ Run' : '↺ Run again'}</button>
+          <button className="btn btn-primary" onClick={run}>{phase === 'idle' ? <><Play size={14} strokeWidth={1.75} aria-hidden /> Run</> : <><RotateCcw size={14} strokeWidth={1.75} aria-hidden /> Run again</>}</button>
         )}
       </div>
     </div>
@@ -70,7 +71,7 @@ export function StreamingResponse() {
 
 const variants = {
   A: { label: 'Clear', text: 'Track every project in one place.' },
-  B: { label: 'Friendly', text: 'Your projects, finally organized. 🎉' },
+  B: { label: 'Friendly', text: 'Your projects, finally organized.' },
   C: { label: 'Bold', text: 'Stop chasing updates. Start shipping.' },
 };
 const moreVariants = {
@@ -96,9 +97,9 @@ export function MultipleVariants() {
       </div>
       <div className="row">
         <button className="btn btn-ghost" onClick={() => { setSet(set === variants ? moreVariants : variants); setPicked(null); }}>
-          ↻ Show 3 more
+          <RotateCcw size={14} strokeWidth={1.75} aria-hidden /> Show 3 more
         </button>
-        {picked && <span className="demo-ok">✓ Using option {picked}: “{set[picked].text}”</span>}
+        {picked && <span className="demo-ok"><Check size={14} strokeWidth={1.75} aria-hidden /> Using option {picked}: “{set[picked].text}”</span>}
       </div>
     </div>
   );

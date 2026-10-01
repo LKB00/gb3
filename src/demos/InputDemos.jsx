@@ -1,11 +1,12 @@
+import { ClipboardList, FileText, Palette, PenLine, RotateCcw } from 'lucide-react';
 import { useState } from 'react';
 import { useTypewriter } from './useTypewriter';
 
 const starters = [
-  { icon: '✍️', text: 'Write a friendly welcome email for new users' },
-  { icon: '📄', text: 'Summarize this report in 5 bullet points' },
-  { icon: '🎨', text: 'Suggest 3 color palettes for a calm health app' },
-  { icon: '🧪', text: 'Give me 5 usability test questions for checkout' },
+  { icon: PenLine, text: 'Write a friendly welcome email for new users' },
+  { icon: FileText, text: 'Summarize this report in 5 bullet points' },
+  { icon: Palette, text: 'Suggest 3 color palettes for a calm health app' },
+  { icon: ClipboardList, text: 'Give me 5 usability test questions for checkout' },
 ];
 
 export function PromptStarters() {
@@ -20,7 +21,7 @@ export function PromptStarters() {
           <div className="starter-grid">
             {starters.map((s) => (
               <button key={s.text} className="starter" onClick={() => setValue(s.text)}>
-                <span aria-hidden>{s.icon}</span> {s.text}
+                <s.icon size={14} strokeWidth={1.75} aria-hidden /> {s.text}
               </button>
             ))}
           </div>
@@ -48,7 +49,7 @@ export function PromptStarters() {
         <button className="btn btn-primary" disabled={!value.trim()}>Send</button>
       </form>
       {sent && (
-        <button className="btn btn-ghost" onClick={() => setSent('')}>↺ Reset demo</button>
+        <button className="btn btn-ghost" onClick={() => setSent('')}><RotateCcw size={14} strokeWidth={1.75} aria-hidden /> Reset demo</button>
       )}
       <p className="demo-note">Notice: clicking an example fills the box but does not send. You can still edit it.</p>
     </div>
@@ -87,7 +88,7 @@ export function ClarifyingQuestion() {
       </div>
       {step === 'answer' && <div className="bubble bubble-ai">{tw.output}{tw.running && <span className="caret" />}</div>}
       {step === 'answer' && !tw.running && (
-        <button className="btn btn-ghost" onClick={() => { setStep('ask'); setChoice(null); }}>↺ Try another answer</button>
+        <button className="btn btn-ghost" onClick={() => { setStep('ask'); setChoice(null); }}><RotateCcw size={14} strokeWidth={1.75} aria-hidden /> Try another answer</button>
       )}
     </div>
   );

@@ -1,3 +1,4 @@
+import { ArrowRight, Check, MousePointerClick } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import MockFrame, { MockBlock } from '../mock/Mock';
@@ -36,7 +37,7 @@ export default function Hunt({ scenario }) {
                 b={b}
                 state={state}
                 marker={n >= 0 ? n + 1 : undefined}
-                pin={fine === i ? '✓ This part is fine' : undefined}
+                pin={fine === i ? 'This part is fine' : undefined}
                 onClick={() => click(i)}
                 label={`Screen part ${i + 1}`}
               />
@@ -54,7 +55,7 @@ export default function Hunt({ scenario }) {
         </div>
 
         {shown.length === 0 && (
-          <p className="demo-muted hunt-hint">👆 Tap any part of the screen that looks wrong.</p>
+          <p className="demo-muted hunt-hint"><MousePointerClick size={14} strokeWidth={1.75} aria-hidden /> Tap any part of the screen that looks wrong.</p>
         )}
 
         <ol className="hunt-list">
@@ -66,14 +67,14 @@ export default function Hunt({ scenario }) {
                 <span className="hunt-num">{n + 1}</span>
                 <div>
                   <p>{m.text}</p>
-                  <Link to={`/patterns/${p.id}`} className="hunt-fix">Fix: {p.title} →</Link>
+                  <Link to={`/patterns/${p.id}`} className="hunt-fix">Fix: {p.title} <ArrowRight size={13} strokeWidth={1.75} aria-hidden /></Link>
                 </div>
               </li>
             );
           })}
         </ol>
 
-        {done && !revealed && <p className="demo-ok">🎉 You found every mistake!</p>}
+        {done && !revealed && <p className="demo-ok"><Check size={14} strokeWidth={2} aria-hidden /> You found every mistake.</p>}
         {!done && !revealed && (
           <button className="btn btn-ghost btn-sm" onClick={() => setRevealed(true)}>Show the ones I missed</button>
         )}
