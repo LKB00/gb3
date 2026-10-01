@@ -5119,3 +5119,25 @@ a.pattern-card:hover { transform: translateY(-3px); }
   /* On phones, level and badges live on the Me tab; Play is just games */
   .play-grid > .level-card { display: none; }
 }
+.levelup-toast { bottom: auto; top: calc(72px + env(safe-area-inset-top, 0px)); animation-name: toast-down; }
+@keyframes toast-down { from { transform: translate(-50%, -20px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
+.levelup-toast svg { color: var(--lime); }
+.sound-hint { gap: 10px; padding: 8px 8px 8px 16px; font-size: 13px; }
+.sound-hint-off {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 9999px;
+  background: var(--lime);
+  color: #24282c;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.goal-toast { line-height: 20px; white-space: nowrap; max-width: calc(100vw - 24px); }
+.goal-toast > span { overflow: hidden; text-overflow: ellipsis; }
+.sound-hint { bottom: auto; top: calc(64px + env(safe-area-inset-top, 0px)); animation-name: toast-down; }
+.sound-hint-off { flex: none; white-space: nowrap; }
+@media (max-width: 720px) {
+  .levelup-toast { top: calc(60px + env(safe-area-inset-top, 0px)); }
+  .sound-hint { top: calc(60px + env(safe-area-inset-top, 0px)); }
+}

@@ -13,7 +13,7 @@ A playground for AI interaction design. Not a course: quick games, instant wins,
 - **Challenge a friend**: after the Daily or a Speed round, copy a link. Your friend plays the exact same rounds (seeded) and sees your score to beat. Everything is in the link, no server.
 - **Speed round** (`/play/speed`): 60 seconds of quick "which is better?" picks (classic + hard mixed). 3 in a row = ×2 points; a wrong tap costs 1 point, so random tapping doesn't pay. 3-2-1 countdown, ticking last 5 seconds, copyable score.
 - **Card flip**: winning a Fix it challenge flips your new pattern card over with a glow.
-- **Sound and vibration** (speaker button in the top bar, off by default): short sounds made with Web Audio (no files) and phone vibration on right, wrong, win and card flip.
+- **Sound and haptics** (on by default, two switches on the Me page): about 20 sounds made with Web Audio (no audio files): soft taps on every button, tab sounds, right answers that rise in pitch with your streak, combo chimes, a sad slide for wrong, star chimes, card flip whoosh, piece place/remove in Build mode, trust up/down in stories, countdown and time-up in Speed, daily goal and a **Level up!** fanfare. Matching vibration patterns on Android; light system taps on iPhone (Safari 17.4+). A one-time hint with a Turn off button the first time sound plays.
 - **Day streak + daily goal** (`/play`, flame in the top bar): any answer in any game is a "move"; 10 moves is the daily goal. One missed day per week is covered by a free skip day, so one busy day doesn't wipe out a streak. A toast celebrates the goal.
 - **Player card** (`/play/card`): your name, AI-designer type (from the group you've mastered most, e.g. "The Trust Keeper"), level, XP, stats and badges. Save as a 1080×1350 image or share; made in the browser, nothing uploaded.
 - **XP, levels and badges** (`/play`): stars, flaws found and best streak add up to XP; 6 levels from Rookie to Legend; a badge per group (gold with all 3 stars).
@@ -77,7 +77,7 @@ Live at **https://lkb00.github.io/patricka/** — every push to `main` builds an
 | Day streak with a free skip day | Builds a habit without guilt: one busy day doesn't reset weeks of play, and today not played yet never shows as broken. |
 | Player card + designer type | Something personal to keep and show off; the type changes as you play, so it's a reason to explore other groups. |
 | Speed round | Pace and pressure for players who already know the basics; the wrong-tap cost keeps it about skill, not luck. |
-| Card flip, sounds, vibration | Small sensory rewards at the moment of a win; sound is off by default and motion respects reduced-motion settings. |
+| Sounds and haptics everywhere | Every tap gets a small physical response, and wins feel bigger. On by default for fun, with a clear one-time Turn off and separate switches. |
 | Build mode | Designing from a blank screen is the closest thing to real work; traps teach what to leave out. |
 | Four stories | Different products (agent, voice, support, coding) show the same trust ideas in new places. |
 | Challenge links | The fastest way for one player to bring the next one, with no accounts or server. |

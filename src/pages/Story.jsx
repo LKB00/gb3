@@ -99,7 +99,7 @@ function Story({ story }) {
     const c = scene.choices[i];
     setPicked(i);
     markPlayed();
-    fx(c.trust >= 0 ? 'right' : 'wrong');
+    fx(c.trust >= 0 ? 'trustUp' : 'trustDown');
     setTrust((t) => clamp(t + c.trust));
     setHistory((h) => [...h, { scene: sceneId, choice: i }]);
   };

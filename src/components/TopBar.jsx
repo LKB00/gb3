@@ -2,7 +2,7 @@ import { Link, NavLink, useLocation } from 'react-router-dom';
 import { ChevronLeft, Moon, Sun, Volume2, VolumeX, Zap } from 'lucide-react';
 import { useXP } from '../progress';
 import { useTheme } from '../theme';
-import { GoalToast, StreakPill } from './Today';
+import { GoalToast, LevelUpToast, SoundHint, StreakPill } from './Today';
 import { useFx } from '../game/fx';
 
 const PLAY = ['/play', '/practice'];
@@ -60,6 +60,8 @@ export default function TopBar() {
         </div>
       </div>
       <GoalToast />
+      <LevelUpToast />
+      <SoundHint />
     </header>
   );
 }

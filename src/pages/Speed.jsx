@@ -77,6 +77,7 @@ export default function Speed() {
   useEffect(() => {
     if (phase !== 'count') return;
     if (count === 0) {
+      fx('go');
       endAt.current = Date.now() + SECONDS * 1000;
       lastTick.current = SECONDS;
       setPhase('play');
@@ -103,7 +104,7 @@ export default function Speed() {
         setResult({ record: final > best, gain: Math.max(0, final - best) * XP.speed });
         saveSpeed(final);
         track('Game finished', { game: 'speed', score: final });
-        if (final > best && final > 0) fx('win');
+        fx(final > best && final > 0 ? 'win' : 'timeup');
         setPhase('over');
       }
     }, 100);
@@ -118,7 +119,9 @@ export default function Speed() {
       if (phase !== 'play' || flash) return;
       const ok = sides[n] === 'good';
       markPlayed();
-      fx(ok ? 'right' : 'wrong');
+      if (!ok) fx('wrong');
+      else if (combo + 1 >= 3) fx('combo', { streak: combo + 1 });
+      else fx('right', { streak: combo });
       setAnswered((a) => a + 1);
       if (ok) {
         const gain = combo + 1 >= 3 ? 2 : 1;

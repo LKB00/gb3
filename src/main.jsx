@@ -5,6 +5,7 @@ import App from './App';
 import './styles.css';
 import { listenForInstall } from './game/install';
 import { startTracking } from './game/track';
+import { listenForTaps } from './game/fx';
 
 // HashRouter so the site works on static hosting (GitHub Pages) without server rules.
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -21,3 +22,4 @@ if (import.meta.env.PROD && 'serviceWorker' in navigator) {
 }
 listenForInstall();
 startTracking();
+listenForTaps();

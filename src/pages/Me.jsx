@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
-import { ChevronRight, IdCard, Moon, Sun, Volume2, VolumeX } from 'lucide-react';
-import { useFx } from '../game/fx';
+import { ChevronRight, IdCard, Moon, Smartphone, Sun, Volume2, VolumeX } from 'lucide-react';
+import { useHaptic, useSound } from '../game/fx';
 import { useTheme } from '../theme';
 import { TodayCard } from '../components/Today';
 import { AppAndBackup, Badges, LevelCard } from './Play';
@@ -10,7 +10,8 @@ import { useTitle } from '../useTitle';
 // On phones it's a bottom tab; on desktop the XP pill opens it.
 export default function Me() {
   useTitle('Me');
-  const [sound, toggleSound] = useFx();
+  const [sound, toggleSound] = useSound();
+  const [haptic, toggleHaptic] = useHaptic();
   const [isDark, toggleTheme] = useTheme();
   return (
     <div className="page page-wide me">
@@ -37,8 +38,13 @@ export default function Me() {
         <div className="me-stack">
           <button type="button" className="me-row" onClick={toggleSound} aria-pressed={sound}>
             {sound ? <Volume2 size={20} strokeWidth={1.75} aria-hidden /> : <VolumeX size={20} strokeWidth={1.75} aria-hidden />}
-            <span><strong>Sound and vibration</strong><span className="small muted">Short sounds and buzzes on wins</span></span>
+            <span><strong>Sound effects</strong><span className="small muted">Taps, right and wrong, wins, level ups</span></span>
             <span className={'switch' + (sound ? ' is-on' : '')} aria-hidden />
+          </button>
+          <button type="button" className="me-row" onClick={toggleHaptic} aria-pressed={haptic}>
+            <Smartphone size={20} strokeWidth={1.75} aria-hidden />
+            <span><strong>Vibration</strong><span className="small muted">Feel taps and wins on your phone</span></span>
+            <span className={'switch' + (haptic ? ' is-on' : '')} aria-hidden />
           </button>
           <button type="button" className="me-row" onClick={toggleTheme} aria-pressed={isDark}>
             {isDark ? <Moon size={20} strokeWidth={1.75} aria-hidden /> : <Sun size={20} strokeWidth={1.75} aria-hidden />}
