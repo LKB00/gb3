@@ -2,17 +2,19 @@ import { useTitle } from '../useTitle';
 import { Link } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
 import { lessons } from '../data/lessons';
+import { usePassed } from '../progress';
 
 const levels = ['Basics', 'Core', 'Advanced'];
 
 export default function Learn() {
   useTitle('Learning path');
+  const passed = usePassed();
   return (
     <div className="page">
       <header className="page-head">
         <p className="label">Learning path</p>
         <h1 className="display">From basics to AI agents</h1>
-        <p className="lead">{lessons.length} short lessons, about {lessons.reduce((n, l) => n + l.minutes, 0)} minutes in total. Each one links to patterns you can try.</p>
+        <p className="lead">{lessons.length} short lessons, about {lessons.reduce((n, l) => n + l.minutes, 0)} minutes in total. Each one ends with labs to do, so you practice right after you learn.</p>
       </header>
 
       {levels.map((level) => (
@@ -25,7 +27,7 @@ export default function Learn() {
                   <span className="index-num">{lessons.indexOf(l) + 1}</span>
                   <span className="index-title">{l.title}</span>
                   <span className="index-sum">{l.intro}</span>
-                  <span className="index-meta">{l.minutes} min</span>
+                  <span className="index-meta">{l.minutes} min · {l.patterns.filter((pid) => passed.includes(pid)).length}/{l.patterns.length} labs</span>
                   <ChevronRight size={16} strokeWidth={1.75} className="index-chev" aria-hidden />
                 </Link>
               </li>

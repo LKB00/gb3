@@ -3013,3 +3013,77 @@ button.ai-badge {
 .td-better svg {
   color: var(--attention);
 }
+
+/* ---------- Progress (learning by doing) ---------- */
+.sb-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 4px 0;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: var(--card);
+  border: var(--hair) solid var(--line);
+  color: var(--ink);
+  text-decoration: none;
+}
+.sb-progress:hover {
+  border-color: var(--ink-3);
+}
+.sb-progress-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.sb-progress-num {
+  font-size: 12px;
+  font-weight: 700;
+}
+.sb-bar,
+.meter {
+  display: block;
+  height: 4px;
+  border-radius: 9999px;
+  background: var(--sand-dark);
+  overflow: hidden;
+}
+.sb-bar span,
+.meter span {
+  display: block;
+  height: 100%;
+  border-radius: 9999px;
+  background: var(--positive);
+  transition: width 0.4s ease;
+}
+.sb-progress-sub {
+  font-size: 12px;
+  color: var(--ink-3);
+}
+.index-check-on {
+  color: var(--positive);
+}
+.index-check-off {
+  color: var(--ink-3);
+}
+.index-count {
+  margin-left: auto;
+}
+.do-it {
+  padding: 24px;
+  border-radius: 14px;
+  background: var(--sand);
+}
+.do-it .label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.do-it .index-list li:last-child {
+  border-bottom: none;
+}
+.index-row-icon > svg.index-check-on {
+  color: var(--positive);
+}
+.index-row-icon > svg.index-check-off {
+  color: var(--ink-3);
+}

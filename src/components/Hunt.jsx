@@ -1,8 +1,9 @@
 import { ArrowRight, Check, MousePointerClick } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import MockFrame, { MockBlock } from '../mock/Mock';
 import { getPattern } from '../data/patterns';
+import { markHuntDone } from '../progress';
 
 // Mistake Hunt: click the parts of the screen that are wrong.
 export default function Hunt({ scenario }) {
@@ -12,6 +13,11 @@ export default function Hunt({ scenario }) {
 
   const mistakes = scenario.blocks.map((b, i) => (b.mistake ? i : -1)).filter((i) => i >= 0);
   const done = found.length === mistakes.length;
+
+  // Finding every mistake yourself (without revealing) completes the screen.
+  useEffect(() => {
+    if (done && !revealed) markHuntDone(scenario.id);
+  }, [done, revealed, scenario.id]);
   const shown = revealed ? [...found, ...mistakes.filter((i) => !found.includes(i))] : found;
 
   const click = (i) => {

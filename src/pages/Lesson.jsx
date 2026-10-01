@@ -1,16 +1,18 @@
 import { Link, useParams } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, Check } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, Circle, FlaskConical } from 'lucide-react';
 import { getLesson, lessons } from '../data/lessons';
 import { getPattern } from '../data/patterns';
 import { visuals } from '../data/visuals';
 import Compare from '../components/Compare';
 import { useTitle } from '../useTitle';
+import { usePassed } from '../progress';
 import NotFound from './NotFound';
 
 export default function Lesson() {
   const { id } = useParams();
   const lesson = getLesson(id);
   useTitle(lesson?.title);
+  const passed = usePassed();
   if (!lesson) return <NotFound />;
 
   const idx = lessons.indexOf(lesson);
@@ -53,13 +55,33 @@ export default function Lesson() {
       </section>
 
       {lesson.patterns.length > 0 && (
-        <section className="block">
-          <h2>Patterns in this lesson</h2>
-          <div className="row wrap">
-            {lesson.patterns.map((pid) => (
-              <Link key={pid} to={`/patterns/${pid}`} className="chip">{getPattern(pid).title}</Link>
-            ))}
+        <section className="block do-it">
+          <div className="section-head">
+            <p className="label"><FlaskConical size={12} strokeWidth={2} aria-hidden /> Do it now</p>
+            <h2>Practice what you just learned</h2>
+            <p className="section-sub">
+              {lesson.patterns.filter((pid) => passed.includes(pid)).length} of {lesson.patterns.length} labs passed. Each takes about a minute.
+            </p>
           </div>
+          <span className="meter" aria-hidden>
+            <span style={{ width: `${(lesson.patterns.filter((pid) => passed.includes(pid)).length / lesson.patterns.length) * 100}%` }} />
+          </span>
+          <ul className="index-list">
+            {lesson.patterns.map((pid) => (
+              <li key={pid}>
+                <Link to={`/patterns/${pid}#lab`} className={'index-row index-row-icon' + (passed.includes(pid) ? ' index-done' : '')}>
+                  {passed.includes(pid) ? (
+                    <Check size={16} strokeWidth={2} className="index-check-on" aria-label="Passed" />
+                  ) : (
+                    <Circle size={16} strokeWidth={1.5} className="index-check-off" aria-label="Not done yet" />
+                  )}
+                  <span className="index-title">{getPattern(pid).title}</span>
+                  <span className="index-sum">{passed.includes(pid) ? 'Passed. Open to review.' : 'Build it in the lab'}</span>
+                  <ArrowRight size={16} strokeWidth={1.75} className="index-chev" aria-hidden />
+                </Link>
+              </li>
+            ))}
+          </ul>
         </section>
       )}
 
