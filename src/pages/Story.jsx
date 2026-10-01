@@ -8,6 +8,7 @@ import MockFrame, { MockBlock } from '../mock/Mock';
 import Breadcrumbs from '../components/Breadcrumbs';
 import Burst, { XpPop } from '../components/Burst';
 import { useTitle } from '../useTitle';
+import { fx } from '../game/fx';
 
 // Story mode: design an AI agent through one short story. Every choice changes
 // how much Priya trusts it, and the ending depends on that trust.
@@ -58,6 +59,7 @@ export default function Story() {
     const c = scene.choices[i];
     setPicked(i);
     markPlayed();
+    fx(c.trust >= 0 ? 'right' : 'wrong');
     setTrust((t) => clamp(t + c.trust));
     setHistory((h) => [...h, { scene: sceneId, choice: i }]);
   };
@@ -72,6 +74,7 @@ export default function Story() {
     }
     setGain(Math.max(0, Math.round(trust / 2) - Math.round(Math.max(0, stats.storyBest ?? 0) / 2)));
     saveStory(trust);
+    fx(trust >= 50 ? 'win' : 'wrong');
     setEnded(true);
   };
 

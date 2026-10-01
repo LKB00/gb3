@@ -1,8 +1,9 @@
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { Moon, Sun, Zap } from 'lucide-react';
+import { Moon, Sun, Volume2, VolumeX, Zap } from 'lucide-react';
 import { useXP } from '../progress';
 import { useTheme } from '../theme';
 import { GoalToast, StreakPill } from './Today';
+import { useFx } from '../game/fx';
 
 const PLAY = ['/play', '/practice'];
 const EXPLORE = ['/teardowns', '/anti-patterns', '/principles', '/glossary', '/learn'];
@@ -12,6 +13,7 @@ export default function TopBar() {
   const { pathname } = useLocation();
   const { xp, level } = useXP();
   const [isDark, toggleTheme] = useTheme();
+  const [sound, toggleSound] = useFx();
   const on = (list) => list.some((p) => pathname.startsWith(p));
 
   return (
@@ -33,6 +35,9 @@ export default function TopBar() {
             <span key={xp} className="xp-num">{xp}</span>
             <span className="xp-unit">XP</span>
           </Link>
+          <button className="icon-btn" onClick={toggleSound} aria-pressed={sound} aria-label={sound ? 'Turn sound and vibration off' : 'Turn sound and vibration on'} title={sound ? 'Sound on' : 'Sound off'}>
+            {sound ? <Volume2 size={16} strokeWidth={1.75} aria-hidden /> : <VolumeX size={16} strokeWidth={1.75} aria-hidden />}
+          </button>
           <button className="icon-btn" onClick={toggleTheme} aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}>
             {isDark ? <Sun size={16} strokeWidth={1.75} aria-hidden /> : <Moon size={16} strokeWidth={1.75} aria-hidden />}
           </button>

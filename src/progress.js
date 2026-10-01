@@ -88,7 +88,14 @@ export const LEVELS = [
   { xp: 1000, name: 'AI UX pro' },
   { xp: 1300, name: 'Legend' },
 ];
-export const XP = { star: 10, hunt: 30, streak: 5, daily: 10 };
+export const XP = { star: 10, hunt: 30, streak: 5, daily: 10, speed: 2 };
+
+// Speed round: best points in 60 seconds.
+export function saveSpeed(points) {
+  const s = readObj('game-stats');
+  if ((s.speedBest || 0) >= points) return;
+  writeObj('game-stats', { ...s, speedBest: points });
+}
 
 // Daily challenge: { 'YYYY-MM-DD': [true, false, …] }. First result of the day counts.
 export function saveDaily(key, results) {
@@ -132,7 +139,8 @@ export function useXP() {
     hunts.length * XP.hunt +
     (stats.bestStreak || 0) * XP.streak +
     dailyRight * XP.daily +
-    Math.round(Math.max(0, stats.storyBest || 0) / 2);
+    Math.round(Math.max(0, stats.storyBest || 0) / 2) +
+    (stats.speedBest || 0) * XP.speed;
   let i = LEVELS.length - 1;
   while (LEVELS[i].xp > xp) i--;
   const level = LEVELS[i];

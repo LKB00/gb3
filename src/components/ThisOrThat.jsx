@@ -6,6 +6,7 @@ import { makeDeck } from '../game/decks';
 import MockFrame, { MockBlock } from '../mock/Mock';
 import { markPlayed, saveStreak, useGameStats, XP } from '../progress';
 import Burst from './Burst';
+import { fx } from '../game/fx';
 
 // This or That: two versions of the same AI screen. Tap the better one.
 // Quick rounds, instant answer, a streak to protect. No reading needed to start.
@@ -57,6 +58,7 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
       setPick(n);
       markPlayed();
       const ok = sides[n] === 'good';
+      fx(ok ? 'right' : 'wrong');
       setResults((r) => [...r, ok]);
       if (ok) {
         const s = streak + 1;

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Flame, Snowflake, Target } from 'lucide-react';
 import { DAILY_GOAL, dayKey, useStreak } from '../progress';
 import Burst from './Burst';
+import { fx } from '../game/fx';
 
 // Small flame in the top bar: your day streak. Grey until you play today.
 export function StreakPill() {
@@ -28,6 +29,7 @@ export function GoalToast() {
   useEffect(() => {
     let t;
     const on = () => {
+      fx('win');
       setShow(true);
       clearTimeout(t);
       t = setTimeout(() => setShow(false), 3500);

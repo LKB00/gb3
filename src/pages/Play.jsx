@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowRight, BookOpenText, CalendarDays, Check, Eye, Flame, Puzzle, ScanSearch, Shuffle, Star, Zap } from 'lucide-react';
+import { ArrowRight, BookOpenText, CalendarDays, Check, Eye, Flame, Puzzle, ScanSearch, Shuffle, Star, Timer, Zap } from 'lucide-react';
 import { categories, patterns } from '../data/patterns';
 import { hunts } from '../data/hunts';
 import { dailyStreak, useDaily, useGameStats, useHuntsDone, usePassed, useStars, useXP } from '../progress';
@@ -81,6 +81,12 @@ export function GameTiles() {
   const stats = useGameStats();
   return (
     <div className="games">
+      <Link to="/play/speed" className="game game-e">
+        <Timer size={22} strokeWidth={1.75} aria-hidden />
+        <strong>Speed round</strong>
+        <span>60 seconds. Tap the better screen, fast. 3 in a row = ×2 points.</span>
+        <span className="game-meta"><Zap size={13} strokeWidth={1.75} aria-hidden /> Best {stats.speedBest || 0} pts</span>
+      </Link>
       <Link to="/play/story" className="game game-d">
         <BookOpenText size={22} strokeWidth={1.75} aria-hidden />
         <strong>Agent on duty</strong>
