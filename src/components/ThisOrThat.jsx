@@ -7,6 +7,8 @@ import MockFrame, { MockBlock } from '../mock/Mock';
 import { markPlayed, saveStreak, useGameStats, XP } from '../progress';
 import Burst from './Burst';
 import { fx } from '../game/fx';
+import { track } from '../game/track';
+import Disagree from './Disagree';
 
 // This or That: two versions of the same AI screen. Tap the better one.
 // Quick rounds, instant answer, a streak to protect. No reading needed to start.
@@ -80,6 +82,7 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
     }
     setRecordXp(Math.max(0, runBest - (stats.bestStreak || 0)) * XP.streak);
     saveStreak(runBest);
+    track('Game finished', { game: onDone ? 'daily' : `this-or-that-${mode}`, score: results.filter(Boolean).length });
     if (onDone) onDone(results);
     else setOver(true);
   }, [pick, i, deck.length, runBest, stats.bestStreak, onDone, results]);
@@ -194,7 +197,8 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
           <>
             <p>
               <strong className={right ? 'txt-good' : 'txt-bad'}>{right ? (streak >= 3 ? `${streak} in a row!` : 'Nice pick.') : 'Not quite.'}</strong>{' '}
-              The pattern is <Link to={`/patterns/${p.id}`}>{p.title}</Link>.
+              The pattern is <Link to={`/patterns/${p.id}`}>{p.title}</Link>.{' '}
+              <Disagree where={`This or That · ${round.brief}`} detail={`Better: “${round.good.caption}”. Worse: “${round.bad.caption}”.`} />
             </p>
             <button type="button" className="btn btn-primary" onClick={next} ref={nextRef}>
               {i < deck.length - 1 ? 'Next' : onDone ? 'See result' : 'See score'} <ArrowRight size={14} strokeWidth={1.75} aria-hidden />

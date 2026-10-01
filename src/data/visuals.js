@@ -1412,6 +1412,146 @@ export const visuals = {
     },
   },
 
+  'agent-handoff': {
+    compare: {
+      bad: {
+        caption: 'Who did what? Nobody knows',
+        blocks: [user('Write a market report on AI note apps'), spinner('AI is working… (8 agents)', { pin: 'A black box' }), ai('Done. The market will grow 300%.')],
+      },
+      good: {
+        caption: 'A visible team with one lead',
+        blocks: [
+          user('Write a market report on AI note apps'),
+          steps([['Research agent · read 24 sources', 'done'], ['Writer agent · drafting section 3', 'active'], ['Checker agent · verify numbers', 'todo']], { pin: 'Each agent and its job' }),
+          note('Lead agent reports back to you and owns the final report.'),
+        ],
+      },
+    },
+    lab: {
+      goal: 'Three AI agents team up to write a market report.',
+      frame: [user('Write a market report on AI note apps'), slot('show'), slot('handoff'), slot('owner')],
+      decisions: [
+        {
+          id: 'show',
+          label: 'While they work, show…',
+          options: [
+            opt('“AI is working…”', false, 'Hides the team. People can’t tell what’s happening or where it’s stuck.', [spinner('AI is working…')]),
+            opt('Each agent, its job and status', true, 'People see the work move from agent to agent.', [steps([['Research · done', 'done'], ['Writing · now', 'active'], ['Checking', 'todo']])]),
+            opt('Every agent’s raw log', false, 'Too much. People drown in detail they didn’t ask for.', [note('[researcher] fetch… [writer] token… [checker] wait…')]),
+          ],
+        },
+        {
+          id: 'handoff',
+          label: 'When one agent hands off to another…',
+          options: [
+            opt('Say what was passed on', true, 'Hand-offs are where mistakes slip in. Making them visible helps people check.', [note('Research → Writer: 24 sources, 6 key numbers')]),
+            opt('Hand off silently', false, 'If a number is wrong, nobody can tell which agent changed it.', []),
+          ],
+        },
+        {
+          id: 'owner',
+          label: 'Who answers for the final report?',
+          options: [
+            opt('“The research agent said so”', false, 'Passing blame between agents breaks trust.', [ai('The research agent said the market grows 300%.')]),
+            opt('One lead agent owns it', true, 'One voice reports back, explains, and fixes.', [note('Lead agent: I checked all 6 numbers. One is an estimate.')]),
+          ],
+        },
+      ],
+    },
+  },
+  'screen-control': {
+    compare: {
+      bad: {
+        caption: 'An invisible hand on your computer',
+        blocks: [user('Order more printer paper'), note('Agent is using your browser…', { pin: 'Can’t watch, can’t stop' }), toast('Paid ₹4,200 with saved card')],
+      },
+      good: {
+        caption: 'Visible, limited, and you can take over',
+        blocks: [
+          user('Order more printer paper'),
+          banner('info', 'Agent is in control of officesupply.com', 'Only this site · you can watch', { pin: 'Clear scope' }),
+          buttons(['!Take over']),
+          modal('Ready to pay ₹4,200?', 'I stopped at checkout. You pay.', ['Cancel', '!Pay myself']),
+        ],
+      },
+    },
+    lab: {
+      goal: 'An agent orders office supplies by using a website for you.',
+      frame: [user('Order more printer paper'), slot('access'), slot('while'), slot('pay')],
+      decisions: [
+        {
+          id: 'access',
+          label: 'Ask for access to…',
+          options: [
+            opt('Your whole computer, once', false, 'Far more access than the task needs. People can’t judge the risk.', [modal('Allow full computer control?', '', ['No', '!Allow'])]),
+            opt('Just this one site', true, 'A small, clear scope is easy to say yes to.', [modal('Let the agent use officesupply.com?', 'Only this site, until the order is done.', ['No', '!Allow'])]),
+          ],
+        },
+        {
+          id: 'while',
+          label: 'While it clicks and types…',
+          options: [
+            opt('Work in a hidden window', false, 'People lose track and can’t step in.', [note('Working in the background…')]),
+            opt('Show it, with a Take over button', true, 'People can watch and grab control at any moment.', [banner('info', 'Agent is in control', 'officesupply.com'), buttons(['!Take over'])]),
+          ],
+        },
+        {
+          id: 'pay',
+          label: 'At checkout…',
+          options: [
+            opt('Pay with the saved card', false, 'Money can’t be un-spent. This needs a person.', [toast('Paid ₹4,200')]),
+            opt('Stop and hand back control', true, 'People pay themselves, after seeing the cart.', [modal('Ready to pay ₹4,200?', 'I stopped at checkout.', ['Cancel', '!Pay myself'])]),
+            opt('Type in your password to log in', false, 'Agents should never handle passwords. Hand over for logins.', [note('Entering password…')]),
+          ],
+        },
+      ],
+    },
+  },
+  'connected-apps': {
+    compare: {
+      bad: {
+        caption: 'Connected to… what, exactly?',
+        blocks: [note('7 apps connected', { pin: 'No details' }), ai('I emailed the client and moved the meeting.')],
+      },
+      good: {
+        caption: 'Clear access, one tap to turn off',
+        blocks: [
+          rows([{ label: 'Gmail', value: 'Read only', action: 'Remove' }, { label: 'Calendar', value: 'Read + act', tag: 'Asks first', tone: 'warn', action: 'Remove' }], { pin: 'Read vs. act, in plain words' }),
+          ai('You’re free after 3 pm. (from Calendar)'),
+        ],
+      },
+    },
+    lab: {
+      goal: 'An assistant connects to someone’s mail and calendar.',
+      frame: [slot('ask'), slot('list'), slot('answer')],
+      decisions: [
+        {
+          id: 'ask',
+          label: 'When connecting Gmail, ask for…',
+          options: [
+            opt('Full access: read, send, delete', false, 'Asking for more than you need scares people, and raises the risk.', [modal('Allow full Gmail access?', 'Read, send and delete email.', ['No', '!Allow'])]),
+            opt('Read only, for now', true, 'Start small. Ask for more when a task really needs it.', [modal('Let the assistant read your Gmail?', 'It can’t send or delete.', ['No', '!Allow'])]),
+          ],
+        },
+        {
+          id: 'list',
+          label: 'In settings, show…',
+          options: [
+            opt('“7 apps connected”', false, 'People can’t see what each app allows.', [note('7 apps connected')]),
+            opt('Each app, its access, and Remove', true, 'One glance tells people what the AI can reach.', [rows([{ label: 'Gmail', value: 'Read only', action: 'Remove' }, { label: 'Calendar', value: 'Read + act', action: 'Remove' }])]),
+          ],
+        },
+        {
+          id: 'answer',
+          label: 'When an answer uses an app…',
+          options: [
+            opt('Just answer', false, 'People can’t tell if it came from their data or a guess.', [ai('You’re free after 3 pm.')]),
+            opt('Name the app it used', true, 'Showing the source builds trust and reminds people what’s connected.', [ai('You’re free after 3 pm. (from Calendar)')]),
+          ],
+        },
+      ],
+    },
+  },
   'cost-estimate': {
     compare: {
       bad: {

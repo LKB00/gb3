@@ -61,7 +61,7 @@ export function dailyNumber(key = todayKey()) {
 }
 
 // Small seeded random number generator (mulberry32), seeded from the date.
-function seeded(key) {
+export function seeded(key) {
   let h = 2166136261;
   for (const ch of key) h = Math.imul(h ^ ch.charCodeAt(0), 16777619);
   return () => {

@@ -90,6 +90,29 @@ export const LEVELS = [
 ];
 export const XP = { star: 10, hunt: 30, streak: 5, daily: 10, speed: 2 };
 
+// Build mode: best stars per brief, in game-stats.builds = { briefId: 1–3 }.
+export function saveBuild(id, stars) {
+  const s = readObj('game-stats');
+  const builds = s.builds || {};
+  if ((builds[id] || 0) >= stars) return;
+  writeObj('game-stats', { ...s, builds: { ...builds, [id]: stars } });
+}
+
+// Stories: best trust per story, in game-stats.stories = { storyId: 0–100 }.
+// (The first story used to save game-stats.storyBest; it still counts.)
+export function saveStoryBest(id, trust) {
+  const s = readObj('game-stats');
+  const stories = { ...(s.stories || {}) };
+  if (id === 'tidy' && s.storyBest != null && stories.tidy == null) stories.tidy = s.storyBest;
+  if ((stories[id] ?? -1) >= trust) return;
+  writeObj('game-stats', { ...s, stories: { ...stories, [id]: trust } });
+}
+export function storyBests(stats) {
+  const out = { ...(stats.stories || {}) };
+  if (stats.storyBest != null && out.tidy == null) out.tidy = stats.storyBest;
+  return out;
+}
+
 // Speed round: best points in 60 seconds.
 export function saveSpeed(points) {
   const s = readObj('game-stats');
@@ -139,7 +162,8 @@ export function useXP() {
     hunts.length * XP.hunt +
     (stats.bestStreak || 0) * XP.streak +
     dailyRight * XP.daily +
-    Math.round(Math.max(0, stats.storyBest || 0) / 2) +
+    Object.values(storyBests(stats)).reduce((n, t) => n + Math.round(Math.max(0, t) / 2), 0) +
+    Object.values(stats.builds || {}).reduce((n, st) => n + st * XP.star, 0) +
     (stats.speedBest || 0) * XP.speed;
   let i = LEVELS.length - 1;
   while (LEVELS[i].xp > xp) i--;
@@ -201,4 +225,60 @@ export function streakInfo(days, today = new Date()) {
 export function useStreak() {
   const days = useDays();
   return { ...streakInfo(days), days };
+}
+
+// ---- Backup code: move progress to another browser, no account needed ----
+// The code is "AIP1." + base64 of the saved progress. Restoring MERGES with what
+// is already here (keeps the best of both), so it can never lose progress.
+const LISTS = ['labs-passed', 'hunts-done'];
+const OBJECTS = ['lab-stars', 'game-stats', 'daily', 'days'];
+
+export function exportProgress() {
+  const data = {};
+  for (const k of LISTS) data[k] = read(k);
+  for (const k of OBJECTS) data[k] = readObj(k);
+  try {
+    data.name = localStorage.getItem('player-name') || '';
+  } catch {
+    data.name = '';
+  }
+  const json = JSON.stringify(data);
+  const b64 = btoa(unescape(encodeURIComponent(json)));
+  return `AIP1.${b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')}`;
+}
+
+// Numbers keep the larger value; nested objects merge key by key; arrays keep the first saved.
+function mergeObj(a = {}, b = {}) {
+  const out = { ...a };
+  for (const [k, v] of Object.entries(b)) {
+    if (typeof v === 'number') out[k] = Math.max(typeof a[k] === 'number' ? a[k] : -Infinity, v);
+    else if (Array.isArray(v)) out[k] = a[k] ?? v;
+    else if (v && typeof v === 'object') out[k] = mergeObj(a[k], v);
+    else if (out[k] === undefined) out[k] = v;
+  }
+  return out;
+}
+
+export function importProgress(code) {
+  try {
+    const raw = code.trim();
+    if (!raw.startsWith('AIP1.')) return { ok: false, error: 'This doesn’t look like an AI Patterns backup code.' };
+    let b64 = raw.slice(5).replace(/-/g, '+').replace(/_/g, '/');
+    while (b64.length % 4) b64 += '=';
+    const data = JSON.parse(decodeURIComponent(escape(atob(b64))));
+    if (!data || typeof data !== 'object') throw new Error('bad');
+    for (const k of LISTS) {
+      if (!Array.isArray(data[k])) continue;
+      const merged = [...new Set([...read(k), ...data[k].filter((x) => typeof x === 'string')])];
+      localStorage.setItem(k, JSON.stringify(merged));
+    }
+    for (const k of OBJECTS) {
+      if (data[k] && typeof data[k] === 'object') localStorage.setItem(k, JSON.stringify(mergeObj(readObj(k), data[k])));
+    }
+    if (data.name && !localStorage.getItem('player-name')) localStorage.setItem('player-name', String(data.name).slice(0, 24));
+    window.dispatchEvent(new Event(EVENT));
+    return { ok: true };
+  } catch {
+    return { ok: false, error: 'That code didn’t work. Check that you copied all of it.' };
+  }
 }

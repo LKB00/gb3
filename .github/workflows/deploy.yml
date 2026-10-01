@@ -25,6 +25,9 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+        env:
+          # Optional Plausible stats; empty = off. Set it in Settings → Secrets and variables → Actions → Variables.
+          VITE_PLAUSIBLE_DOMAIN: ${{ vars.VITE_PLAUSIBLE_DOMAIN }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

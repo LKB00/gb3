@@ -471,6 +471,51 @@ export const patterns = [
     examples: [],
   },
   {
+    id: 'agent-handoff',
+    title: 'Show which agent is working',
+    category: 'agents',
+    summary: 'When several AI agents pass work between them, show who is doing what, and who answers for it.',
+    problem:
+      'Big AI tasks are now split between several agents: a researcher, a writer, a checker. If the screen hides this, people can’t tell where a mistake came from or who to ask.',
+    solution:
+      'Show each agent as a named step with its job and status. Make the hand-offs visible, and keep one lead agent that reports back and owns the result.',
+    when: ['Multi-agent or sub-agent workflows', 'Long tasks where different steps need different tools'],
+    avoid: ['A single, quick answer where agent names add noise'],
+    dos: ['Name each agent by its job, not a code name', 'Show hand-offs as they happen', 'Let people open one agent’s work to check it'],
+    donts: ['Show one “AI is working” for a 10-agent process', 'Let agents pass blame (“the research agent said so”)'],
+    examples: [],
+  },
+  {
+    id: 'screen-control',
+    title: 'Ask before using your screen',
+    category: 'agents',
+    summary: 'When an AI agent clicks and types for you, show what it can touch, make it visible, and let people take over.',
+    problem:
+      'Agents can now use a browser or a whole computer. People can’t see what they are allowed to do, they lose track of what is happening, and logins or payments feel scary.',
+    solution:
+      'Ask for access per site or app, with a clear scope. Show a visible “agent is in control” state with a big Take over button, and pause for logins, payments and anything you can’t undo.',
+    when: ['Browser agents and computer-use agents', 'Agents that fill forms or buy things'],
+    avoid: ['Read-only tasks that never act on a screen'],
+    dos: ['Ask once per site with a clear scope', 'Show a visible border or banner while the agent is in control', 'Hand control back for passwords and payments'],
+    donts: ['Ask for access to “everything” up front', 'Act in a hidden window with no way to watch', 'Type passwords for people'],
+    examples: [],
+  },
+  {
+    id: 'connected-apps',
+    title: 'Show what it can access',
+    category: 'trust',
+    summary: 'List the apps and data the AI is connected to, what it can do in each, and how to turn it off.',
+    problem:
+      'AI assistants now connect to mail, calendars, drives and work tools. People forget what they connected, and don’t know if the AI can only read, or also send and delete.',
+    solution:
+      'Keep one clear list of connected apps, each with “read” or “read and act” access. Show which app was used in an answer, and make it one tap to pause or remove a connection.',
+    when: ['Assistants with connectors, plugins or tool access', 'Work tools that read company data'],
+    avoid: ['A stand-alone AI with no connections'],
+    dos: ['Say read-only vs. can-act in plain words', 'Show the app used next to each answer', 'One-tap disconnect'],
+    donts: ['Hide connections deep in settings', 'Ask for write access when read is enough'],
+    examples: [],
+  },
+  {
     id: 'voice-turn-taking',
     title: 'Show who is talking',
     category: 'voice',

@@ -5,6 +5,8 @@ import { markPassed, markPlayed, saveStars, useStars, XP } from '../progress';
 import Burst, { XpPop } from './Burst';
 import FlipCard from './FlipCard';
 import { fx } from '../game/fx';
+import { track } from '../game/track';
+import Disagree from './Disagree';
 
 // Challenge ("Fix it"), built as a guided flow:
 //   one decision at a time → instant feedback → fix mistakes → next step → summary.
@@ -47,6 +49,7 @@ export default function Lab({ id, lab, title, next }) {
     if (skipped) return;
     setGained(Math.max(0, stars - (savedStars[id] || 0)) * XP.star);
     fx('win');
+    track('Game finished', { game: 'fix-it', stars });
     saveStars(id, stars);
     markPassed(id);
   };
@@ -150,6 +153,7 @@ export default function Lab({ id, lab, title, next }) {
                 </strong>
                 <span>{pickedOpt.why}</span>
                 {!pickedOpt.ok && <span className="lab-why-try">Try another option.</span>}
+                <Disagree where={`Fix it · ${id} · ${d.label}`} detail={`“${pickedOpt.label}” was marked ${pickedOpt.ok ? 'good' : 'a mistake'}: ${pickedOpt.why}`} />
               </div>
             )}
 

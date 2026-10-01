@@ -8,6 +8,9 @@ A playground for AI interaction design. Not a course: quick games, instant wins,
 - **Fix it** (the Play tab on each card): build an AI feature one decision at a time with instant feedback. Win the card with 1–3 stars.
 - **Spot the flaw** (`/play/spot-the-flaw`): realistic AI screens with hidden mistakes. Tap what is wrong.
 - **Cards** (`/patterns`): 34 pattern cards in 7 groups (Input, Output, Control, Trust, Feedback, Agents, Voice & vision). Each has Play, Why it works and Cheat sheet tabs.
+- **Build mode** (`/play/build`): a blank AI screen and a box of pieces. Tap or drag the right pieces on, leave the traps out, then check. 4 briefs (research answer, travel agent, long writing task, voice in a car), 1–3 stars each.
+- **Stories** (`/play/story`): 4 branching stories with a trust meter and 4 endings each: a file-cleanup agent (Priya), a kitchen voice assistant (Arjun), a bank help bot (Meera) and a coding agent (Kabir).
+- **Challenge a friend**: after the Daily or a Speed round, copy a link. Your friend plays the exact same rounds (seeded) and sees your score to beat. Everything is in the link, no server.
 - **Speed round** (`/play/speed`): 60 seconds of quick "which is better?" picks (classic + hard mixed). 3 in a row = ×2 points; a wrong tap costs 1 point, so random tapping doesn't pay. 3-2-1 countdown, ticking last 5 seconds, copyable score.
 - **Card flip**: winning a Fix it challenge flips your new pattern card over with a glow.
 - **Sound and vibration** (speaker button in the top bar, off by default): short sounds made with Web Audio (no files) and phone vibration on right, wrong, win and card flip.
@@ -15,7 +18,19 @@ A playground for AI interaction design. Not a course: quick games, instant wins,
 - **Player card** (`/play/card`): your name, AI-designer type (from the group you've mastered most, e.g. "The Trust Keeper"), level, XP, stats and badges. Save as a 1080×1350 image or share; made in the browser, nothing uploaded.
 - **XP, levels and badges** (`/play`): stars, flaws found and best streak add up to XP; 6 levels from Rookie to Legend; a badge per group (gold with all 3 stars).
 - **Explore**: Teardowns of ChatGPT, Perplexity, GitHub Copilot and Claude Code; 8 AI dark patterns; Principles (UX heuristics, psychology, Microsoft's 18 Human-AI guidelines); Glossary; Deep dives (9 short reads).
+- **Installable app**: add it to the home screen or dock; works offline (service worker in `public/sw.js`).
+- **Backup code** (`/play` → Your progress): copy a code with all progress and paste it on another device. Restoring merges and never loses progress.
+- **Link previews**: Open Graph and Twitter tags with `public/og.png`, so shared links show a title card.
+- **“I disagree”** links on answers open a ready-to-send GitHub issue.
 - Light and dark mode, works on phone and desktop. Progress is saved only in the browser.
+
+## Visitor stats (optional)
+
+Off by default. To turn on privacy-friendly stats with [Plausible](https://plausible.io) (no cookies, no personal data):
+
+1. Create a Plausible site for `lkb00.github.io`.
+2. In GitHub → Settings → Secrets and variables → Actions → **Variables**, add `VITE_PLAUSIBLE_DOMAIN` = `lkb00.github.io`.
+3. Deploy again. Page views and "Game finished" events will show up in Plausible.
 
 ## Design
 
@@ -62,6 +77,10 @@ Live at **https://lkb00.github.io/patricka/** — every push to `main` builds an
 | Player card + designer type | Something personal to keep and show off; the type changes as you play, so it's a reason to explore other groups. |
 | Speed round | Pace and pressure for players who already know the basics; the wrong-tap cost keeps it about skill, not luck. |
 | Card flip, sounds, vibration | Small sensory rewards at the moment of a win; sound is off by default and motion respects reduced-motion settings. |
+| Build mode | Designing from a blank screen is the closest thing to real work; traps teach what to leave out. |
+| Four stories | Different products (agent, voice, support, coding) show the same trust ideas in new places. |
+| Challenge links | The fastest way for one player to bring the next one, with no accounts or server. |
+| Installable app + backup code | Feels like a real app on a phone, and progress isn't trapped in one browser. |
 | Levels and badges | Small, honest goals (next level, finish a group) instead of a syllabus. |
 | Confetti, XP pops, card unlocks | Short moments of delight on wins; turned off for people who prefer reduced motion. |
 | Breadcrumbs | Every inner page shows where you are and one step back. |
