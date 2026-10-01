@@ -8,11 +8,9 @@ import { fileURLToPath } from 'url';
 
 const OUT = fileURLToPath(new URL('../public/', import.meta.url));
 const INK = '#24282c';
-const logo = (gap) => `<svg viewBox="0 0 44 28" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:auto">
-  <circle cx="13" cy="14" r="12" fill="#c2ef72"/>
-  <circle cx="31" cy="14" r="12" fill="#f6a5a0" stroke="${gap}" stroke-width="2"/>
-  <g fill="${INK}"><circle cx="9.5" cy="12" r="1.8"/><circle cx="16.5" cy="12" r="1.8"/><circle cx="27.5" cy="12.5" r="1.8"/><circle cx="34.5" cy="12.5" r="1.8"/></g>
-  <g fill="none" stroke="${INK}" stroke-width="2" stroke-linecap="round"><path d="M8.5 17Q13 21.6 17.5 17"/><path d="M26.5 20.8Q31 16.2 35.5 20.8"/><path d="M26.2 8.4L29.6 10.2"/><path d="M35.8 8.4L32.4 10.2"/></g>
+const LIME = '#c2ef72';
+const logo = (gap) => `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:auto">
+  <circle cx="12" cy="12" r="10" fill="${LIME}" stroke="${gap}" stroke-width="1"/>
 </svg>`;
 
 // App icon: dark tile with the logo. `round` = rounded corners with see-through outside; `scale` = logo width as a share of the tile.
@@ -23,23 +21,15 @@ const icon = (size, { round, scale }) => ({
     <div style="width:${Math.round(size * scale)}px">${logo(INK)}</div></div></body>`,
 });
 
-const card = (rot, bg, dot, dotText, title, body) => `
-  <div style="transform:rotate(${rot}deg);background:${bg};border-radius:28px;padding:22px 24px;width:400px;box-sizing:border-box">
-    <div style="display:flex;align-items:center;gap:12px;font-weight:800;font-size:25px;color:#24282c"><span style="width:34px;height:34px;border-radius:50%;background:${dot};color:#fff;display:grid;place-items:center;font-size:20px">${dotText}</span>${title}</div>
-    <div style="background:#fff;border-radius:18px;padding:16px 18px;margin-top:14px;font-size:23px;line-height:34px;color:#4b4f53">${body}</div></div>`;
 
 const og = {
   size: [1200, 630],
-  html: `<body style="margin:0;width:1200px;height:630px;background:${INK};font-family:'Bricolage Grotesque','DejaVu Sans',sans-serif;position:relative;overflow:hidden">
-    <div style="position:absolute;left:72px;top:52px;display:flex;align-items:center;gap:20px;color:#c9ccc4;font-weight:800;font-size:27px;letter-spacing:0.05em">
-      <div style="width:96px">${logo(INK)}</div>GOOD BOT, BAD BOT</div>
-    <div style="position:absolute;left:72px;top:140px;width:620px;color:#fbfbf7;font-weight:800;font-size:84px;line-height:92px">Can you spot good AI design?</div>
-    <div style="position:absolute;left:72px;top:432px;width:620px;color:#c9ccc4;font-size:25px;line-height:34px">Quick games about AI interaction design. Play, collect cards, keep your streak.</div>
-    <div style="position:absolute;left:72px;top:536px;display:flex;gap:14px">${['This or That', 'Daily', 'Speed round', 'Stories'].map((t) => `<span style="background:#32373c;color:#fbfbf7;font-weight:800;font-size:22px;border-radius:999px;padding:12px 22px">${t}</span>`).join('')}</div>
-    <div style="position:absolute;left:722px;top:112px;display:flex;flex-direction:column;gap:22px">
-      ${card(-2, '#fae6e4', '#c1443a', '✕', 'No sources', 'Churn rose 4% after the pricing change.')}
-      ${card(2, '#edf3dc', '#5a7a1f', '✓', 'Shows sources', 'Churn rose 4% after the pricing change <b style="background:#e8e8f0;border-radius:6px;padding:0 8px">1</b>')}
-    </div></body>`,
+  html: `<body style="margin:0;width:1200px;height:630px;background:#fbfbf7;font-family:'Bricolage Grotesque','DejaVu Sans',sans-serif;position:relative;overflow:hidden">
+    <div style="position:absolute;left:72px;top:52px;display:flex;align-items:center;gap:14px;color:#24282c;font-weight:700;font-size:32px;letter-spacing:-0.01em">
+      <div style="width:42px;height:42px;border-radius:50%;background:${LIME};border:2px solid ${INK}"></div>AI Patterns</div>
+    <div style="position:absolute;left:72px;top:160px;width:620px;color:#24282c;font-weight:700;font-size:64px;line-height:72px">Quick games about AI interaction design.</div>
+    <div style="position:absolute;left:72px;top:428px;width:620px;color:#4b4f53;font-size:24px;line-height:34px">Spot good AI design, collect pattern cards, keep your streak.</div>
+    <div style="position:absolute;left:72px;top:518px;display:flex;gap:12px">${['This or That', 'Daily', 'Speed round'].map((t) => `<span style="background:#e8e8f0;color:#24282c;font-weight:700;font-size:18px;border-radius:8px;padding:10px 18px">${t}</span>`).join('')}</div></body>`,
 };
 
 const jobs = {

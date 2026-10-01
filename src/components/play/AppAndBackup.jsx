@@ -35,7 +35,7 @@ export default function AppAndBackup() {
           <strong>Play it like an app</strong>
           <p className="small muted">
             {install.installed
-              ? 'Installed. Open Good Bot, Bad Bot from your home screen.'
+              ? 'Installed. Open AI Patterns from your home screen.'
               : install.iosHint
                 ? 'On iPhone: tap Share, then “Add to Home Screen”.'
                 : 'Add it to your home screen or dock. Works offline too.'}
