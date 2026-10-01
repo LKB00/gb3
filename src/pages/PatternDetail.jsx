@@ -1,9 +1,9 @@
 import { Link, useParams, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, Check, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, Gamepad2, Lightbulb, ScrollText, Star, X } from 'lucide-react';
 import { getCategory, getPattern, patterns } from '../data/patterns';
 import { visuals } from '../data/visuals';
 import { lessons } from '../data/lessons';
-import { usePassed } from '../progress';
+import { usePassed, useStars } from '../progress';
 import DemoFrame from '../components/DemoFrame';
 import Compare from '../components/Compare';
 import Lab from '../components/Lab';
@@ -15,14 +15,14 @@ import NotFound from './NotFound';
 
 const ICON = { size: 14, strokeWidth: 2, 'aria-hidden': true };
 
-// One pattern = three short views instead of one long page:
-//   Do         → build it in the lab (learning by doing comes first)
-//   Understand → the expert answer, why it matters, real products, principles
-//   Reference  → rules of thumb and details, for later
+// One pattern card = three short views instead of one long page:
+//   Play          → the "Fix it" challenge (playing comes first)
+//   Why it works  → the winning design, real products, principles
+//   Cheat sheet   → rules of thumb and details, for later
 const VIEWS = [
-  { id: 'do', label: 'Do' },
-  { id: 'understand', label: 'Understand' },
-  { id: 'reference', label: 'Reference' },
+  { id: 'do', label: 'Play', icon: Gamepad2 },
+  { id: 'understand', label: 'Why it works', icon: Lightbulb },
+  { id: 'reference', label: 'Cheat sheet', icon: ScrollText },
 ];
 
 function Section({ title, sub, children }) {
@@ -41,6 +41,7 @@ export default function PatternDetail() {
   const { id } = useParams();
   const [params, setParams] = useSearchParams();
   const passed = usePassed();
+  const stars = useStars();
   const p = getPattern(id);
   useTitle(p?.title);
   if (!p) return <NotFound />;
@@ -63,7 +64,7 @@ export default function PatternDetail() {
     <article className="page">
       <Breadcrumbs
         items={[
-          { label: 'Library', to: '/patterns' },
+          { label: 'Cards', to: '/patterns' },
           { label: cat.name, to: `/patterns?category=${p.category}` },
           { label: p.title },
         ]}
@@ -72,17 +73,21 @@ export default function PatternDetail() {
       <header className="page-head page-head-tight">
         <div className="row">
           <span className={`tag tag-${p.category}`}>{cat.name}</span>
-          <span className="muted small">Pattern {idx + 1} of {patterns.length}</span>
-          {done && <span className="tag tag-done"><Check size={10} strokeWidth={2.5} aria-hidden /> Lab passed</span>}
+          <span className="muted small">Card #{String(idx + 1).padStart(2, '0')}</span>
+          {done && (
+            <span className="card-stars" aria-label={`Collected, ${stars[p.id] || 1} of 3 stars`}>
+              {[1, 2, 3].map((n) => <Star key={n} size={14} strokeWidth={1.75} className={n <= (stars[p.id] || 1) ? 'is-on' : ''} aria-hidden />)}
+            </span>
+          )}
         </div>
         <h1 className="display">{p.title}</h1>
         <p className="lead">{p.summary}</p>
       </header>
 
       <div className="tabs view-tabs" role="tablist" aria-label="Views">
-        {VIEWS.map((t, i) => (
+        {VIEWS.map((t) => (
           <button key={t.id} role="tab" aria-selected={view === t.id} className={'tab' + (view === t.id ? ' active' : '')} onClick={() => go(t.id)}>
-            <span className="tab-num">{i + 1}</span>
+            <t.icon size={15} strokeWidth={1.75} aria-hidden />
             {t.label}
           </button>
         ))}
@@ -109,7 +114,7 @@ export default function PatternDetail() {
             <p className="label">Why it matters</p>
             <p>{p.problem}</p>
           </div>
-          <Section title="The expert answer" sub="The same moment designed two ways.">
+          <Section title="The winning design" sub="The same moment, designed two ways.">
             <Compare data={v.compare} />
           </Section>
           {p.demo && (
@@ -165,7 +170,7 @@ export default function PatternDetail() {
         </div>
       )}
 
-      <nav className="pager" aria-label="More patterns">
+      <nav className="pager" aria-label="More cards">
         {prev ? (
           <Link to={`/patterns/${prev.id}`} className="pager-link">
             <span className="label">Previous</span>
@@ -174,13 +179,13 @@ export default function PatternDetail() {
         ) : <span />}
         {next ? (
           <Link to={`/patterns/${next.id}`} className="pager-link pager-next">
-            <span className="label">Next pattern</span>
+            <span className="label">Next card</span>
             <span>{next.title} <ArrowRight size={14} strokeWidth={1.75} aria-hidden /></span>
           </Link>
         ) : (
-          <Link to="/practice" className="pager-link pager-next">
+          <Link to="/play" className="pager-link pager-next">
             <span className="label">Next</span>
-            <span>Practice <ArrowRight size={14} strokeWidth={1.75} aria-hidden /></span>
+            <span>More games <ArrowRight size={14} strokeWidth={1.75} aria-hidden /></span>
           </Link>
         )}
       </nav>

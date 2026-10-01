@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import TopBar from './components/TopBar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -7,7 +7,7 @@ import Patterns from './pages/Patterns';
 import PatternDetail from './pages/PatternDetail';
 import Learn from './pages/Learn';
 import Lesson from './pages/Lesson';
-import Practice from './pages/Practice';
+import Play, { SpotTheFlaw, ThisOrThatPage } from './pages/Play';
 import Principles from './pages/Principles';
 import AntiPatterns from './pages/AntiPatterns';
 import Glossary from './pages/Glossary';
@@ -27,7 +27,10 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/patterns" element={<Patterns />} />
           <Route path="/patterns/:id" element={<PatternDetail />} />
-          <Route path="/practice" element={<Practice />} />
+          <Route path="/play" element={<Play />} />
+          <Route path="/play/this-or-that" element={<ThisOrThatPage />} />
+          <Route path="/play/spot-the-flaw" element={<SpotTheFlaw />} />
+          <Route path="/practice" element={<Navigate to="/play" replace />} />
           <Route path="/principles" element={<Principles />} />
           <Route path="/anti-patterns" element={<AntiPatterns />} />
           <Route path="/glossary" element={<Glossary />} />

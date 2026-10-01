@@ -1,22 +1,17 @@
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { Moon, Sun } from 'lucide-react';
-import { patterns } from '../data/patterns';
-import { hunts } from '../data/hunts';
-import { useHuntsDone, usePassed } from '../progress';
+import { Moon, Sun, Zap } from 'lucide-react';
+import { useXP } from '../progress';
 import { useTheme } from '../theme';
 
-const LIBRARY = ['/patterns', '/teardowns', '/anti-patterns', '/principles', '/glossary'];
+const PLAY = ['/play', '/practice'];
+const EXPLORE = ['/teardowns', '/anti-patterns', '/principles', '/glossary', '/learn'];
 
-// Three places only: Learn (guided), Practice (do), Library (look things up).
+// Three places only: Play (games), Cards (the pattern collection), Explore (go deeper).
 export default function TopBar() {
   const { pathname } = useLocation();
-  const passed = usePassed();
-  const huntsDone = useHuntsDone();
+  const { xp, level } = useXP();
   const [isDark, toggleTheme] = useTheme();
-  const pct = Math.round(((passed.length + huntsDone.length) / (patterns.length + hunts.length)) * 100);
-  const inLibrary = LIBRARY.some((p) => pathname.startsWith(p));
-  const r = 7;
-  const c = 2 * Math.PI * r;
+  const on = (list) => list.some((p) => pathname.startsWith(p));
 
   return (
     <header className="topnav">
@@ -26,17 +21,15 @@ export default function TopBar() {
           <span className="logo-text">AI Patterns</span>
         </Link>
         <nav className="topnav-links" aria-label="Main">
-          <NavLink to="/learn">Learn</NavLink>
-          <NavLink to="/practice">Practice</NavLink>
-          <NavLink to="/patterns" className={() => (inLibrary ? 'active' : '')}>Library</NavLink>
+          <NavLink to="/play" className={() => (on(PLAY) ? 'active' : '')}>Play</NavLink>
+          <NavLink to="/patterns">Cards</NavLink>
+          <NavLink to="/teardowns" className={() => (on(EXPLORE) ? 'active' : '')}>Explore</NavLink>
         </nav>
         <div className="topnav-right">
-          <Link to="/practice" className="progress-pill" aria-label={`Your progress: ${pct}%. ${passed.length} labs passed, ${huntsDone.length} hunts done.`}>
-            <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden>
-              <circle cx="9" cy="9" r={r} className="ring-bg" />
-              <circle cx="9" cy="9" r={r} className="ring-fg" strokeDasharray={c} strokeDashoffset={c * (1 - pct / 100)} />
-            </svg>
-            {pct}%
+          <Link to="/play" className="xp-pill" aria-label={`${xp} XP, level: ${level.name}`} title={level.name}>
+            <Zap size={14} strokeWidth={2} aria-hidden />
+            <span key={xp} className="xp-num">{xp}</span>
+            <span className="xp-unit">XP</span>
           </Link>
           <button className="icon-btn" onClick={toggleTheme} aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}>
             {isDark ? <Sun size={16} strokeWidth={1.75} aria-hidden /> : <Moon size={16} strokeWidth={1.75} aria-hidden />}

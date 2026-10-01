@@ -1,15 +1,17 @@
 import { useTitle } from '../useTitle';
 import { useSearchParams } from 'react-router-dom';
-import { Search } from 'lucide-react';
+import { Puzzle, Search } from 'lucide-react';
 import { categories, patterns } from '../data/patterns';
 import PatternCard from '../components/PatternCard';
-import { usePassed } from '../progress';
-import LibraryTabs from '../components/LibraryTabs';
+import { usePassed, useStars } from '../progress';
+import { useRandomChallenge } from './Play';
 
 export default function Patterns() {
-  useTitle('All patterns');
+  useTitle('Cards');
   const [params, setParams] = useSearchParams();
   const passed = usePassed();
+  const stars = useStars();
+  const random = useRandomChallenge();
   const category = params.get('category') || 'all';
   const query = params.get('q') || '';
 
@@ -29,10 +31,16 @@ export default function Patterns() {
 
   return (
     <div className="page page-wide">
-      <LibraryTabs />
-      <header className="page-head">
-        <h1 className="display">All patterns</h1>
-        <p className="lead">{patterns.length} patterns for designing AI features, grouped by the problem they solve.</p>
+      <header className="page-head page-head-tight cards-head">
+        <h1 className="display">Your cards</h1>
+        <p className="lead">Every card is an AI design pattern. Win its “Fix it” challenge to collect it, with up to 3 stars.</p>
+        <div className="collect-bar">
+          <span className="meter" aria-hidden><span style={{ width: `${(passed.length / patterns.length) * 100}%` }} /></span>
+          <span className="small"><strong>{passed.length}</strong> of {patterns.length} collected</span>
+          <button type="button" className="btn btn-primary" onClick={random}>
+            <Puzzle size={15} strokeWidth={1.75} aria-hidden /> Play a random card
+          </button>
+        </div>
       </header>
 
       <div className="filters">
@@ -41,10 +49,10 @@ export default function Patterns() {
           <input
             type="search"
             id="pattern-search"
-            placeholder="Search patterns"
+            placeholder="Search cards"
             value={query}
             onChange={(e) => update('q', e.target.value)}
-            aria-label="Search patterns"
+            aria-label="Search cards"
           />
         </label>
         <div className="chips" role="group" aria-label="Filter by group">
@@ -58,11 +66,11 @@ export default function Patterns() {
 
       {list.length ? (
         <div className="card-grid">
-          {list.map((p) => <PatternCard key={p.id} pattern={p} passed={passed.includes(p.id)} />)}
+          {list.map((p) => <PatternCard key={p.id} pattern={p} number={patterns.indexOf(p) + 1} passed={passed.includes(p.id)} stars={stars[p.id] || (passed.includes(p.id) ? 1 : 0)} />)}
         </div>
       ) : (
         <div className="empty">
-          <p>No patterns match “{query}”.</p>
+          <p>No cards match “{query}”.</p>
           <button className="btn btn-ghost" onClick={() => setParams({}, { replace: true })}>Clear filters</button>
         </div>
       )}

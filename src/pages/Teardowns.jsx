@@ -46,7 +46,7 @@ export function TeardownDetail() {
 
   return (
     <article className="page">
-      <Breadcrumbs items={[{ label: 'Library', to: '/patterns' }, { label: 'Teardowns', to: '/teardowns' }, { label: t.product }]} />
+      <Breadcrumbs items={[{ label: 'Explore', to: '/teardowns' }, { label: 'Teardowns', to: '/teardowns' }, { label: t.product }]} />
       <header className="page-head">
         <div className="td-head">
           <span className="ex-mark td-mark-lg" aria-hidden>{t.product[0]}</span>

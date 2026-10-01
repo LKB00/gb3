@@ -22,9 +22,9 @@ export default function Lesson() {
 
   return (
     <article className="page">
-      <Breadcrumbs items={[{ label: 'Learn', to: '/learn' }, { label: `Lesson ${idx + 1}` }]} />
+      <Breadcrumbs items={[{ label: 'Explore', to: '/teardowns' }, { label: 'Deep dives', to: '/learn' }, { label: lesson.title }]} />
       <header className="page-head page-head-tight">
-        <p className="label">Lesson {idx + 1} of {lessons.length} · {lesson.level} · {lesson.minutes} min</p>
+        <p className="label">Deep dive · {lesson.minutes} min read</p>
         <h1 className="display">{lesson.title}</h1>
         <p className="lead">{lesson.intro}</p>
       </header>
@@ -37,7 +37,7 @@ export default function Lesson() {
             <div className="lesson-visual">
               <Compare data={visuals[s.visual].compare} />
               <Link to={`/patterns/${s.visual}`} className="text-link">
-                Try {getPattern(s.visual).title} in the Design Lab <ArrowRight size={14} strokeWidth={1.75} aria-hidden />
+                Play the {getPattern(s.visual).title} card <ArrowRight size={14} strokeWidth={1.75} aria-hidden />
               </Link>
             </div>
           )}
@@ -45,24 +45,24 @@ export default function Lesson() {
       ))}
 
       <section className="block">
-        <h2>Key takeaways</h2>
+        <h2>Remember this</h2>
         <ul className="rule-list rule-do">
           {lesson.takeaways.map((t) => <li key={t}><Check size={14} strokeWidth={2} aria-hidden />{t}</li>)}
         </ul>
       </section>
 
       <section className="block">
-        <h2>Try this</h2>
+        <h2>Try it at work</h2>
         <p className="prose">{lesson.exercise}</p>
       </section>
 
       {lesson.patterns.length > 0 && (
         <section className="block do-it">
           <div className="section-head">
-            <p className="label"><FlaskConical size={12} strokeWidth={2} aria-hidden /> Do it now</p>
-            <h2>Practice what you just learned</h2>
+            <p className="label"><FlaskConical size={12} strokeWidth={2} aria-hidden /> Your turn</p>
+            <h2>Play the cards from this read</h2>
             <p className="section-sub">
-              {lesson.patterns.filter((pid) => passed.includes(pid)).length} of {lesson.patterns.length} labs passed. Each takes about a minute.
+              {lesson.patterns.filter((pid) => passed.includes(pid)).length} of {lesson.patterns.length} collected. About a minute each.
             </p>
           </div>
           <span className="meter" aria-hidden>
@@ -73,12 +73,12 @@ export default function Lesson() {
               <li key={pid}>
                 <Link to={`/patterns/${pid}`} className={'index-row index-row-icon' + (passed.includes(pid) ? ' index-done' : '')}>
                   {passed.includes(pid) ? (
-                    <Check size={16} strokeWidth={2} className="index-check-on" aria-label="Passed" />
+                    <Check size={16} strokeWidth={2} className="index-check-on" aria-label="Collected" />
                   ) : (
                     <Circle size={16} strokeWidth={1.5} className="index-check-off" aria-label="Not done yet" />
                   )}
                   <span className="index-title">{getPattern(pid).title}</span>
-                  <span className="index-sum">{passed.includes(pid) ? 'Passed. Open to review.' : 'Build it in the lab'}</span>
+                  <span className="index-sum">{passed.includes(pid) ? 'Collected' : 'Play to collect'}</span>
                   <ArrowRight size={16} strokeWidth={1.75} className="index-chev" aria-hidden />
                 </Link>
               </li>
@@ -87,7 +87,7 @@ export default function Lesson() {
         </section>
       )}
 
-      <nav className="pager" aria-label="More lessons">
+      <nav className="pager" aria-label="More deep dives">
         {prev ? (
           <Link to={`/learn/${prev.id}`} className="pager-link">
             <span className="label">Previous</span>
@@ -96,13 +96,13 @@ export default function Lesson() {
         ) : <span />}
         {next ? (
           <Link to={`/learn/${next.id}`} className="pager-link pager-next">
-            <span className="label">Next lesson</span>
+            <span className="label">Next deep dive</span>
             <span>{next.title} <ArrowRight size={14} strokeWidth={1.75} aria-hidden /></span>
           </Link>
         ) : (
-          <Link to="/practice" className="pager-link pager-next">
+          <Link to="/play" className="pager-link pager-next">
             <span className="label">Next</span>
-            <span>Practice <ArrowRight size={14} strokeWidth={1.75} aria-hidden /></span>
+            <span>Play a game <ArrowRight size={14} strokeWidth={1.75} aria-hidden /></span>
           </Link>
         )}
       </nav>
