@@ -87,7 +87,9 @@
   }
   .topnav-back:active { background: var(--sand-dark); }
   .logo-text { display: inline !important; }
-  .logo-text { display: none; }
+  /* The name is the part that gives way when streak and XP are big: it shortens with "…". */
+  .logo { flex: 0 1 auto; min-width: 0; }
+  .logo-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .topnav-right { flex: none; }
   .bottomnav {
     position: fixed;
@@ -318,3 +320,9 @@
   .bottomnav-icon { height: 28px; }
 }
 
+/* Very narrow phones: the short name GB3 (Good Bot, Bad Bot = G + B three times) replaces the full name. */
+.logo-short { display: none; }
+@media (max-width: 340px) {
+  .logo-full { display: none; }
+  .logo-short { display: inline; }
+}

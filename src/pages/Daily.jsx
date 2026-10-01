@@ -34,7 +34,7 @@ function useCountdown() {
 export function shareText(num, results, streak) {
   const grid = results.map((r) => (r ? '🟩' : '🟥')).join('');
   const url = `${window.location.origin}${window.location.pathname}#/play/daily`;
-  return `AI Patterns Daily #${num} · ${results.filter(Boolean).length}/${results.length}\n${grid}${streak > 1 ? `\n🔥 ${streak} days in a row` : ''}\nPlay at ${url}`;
+  return `Good Bot, Bad Bot Daily #${num} · ${results.filter(Boolean).length}/${results.length}\n${grid}${streak > 1 ? `\n🔥 ${streak} days in a row` : ''}\nCan you spot good AI design? ${url}`;
 }
 
 function Result({ num, day, results, streak, fresh, challenge, replay }) {
@@ -53,7 +53,7 @@ function Result({ num, day, results, streak, fresh, challenge, replay }) {
   };
   const dare = async () => {
     const link = challengeLink('/play/daily', { d: day, vs: score, r: results.map((x) => (x ? 1 : 0)).join('') });
-    if (await copyText(`I got ${score}/${results.length} on AI Patterns Daily #${num}. Can you beat me? ${link}`)) {
+    if (await copyText(`I got ${score}/${results.length} on Good Bot, Bad Bot Daily #${num}. Can you beat me? ${link}`)) {
       setDared(true);
       setTimeout(() => setDared(false), 2000);
     }
