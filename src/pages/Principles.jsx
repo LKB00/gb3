@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { haxGuidelines, haxPhases, principleTypes, principles, patternsUsing } from '../data/principles';
 import { getPattern } from '../data/patterns';
 import { useTitle } from '../useTitle';
+import LibraryTabs from '../components/LibraryTabs';
 
 export default function Principles() {
   useTitle('Principles');
@@ -17,9 +18,9 @@ export default function Principles() {
   }, [focus]);
 
   return (
-    <div className="page">
+    <div className="page page-wide page-lib-read">
+      <LibraryTabs />
       <header className="page-head">
-        <p className="label">Principles</p>
         <h1 className="display">The ideas behind the patterns</h1>
         <p className="lead">
           Patterns work because of how people think. These are the UX heuristics, laws and psychology the patterns rely on, plus Microsoft’s 18 guidelines for human-AI interaction, and where each one is used.

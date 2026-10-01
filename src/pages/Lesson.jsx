@@ -7,6 +7,7 @@ import Compare from '../components/Compare';
 import { useTitle } from '../useTitle';
 import { usePassed } from '../progress';
 import NotFound from './NotFound';
+import Breadcrumbs from '../components/Breadcrumbs';
 
 export default function Lesson() {
   const { id } = useParams();
@@ -21,7 +22,8 @@ export default function Lesson() {
 
   return (
     <article className="page">
-      <header className="page-head">
+      <Breadcrumbs items={[{ label: 'Learn', to: '/learn' }, { label: `Lesson ${idx + 1}` }]} />
+      <header className="page-head page-head-tight">
         <p className="label">Lesson {idx + 1} of {lessons.length} · {lesson.level} · {lesson.minutes} min</p>
         <h1 className="display">{lesson.title}</h1>
         <p className="lead">{lesson.intro}</p>
@@ -34,7 +36,7 @@ export default function Lesson() {
           {s.visual && (
             <div className="lesson-visual">
               <Compare data={visuals[s.visual].compare} />
-              <Link to={`/patterns/${s.visual}#lab`} className="text-link">
+              <Link to={`/patterns/${s.visual}`} className="text-link">
                 Try {getPattern(s.visual).title} in the Design Lab <ArrowRight size={14} strokeWidth={1.75} aria-hidden />
               </Link>
             </div>
@@ -69,7 +71,7 @@ export default function Lesson() {
           <ul className="index-list">
             {lesson.patterns.map((pid) => (
               <li key={pid}>
-                <Link to={`/patterns/${pid}#lab`} className={'index-row index-row-icon' + (passed.includes(pid) ? ' index-done' : '')}>
+                <Link to={`/patterns/${pid}`} className={'index-row index-row-icon' + (passed.includes(pid) ? ' index-done' : '')}>
                   {passed.includes(pid) ? (
                     <Check size={16} strokeWidth={2} className="index-check-on" aria-label="Passed" />
                   ) : (

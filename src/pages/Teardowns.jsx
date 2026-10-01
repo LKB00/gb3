@@ -1,18 +1,20 @@
 import { Link, useParams } from 'react-router-dom';
-import { ArrowLeft, ChevronRight, Lightbulb, ThumbsUp } from 'lucide-react';
+import { ChevronRight, Lightbulb, ThumbsUp } from 'lucide-react';
 import { getTeardown, teardowns } from '../data/teardowns';
 import { getPattern } from '../data/patterns';
 import { useTitle } from '../useTitle';
 import NotFound from './NotFound';
+import LibraryTabs from '../components/LibraryTabs';
+import Breadcrumbs from '../components/Breadcrumbs';
 
 const NOTE = 'Based on well-known public features; products change often. Not affiliated with these companies. Product names belong to their owners.';
 
 export function TeardownList() {
   useTitle('Teardowns');
   return (
-    <div className="page">
+    <div className="page page-wide page-lib-read">
+      <LibraryTabs />
       <header className="page-head">
-        <p className="label">Teardowns</p>
         <h1 className="display">How real AI products use the patterns</h1>
         <p className="lead">Step-by-step breakdowns of well-known AI products: which patterns they use at each stage, what works, and what could be better.</p>
       </header>
@@ -44,8 +46,8 @@ export function TeardownDetail() {
 
   return (
     <article className="page">
+      <Breadcrumbs items={[{ label: 'Library', to: '/patterns' }, { label: 'Teardowns', to: '/teardowns' }, { label: t.product }]} />
       <header className="page-head">
-        <Link to="/teardowns" className="text-link"><ArrowLeft size={14} strokeWidth={1.75} aria-hidden /> All teardowns</Link>
         <div className="td-head">
           <span className="ex-mark td-mark-lg" aria-hidden>{t.product[0]}</span>
           <div>

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
-import Sidebar from './components/Sidebar';
+import TopBar from './components/TopBar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
 import Patterns from './pages/Patterns';
@@ -21,7 +21,7 @@ export default function App() {
   return (
     <div className="shell">
       <a href="#main" className="skip-link">Skip to content</a>
-      <Sidebar />
+      <TopBar />
       <main id="main" className="main">
         <Routes>
           <Route path="/" element={<Home />} />

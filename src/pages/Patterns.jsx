@@ -4,6 +4,7 @@ import { Search } from 'lucide-react';
 import { categories, patterns } from '../data/patterns';
 import PatternCard from '../components/PatternCard';
 import { usePassed } from '../progress';
+import LibraryTabs from '../components/LibraryTabs';
 
 export default function Patterns() {
   useTitle('All patterns');
@@ -28,8 +29,8 @@ export default function Patterns() {
 
   return (
     <div className="page page-wide">
+      <LibraryTabs />
       <header className="page-head">
-        <p className="label">Library</p>
         <h1 className="display">All patterns</h1>
         <p className="lead">{patterns.length} patterns for designing AI features, grouped by the problem they solve.</p>
       </header>
