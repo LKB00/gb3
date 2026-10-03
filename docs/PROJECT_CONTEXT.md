@@ -4,7 +4,7 @@
 > with the same context: what the site is, what the owner wants, how to work, how to ship, what was decided and why,
 > and what is still open. Keep it up to date (see [Keeping this file current](#14-keeping-this-file-current)).
 >
-> Last updated: **2026-10-01**, after the rename to **Good Bot, Bad Bot** (formerly "AI Patterns"). Live site: <https://lkb00.github.io/patricka/>
+> Last updated: **2026-10-03**, after reverting logo to simple lime circle. Live site: <https://lkb00.github.io/patricka/>
 
 ## Contents
 1. [Snapshot](#1-snapshot) (name and brand: see [section 8b](#8b-brand))
@@ -412,6 +412,7 @@ Things the repo does **not** have: unit tests, visual regression, a real-device 
 | #22 | Edge cases: corrupt saved data crash, clipboard fallbacks, long names, key shortcuts, tap targets, landscape, stronger tests |
 | #23 | Added this context file |
 | #24 | Rename to **Good Bot, Bad Bot**: new two-bot logo, icons, share image, name everywhere, `npm run brand` |
+| #25 | Revert logo to **simple lime circle** (owner preference), keep product name **Good Bot, Bad Bot** |
 
 ### Decisions worth remembering
 - **Name: Good Bot, Bad Bot** (chosen by the owner from a short list). It matches the main game (pick the better screen). Renamed from "AI Patterns", which was clear but easy to forget.
