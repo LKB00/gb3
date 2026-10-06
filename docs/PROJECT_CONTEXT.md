@@ -152,7 +152,7 @@ The owner looks at a **private Claude Artifact**. It is one self-contained HTML 
 ### 5.1 Concept and product rules (from owner feedback)
 - It **must not feel like an educational platform, syllabus or course.** It should be fun, quick, rewarding: games, XP, streaks, cards to collect.
 - Anyone curious about AI design patterns should be playing in **one second**. Simple structure, no "information heavy" pages, no getting lost.
-- Three places only: **Play** (games), **Cards** (the pattern collection), **Explore** (deeper reading). Plus **Me** (profile/settings) on phones.
+- Three places: **Play** (games), **Cards** (the pattern collection), **Explore** (deeper reading). Plus **Me** (profile/settings), now in the top bar on desktop and in the bottom bar on phones.
 - Instant feedback everywhere (sound, vibration, motion, XP pops). Everything on a phone must feel made for a phone.
 - The look follows the owner's other projects (see Snapshot).
 
