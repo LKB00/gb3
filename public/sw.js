@@ -2,7 +2,7 @@
 // - Pages: network first, so people always get the newest version when online;
 //   the last copy is used when offline.
 // - Built files and fonts: cache first (their names change when they change).
-const CACHE = 'good-bot-bad-bot-v2';
+const CACHE = 'good-bot-bad-bot-v3';
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(['./', './index.html', './manifest.webmanifest', './icon-192.png'])));
