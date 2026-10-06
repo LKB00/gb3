@@ -53,22 +53,13 @@ function useCardData() {
 }
 
 // Draws the same card on a canvas (1080 × 1350, good for LinkedIn and Instagram).
-// The two-bot logo (same drawing as components/LogoMark.jsx), top-left at (x, y), scaled.
+// The lime circle logo (same drawing as components/LogoMark.jsx), top-left at (x, y), scaled.
 function drawLogo(g, x, y, k) {
   const c = (cx, cy, r, fill) => { g.beginPath(); g.arc(x + cx * k, y + cy * k, r * k, 0, Math.PI * 2); g.fillStyle = fill; g.fill(); };
-  const curve = (x1, y1, cx, cy, x2, y2) => { g.beginPath(); g.moveTo(x + x1 * k, y + y1 * k); g.quadraticCurveTo(x + cx * k, y + cy * k, x + x2 * k, y + y2 * k); g.stroke(); };
-  const line = (x1, y1, x2, y2) => { g.beginPath(); g.moveTo(x + x1 * k, y + y1 * k); g.lineTo(x + x2 * k, y + y2 * k); g.stroke(); };
-  c(13, 14, 12, LIME);
-  c(31, 14, 13, INK); // dark gap between the bots
-  c(31, 14, 12, '#f6a5a0');
-  for (const [cx, cy] of [[9.5, 12], [16.5, 12], [27.5, 12.5], [34.5, 12.5]]) c(cx, cy, 1.8, INK);
+  c(12, 12, 10, LIME);
   g.strokeStyle = INK;
-  g.lineWidth = 2 * k;
-  g.lineCap = 'round';
-  curve(8.5, 17, 13, 21.6, 17.5, 17);
-  curve(26.5, 20.8, 31, 16.2, 35.5, 20.8);
-  line(26.2, 8.4, 29.6, 10.2);
-  line(35.8, 8.4, 32.4, 10.2);
+  g.lineWidth = 1 * k;
+  g.stroke();
 }
 
 // Draw text that shrinks until it fits the width (long names, long type names).
