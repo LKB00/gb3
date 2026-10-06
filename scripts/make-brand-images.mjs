@@ -1,7 +1,8 @@
 // Makes the brand images in public/ from one drawing, so the logo can change in one place:
 //   icon-192.png, icon-512.png, icon-maskable-512.png, apple-touch-icon.png, og.png (link preview, 1200x630)
 // Run: npm run brand   (needs Chromium; in the cloud sandbox: CHROMIUM_PATH=/opt/pw-browsers/chromium npm run brand)
-// The logo drawing is the same as src/components/LogoMark.jsx and the favicon in index.html.
+// The share image header uses the lime-circle logo (same as src/components/LogoMark.jsx and the favicon in index.html).
+// The app icons use the "Two answers" drawing below (appIcon). An unused backup idea is in design/backup-icons/.
 // Fonts: uses Bricolage Grotesque if installed, else the system sans font.
 import { chromium } from 'playwright';
 import { fileURLToPath } from 'url';
@@ -13,12 +14,28 @@ const logo = (gap) => `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/sv
   <circle cx="12" cy="12" r="10" fill="${LIME}" stroke="${gap}" stroke-width="1"/>
 </svg>`;
 
-// App icon: dark tile with the logo. `round` = rounded corners with see-through outside; `scale` = logo width as a share of the tile.
-const icon = (size, { round, scale }) => ({
+const CORAL = '#f6a5a0';
+// App icon "Two answers": a bad answer (coral, cross) behind a good one (lime, tick). Needs no fonts.
+// `k` scales the drawing about the centre (1.16 normal; 0.84 keeps it inside the Android maskable safe zone).
+const appIcon = (k) => `<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:100%"><rect width="1024" height="1024" fill="${INK}"/>
+<g transform="translate(512 512) scale(${k}) translate(-512 -512) translate(0 34)">
+  <rect x="430" y="150" width="440" height="330" rx="110" fill="${CORAL}"/>
+  <polygon points="600,470 800,610 770,470" fill="${CORAL}"/>
+  <path d="M628 255 L738 365 M738 255 L628 365" fill="none" stroke="${INK}" stroke-width="64" stroke-linecap="round"/>
+  <g stroke="${INK}" stroke-width="34" stroke-linejoin="round">
+    <rect x="150" y="360" width="440" height="330" rx="110" fill="${LIME}"/>
+    <polygon points="265,680 195,810 410,680" fill="${LIME}"/>
+  </g>
+  <rect x="167" y="377" width="406" height="296" rx="93" fill="${LIME}"/>
+  <polygon points="277,668 212,780 392,668" fill="${LIME}"/>
+  <path d="M262 528 L340 606 L482 442" fill="none" stroke="${INK}" stroke-width="68" stroke-linecap="round" stroke-linejoin="round"/>
+</g></svg>`;
+
+// `round` = rounded corners with see-through outside (the OS rounds the others); `k` = drawing scale (see appIcon).
+const icon = (size, { round, k }) => ({
   size: [size, size],
   transparent: !!round,
-  html: `<body style="margin:0"><div style="width:${size}px;height:${size}px;background:${INK};${round ? `border-radius:${Math.round(size * 0.22)}px;` : ''}display:grid;place-items:center">
-    <div style="width:${Math.round(size * scale)}px">${logo(INK)}</div></div></body>`,
+  html: `<body style="margin:0"><div style="width:${size}px;height:${size}px;overflow:hidden;${round ? `border-radius:${Math.round(size * 0.22)}px;` : ''}">${appIcon(k)}</div></body>`,
 });
 
 const card = (rot, bg, dot, dotText, title, body) => `
@@ -41,10 +58,10 @@ const og = {
 };
 
 const jobs = {
-  'icon-192.png': icon(192, { round: true, scale: 0.62 }),
-  'icon-512.png': icon(512, { round: true, scale: 0.62 }),
-  'icon-maskable-512.png': icon(512, { round: false, scale: 0.5 }),
-  'apple-touch-icon.png': icon(180, { round: false, scale: 0.6 }),
+  'icon-192.png': icon(192, { round: true, k: 1.16 }),
+  'icon-512.png': icon(512, { round: true, k: 1.16 }),
+  'icon-maskable-512.png': icon(512, { round: false, k: 0.84 }),
+  'apple-touch-icon.png': icon(180, { round: false, k: 1.16 }),
   'og.png': og,
 };
 
