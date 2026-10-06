@@ -3,5 +3,5 @@ export const creator = {
   name: 'Lokesh Kumar Bhatia',
   portfolio: 'https://lokeshbhatia.com',
   // LinkedIn profile address. The LinkedIn icon only shows when this is filled in.
-  linkedin: '',
+  linkedin: 'https://www.linkedin.com/in/lkb01/',
 };
