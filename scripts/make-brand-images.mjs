@@ -1,9 +1,9 @@
 // Makes the brand images in public/ from one drawing, so the logo can change in one place:
 //   icon-192.png, icon-512.png, icon-maskable-512.png, apple-touch-icon.png, favicon.svg, favicon-32.png, og.png (link preview, 1200x630)
 // Run: npm run brand   (needs Chromium; in the cloud sandbox: CHROMIUM_PATH=/opt/pw-browsers/chromium npm run brand)
-// The share image header uses the lime-circle logo (same as src/components/LogoMark.jsx).
-// The app icons use the "Two answers" drawing below (appIcon). An unused backup idea is in design/backup-icons/.
-// Fonts: uses Bricolage Grotesque if installed, else the system sans font.
+// The app icons, tab icon and share image all use the "Two answers" drawing below (appIcon). The in-app logo
+// (src/components/LogoMark.jsx) is the lime circle and is not made here. An unused backup idea is in design/backup-icons/.
+// Fonts: the share image embeds Bricolage Grotesque and Lato from design/fonts/, so no font needs to be installed.
 import { chromium } from 'playwright';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
@@ -11,9 +11,6 @@ import fs from 'fs';
 const OUT = fileURLToPath(new URL('../public/', import.meta.url));
 const INK = '#24282c';
 const LIME = '#c2ef72';
-const logo = (gap) => `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:auto">
-  <circle cx="12" cy="12" r="10" fill="${LIME}" stroke="${gap}" stroke-width="1"/>
-</svg>`;
 
 const CORAL = '#f6a5a0';
 // App icon "Two answers": a bad answer (coral, cross) behind a good one (lime, tick). Needs no fonts.
@@ -39,23 +36,34 @@ const icon = (size, { round, k }) => ({
   html: `<body style="margin:0"><div style="width:${size}px;height:${size}px;overflow:hidden;${round ? `border-radius:${Math.round(size * 0.22)}px;` : ''}">${appIcon(k)}</div></body>`,
 });
 
-const card = (rot, bg, dot, dotText, title, body) => `
-  <div style="transform:rotate(${rot}deg);background:${bg};border-radius:28px;padding:22px 24px;width:400px;box-sizing:border-box">
-    <div style="display:flex;align-items:center;gap:12px;font-weight:800;font-size:25px;color:#24282c"><span style="width:34px;height:34px;border-radius:50%;background:${dot};color:#fff;display:grid;place-items:center;font-size:20px">${dotText}</span>${title}</div>
-    <div style="background:#fff;border-radius:18px;padding:16px 18px;margin-top:14px;font-size:23px;line-height:34px;color:#4b4f53">${body}</div></div>`;
+// Brand fonts are embedded (design/fonts, OFL licence), so the share image looks the same on any machine.
+const font = (file) => fs.readFileSync(fileURLToPath(new URL('../design/fonts/' + file, import.meta.url))).toString('base64');
+const fontCss = `
+  @font-face{font-family:'Bricolage Grotesque';font-weight:800;src:url(data:font/woff2;base64,${font('bricolage-grotesque-latin-800-normal.woff2')}) format('woff2')}
+  @font-face{font-family:Lato;font-weight:400;src:url(data:font/woff2;base64,${font('lato-latin-400-normal.woff2')}) format('woff2')}
+  @font-face{font-family:Lato;font-weight:700;src:url(data:font/woff2;base64,${font('lato-latin-700-normal.woff2')}) format('woff2')}`;
+
+// One answer card: a bad (coral, cross) or good (lime, tick) AI answer to the same question.
+const card = ({ rot, bg, mark, title, body, x, y, z }) => `
+  <div style="position:absolute;left:${x}px;top:${y}px;z-index:${z};transform:rotate(${rot}deg);background:${bg};border-radius:34px;padding:24px 26px 26px;width:420px;box-sizing:border-box;box-shadow:0 0 0 8px ${INK}">
+    <div style="display:flex;align-items:center;gap:14px;font-family:'Bricolage Grotesque';font-weight:800;font-size:32px;color:${INK}">
+      <span style="width:44px;height:44px;border-radius:50%;background:${INK};display:grid;place-items:center">${mark}</span>${title}</div>
+    <div style="background:#fff;border-radius:20px;padding:18px 20px;margin-top:16px;font-family:Lato;font-size:28px;line-height:38px;color:#3b3f43">${body}</div></div>`;
+const tick = `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="${LIME}" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l5 5L19.5 7"/></svg>`;
+const cross = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="${CORAL}" stroke-width="3.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>`;
 
 const og = {
   size: [1200, 630],
-  html: `<body style="margin:0;width:1200px;height:630px;background:${INK};font-family:'Bricolage Grotesque','DejaVu Sans',sans-serif;position:relative;overflow:hidden">
-    <div style="position:absolute;left:72px;top:52px;display:flex;align-items:center;gap:20px;color:#c9ccc4;font-weight:800;font-size:27px;letter-spacing:0.05em">
-      <div style="width:96px">${logo(INK)}</div>GOOD BOT, BAD BOT</div>
-    <div style="position:absolute;left:72px;top:140px;width:620px;color:#fbfbf7;font-weight:800;font-size:84px;line-height:92px">Can you spot good AI design?</div>
-    <div style="position:absolute;left:72px;top:432px;width:620px;color:#c9ccc4;font-size:25px;line-height:34px">Quick games about AI interaction design. Play, collect cards, keep your streak.</div>
-    <div style="position:absolute;left:72px;top:536px;display:flex;gap:14px">${['This or That', 'Daily', 'Speed round', 'Stories'].map((t) => `<span style="background:#32373c;color:#fbfbf7;font-weight:800;font-size:22px;border-radius:999px;padding:12px 22px">${t}</span>`).join('')}</div>
-    <div style="position:absolute;left:722px;top:112px;display:flex;flex-direction:column;gap:22px">
-      ${card(-2, '#fae6e4', '#c1443a', '✕', 'No sources', 'Churn rose 4% after the pricing change.')}
-      ${card(2, '#edf3dc', '#5a7a1f', '✓', 'Shows sources', 'Churn rose 4% after the pricing change <b style="background:#e8e8f0;border-radius:6px;padding:0 8px">1</b>')}
-    </div></body>`,
+  html: `<body style="margin:0;width:1200px;height:630px;background:${INK};position:relative;overflow:hidden"><style>${fontCss}</style>
+    <div style="position:absolute;left:72px;top:58px;display:flex;align-items:center;gap:22px">
+      <div style="width:92px;height:92px">${appIcon(1.16, 225)}</div>
+      <div style="font-family:'Bricolage Grotesque';font-weight:800;font-size:44px;color:#fbfbf7;letter-spacing:-0.01em">Good Bot, Bad Bot</div></div>
+    <div style="position:absolute;left:72px;top:186px;width:640px;font-family:'Bricolage Grotesque';font-weight:800;font-size:94px;line-height:98px;letter-spacing:-0.02em;color:#fbfbf7">Can you spot <span style="color:${LIME}">good</span> AI design?</div>
+    <div style="position:absolute;left:72px;top:494px;width:640px;font-family:Lato;font-weight:400;font-size:29px;line-height:40px;color:#c9ccc4;white-space:nowrap">Quick games. Collect cards. Keep your streak.</div>
+    <div style="position:absolute;left:72px;top:550px;font-family:Lato;font-weight:700;font-size:27px;color:${LIME};letter-spacing:0.01em">gb3.lokeshbhatia.com</div>
+    ${card({ rot: -2.5, bg: CORAL, mark: cross, title: 'No sources', body: 'Churn rose 4% after the pricing change.', x: 718, y: 70, z: 1 })}
+    ${card({ rot: 2, bg: LIME, mark: tick, title: 'Shows sources', body: `Churn rose 4% after the pricing change <b style="background:#e8e8f0;border-radius:8px;padding:0 10px;font-size:24px">1</b>`, x: 748, y: 318, z: 2 })}
+  </body>`,
 };
 
 const jobs = {
