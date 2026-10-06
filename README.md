@@ -1,6 +1,6 @@
 # Good Bot, Bad Bot (GB3)
 
-*Can you spot good AI design?* (Formerly “AI Patterns”. The repo stays `patricka`; the web address is gb3.lokeshbhatia.com.)
+*Can you spot good AI design?* (Formerly “AI Patterns”. The repo is `LKB00/gb3` (it was `patricka`); the web address is gb3.lokeshbhatia.com.)
 
 A playground for AI interaction design. Not a course: quick games, instant wins, pattern cards to collect, XP and levels. Anyone curious about AI design patterns can jump in and play in one second.
 
@@ -100,7 +100,7 @@ Built with React + Vite. Uses hash links (`/#/patterns`) so it works on GitHub P
 
 ## Website
 
-Live at **https://gb3.lokeshbhatia.com/** (the old address lkb00.github.io/patricka redirects here) — every push to `main` builds and publishes the site automatically
+Live at **https://gb3.lokeshbhatia.com/** (the repo's own address, lkb00.github.io/gb3, redirects here once the custom domain is set up on GitHub) — every push to `main` builds and publishes the site automatically
 (`.github/workflows/deploy.yml`). One-time setup: repo **Settings → Pages → Source: GitHub Actions**.
 
 ## UX decisions (why each part is here)
