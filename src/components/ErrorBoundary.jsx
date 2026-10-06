@@ -4,10 +4,11 @@ import { Component } from 'react';
 // Wrapped around the routes (nav stays usable) and around the whole app (last resort).
 // Re-mount it with a new `key` (the page path) and it resets itself on navigation.
 export default class ErrorBoundary extends Component {
-  state = { failed: false };
+  state = { failed: false, detail: '' };
 
-  static getDerivedStateFromError() {
-    return { failed: true };
+  static getDerivedStateFromError(error) {
+    const stack = String(error?.stack || '').split('\n').slice(0, 4).join('\n');
+    return { failed: true, detail: `${error?.name || 'Error'}: ${error?.message || error}\n${stack}`.slice(0, 600) };
   }
 
   componentDidCatch(error) {
@@ -25,6 +26,7 @@ export default class ErrorBoundary extends Component {
           <button type="button" className="btn btn-primary" onClick={() => window.location.reload()}>Try again</button>
           <a className="btn btn-ghost" href="./#/">Go home</a>
         </div>
+        <pre className="small muted crash-detail">{this.state.detail}</pre>
         <p className="small muted crash-note">
           Still broken after a reload? Saved data on this device may be damaged.{' '}
           <button
