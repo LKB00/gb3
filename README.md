@@ -30,11 +30,11 @@ A playground for AI interaction design. Not a course: quick games, instant wins,
 
 ## Visitor stats (optional)
 
-Off by default. To turn on free, privacy-friendly stats with [GoatCounter](https://www.goatcounter.com) (no cookies, no personal data):
+On, using [GoatCounter](https://www.goatcounter.com) (free, no cookies, no personal data). The numbers are at https://lkb.goatcounter.com (log in as the owner).
 
-1. Sign up at goatcounter.com and pick a site code, for example `mysite` (stats live at `mysite.goatcounter.com`).
-2. In GitHub → Settings → Secrets and variables → Actions → **Variables**, add `VITE_GOATCOUNTER_CODE` = `mysite`.
-3. Deploy again. Page views (every `#/` page) and "Game finished" events will show up in GoatCounter.
+- Counts every `#/` page view and "Game finished" events.
+- The site code `lkb` is set in `src/game/track.js`. To use another site, set the repo variable `VITE_GOATCOUNTER_CODE` (Settings → Secrets and variables → Actions → Variables) and deploy again.
+- GoatCounter ignores localhost, so local tests and `npm run dev` are not counted.
 
 ## Design
 
