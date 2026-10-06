@@ -28,7 +28,9 @@ import NotFound from './pages/NotFound';
 
 export default function App() {
   const { pathname } = useLocation();
-  useEffect(() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' }), [pathname]);
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [pathname]);
 
   return (
     <div className="shell">
