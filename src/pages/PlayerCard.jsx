@@ -154,7 +154,7 @@ async function drawCard(name, data) {
 
   g.fillStyle = '#8d918a';
   g.font = `400 28px ${sans}`;
-  g.fillText('lkb00.github.io/patricka', 84, 1290);
+  g.fillText('gb3.lokeshbhatia.com', 84, 1290);
   g.textAlign = 'right';
   g.fillText(new Date().toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' }), 996, 1290);
   return cv;
