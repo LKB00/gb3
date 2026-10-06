@@ -1,8 +1,7 @@
 // Privacy-friendly visitor stats with GoatCounter (free, no cookies, no personal data).
-// OFF unless the site is built with VITE_GOATCOUNTER_CODE set (your GoatCounter site code), for example:
-//   VITE_GOATCOUNTER_CODE=mysite npm run build      (stats at https://mysite.goatcounter.com)
-// See README → "Visitor stats".
-const CODE = import.meta.env.VITE_GOATCOUNTER_CODE;
+// Stats are at https://lkb.goatcounter.com. The site code is not secret; set VITE_GOATCOUNTER_CODE at build time to use another one.
+// GoatCounter ignores localhost, so local tests and `npm run dev` are not counted. See README → "Visitor stats".
+const CODE = import.meta.env.VITE_GOATCOUNTER_CODE || 'lkb';
 
 let latest = '';
 let last = '';
