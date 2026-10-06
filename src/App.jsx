@@ -25,11 +25,15 @@ import AntiPatterns from './pages/AntiPatterns';
 import Glossary from './pages/Glossary';
 import { TeardownDetail, TeardownList } from './pages/Teardowns';
 import NotFound from './pages/NotFound';
+import { trackPage } from './game/track';
 
 export default function App() {
   const { pathname } = useLocation();
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [pathname]);
+  useEffect(() => {
+    trackPage(pathname);
   }, [pathname]);
 
   return (
