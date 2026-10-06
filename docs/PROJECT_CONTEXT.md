@@ -4,7 +4,7 @@
 > with the same context: what the site is, what the owner wants, how to work, how to ship, what was decided and why,
 > and what is still open. Keep it up to date (see [Keeping this file current](#14-keeping-this-file-current)).
 >
-> Last updated: **2026-10-03**, after reverting logo to simple lime circle. Live site: <https://lkb00.github.io/patricka/>
+> Last updated: **2026-10-03**, after reverting logo to simple lime circle. Live site: <https://gb3.lokeshbhatia.com/>
 
 ## Contents
 1. [Snapshot](#1-snapshot) (name and brand: see [section 8b](#8b-brand))
@@ -29,9 +29,9 @@
 
 | | |
 |---|---|
-| **Name** | **Good Bot, Bad Bot**, short name **GB3** (tagline: *Can you spot good AI design?*). Formerly "AI Patterns". The repo and address stay `patricka`. |
+| **Name** | **Good Bot, Bad Bot**, short name **GB3** (tagline: *Can you spot good AI design?*). Formerly "AI Patterns". The repo stays `patricka`; the address is `gb3.lokeshbhatia.com`. |
 | **What** | A playful website about **AI design patterns, AI interaction design and agentic UX**. A game, not a course. |
-| **Live** | <https://lkb00.github.io/patricka/> (GitHub Pages, hash routes like `/#/play`) |
+| **Live** | <https://gb3.lokeshbhatia.com/> (GitHub Pages with a custom domain; DNS on Cloudflare, CNAME `gb3` to `lkb00.github.io`, grey cloud / DNS only; old address `lkb00.github.io/patricka` redirects; hash routes like `/#/play`). Saved progress is per address, so progress from the old address needs the backup code (Me page). |
 | **Repo** | `LKB00/patricka`. Work branch: `claude/awesome-rubin-9zmea8`. Live branch: `main` |
 | **Stack** | React 18.3, react-router-dom 6 (`HashRouter`), Vite 6 (`base: './'`), lucide-react icons. Plain CSS (no framework). No backend. |
 | **State** | Everything a visitor earns lives in their own browser (`localStorage`). No accounts, no server. |
