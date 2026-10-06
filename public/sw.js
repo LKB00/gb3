@@ -2,11 +2,16 @@
 // - Pages: network first, so people always get the newest version when online;
 //   the last copy is used when offline.
 // - Built files and fonts: cache first (their names change when they change).
+// Cache v3: Fixed logo - force update 2026-10-06
 const CACHE = 'good-bot-bad-bot-v3';
 
 self.addEventListener('install', (e) => {
-  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(['./', './index.html', './manifest.webmanifest', './icon-192.png'])));
   self.skipWaiting();
+  e.waitUntil(
+    caches.delete('good-bot-bad-bot-v2').then(() =>
+      caches.open(CACHE).then((c) => c.addAll(['./', './index.html', './manifest.webmanifest', './icon-192.png']))
+    )
+  );
 });
 
 self.addEventListener('activate', (e) => {
