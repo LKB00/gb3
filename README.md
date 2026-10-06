@@ -86,7 +86,7 @@ scripts/smoke.mjs  the browser check used by `npm run check`
 | Add a task to How much power? | `data/autonomy.js` → `tasks` |
 | Add a game | page in `src/pages/`, route in `App.jsx`, tile in `config/games.js` (steps are in that file) |
 | Add an Explore page | page in `src/pages/`, route in `App.jsx`, tab in `config/nav.js` |
-| Change the name or logo | Name: search for `Good Bot` in `src/`, `index.html` and `public/manifest.webmanifest`. Logo: `src/components/LogoMark.jsx`, then `npm run brand` for the icons and share image (see docs/PROJECT_CONTEXT.md, section 8b) |
+| Change the name or logo | Name: search for `Good Bot` in `src/`, `index.html` and `public/manifest.webmanifest`. Logo: `src/components/LogoMark.jsx`, then `npm run brand` for the icons and share image (the app icon is drawn in `scripts/make-brand-images.mjs`; backup icon idea in `design/backup-icons/`) (see docs/PROJECT_CONTEXT.md, section 8b) |
 | Change a colour or font | `src/styles/tokens.css` (light and dark mode) |
 | Change how one area looks | the matching file in `src/styles/` (each file says what it covers at the top); phone rules for older areas are in `phone.css` |
 | Change how things move (page fades, staggers, pops, shakes) | `src/styles/motion.css`. It is all wrapped in "no-preference", so people who ask for less motion get none. A number that rolls up: `<CountUp value={n} />` |

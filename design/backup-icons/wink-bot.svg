@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <!-- Backup app icon idea "Wink bot": a friendly lime judge with a tick for an eye. Not used. -->
+  <rect width="1024" height="1024" fill="#24282c"/>
+  <circle cx="512" cy="512" r="340" fill="#c2ef72"/>
+  <circle cx="400" cy="450" r="52" fill="#24282c"/>
+  <path d="M552 462 L600 510 L690 405" fill="none" stroke="#24282c" stroke-width="48" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M385 622 Q512 722 640 622" fill="none" stroke="#24282c" stroke-width="40" stroke-linecap="round"/>
+</svg>
