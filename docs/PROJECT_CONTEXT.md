@@ -40,7 +40,7 @@
 | **Languages in code** | JavaScript (JSX). No TypeScript. No unit-test framework. Quality comes from `npm run check`. |
 | **Fonts** | Bricolage Grotesque (headings), Lato (text), Libre Baskerville (user speech in mock screens), loaded from Google Fonts in `index.html`. |
 | **Design language** | Copied from the owner's other projects (warm "sand paper" `#fbfbf7`, charcoal ink `#24282c`, lime accent `#c2ef72`, soft pastels per pattern group, pill buttons, hairline borders). |
-| **Optional stats** | Plausible, **off** unless the repo variable `VITE_PLAUSIBLE_DOMAIN` is set (see README). Not enabled today. |
+| **Optional stats** | GoatCounter (free), **off** unless the repo variable `VITE_GOATCOUNTER_CODE` is set (see README). Counts every `#/` page view and "Game finished" events. |
 
 ---
 
@@ -435,7 +435,7 @@ Things the repo does **not** have: unit tests, visual regression, a real-device 
 
 - **Not verified on real devices:** actual audio output, **iPhone haptics** (the `switch` trick), Android vibration feel, installed-app behaviour. The owner was asked to check these on their phone; no reply yet.
 - **The live site cannot be opened from the sandbox**, so deploys are confirmed from the workflow result only.
-- **Plausible stats are off.** To enable: set the repo variable `VITE_PLAUSIBLE_DOMAIN` (Settings > Secrets and variables > Actions > Variables); see README "Visitor stats (optional)".
+- **GoatCounter stats are off until the owner sets the code.** To enable: set the repo variable `VITE_GOATCOUNTER_CODE` (Settings > Secrets and variables > Actions > Variables); see README "Visitor stats (optional)".
 - GitHub Pages: set once under Settings > Pages > Source: GitHub Actions (already done).
 - Google Fonts load from the internet; offline the browser falls back to system fonts.
 - Scroll-reveal uses `animation-timeline: view()` (Chrome 115+, Safari 26+); other browsers simply show everything.
@@ -455,7 +455,7 @@ From the research on aiuxplayground.com (not built yet):
 4. **A "Preview the result first" piece** in Build mode (travel and car briefs) and a matching trap.
 
 Other options:
-- Turn on Plausible and look at what people play.
+- Turn on GoatCounter and look at what people play.
 - Test sound/haptics on real phones; tune volumes.
 - Add unit tests for `progress.js` (XP, streak, clean functions, import) and `lib/random.js`.
 - More stories, hard pairs and Spot-the-flaw screens; new pattern groups as the field changes.

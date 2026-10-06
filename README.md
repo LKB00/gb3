@@ -30,11 +30,11 @@ A playground for AI interaction design. Not a course: quick games, instant wins,
 
 ## Visitor stats (optional)
 
-Off by default. To turn on privacy-friendly stats with [Plausible](https://plausible.io) (no cookies, no personal data):
+Off by default. To turn on free, privacy-friendly stats with [GoatCounter](https://www.goatcounter.com) (no cookies, no personal data):
 
-1. Create a Plausible site for `lkb00.github.io`.
-2. In GitHub → Settings → Secrets and variables → Actions → **Variables**, add `VITE_PLAUSIBLE_DOMAIN` = `lkb00.github.io`.
-3. Deploy again. Page views and "Game finished" events will show up in Plausible.
+1. Sign up at goatcounter.com and pick a site code, for example `mysite` (stats live at `mysite.goatcounter.com`).
+2. In GitHub → Settings → Secrets and variables → Actions → **Variables**, add `VITE_GOATCOUNTER_CODE` = `mysite`.
+3. Deploy again. Page views (every `#/` page) and "Game finished" events will show up in GoatCounter.
 
 ## Design
 
