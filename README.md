@@ -107,7 +107,7 @@ Live at **https://lkb00.github.io/patricka/** — every push to `main` builds an
 
 | Part | Why it is here |
 |---|---|
-| Top bar: Play, Cards, Explore | Three places, named like a product, not a course. Easy to remember. |
+| Top bar: Play, Cards, Explore, Me | Three places to learn and play, plus your own page. Named like a product, not a course. Easy to remember. |
 | XP pill in the top bar | Your score is always visible and a tap away; it grows as you play. |
 | Home starts a game | No reading needed: the first This or That round is right under the headline. |
 | This or That | The fastest way in: two screens, one tap, instant answer, a streak to protect. |

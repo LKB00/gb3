@@ -8,7 +8,7 @@ import LogoMark from './LogoMark';
 import { useCountUp } from '../lib/useCountUp';
 import { EXPLORE_HOME, isExplore, isPlay, parentOf } from '../config/nav';
 
-// Three places only: Play (games), Cards (the pattern collection), Explore (go deeper).
+// Four places: Play (games), Cards (the pattern collection), Explore (go deeper), Me (progress and settings).
 // On phones the places move to the bottom bar (BottomNav) and this bar gets simpler.
 export default function TopBar() {
   const { pathname } = useLocation();
@@ -37,6 +37,7 @@ export default function TopBar() {
           <NavLink to="/play" className={() => (isPlay(pathname) ? 'active' : '')}>Play</NavLink>
           <NavLink to="/patterns">Cards</NavLink>
           <NavLink to={EXPLORE_HOME} className={() => (isExplore(pathname) ? 'active' : '')}>Explore</NavLink>
+          <NavLink to="/me">Me</NavLink>
         </nav>
         <div className="topnav-right">
           <StreakPill />
