@@ -29,10 +29,10 @@
 
 | | |
 |---|---|
-| **Name** | **Good Bot, Bad Bot**, short name **GB3** (tagline: *Can you spot good AI design?*). Formerly "AI Patterns". The repo stays `patricka`; the address is `gb3.lokeshbhatia.com`. |
+| **Name** | **Good Bot, Bad Bot**, short name **GB3** (tagline: *Can you spot good AI design?*). Formerly "AI Patterns". The repo is `LKB00/gb3` (renamed from `patricka`; the cloud sandbox folder and old links may still say `patricka`); the address is `gb3.lokeshbhatia.com`. |
 | **What** | A playful website about **AI design patterns, AI interaction design and agentic UX**. A game, not a course. |
-| **Live** | <https://gb3.lokeshbhatia.com/> (GitHub Pages with a custom domain; DNS on Cloudflare, CNAME `gb3` to `lkb00.github.io`, grey cloud / DNS only; old address `lkb00.github.io/patricka` redirects; hash routes like `/#/play`). Saved progress is per address, so progress from the old address needs the backup code (Me page). |
-| **Repo** | `LKB00/patricka`. Work branch: `claude/awesome-rubin-9zmea8`. Live branch: `main` |
+| **Live** | <https://gb3.lokeshbhatia.com/> (GitHub Pages with a custom domain; DNS on Cloudflare, CNAME `gb3` to `lkb00.github.io`, grey cloud / DNS only; the old `lkb00.github.io/patricka` address is a 404 (GitHub does not redirect Pages after a repo rename); hash routes like `/#/play`). Saved progress is per address, so progress from the old address needs the backup code (Me page). |
+| **Repo** | `LKB00/gb3` (renamed from `patricka`; GitHub redirects the old name). Work branch: `claude/awesome-rubin-9zmea8`. Live branch: `main` |
 | **Stack** | React 18.3, react-router-dom 6 (`HashRouter`), Vite 6 (`base: './'`), lucide-react icons. Plain CSS (no framework). No backend. |
 | **State** | Everything a visitor earns lives in their own browser (`localStorage`). No accounts, no server. |
 | **Deploy** | Push/merge to `main` runs `.github/workflows/deploy.yml` (npm ci, lint, build, publish to Pages). |
@@ -119,7 +119,7 @@ The owner looks at a **private Claude Artifact**. It is one self-contained HTML 
 2. `mcp__github__create_pull_request` (head = work branch, base = `main`). Look for a PR template first (none exists today).
    End the PR description with the "Generated with Claude Code" line and the session link the environment gives.
 3. `mcp__github__merge_pull_request` with `merge_method: "merge"`.
-4. Confirm the deploy: `mcp__github__actions_list` with `method: list_workflow_runs` (repo `LKB00/patricka`). The new run is titled
+4. Confirm the deploy: `mcp__github__actions_list` with `method: list_workflow_runs` (repo `LKB00/gb3`). The new run is titled
    "Merge pull request #N ..." and must reach `status: completed`, `conclusion: success`. It can take about 40 seconds to appear.
 5. Tell the owner it is live, give the link, and say to refresh (or close and reopen the installed app, sometimes twice).
 6. If the deploy fails: read the job logs (`mcp__github__get_job_logs`), fix on the work branch, and ship again. Lint runs before the
@@ -133,7 +133,7 @@ The owner looks at a **private Claude Artifact**. It is one self-contained HTML 
 
 - **Network is restricted.** Blocked from the sandbox: the live site (`lkb00.github.io`), Google Fonts (`net::ERR_FAILED` in the console is
   expected and not a bug), and unrelated sites such as `aiuxplayground.com` (WebFetch is blocked; WebSearch works). Do not try to `curl` the live site.
-- **No `gh`.** Use GitHub MCP tools. GitHub scope is limited to `LKB00/patricka` (other repos need `add_repo`; the two reference repos are read-only anyway).
+- **No `gh`.** Use GitHub MCP tools. GitHub scope is limited to `LKB00/gb3` (the session may still list it as `patricka`) (other repos need `add_repo`; the two reference repos are read-only anyway).
 - **Browser tests**: Chromium is at `/opt/pw-browsers/chromium`. Do not run `playwright install`. Use `executablePath` (or `CHROMIUM_PATH` for `npm run smoke`).
   `playwright` is a devDependency of the repo.
 - **Port clashes.** `npm run smoke` starts its own server on port 4180 (or the next free one). If you start `vite preview` yourself, start it with
@@ -391,7 +391,7 @@ Things the repo does **not** have: unit tests, visual regression, a real-device 
 
 ## 11. History and decisions
 
-### Timeline (PR numbers on `LKB00/patricka`)
+### Timeline (PR numbers on `LKB00/gb3`)
 | PR | What |
 |---|---|
 | #1 | First site + GitHub Pages deploy workflow |
