@@ -7,6 +7,7 @@ import AppAndBackup from '../components/play/AppAndBackup';
 import Badges from '../components/play/Badges';
 import LevelCard from '../components/play/LevelCard';
 import { useTitle } from '../lib/useTitle';
+import Credits from '../components/Credits';
 
 // "Me": your level, today, badges, settings and backup in one place.
 // On phones it's a bottom tab; on desktop the XP pill opens it.
@@ -61,7 +62,7 @@ export default function Me() {
         <AppAndBackup />
       </section>
 
-      <p className="small muted me-credits">Good Bot, Bad Bot · created by Lokesh Kumar Bhatia · games about AI interaction design. Progress is saved only in your browser. Icons by Lucide (ISC license).</p>
+      <div className="me-credits"><Credits /></div>
     </div>
   );
 }

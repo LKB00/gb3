@@ -257,6 +257,7 @@ src/
   progress.js              ALL saved progress, XP/levels, streaks, backup (the one place that touches game saves)
   data/                    all content as plain JS (see section 9)
   config/nav.js            menus and Explore tabs (one source for TopBar, BottomNav, LibraryTabs)
+  config/creator.js        creator name, portfolio link and LinkedIn link (shown by components/Credits.jsx in the footer and on Me)
   config/games.js          the game tiles (one entry per game)
   pages/                   one file per route
   components/              shared UI; components/play/ = Play hub parts

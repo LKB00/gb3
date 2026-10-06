@@ -311,6 +311,11 @@
   line-height: 18px;
   color: var(--ink-3);
 }
+.credits p { margin: 0; }
+.credits-note { margin-top: 4px !important; }
+.credits a { color: var(--ink-2); text-decoration: underline; text-underline-offset: 2px; }
+.credits a:hover { color: var(--ink); }
+.credits-icon { display: inline-flex; vertical-align: -3px; text-decoration: none !important; }
 @media (max-width: 720px) {
   .site-footer {
     margin: 32px 16px 0;

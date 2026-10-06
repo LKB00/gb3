@@ -51,7 +51,7 @@
 }
 .me-row > span:nth-child(2) { flex: 1; display: flex; flex-direction: column; }
 .me-row strong { font-size: 15px; }
-.me-credits { margin-top: 48px; }
+.me-credits { margin-top: 48px; font-size: 12px; line-height: 18px; color: var(--ink-3); }
 .speed-quit {
   flex: none;
   width: 32px;
