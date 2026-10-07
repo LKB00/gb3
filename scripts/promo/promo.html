@@ -57,16 +57,30 @@
   #brand { top: 1040px; font-size: 112px; line-height: 1; white-space: nowrap; }
   #tag3 { top: 1210px; font: 400 52px/1.35 Lato, sans-serif; color: #c9ccc4; }
 
-  /* phones */
-  .phone { position: absolute; border-radius: 96px; background: #050606; padding: 20px; box-shadow: 0 0 0 3px #2b2f32, 0 80px 160px rgba(0, 0, 0, 0.6); }
-  .phone .screen { position: relative; width: 100%; height: 100%; border-radius: 78px; overflow: hidden; background: var(--paper); }
-  .phone img { position: absolute; left: 0; top: 0; width: 100%; height: auto; display: block; }
-  .phone .island { position: absolute; top: 18px; left: 50%; width: 150px; height: 42px; margin-left: -75px; background: #050606; border-radius: 30px; z-index: 3; }
+  /* phones: a modern phone drawn at real size (393x852 screen), then zoomed with --z.
+     The status bar and home bar are drawn here; the screenshot fills exactly the space between them. */
+  .phone { position: absolute; width: calc(425px * var(--z)); height: calc(884px * var(--z)); }
+  .device { zoom: var(--z); position: relative; width: 425px; height: 884px; border-radius: 74px; padding: 4px;
+    background: linear-gradient(135deg, #6b7075 0%, #2b2e31 22%, #46494d 48%, #1f2123 74%, #575b60 100%);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14), 0 60px 120px rgba(0, 0, 0, 0.55), 0 18px 40px rgba(0, 0, 0, 0.45); }
+  .bezel { width: 100%; height: 100%; border-radius: 70px; background: #030303; padding: 12px; box-shadow: inset 0 0 0 1.5px #000, inset 0 0 0 3px #1c1d1f; }
+  .screen { position: relative; width: 393px; height: 852px; border-radius: 58px; overflow: hidden; background: #fbfbf7; }
+  .screen > img { position: absolute; left: 0; top: 54px; width: 393px; height: 764px; display: block; }
+  .status { position: absolute; left: 0; right: 0; top: 0; height: 54px; display: flex; align-items: center; justify-content: space-between; padding: 6px 30px 0 50px; color: #24282c; font: 700 17px/1 Lato, sans-serif; }
+  .status svg { display: block; }
+  .island { position: absolute; top: 11px; left: 50%; width: 124px; height: 36px; margin-left: -62px; background: #000; border-radius: 20px; z-index: 3; }
+  .island::after { content: ''; position: absolute; right: 22px; top: 12px; width: 12px; height: 12px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #2a3550, #07080c 70%); }
+  .homebar { position: absolute; bottom: 9px; left: 50%; width: 136px; height: 5px; margin-left: -68px; border-radius: 3px; background: #24282c; z-index: 3; }
+  .glass { position: absolute; inset: 0; border-radius: 58px; background: linear-gradient(118deg, rgba(255, 255, 255, 0.10) 0%, rgba(255, 255, 255, 0) 32%); pointer-events: none; z-index: 4; }
+  .side { position: absolute; width: 5px; border-radius: 3px; background: linear-gradient(90deg, #2a2d30, #5d6166, #2a2d30); }
+  .side.l1 { left: -4px; top: 150px; height: 32px; }
+  .side.l2 { left: -4px; top: 210px; height: 60px; }
+  .side.l3 { left: -4px; top: 284px; height: 60px; }
+  .side.r1 { right: -4px; top: 240px; height: 96px; }
 
   /* 4 · gameplay */
   #s4title { top: 150px; font-size: 104px; line-height: 1.02; }
-  #phone4 { width: 680px; height: 1452px; left: 200px; top: 470px; }
-  #shot4b { opacity: 0; }
+  #phone4 { --z: 1.58; left: 204px; top: 450px; }
   #tap { width: 150px; height: 150px; border-radius: 50%; border: 6px solid var(--lime); margin: -75px 0 0 -75px; }
   #tapDot { width: 64px; height: 64px; border-radius: 50%; background: rgba(36, 40, 44, 0.35); margin: -32px 0 0 -32px; }
   #xp { left: 700px; top: 860px; background: var(--lime); color: var(--ink); border-radius: 999px; padding: 18px 34px; font: 800 52px/1 'Bricolage Grotesque', sans-serif; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45); }
@@ -75,7 +89,7 @@
   #s5title { top: 150px; font-size: 104px; line-height: 1.02; }
   #s5word { top: 1690px; height: 120px; }
   #s5word span { position: absolute; left: 0; right: 0; text-align: center; font: 800 76px/1 'Bricolage Grotesque', sans-serif; letter-spacing: -0.02em; color: var(--lime); }
-  .mphone { width: 560px; height: 1196px; top: 440px; left: 260px; }
+  .mphone { --z: 1.3; top: 440px; left: 264px; }
 
   /* 6 · card */
   #s6title { top: 150px; font-size: 104px; line-height: 1.02; }
@@ -139,7 +153,7 @@
       <span class="line"><span>Two AI screens.</span></span>
       <span class="line"><span class="lime">Tap the better one.</span></span>
     </h2>
-    <div class="phone" id="phone4"><div class="screen"><div class="island"></div><img id="shot4a" src="shots/tot.png"><img id="shot4b" src="shots/tot-tap.png"></div></div>
+    <div class="phone" id="phone4" data-shots="tot.png tot-tap.png"></div>
     <div class="abs" id="tap"></div>
     <div class="abs" id="tapDot"></div>
     <div class="abs" id="xp">+10 XP</div>
@@ -151,10 +165,10 @@
       <span class="line"><span>7 quick games.</span></span>
       <span class="line"><span class="lime">5 minutes a day.</span></span>
     </h2>
-    <div class="phone mphone" id="m0"><div class="screen"><div class="island"></div><img src="shots/speed.png"></div></div>
-    <div class="phone mphone" id="m1"><div class="screen"><div class="island"></div><img src="shots/build.png"></div></div>
-    <div class="phone mphone" id="m2"><div class="screen"><div class="island"></div><img src="shots/power.png"></div></div>
-    <div class="phone mphone" id="m3"><div class="screen"><div class="island"></div><img src="shots/story.png"></div></div>
+    <div class="phone mphone" id="m0" data-shots="speed.png"></div>
+    <div class="phone mphone" id="m1" data-shots="build.png"></div>
+    <div class="phone mphone" id="m2" data-shots="power.png"></div>
+    <div class="phone mphone" id="m3" data-shots="story.png"></div>
     <div class="abs center" id="s5word"><span>60-second speed round</span><span>Build an AI screen</span><span>How much power?</span><span>Short stories</span></div>
   </section>
 
@@ -184,8 +198,19 @@
   <div id="vignette"></div>
 </div>
 
+<script src="shots/meta.js"></script>
 <script>
   const DURATION = 32;
+  // Fill every .phone with the device, status bar and its screenshots (data-shots, stacked; later ones start hidden).
+  const statusIcons = `<span style="display:flex;gap:7px;align-items:center">
+    <svg width="19" height="12" viewBox="0 0 19 12"><rect x="0" y="8" width="3.2" height="4" rx="1" fill="currentColor"/><rect x="5.2" y="5.5" width="3.2" height="6.5" rx="1" fill="currentColor"/><rect x="10.4" y="3" width="3.2" height="9" rx="1" fill="currentColor"/><rect x="15.6" y="0" width="3.2" height="12" rx="1" fill="currentColor"/></svg>
+    <svg width="17" height="12" viewBox="0 0 17 12"><path d="M8.5 2.2c2.5 0 4.8 1 6.5 2.6l1.3-1.3A11 11 0 0 0 8.5.3 11 11 0 0 0 .7 3.5L2 4.8a9.2 9.2 0 0 1 6.5-2.6zm0 3.7c1.5 0 2.9.6 3.9 1.5l1.3-1.3a7.4 7.4 0 0 0-10.4 0l1.3 1.3c1-.9 2.4-1.5 3.9-1.5zm0 3.6c.6 0 1.2.2 1.6.6L8.5 11.7 6.9 10.1c.4-.4 1-.6 1.6-.6z" fill="currentColor"/></svg>
+    <svg width="27" height="13" viewBox="0 0 27 13"><rect x="0.5" y="0.5" width="23" height="12" rx="3.8" fill="none" stroke="currentColor" opacity=".4"/><rect x="2.2" y="2.2" width="17" height="8.6" rx="2.4" fill="currentColor"/><path d="M25 4.4v4.2c.8-.3 1.4-1.1 1.4-2.1s-.6-1.8-1.4-2.1z" fill="currentColor" opacity=".45"/></svg></span>`;
+  document.querySelectorAll('.phone').forEach((ph) => {
+    const imgs = ph.dataset.shots.split(' ').map((f, i) => `<img src="shots/${f}"${ph.id ? ` id="${ph.id}-${i}"` : ''}${i ? ' style="opacity:0"' : ''}>`).join('');
+    ph.innerHTML = `<div class="device"><i class="side l1"></i><i class="side l2"></i><i class="side l3"></i><i class="side r1"></i>
+      <div class="bezel"><div class="screen"><div class="status"><span>9:41</span>${statusIcons}</div><div class="island"></div>${imgs}<div class="homebar"></div><div class="glass"></div></div></div></div>`;
+  });
   const INK = '#24282c', LIME = '#c2ef72', CORAL = '#f6a5a0';
   // Same "Two answers" app icon as scripts/make-brand-images.mjs.
   const appIcon = `<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:100%"><rect width="1024" height="1024" fill="${INK}"/>
@@ -308,11 +333,13 @@
       set('phone4', { y: lerp(700, 0, k) + drift, rx: lerp(28, 0, k), s: lerp(0.9, 1, k) });
       $('phone4').style.transformOrigin = '50% 0%';
       // The tap lands on answer A (the one with sources) at 14.5 s.
-      const tx = 200 + 20 + 350, ty = 470 + 20 + 671 + drift;
+      // Screen starts 16 px inside the device (rim + bezel), the screenshot 54 px lower (status bar); zoom 1.58.
+      const z = 1.58, tapA = (window.SHOTS && window.SHOTS.tapA) || { x: 196, y: 374 };
+      const tx = 204 + (16 + tapA.x) * z, ty = 450 + (16 + 54 + tapA.y) * z + drift;
       const tapIn = p(t, 14.2, 0.3), ring = p(t, 14.5, 0.6);
       set('tapDot', { x: tx, y: ty, s: lerp(1.4, 1, out(tapIn)) * (t > 14.5 ? lerp(1, 0.7, p(t, 14.5, 0.15)) : 1), o: tapIn * (1 - p(t, 14.75, 0.25)) });
       set('tap', { x: tx, y: ty, s: lerp(0.4, 1.6, out(ring)), o: ring > 0 ? 1 - ring : 0 });
-      $('shot4b').style.opacity = p(t, 14.55, 0.18);
+      $('phone4-1').style.opacity = p(t, 14.55, 0.18);
       const xp = back(p(t, 14.75, 0.5));
       set('xp', { y: lerp(40, -60, out(p(t, 14.75, 1.6))) + drift, s: lerp(0.6, 1, xp), o: clamp(p(t, 14.75, 0.15)) * (1 - p(t, 16.2, 0.4)) });
       exit('s4', t, 17.85);

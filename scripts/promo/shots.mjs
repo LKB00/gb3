@@ -1,4 +1,5 @@
 // Step 1 of the promo video: real phone screenshots of the built site (run `npm run build` first).
+// Size 393x764 = an iPhone screen (393x852) minus the status bar (54) and home bar (34) that promo.html draws.
 // Saves PNGs to scripts/promo/shots/ (not committed). Used by promo.html. See scripts/promo/README.md.
 import { preview } from 'vite';
 import { chromium } from 'playwright';
@@ -15,7 +16,7 @@ const css = `@font-face{font-family:'Bricolage Grotesque';font-weight:200 800;sr
 const server = await preview({ preview: { port: 4190 }, logLevel: 'silent' });
 const base = `${server.resolvedUrls.local[0]}#`;
 const browser = await chromium.launch(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {});
-const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 3, isMobile: true, hasTouch: true, serviceWorkers: 'block', colorScheme: 'light' });
+const ctx = await browser.newContext({ viewport: { width: 393, height: 764 }, deviceScaleFactor: 3, isMobile: true, hasTouch: true, serviceWorkers: 'block', colorScheme: 'light' });
 const page = await ctx.newPage();
 
 // A player who has played a bit: streak, XP, some cards won in the Trust group.
@@ -40,11 +41,14 @@ for (const [name, route] of [['home', '/'], ['play', '/play'], ['speed', '/play/
   await page.screenshot({ path: `${OUT}/${name}.png` });
 }
 
-// This or That: before the tap, and after a right answer (pairs are random, so retry until one is right).
+// This or That: before the tap, and after tapping A when A is right (pairs are random, so retry).
 for (let i = 0; i < 20; i++) {
   await open('/play/this-or-that');
   await page.screenshot({ path: `${OUT}/tot.png` });
-  await page.locator('.tot-option').nth(i % 2).click();
+  // Where answer A is, so the video's tap lands on it.
+  const a = await page.locator('.tot-option').first().boundingBox();
+  fs.writeFileSync(`${OUT}/meta.js`, `window.SHOTS = ${JSON.stringify({ tapA: { x: a.x + a.width / 2, y: a.y + a.height / 2 } })};\n`);
+  await page.locator('.tot-option').first().click();
   await page.waitForTimeout(500);
   if (await page.getByText('Nice pick.').count()) {
     await page.screenshot({ path: `${OUT}/tot-tap.png` });
