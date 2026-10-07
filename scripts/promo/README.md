@@ -1,11 +1,12 @@
 # Promo video
 
-A 32-second video with original music and sound effects, in two sizes:
+A 32-second video with original music and sound effects, in three sizes:
 
 | File | Size | For |
 |---|---|---|
 | `design/video/gb3-promo.mp4` | 1080×1920 (vertical) | Instagram Reels, YouTube Shorts, LinkedIn mobile |
-| `design/video/gb3-promo-square.mp4` | 1080×1080 (square) | LinkedIn feed, X |
+| `design/video/gb3-promo-square.mp4` | 1080×1080 (square) | LinkedIn feed |
+| `design/video/gb3-promo-wide.mp4` | 1920×1080 (wide) | X/Twitter, YouTube |
 
 ## Story
 
@@ -38,11 +39,12 @@ node scripts/promo/shots.mjs                    # 1. real phone screenshots -> s
 node scripts/promo/sound.mjs                    # 2. music + effects -> scripts/promo/out/sound.wav (about 15 s)
 node scripts/promo/render.mjs                   # 3. vertical video (about 10 minutes)
 node scripts/promo/render.mjs --square          #    square video (about 6 minutes)
+node scripts/promo/render.mjs --wide            #    wide video (about 10 minutes)
 node scripts/promo/render.mjs 2 15 --square     # optional: still frames at 2 s and 15 s -> scripts/promo/stills/
 node scripts/promo/render.mjs --sound-only      # after changing only the sound: add it again, no re-render
 ```
 
-- To preview, open `scripts/promo/promo.html` in a browser after `shots.mjs` (add `?square` for the square one). It plays in a loop, without sound.
+- To preview, open `scripts/promo/promo.html` in a browser after `shots.mjs` (add `?square` or `?wide` for the other sizes). It plays in a loop, without sound.
 - To change words or timing, edit `promo.html`. Each scene has a start and end time in `scenes`, and its animation is in `render(t)`.
   If you move a scene, move its sounds in `sound.mjs` too (the times are in seconds there as well).
 - If counts change (games, cards), update the words in `promo.html` too.

@@ -145,6 +145,42 @@
   .square #url7 span { font-size: 50px; padding: 26px 48px; }
   .square #sub7 { top: 790px; font-size: 38px; }
   .square #by7 { top: 960px; font-size: 26px; }
+
+  /* Wide version (?wide, 1920x1080, X/Twitter and YouTube): text on the left, phone or card on the right. */
+  body.wide, .wide #stage { width: 1920px; height: 1080px; }
+  .wide #bubbleWrap { left: 400px; right: 400px; top: 130px; }
+  .wide #bubble { font-size: 48px; padding: 36px 46px; min-height: 0; }
+  .wide #caret { height: 48px; }
+  .wide #chip { font-size: 36px; margin-top: 26px; }
+  .wide #hookTitle { top: 540px; font-size: 150px; }
+  .wide #s2title, .wide #s4title, .wide #s6title { left: 160px; right: auto; width: 920px; text-align: left; }
+  .wide #s2title { top: 330px; font-size: 88px; width: 640px; }
+  .wide .row { left: 820px; right: 120px; height: 150px; }
+  .wide #r0 { top: 250px !important; }
+  .wide #r1 { top: 430px !important; }
+  .wide #r2 { top: 610px !important; }
+  .wide .pill { height: 132px; font-size: 40px; border-radius: 34px; }
+  .wide #s2foot { left: 160px; right: auto; text-align: left; top: 570px; font-size: 38px; }
+  .wide #icon3 { width: 300px; height: 300px; left: 810px; top: 160px; border-radius: 68px; }
+  .wide #brand { top: 540px; font-size: 124px; }
+  .wide #tag3 { top: 700px; font-size: 46px; }
+  .wide #s4title { top: 380px; font-size: 96px; }
+  .wide #phone4 { --z: 1; left: 1180px; top: 98px; }
+  .wide #xp { left: 1400px; top: 400px; font-size: 44px; }
+  .wide #s5title { top: 36px; font-size: 70px; }
+  .wide .mphone { --z: 0.8; top: 226px; left: 790px; }
+  .wide #s5word { top: 958px; height: 80px; }
+  .wide #s5word span { font-size: 56px; }
+  .wide #s6title { top: 340px; font-size: 96px; }
+  .wide #s6foot { left: 160px; right: auto; text-align: left; top: 620px; font-size: 42px; }
+  .wide #cardWrap { left: 1180px; top: 177px; width: 520px; }
+  .wide #card6 { width: 520px; border-radius: 42px; }
+  .wide #icon7 { width: 170px; height: 170px; left: 875px; top: 100px; border-radius: 40px; }
+  .wide #end7 { top: 320px; font-size: 112px; }
+  .wide #url7 { top: 630px; }
+  .wide #url7 span { font-size: 52px; padding: 26px 50px; }
+  .wide #sub7 { top: 780px; font-size: 40px; }
+  .wide #by7 { top: 960px; font-size: 26px; }
 </style>
 </head>
 <body>
@@ -239,7 +275,9 @@
 <script>
   const DURATION = 32;
   const SQUARE = /[?&]square/.test(location.search);
+  const WIDE = /[?&]wide/.test(location.search);
   if (SQUARE) document.body.classList.add('square');
+  if (WIDE) document.body.classList.add('wide');
   // Fill every .phone with the device, status bar and its screenshots (data-shots, stacked; later ones start hidden).
   const statusIcons = `<span style="display:flex;gap:7px;align-items:center">
     <svg width="19" height="12" viewBox="0 0 19 12"><rect x="0" y="8" width="3.2" height="4" rx="1" fill="currentColor"/><rect x="5.2" y="5.5" width="3.2" height="6.5" rx="1" fill="currentColor"/><rect x="10.4" y="3" width="3.2" height="9" rx="1" fill="currentColor"/><rect x="15.6" y="0" width="3.2" height="12" rx="1" fill="currentColor"/></svg>
@@ -397,7 +435,7 @@
       for (let i = 0; i < 4; i++) {
         const d = i - pos;
         const ad = Math.min(Math.abs(d), 2);
-        set('m' + i, { x: d * (SQUARE ? 360 : 560), y: lerp(600, 0, enter) + ad * (SQUARE ? 40 : 70), s: 1 - ad * 0.16, r: d * 4, o: clamp(1 - ad * 0.45) * enter });
+        set('m' + i, { x: d * (WIDE ? 450 : SQUARE ? 360 : 560), y: lerp(600, 0, enter) + ad * (SQUARE || WIDE ? 40 : 70), s: 1 - ad * 0.16, r: d * 4, o: clamp(1 - ad * 0.45) * enter });
         $('m' + i).style.zIndex = 10 - Math.round(ad * 3);
       }
       $('s5word').querySelectorAll('span').forEach((s, i) => {

@@ -1,8 +1,9 @@
 // Step 3 of the promo video: renders promo.html frame by frame, then adds the sound (sound.mjs) with ffmpeg.
 //   node scripts/promo/render.mjs                -> design/video/gb3-promo.mp4         (1080x1920, Reels/Shorts)
 //   node scripts/promo/render.mjs --square       -> design/video/gb3-promo-square.mp4  (1080x1080, LinkedIn feed)
-//   node scripts/promo/render.mjs --sound-only   -> only re-adds the sound to the last render (fast; add --square for that one)
-//   node scripts/promo/render.mjs 2.5 14.8       -> only still frames at those seconds, in scripts/promo/stills/ (add --square too)
+//   node scripts/promo/render.mjs --wide         -> design/video/gb3-promo-wide.mp4    (1920x1080, X/Twitter, YouTube)
+//   node scripts/promo/render.mjs --sound-only   -> only re-adds the sound to the last render (fast; add --square or --wide for those)
+//   node scripts/promo/render.mjs 2.5 14.8       -> only still frames at those seconds, in scripts/promo/stills/ (add --square or --wide too)
 // Needs Chromium (CHROMIUM_PATH in the cloud sandbox) and ffmpeg. Run shots.mjs and sound.mjs first. See scripts/promo/README.md.
 import { chromium } from 'playwright';
 import { spawn } from 'node:child_process';
@@ -13,10 +14,12 @@ const FPS = 30;
 const here = (p) => fileURLToPath(new URL(p, import.meta.url));
 const args = process.argv.slice(2);
 const square = args.includes('--square');
+const wide = args.includes('--wide');
 const soundOnly = args.includes('--sound-only');
 const stills = args.filter((a) => !a.startsWith('--')).map(Number);
-const name = square ? 'gb3-promo-square' : 'gb3-promo';
-const size = square ? { width: 1080, height: 1080 } : { width: 1080, height: 1920 };
+const format = square ? 'square' : wide ? 'wide' : '';
+const name = format ? `gb3-promo-${format}` : 'gb3-promo';
+const size = square ? { width: 1080, height: 1080 } : wide ? { width: 1920, height: 1080 } : { width: 1080, height: 1920 };
 fs.mkdirSync(here('out'), { recursive: true });
 const silent = here(`out/${name}-silent.mp4`);
 const final = here(`../../design/video/${name}.mp4`);
@@ -31,7 +34,7 @@ if (!soundOnly) {
   const browser = await chromium.launch(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {});
   const page = await browser.newPage({ viewport: size });
   page.on('pageerror', (e) => { console.error(e); process.exit(1); });
-  await page.goto('file://' + here('promo.html') + '?render' + (square ? '&square' : ''));
+  await page.goto('file://' + here('promo.html') + '?render' + (format ? '&' + format : ''));
   await page.evaluate(() => window.ready);
   const duration = await page.evaluate(() => window.DURATION);
   const frame = async (t) => {
@@ -41,7 +44,7 @@ if (!soundOnly) {
 
   if (stills.length) {
     fs.mkdirSync(here('stills'), { recursive: true });
-    for (const t of stills) fs.writeFileSync(here(`stills/${square ? 'square-' : ''}${t}.png`), await frame(t));
+    for (const t of stills) fs.writeFileSync(here(`stills/${format ? format + '-' : ''}${t}.png`), await frame(t));
     console.log('Stills saved to scripts/promo/stills/');
     await browser.close();
     process.exit(0);
