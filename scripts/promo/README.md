@@ -1,7 +1,11 @@
 # Promo video
 
-A 32-second vertical video (1080×1920, 30 fps, no sound) for Reels, Shorts, LinkedIn and X.
-The output is `design/video/gb3-promo.mp4`.
+A 32-second video with original music and sound effects, in two sizes:
+
+| File | Size | For |
+|---|---|---|
+| `design/video/gb3-promo.mp4` | 1080×1920 (vertical) | Instagram Reels, YouTube Shorts, LinkedIn mobile |
+| `design/video/gb3-promo-square.mp4` | 1080×1080 (square) | LinkedIn feed, X |
 
 ## Story
 
@@ -15,18 +19,31 @@ The output is `design/video/gb3-promo.mp4`.
 | 24–28 s | "Collect 37 cards. Find your type." The player card turns in 3D. |
 | 28–32 s | End card: "Can you spot good AI design?" + gb3.lokeshbhatia.com. |
 
+## Sound
+
+`sound.mjs` makes all the sound from code (no music library, so no licence questions):
+- **Music:** about 125 BPM, A minor (Am7, Fmaj7, C, G6). A quiet heartbeat in the hook, the beat drops on scene 2,
+  pad and arp only during the logo, the beat comes back for the games, then one warm chord at the end.
+- **Effects:** typing, a "nope" for the warning, whooshes between scenes, a riser and hit before the logo,
+  a ding for each good choice, the tap, a chime and a coin for +10 XP, sparkles on the logo and the card.
+- Loudness is about -14 LUFS (normal for social media).
+
 ## Make it again
 
 Run these from the repo root. In the cloud sandbox, start each command with `CHROMIUM_PATH=/opt/pw-browsers/chromium`.
 
 ```bash
-npm run build                          # the site the screenshots come from
-node scripts/promo/shots.mjs           # real phone screenshots -> scripts/promo/shots/
-node scripts/promo/render.mjs 2 15     # optional: still frames at 2 s and 15 s -> scripts/promo/stills/
-node scripts/promo/render.mjs          # the full video (about 10 minutes, about 6 MB), needs ffmpeg
+npm run build                                   # the site the screenshots come from
+node scripts/promo/shots.mjs                    # 1. real phone screenshots -> scripts/promo/shots/
+node scripts/promo/sound.mjs                    # 2. music + effects -> scripts/promo/out/sound.wav (about 15 s)
+node scripts/promo/render.mjs                   # 3. vertical video (about 10 minutes)
+node scripts/promo/render.mjs --square          #    square video (about 6 minutes)
+node scripts/promo/render.mjs 2 15 --square     # optional: still frames at 2 s and 15 s -> scripts/promo/stills/
+node scripts/promo/render.mjs --sound-only      # after changing only the sound: add it again, no re-render
 ```
 
-- To preview, open `scripts/promo/promo.html` in a browser after `shots.mjs`. It plays in a loop.
+- To preview, open `scripts/promo/promo.html` in a browser after `shots.mjs` (add `?square` for the square one). It plays in a loop, without sound.
 - To change words or timing, edit `promo.html`. Each scene has a start and end time in `scenes`, and its animation is in `render(t)`.
+  If you move a scene, move its sounds in `sound.mjs` too (the times are in seconds there as well).
 - If counts change (games, cards), update the words in `promo.html` too.
-- There is no sound. Add music in the app where you post it (Instagram, YouTube), or in any video editor.
+- The phone is drawn in `promo.html` (`.device`). Screenshots are 393×764, the screen of a modern phone without the status bar and home bar.
