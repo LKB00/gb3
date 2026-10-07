@@ -30,7 +30,7 @@ if (stills.length) {
   const out = here('../../design/video/gb3-promo.mp4');
   fs.mkdirSync(here('../../design/video'), { recursive: true });
   const ff = spawn('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'image2pipe', '-framerate', String(FPS), '-i', '-',
-    '-c:v', 'libx264', '-preset', 'slow', '-crf', '17', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', out], { stdio: ['pipe', 'inherit', 'inherit'] });
+    '-c:v', 'libx264', '-preset', 'slow', '-crf', '23', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', out], { stdio: ['pipe', 'inherit', 'inherit'] });
   const total = Math.round(duration * FPS);
   for (let i = 0; i < total; i++) {
     const buf = await frame(i / FPS);

@@ -23,7 +23,7 @@ Run these from the repo root. In the cloud sandbox, start each command with `CHR
 npm run build                          # the site the screenshots come from
 node scripts/promo/shots.mjs           # real phone screenshots -> scripts/promo/shots/
 node scripts/promo/render.mjs 2 15     # optional: still frames at 2 s and 15 s -> scripts/promo/stills/
-node scripts/promo/render.mjs          # the full video (about 10 minutes), needs ffmpeg
+node scripts/promo/render.mjs          # the full video (about 10 minutes, about 6 MB), needs ffmpeg
 ```
 
 - To preview, open `scripts/promo/promo.html` in a browser after `shots.mjs`. It plays in a loop.
