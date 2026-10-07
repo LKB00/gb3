@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>GB3 promo</title>
+<!-- The promo video, as one page. render.mjs calls window.render(t) for every frame (t in seconds) and saves it.
+     Open this file in a browser to preview: it plays on its own. Screens come from shots.mjs (scripts/promo/shots/). -->
+<style>
+  @font-face { font-family: 'Bricolage Grotesque'; font-weight: 800; src: url(../../design/fonts/bricolage-grotesque-latin-800-normal.woff2) format('woff2'); }
+  @font-face { font-family: Lato; font-weight: 400; src: url(../../design/fonts/lato-latin-400-normal.woff2) format('woff2'); }
+  @font-face { font-family: Lato; font-weight: 700; src: url(../../design/fonts/lato-latin-700-normal.woff2) format('woff2'); }
+  :root { --ink: #24282c; --bg: #101213; --lime: #c2ef72; --coral: #f6a5a0; --paper: #fbfbf7; --mute: #9da19b; }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { background: #000; }
+  body { width: 1080px; height: 1920px; overflow: hidden; }
+  #stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); color: var(--paper); font-family: Lato, sans-serif; }
+  .abs { position: absolute; }
+  .glow { position: absolute; width: 1400px; height: 1400px; border-radius: 50%; left: -160px; top: 260px; filter: blur(40px); will-change: transform, opacity; }
+  #glowA { background: radial-gradient(closest-side, rgba(194, 239, 114, 0.30), rgba(194, 239, 114, 0) 70%); }
+  #glowB { background: radial-gradient(closest-side, rgba(246, 165, 160, 0.26), rgba(246, 165, 160, 0) 70%); }
+  #grain { position: absolute; inset: -128px; opacity: 0.07; mix-blend-mode: overlay; pointer-events: none; }
+  #vignette { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 70% at 50% 50%, transparent 55%, rgba(0, 0, 0, 0.55)); pointer-events: none; }
+  .scene { position: absolute; inset: 0; display: none; }
+  .display { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; letter-spacing: -0.03em; }
+  .line { display: block; overflow: hidden; padding: 0.04em 0 0.1em; }
+  .line > span { display: inline-block; will-change: transform; }
+  .center { left: 0; right: 0; text-align: center; }
+  .kicker { font: 700 30px/1 Lato, sans-serif; letter-spacing: 0.22em; text-transform: uppercase; color: var(--mute); }
+
+  /* 1 · hook */
+  #bubbleWrap { left: 90px; right: 90px; top: 520px; }
+  .who { display: flex; align-items: center; gap: 18px; margin-bottom: 22px; }
+  .who i { width: 54px; height: 54px; border-radius: 50%; background: #2f3438; display: grid; place-items: center; }
+  .who i b { width: 22px; height: 22px; border-radius: 50%; background: var(--lime); }
+  #bubble { background: var(--paper); color: var(--ink); border-radius: 18px 56px 56px 56px; padding: 44px 52px; font: 400 58px/1.28 Lato, sans-serif; min-height: 240px; box-shadow: 0 40px 120px rgba(0, 0, 0, 0.5); }
+  #caret { display: inline-block; width: 5px; height: 58px; background: var(--ink); vertical-align: -8px; margin-left: 4px; }
+  #chip { margin-top: 30px; display: inline-flex; align-items: center; gap: 16px; background: rgba(246, 165, 160, 0.14); color: var(--coral); border: 2px solid rgba(246, 165, 160, 0.45); border-radius: 999px; padding: 18px 34px 18px 22px; font: 700 40px/1 Lato, sans-serif; }
+  .mark { width: 50px; height: 50px; border-radius: 50%; display: grid; place-items: center; flex: none; }
+  .mark.bad { background: var(--coral); }
+  .mark.good { background: var(--lime); }
+  .mark svg { width: 26px; height: 26px; }
+  #hookTitle { top: 1180px; font-size: 168px; line-height: 0.96; }
+
+  /* 2 · tiny choices */
+  #s2title { top: 300px; font-size: 128px; line-height: 1; }
+  .row { left: 70px; right: 70px; height: 170px; display: flex; align-items: center; gap: 26px; }
+  .pill { flex: 1; height: 150px; border-radius: 40px; display: flex; align-items: center; gap: 22px; padding: 0 34px; font: 700 46px/1.1 Lato, sans-serif; }
+  .pill.bad { background: #1b1e20; color: #8e918c; border: 2px solid #2a2e31; }
+  .pill.good { background: var(--lime); color: var(--ink); box-shadow: 0 30px 80px rgba(194, 239, 114, 0.25); }
+  .pill.bad .mark { background: #3a2a2a; }
+  .pill.good .mark { background: var(--ink); }
+  .strike { position: absolute; height: 4px; background: var(--coral); left: 110px; top: 50%; transform-origin: left; border-radius: 4px; }
+  #s2foot { top: 1560px; font: 400 50px/1.35 Lato, sans-serif; color: #c9ccc4; }
+
+  /* 3 · brand */
+  #icon3 { width: 380px; height: 380px; left: 350px; top: 560px; border-radius: 86px; overflow: hidden; box-shadow: 0 60px 160px rgba(194, 239, 114, 0.22), 0 0 0 2px rgba(255, 255, 255, 0.06); }
+  #brand { top: 1040px; font-size: 112px; line-height: 1; white-space: nowrap; }
+  #tag3 { top: 1210px; font: 400 52px/1.35 Lato, sans-serif; color: #c9ccc4; }
+
+  /* phones */
+  .phone { position: absolute; border-radius: 96px; background: #050606; padding: 20px; box-shadow: 0 0 0 3px #2b2f32, 0 80px 160px rgba(0, 0, 0, 0.6); }
+  .phone .screen { position: relative; width: 100%; height: 100%; border-radius: 78px; overflow: hidden; background: var(--paper); }
+  .phone img { position: absolute; left: 0; top: 0; width: 100%; height: auto; display: block; }
+  .phone .island { position: absolute; top: 18px; left: 50%; width: 150px; height: 42px; margin-left: -75px; background: #050606; border-radius: 30px; z-index: 3; }
+
+  /* 4 · gameplay */
+  #s4title { top: 150px; font-size: 104px; line-height: 1.02; }
+  #phone4 { width: 680px; height: 1452px; left: 200px; top: 470px; }
+  #shot4b { opacity: 0; }
+  #tap { width: 150px; height: 150px; border-radius: 50%; border: 6px solid var(--lime); margin: -75px 0 0 -75px; }
+  #tapDot { width: 64px; height: 64px; border-radius: 50%; background: rgba(36, 40, 44, 0.35); margin: -32px 0 0 -32px; }
+  #xp { left: 700px; top: 860px; background: var(--lime); color: var(--ink); border-radius: 999px; padding: 18px 34px; font: 800 52px/1 'Bricolage Grotesque', sans-serif; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45); }
+
+  /* 5 · montage */
+  #s5title { top: 150px; font-size: 104px; line-height: 1.02; }
+  #s5word { top: 1690px; height: 120px; }
+  #s5word span { position: absolute; left: 0; right: 0; text-align: center; font: 800 76px/1 'Bricolage Grotesque', sans-serif; letter-spacing: -0.02em; color: var(--lime); }
+  .mphone { width: 560px; height: 1196px; top: 440px; left: 260px; }
+
+  /* 6 · card */
+  #s6title { top: 150px; font-size: 104px; line-height: 1.02; }
+  #cardWrap { left: 130px; top: 520px; width: 820px; perspective: 2200px; }
+  #card6 { position: relative; width: 820px; border-radius: 64px; overflow: hidden; box-shadow: 0 80px 180px rgba(0, 0, 0, 0.6), 0 0 0 2px rgba(255, 255, 255, 0.06); transform-style: preserve-3d; }
+  #card6 img { display: block; width: 100%; }
+  #sheen { position: absolute; inset: 0; background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.22) 48%, transparent 66%); mix-blend-mode: screen; }
+  #s6foot { top: 1775px; font: 400 48px/1.35 Lato, sans-serif; color: #c9ccc4; }
+
+  /* 7 · end */
+  #icon7 { width: 250px; height: 250px; left: 415px; top: 470px; border-radius: 58px; overflow: hidden; box-shadow: 0 50px 140px rgba(194, 239, 114, 0.2); }
+  #end7 { top: 800px; font-size: 132px; line-height: 0.98; }
+  #url7 { top: 1210px; left: 0; right: 0; display: flex; justify-content: center; }
+  #url7 span { background: var(--lime); color: var(--ink); border-radius: 999px; padding: 30px 56px; font: 800 60px/1 'Bricolage Grotesque', sans-serif; letter-spacing: -0.01em; box-shadow: 0 40px 120px rgba(194, 239, 114, 0.28); }
+  #sub7 { top: 1390px; font: 400 44px/1.4 Lato, sans-serif; color: #c9ccc4; }
+  #by7 { top: 1740px; font: 700 30px/1 Lato, sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: #74786f; }
+  .lime { color: var(--lime); }
+  .coral { color: var(--coral); }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="glow" id="glowA"></div>
+  <div class="glow" id="glowB"></div>
+
+  <!-- 1 · hook: a bot does something scary, then the question -->
+  <section class="scene" id="s1">
+    <div class="abs" id="bubbleWrap">
+      <div class="who"><i><b></b></i><span class="kicker" style="color:#c9ccc4">AI assistant</span></div>
+      <div id="bubble"><span id="typed"></span><span id="caret"></span></div>
+      <div id="chip"><span class="mark bad"><svg viewBox="0 0 26 26"><path d="M6 6l14 14M20 6L6 20" stroke="#24282c" stroke-width="4.5" stroke-linecap="round"/></svg></span>No preview. No undo.</div>
+    </div>
+    <h1 class="abs center display" id="hookTitle">
+      <span class="line"><span class="lime">Good bot</span></span>
+      <span class="line"><span>or <span class="coral">bad bot?</span></span></span>
+    </h1>
+  </section>
+
+  <!-- 2 · the small choices -->
+  <section class="scene" id="s2">
+    <h2 class="abs center display" id="s2title">
+      <span class="line"><span>Same AI.</span></span>
+      <span class="line"><span class="lime">Better design.</span></span>
+    </h2>
+    <div class="abs row" id="r0" style="top:760px"><div class="pill bad"><span class="mark">✕</span>Just does it</div><div class="pill good"><span class="mark"></span>Asks first</div></div>
+    <div class="abs row" id="r1" style="top:960px"><div class="pill bad"><span class="mark">✕</span>“Trust me”</div><div class="pill good"><span class="mark"></span>Shows sources</div></div>
+    <div class="abs row" id="r2" style="top:1160px"><div class="pill bad"><span class="mark">✕</span>Too late</div><div class="pill good"><span class="mark"></span>Lets you undo</div></div>
+    <p class="abs center" id="s2foot">Small choices decide if people<br>trust your AI product.</p>
+  </section>
+
+  <!-- 3 · brand -->
+  <section class="scene" id="s3">
+    <div class="abs" id="icon3"></div>
+    <h2 class="abs center display" id="brand"><span class="line"><span>Good Bot, Bad Bot</span></span></h2>
+    <p class="abs center" id="tag3">The game that trains your eye<br>for good AI design.</p>
+  </section>
+
+  <!-- 4 · gameplay -->
+  <section class="scene" id="s4">
+    <h2 class="abs center display" id="s4title">
+      <span class="line"><span>Two AI screens.</span></span>
+      <span class="line"><span class="lime">Tap the better one.</span></span>
+    </h2>
+    <div class="phone" id="phone4"><div class="screen"><div class="island"></div><img id="shot4a" src="shots/tot.png"><img id="shot4b" src="shots/tot-tap.png"></div></div>
+    <div class="abs" id="tap"></div>
+    <div class="abs" id="tapDot"></div>
+    <div class="abs" id="xp">+10 XP</div>
+  </section>
+
+  <!-- 5 · more games -->
+  <section class="scene" id="s5">
+    <h2 class="abs center display" id="s5title">
+      <span class="line"><span>7 quick games.</span></span>
+      <span class="line"><span class="lime">5 minutes a day.</span></span>
+    </h2>
+    <div class="phone mphone" id="m0"><div class="screen"><div class="island"></div><img src="shots/speed.png"></div></div>
+    <div class="phone mphone" id="m1"><div class="screen"><div class="island"></div><img src="shots/build.png"></div></div>
+    <div class="phone mphone" id="m2"><div class="screen"><div class="island"></div><img src="shots/power.png"></div></div>
+    <div class="phone mphone" id="m3"><div class="screen"><div class="island"></div><img src="shots/story.png"></div></div>
+    <div class="abs center" id="s5word"><span>60-second speed round</span><span>Build an AI screen</span><span>How much power?</span><span>Short stories</span></div>
+  </section>
+
+  <!-- 6 · player card -->
+  <section class="scene" id="s6">
+    <h2 class="abs center display" id="s6title">
+      <span class="line"><span>Collect 37 cards.</span></span>
+      <span class="line"><span class="lime">Find your type.</span></span>
+    </h2>
+    <div class="abs" id="cardWrap"><div id="card6"><img src="shots/card.png"><div id="sheen"></div></div></div>
+    <p class="abs center" id="s6foot">What kind of AI designer are you?</p>
+  </section>
+
+  <!-- 7 · end card -->
+  <section class="scene" id="s7">
+    <div class="abs" id="icon7"></div>
+    <h2 class="abs center display" id="end7">
+      <span class="line"><span>Can you spot</span></span>
+      <span class="line"><span><span class="lime">good</span> AI design?</span></span>
+    </h2>
+    <div class="abs" id="url7"><span>gb3.lokeshbhatia.com</span></div>
+    <p class="abs center" id="sub7">Free. No sign-up. Play in your browser.</p>
+    <p class="abs center" id="by7">Made by Lokesh Kumar Bhatia</p>
+  </section>
+
+  <canvas id="grain" width="1336" height="2176"></canvas>
+  <div id="vignette"></div>
+</div>
+
+<script>
+  const DURATION = 32;
+  const INK = '#24282c', LIME = '#c2ef72', CORAL = '#f6a5a0';
+  // Same "Two answers" app icon as scripts/make-brand-images.mjs.
+  const appIcon = `<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:100%"><rect width="1024" height="1024" fill="${INK}"/>
+  <g transform="translate(512 512) scale(1.16) translate(-512 -512) translate(0 34)">
+    <rect x="430" y="150" width="440" height="330" rx="110" fill="${CORAL}"/><polygon points="600,470 800,610 770,470" fill="${CORAL}"/>
+    <path d="M628 255 L738 365 M738 255 L628 365" fill="none" stroke="${INK}" stroke-width="64" stroke-linecap="round"/>
+    <g stroke="${INK}" stroke-width="34" stroke-linejoin="round"><rect x="150" y="360" width="440" height="330" rx="110" fill="${LIME}"/><polygon points="265,680 195,810 410,680" fill="${LIME}"/></g>
+    <rect x="167" y="377" width="406" height="296" rx="93" fill="${LIME}"/><polygon points="277,668 212,780 392,668" fill="${LIME}"/>
+    <path d="M262 528 L340 606 L482 442" fill="none" stroke="${INK}" stroke-width="68" stroke-linecap="round" stroke-linejoin="round"/>
+  </g></svg>`;
+  document.getElementById('icon3').innerHTML = appIcon;
+  document.getElementById('icon7').innerHTML = appIcon;
+  const tick = (c) => `<svg viewBox="0 0 26 26"><path d="M5 13.5l5.5 5.5L21 7.5" fill="none" stroke="${c}" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  const cross = `<svg viewBox="0 0 26 26"><path d="M7 7l12 12M19 7L7 19" stroke="${CORAL}" stroke-width="4" stroke-linecap="round"/></svg>`;
+  document.querySelectorAll('.pill.good .mark').forEach((m) => (m.innerHTML = tick(LIME)));
+  document.querySelectorAll('.pill.bad .mark').forEach((m) => (m.innerHTML = cross));
+  document.querySelectorAll('.pill.bad').forEach((p) => { p.style.position = 'relative'; p.insertAdjacentHTML('beforeend', '<i class="strike"></i>'); });
+
+  // Film grain: random noise, moved a little every frame.
+  const gc = document.getElementById('grain').getContext('2d');
+  const img = gc.createImageData(1336, 2176);
+  let seed = 7;
+  const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+  for (let i = 0; i < img.data.length; i += 4) { const v = rnd() * 255; img.data[i] = img.data[i + 1] = img.data[i + 2] = v; img.data[i + 3] = 255; }
+  gc.putImageData(img, 0, 0);
+
+  // Timing helpers. p = progress of a step from `a` lasting `d` seconds (0..1).
+  const clamp = (x) => Math.max(0, Math.min(1, x));
+  const p = (t, a, d) => clamp((t - a) / d);
+  const out = (x) => 1 - Math.pow(1 - x, 4);
+  const expo = (x) => (x >= 1 ? 1 : 1 - Math.pow(2, -10 * x));
+  const inOut = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+  const back = (x) => { const c = 1.5; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
+  const lerp = (a, b, x) => a + (b - a) * x;
+  const $ = (id) => document.getElementById(id);
+  function set(el, { x = 0, y = 0, s = 1, r = 0, rx = 0, ry = 0, o = 1, b = 0 } = {}) {
+    if (typeof el === 'string') el = $(el);
+    el.style.transform = `translate(${x}px, ${y}px) rotateX(${rx}deg) rotateY(${ry}deg) rotate(${r}deg) scale(${s})`;
+    el.style.opacity = o;
+    el.style.filter = b > 0.05 ? `blur(${b}px)` : 'none';
+  }
+  // Lines of a heading slide up out of a mask, one after another.
+  function lines(id, t, start, gap = 0.12, dur = 0.9) {
+    $(id).querySelectorAll('.line > span').forEach((s, i) => {
+      const k = expo(p(t, start + i * gap, dur));
+      s.style.transform = `translateY(${(1 - k) * 110}%)`;
+    });
+  }
+  // Scene exit: zoom a little, blur and fade.
+  function exit(id, t, start, dur = 0.45) {
+    const k = inOut(p(t, start, dur));
+    set(id, { s: 1 + k * 0.06, o: 1 - k, b: k * 14 });
+  }
+  const scenes = { s1: [0, 4.3], s2: [4.3, 8.9], s3: [8.9, 12.0], s4: [12.0, 18.3], s5: [18.3, 23.8], s6: [23.8, 27.9], s7: [27.9, DURATION] };
+
+  const hookText = 'Done! I deleted 2,340 old emails for you.';
+  const words = ['60-second speed round', 'Build an AI screen', 'How much power?', 'Short stories'];
+
+  window.render = function (t) {
+    for (const [id, [a, b]] of Object.entries(scenes)) $(id).style.display = t >= a && t < b ? 'block' : 'none';
+
+    // Background: slow drifting glows; coral in the hook, lime later.
+    const lime = clamp(p(t, 3.2, 2.5));
+    set('glowA', { x: Math.sin(t * 0.35) * 160, y: Math.cos(t * 0.27) * 220 - 200, s: 1 + 0.08 * Math.sin(t * 0.5), o: 0.35 + 0.65 * lime });
+    set('glowB', { x: Math.cos(t * 0.3) * 200 + 120, y: Math.sin(t * 0.22) * 260 + 300, s: 1.1, o: 1 - 0.65 * lime });
+    const gx = (Math.floor(t * 30) * 37) % 128, gy = (Math.floor(t * 30) * 59) % 128;
+    $('grain').style.transform = `translate(${gx}px, ${gy}px)`;
+
+    if (t < 4.3) {
+      // Hook: the bot types fast, a red warning drops in, then the big question.
+      const typed = Math.round(hookText.length * p(t, 0.2, 1.25));
+      $('typed').textContent = hookText.slice(0, typed);
+      $('caret').style.opacity = typed < hookText.length || Math.floor(t * 2.5) % 2 === 0 ? 1 : 0;
+      const enter = expo(p(t, 0, 0.6));
+      set('bubbleWrap', { y: lerp(80, 0, enter) - 60 * inOut(p(t, 2.0, 0.8)), o: enter, s: lerp(0.94, 1, enter) });
+      const c = back(p(t, 1.6, 0.5));
+      set('chip', { y: lerp(40, 0, c), s: lerp(0.7, 1, c), o: clamp(p(t, 1.6, 0.2)) });
+      // A small shake when the warning lands.
+      const shake = p(t, 1.6, 0.35) < 1 && t > 1.6 ? Math.sin(t * 90) * 10 * (1 - p(t, 1.6, 0.35)) : 0;
+      $('bubble').style.transform = `translateX(${shake}px)`;
+      lines('hookTitle', t, 2.15, 0.16, 0.8);
+      set('hookTitle', { s: lerp(1.08, 1, out(p(t, 2.15, 1.4))) });
+      exit('s1', t, 3.85);
+    }
+
+    if (t >= 4.3 && t < 8.9) {
+      set('s2', {});
+      lines('s2title', t, 4.4, 0.14);
+      ['r0', 'r1', 'r2'].forEach((id, i) => {
+        const a = 5.0 + i * 0.5;
+        const k = expo(p(t, a, 0.7));
+        set(id, { y: lerp(60, 0, k), o: k });
+        const row = $(id);
+        const good = back(p(t, a + 0.25, 0.55));
+        set(row.querySelector('.pill.good'), { s: lerp(0.85, 1, good), o: clamp(p(t, a + 0.25, 0.2)) });
+        row.querySelector('.strike').style.transform = `scaleX(${expo(p(t, a + 0.45, 0.4))})`;
+        row.querySelector('.strike').style.width = '58%';
+        set(row.querySelector('.pill.bad'), { o: lerp(1, 0.55, p(t, a + 0.45, 0.4)) });
+      });
+      const f = expo(p(t, 6.9, 0.8));
+      set('s2foot', { y: lerp(30, 0, f), o: f });
+      exit('s2', t, 8.45);
+    }
+
+    if (t >= 8.9 && t < 12.0) {
+      set('s3', {});
+      const k = back(p(t, 8.95, 0.9));
+      set('icon3', { s: lerp(0.4, 1, k), r: lerp(-14, 0, expo(p(t, 8.95, 1.1))), o: clamp(p(t, 8.95, 0.25)), y: -18 * inOut(p(t, 9.8, 2)) });
+      lines('brand', t, 9.35, 0, 0.9);
+      const g = expo(p(t, 9.75, 0.9));
+      set('tag3', { y: lerp(30, 0, g), o: g });
+      exit('s3', t, 11.55);
+    }
+
+    if (t >= 12.0 && t < 18.3) {
+      set('s4', {});
+      lines('s4title', t, 12.05, 0.14);
+      const k = expo(p(t, 12.15, 1.2));
+      const drift = -40 * inOut(p(t, 13.2, 5));
+      set('phone4', { y: lerp(700, 0, k) + drift, rx: lerp(28, 0, k), s: lerp(0.9, 1, k) });
+      $('phone4').style.transformOrigin = '50% 0%';
+      // The tap lands on answer A (the one with sources) at 14.5 s.
+      const tx = 200 + 20 + 350, ty = 470 + 20 + 671 + drift;
+      const tapIn = p(t, 14.2, 0.3), ring = p(t, 14.5, 0.6);
+      set('tapDot', { x: tx, y: ty, s: lerp(1.4, 1, out(tapIn)) * (t > 14.5 ? lerp(1, 0.7, p(t, 14.5, 0.15)) : 1), o: tapIn * (1 - p(t, 14.75, 0.25)) });
+      set('tap', { x: tx, y: ty, s: lerp(0.4, 1.6, out(ring)), o: ring > 0 ? 1 - ring : 0 });
+      $('shot4b').style.opacity = p(t, 14.55, 0.18);
+      const xp = back(p(t, 14.75, 0.5));
+      set('xp', { y: lerp(40, -60, out(p(t, 14.75, 1.6))) + drift, s: lerp(0.6, 1, xp), o: clamp(p(t, 14.75, 0.15)) * (1 - p(t, 16.2, 0.4)) });
+      exit('s4', t, 17.85);
+    }
+
+    if (t >= 18.3 && t < 23.8) {
+      set('s5', {});
+      lines('s5title', t, 18.35, 0.14);
+      // Carousel: the centre phone is big, the others sit to the sides, smaller and darker.
+      const steps = [19.6, 20.8, 22.0];
+      let pos = 0;
+      steps.forEach((a) => (pos += inOut(p(t, a, 0.6))));
+      const enter = expo(p(t, 18.45, 1.1));
+      for (let i = 0; i < 4; i++) {
+        const d = i - pos;
+        const ad = Math.min(Math.abs(d), 2);
+        set('m' + i, { x: d * 560, y: lerp(600, 0, enter) + ad * 70, s: 1 - ad * 0.16, r: d * 4, o: clamp(1 - ad * 0.45) * enter });
+        $('m' + i).style.zIndex = 10 - Math.round(ad * 3);
+      }
+      $('s5word').querySelectorAll('span').forEach((s, i) => {
+        const d = i - pos;
+        const k = clamp(1 - Math.abs(d) * 1.6);
+        set(s, { y: d * 70, o: k * clamp(p(t, 18.9, 0.4)) });
+      });
+      exit('s5', t, 23.35);
+    }
+
+    if (t >= 23.8 && t < 27.9) {
+      set('s6', {});
+      lines('s6title', t, 23.85, 0.14);
+      const k = expo(p(t, 23.95, 1.4));
+      set('card6', { ry: lerp(-50, 0, k) + 4 * Math.sin((t - 23.9) * 1.4) * k, rx: lerp(20, 3, k), y: lerp(400, 0, k), s: lerp(0.85, 1, k), o: clamp(p(t, 23.95, 0.3)) });
+      $('sheen').style.transform = `translateX(${lerp(-110, 110, inOut(p(t, 24.9, 1.2)))}%)`;
+      const f = expo(p(t, 25.2, 0.8));
+      set('s6foot', { y: lerp(30, 0, f), o: f });
+      exit('s6', t, 27.45);
+    }
+
+    if (t >= 27.9) {
+      set('s7', {});
+      const k = back(p(t, 27.95, 0.8));
+      set('icon7', { s: lerp(0.5, 1, k), o: clamp(p(t, 27.95, 0.2)) });
+      lines('end7', t, 28.25, 0.14);
+      const u = back(p(t, 28.9, 0.7));
+      set('url7', { s: lerp(0.8, 1, u), o: clamp(p(t, 28.9, 0.2)) });
+      const s = expo(p(t, 29.4, 0.8));
+      set('sub7', { y: lerp(20, 0, s), o: s });
+      set('by7', { o: expo(p(t, 29.8, 0.8)) * 1 });
+      // Fade to black at the very end so the loop back to the start feels clean.
+      $('stage').style.opacity = 1 - inOut(p(t, DURATION - 0.5, 0.5));
+    } else $('stage').style.opacity = 1;
+  };
+
+  window.ready = Promise.all([document.fonts.ready, ...[...document.images].map((i) => i.decode().catch(() => {}))]);
+  window.DURATION = DURATION;
+  // Opened directly in a browser (not by render.mjs): play in real time on a loop.
+  if (!/[?&]render/.test(location.search)) {
+    const start = performance.now();
+    const loop = () => { window.render(((performance.now() - start) / 1000) % DURATION); requestAnimationFrame(loop); };
+    window.ready.then(loop);
+  }
+</script>
+</body>
+</html>
