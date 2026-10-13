@@ -406,13 +406,13 @@ const sage = {
 // ---------------------------------------------------------------
 const pilot = {
   id: 'pilot',
-  title: 'Coding agent',
+  title: 'Code helper',
   person: 'Kabir',
   role: 'Software developer',
   agent: 'Pilot, an AI that writes code',
   teaser: 'An AI fixes broken code on release day. Fast is good. Safe is better.',
   color: 'control',
-  app: 'Pilot · coding agent',
+  app: 'Pilot · code helper',
   start: 'start',
   trustStart: 50,
   scenes: {

@@ -144,7 +144,7 @@ function Builder({ build }) {
             <span className="lab-stars" aria-label={`${result.stars} of 3 stars`}>
               {[1, 2, 3].map((n) => <Star key={n} size={24} strokeWidth={1.5} className={n <= result.stars ? 'is-on' : ''} style={{ animationDelay: `${n * 120}ms` }} aria-hidden />)}
             </span>
-            <h3>{result.stars === 3 ? 'Ship it! A great screen.' : result.stars === 2 ? 'Close! Fix 1 or 2 things.' : 'Not ready yet. Try again!'}{gain > 0 && <XpPop amount={gain} />}</h3>
+            <h3>{result.stars === 3 ? 'Ship it! A great screen.' : result.stars === 2 ? 'Close! Fix 1 or 2 things.' : 'Not ready yet.'}{gain > 0 && <XpPop amount={gain} />}</h3>
           </div>
           <p className="small muted">{result.stars === 3 ? 'All the must-have pieces, and no traps.' : '3 stars = all the must-have pieces, and no traps. Change your screen, then check again.'}</p>
           <ul className="build-notes">

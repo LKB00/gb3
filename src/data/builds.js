@@ -33,7 +33,7 @@ export const builds = [
   {
     id: 'travel',
     title: 'Trip booking',
-    app: 'Trip agent',
+    app: 'Trip booker',
     brief: 'An AI books a 3-day team trip: flights, hotel and dinner. Keep the people in charge.',
     base: [user('Book our team offsite in Goa, 12–14 Nov, 6 people.')],
     pieces: [
