@@ -203,7 +203,7 @@ export default function Speed() {
             <span className={'speed-time' + (secs <= 10 ? ' is-low' : '')}><Timer size={16} strokeWidth={2} aria-hidden /> {secs}s</span>
             <span className="speed-track" aria-hidden><span style={{ width: `${(left / (SECONDS * 1000)) * 100}%` }} /></span>
             <span className="speed-points" key={points}>{points}<small> pts</small></span>
-            {combo >= 3 && <span className="speed-combo" key={`c${combo}`}>×2 pts</span>}
+            {combo >= 3 && <span className="speed-combo" key={`c${combo}`}>Double!</span>}
           </div>
           <p className="speed-brief">{round.brief}</p>
           <div className="speed-options">

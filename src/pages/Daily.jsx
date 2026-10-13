@@ -137,7 +137,7 @@ export default function Daily() {
         <h1 className="display">Daily #{num}</h1>
         <p className="lead">
           {today && !replay
-            ? 'You played today. Come back tomorrow for 5 new rounds.'
+            ? 'You played today’s Daily. Here is how you did.'
             : `Tap the better AI screen, 5 times. ${replay ? 'Everyone got the same rounds that day.' : 'Everyone gets the same rounds today. You get one try.'} Rounds 3 and 5 are hard.`}
         </p>
       </header>
