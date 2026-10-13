@@ -47,7 +47,7 @@ function useCardData() {
       ['Cards', `${passed.length}/${patterns.length}`],
       ['Stars', String(starTotal)],
       ['Day streak', String(streak)],
-      ['Best run', String(stats.bestStreak || 0)],
+      ['Best streak', String(stats.bestStreak || 0)],
     ],
   };
 }
@@ -235,7 +235,7 @@ export default function PlayerCard() {
 
         <div className="pc-side">
           <h1 className="display">Your player card</h1>
-          <p className="lead">What kind of AI designer are you? Your type comes from the group you’ve mastered most, so it changes as you play.</p>
+          <p className="lead">What kind of AI designer are you? Your title comes from the card group you win most. Play more and it can change.</p>
           <label className="pc-field">
             <span className="label">Name on the card</span>
             <input value={name} maxLength={24} placeholder="Player" onChange={(e) => save(e.target.value)} />
@@ -253,7 +253,7 @@ export default function PlayerCard() {
               <Copy size={15} strokeWidth={1.75} aria-hidden /> Copy text
             </button>
           </div>
-          <p className="small muted" role="status">{msg || 'The image is made in your browser. Nothing is uploaded.'}</p>
+          <p className="small muted" role="status">{msg || 'Save it to share anywhere. It is made on your device. Nothing is uploaded.'}</p>
         </div>
       </div>
     </div>

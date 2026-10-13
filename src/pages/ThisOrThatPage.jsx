@@ -18,7 +18,7 @@ export default function ThisOrThatPage() {
           <Shuffle size={15} strokeWidth={1.75} aria-hidden /> Classic
         </button>
         <button role="tab" aria-selected={mode === 'hard'} className="tab" onClick={() => setParams({ mode: 'hard' }, { replace: true })}>
-          <Eye size={15} strokeWidth={1.75} aria-hidden /> Hard <span className="tab-count">one detail differs</span>
+          <Eye size={15} strokeWidth={1.75} aria-hidden /> Hard <span className="tab-count">spot the 1 difference</span>
         </button>
       </div>
       <div className="view">

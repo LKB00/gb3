@@ -25,12 +25,12 @@ export default function LevelCard() {
       </div>
       <span className="meter meter-xp" aria-hidden><span style={{ width: `${pct}%` }} /></span>
       <p className="small muted">
-        {nextLevel ? `${toNext} XP to ${nextLevel.name}` : 'Top level. Legendary.'} · <Link to="/play/card" className="level-card-link">Your player card</Link>
+        {nextLevel ? `${toNext} more XP to reach ${nextLevel.name}` : 'Top level. You are a Legend!'} · <Link to="/play/card" className="level-card-link">Your player card</Link>
       </p>
       <ul className="level-stats">
         <li><strong>{passed.length}/{patterns.length}</strong> cards</li>
         <li><strong>{starTotal}</strong> stars</li>
-        <li><strong>{huntsDone.length}/{hunts.length}</strong> flaws hunted</li>
+        <li><strong>{huntsDone.length}/{hunts.length}</strong> flaw screens done</li>
         <li><strong>{stats.bestStreak || 0}</strong> best streak</li>
       </ul>
     </div>

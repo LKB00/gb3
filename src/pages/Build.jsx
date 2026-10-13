@@ -12,6 +12,7 @@ import MockFrame, { MockBlock } from '../mock/Mock';
 import Breadcrumbs from '../components/Breadcrumbs';
 import Burst, { XpPop } from '../components/Burst';
 import { useTitle } from '../lib/useTitle';
+import { useReveal } from '../lib/useReveal';
 
 // Build mode: a blank AI screen and a box of pieces. Tap (or drag) pieces onto
 // the screen, then check. Good pieces are patterns; traps are common mistakes.
@@ -33,6 +34,7 @@ function Builder({ build }) {
   const [result, setResult] = useState(null);
   const [gain, setGain] = useState(0);
   const [over, setOver] = useState(false);
+  const resultRef = useReveal(result);
 
   const add = (id) => {
     if (placed.includes(id)) return;
@@ -65,9 +67,9 @@ function Builder({ build }) {
   return (
     <div className="build">
       <div className="build-box">
-        <p className="label">The brief</p>
+        <p className="label">Your job</p>
         <p className="lab-goal">{build.brief}</p>
-        <p className="label build-box-label">Pieces · tap or drag onto the screen</p>
+        <p className="label build-box-label">Pieces · tap to add, tap again to remove</p>
         <ul className="build-pieces">
           {pieces.map((p) => {
             const on = placed.includes(p.id);
@@ -122,7 +124,7 @@ function Builder({ build }) {
                 </div>
               );
             })}
-            {placed.length === 0 && <div className="m-slot-empty m-slot-focus">Empty screen. Add pieces from the box.</div>}
+            {placed.length === 0 && <div className="m-slot-empty m-slot-focus">Empty. Tap a piece to add it here.</div>}
           </MockFrame>
         </div>
         <div className="lab-nav">
@@ -138,14 +140,15 @@ function Builder({ build }) {
       </div>
 
       {result && (
-        <div className="build-result" aria-live="polite">
+        <div ref={resultRef} className="build-result" aria-live="polite">
           {result.stars === 3 && <Burst count={26} />}
           <div className="build-result-head">
             <span className="lab-stars" aria-label={`${result.stars} of 3 stars`}>
               {[1, 2, 3].map((n) => <Star key={n} size={24} strokeWidth={1.5} className={n <= result.stars ? 'is-on' : ''} style={{ animationDelay: `${n * 120}ms` }} aria-hidden />)}
             </span>
-            <h3>{result.stars === 3 ? 'Ship it! A great screen.' : result.stars === 2 ? 'Close. A couple of fixes.' : 'Not ready yet.'}{gain > 0 && <XpPop amount={gain} />}</h3>
+            <h3>{result.stars === 3 ? 'Ship it! A great screen.' : result.stars === 2 ? 'Close! Fix 1 or 2 things.' : 'Not ready yet.'}{gain > 0 && <XpPop amount={gain} />}</h3>
           </div>
+          <p className="small muted">{result.stars === 3 ? 'All the must-have pieces, and no traps.' : '3 stars = all the must-have pieces, and no traps. Change your screen, then check again.'}</p>
           <ul className="build-notes">
             {result.have.map((p) => (
               <li key={p.id} className="is-good"><Check size={14} strokeWidth={2.25} aria-hidden /><span><strong>{p.label}.</strong> {p.why} <Link to={`/patterns/${p.pattern}`}>{getPattern(p.pattern).title}</Link></span></li>
@@ -157,7 +160,7 @@ function Builder({ build }) {
               <li key={p.id} className="is-bad"><AlertTriangle size={14} strokeWidth={2} aria-hidden /><span><strong>Trap: {p.label}.</strong> {p.why} <Link to={`/patterns/${p.pattern}`}>{getPattern(p.pattern).title}</Link></span></li>
             ))}
             {result.missing.map((p) => (
-              <li key={p.id} className="is-missing"><CircleDashed size={14} strokeWidth={2} aria-hidden /><span><strong>Missing: something for “{getPattern(p.pattern).title}”.</strong> Look in the box again.</span></li>
+              <li key={p.id} className="is-missing"><CircleDashed size={14} strokeWidth={2} aria-hidden /><span><strong>Missing: a piece for “{getPattern(p.pattern).title}”.</strong> Find it in the pieces and add it.</span></li>
             ))}
           </ul>
           <Disagree where={`Build mode · ${build.title}`} detail={`Pieces: ${placed.join(', ')}`} />
@@ -178,7 +181,7 @@ export default function Build() {
       <Breadcrumbs items={[{ label: 'Play', to: '/play' }, { label: 'Build mode' }]} />
       <header className="page-head page-head-tight">
         <h1 className="display">Build mode</h1>
-        <p className="lead">Design the screen yourself. Add the pieces it needs, leave out the traps, then check it.</p>
+        <p className="lead">Build an AI screen. Tap the pieces it needs. Some pieces are traps, so leave those out. Then tap “Check my screen” to win up to 3 stars.</p>
       </header>
       <div className="tabs tot-modes" role="tablist" aria-label="Briefs">
         {builds.map((b) => (

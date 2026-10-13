@@ -7,10 +7,18 @@ import './styles/index.css';
 import { listenForInstall } from './game/install';
 import { startTracking } from './game/track';
 import { listenForTaps } from './game/fx';
+import { hideSplash } from './lib/splash';
+
+// Runs once the first page is on screen (or the crash screen is), then ends the splash from index.html.
+function SplashDone() {
+  React.useEffect(hideSplash, []);
+  return null;
+}
 
 // HashRouter so the site works on static hosting (GitHub Pages) without server rules.
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
+    <SplashDone />
     <ErrorBoundary>
       <HashRouter>
         <App />

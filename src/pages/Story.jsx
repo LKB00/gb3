@@ -12,6 +12,7 @@ import { useTitle } from '../lib/useTitle';
 import { fx } from '../game/fx';
 import { track } from '../game/track';
 import Disagree from '../components/Disagree';
+import { useReveal } from '../lib/useReveal';
 
 // Story mode: design an AI agent through one short story. Every choice changes
 // how much the person trusts it, and the ending depends on that trust.
@@ -53,7 +54,7 @@ function StoryPicker() {
       <Breadcrumbs items={[{ label: 'Play', to: '/play' }, { label: 'Stories' }]} />
       <header className="page-head page-head-tight">
         <h1 className="display">Stories</h1>
-        <p className="lead">You design an AI product, one moment at a time. Every choice moves a real person’s trust. 4 endings each.</p>
+        <p className="lead">Pick a story. You decide what an AI helper does. Good choices make the person trust it more. Your trust at the end picks 1 of 4 endings.</p>
       </header>
       <div className="story-picks">
         {stories.map((st) => (
@@ -63,7 +64,7 @@ function StoryPicker() {
             <span>{st.teaser}</span>
             <span className="game-meta">
               {st.person} · {st.role}
-              {best[st.id] != null && <> · best trust {best[st.id]}</>}
+              {best[st.id] != null && <> · your best: trust {best[st.id]}/100</>}
             </span>
           </Link>
         ))}
@@ -93,6 +94,7 @@ function Story({ story }) {
   const scene = story.scenes[sceneId];
   const choice = picked !== null ? scene.choices[picked] : null;
   const sceneNo = history.length + (picked === null ? 1 : 0);
+  const outcomeRef = useReveal(choice ? `${sceneNo}-${picked}` : null);
 
   const pick = (i) => {
     if (picked !== null) return;
@@ -138,9 +140,11 @@ function Story({ story }) {
         <div className={`story-end story-end-${ending.tone}`}>
           {ending.tone === 'good' && <Burst count={28} />}
           <Face size={40} strokeWidth={1.5} aria-hidden />
-          <p className="label">Ending · trust {trust}/100</p>
+          <p className="label">The end · final trust {trust}/100</p>
           <h1 className="display">{ending.title}{gain > 0 && <XpPop amount={gain} />}</h1>
           <p className="lead">{ending.text}</p>
+          {ending !== story.endings[0] && <p className="small">Get trust {story.endings[0].min} or more for the best ending.</p>}
+          <p className="label">Your choices</p>
           <ol className="story-recap">
             {history.map((h, n) => {
               const sc = story.scenes[h.scene];
@@ -163,7 +167,7 @@ function Story({ story }) {
             </button>
             <Link to="/play" className="btn btn-ghost btn-lg">More games</Link>
           </div>
-          {storyBests(stats)[story.id] != null && <p className="small muted">Your best ending so far: trust {Math.max(storyBests(stats)[story.id], trust)}</p>}
+          {storyBests(stats)[story.id] != null && <p className="small muted">Your best so far: trust {Math.max(storyBests(stats)[story.id], trust)}/100</p>}
         </div>
       </div>
     );
@@ -176,6 +180,7 @@ function Story({ story }) {
         <div>
           <p className="label">Scene {sceneNo} · {scene.title}</p>
           <h1 className="display">{story.title}</h1>
+          <p className="small muted">You design {story.agent}. Pick what it does. Keep {story.person}’s trust high.</p>
         </div>
         <TrustMeter trust={trust} delta={choice ? choice.trust : null} person={story.person} />
       </header>
@@ -203,12 +208,12 @@ function Story({ story }) {
           </div>
 
           {choice && (
-            <div className={'story-outcome ' + (choice.trust >= 0 ? 'is-up' : 'is-down')} aria-live="polite">
+            <div ref={outcomeRef} className={'story-outcome ' + (choice.trust >= 0 ? 'is-up' : 'is-down')} aria-live="polite">
               <span className="story-avatar" aria-hidden>{story.person[0]}</span>
               <div>
                 <p>{choice.reaction}</p>
                 <p className="small">
-                  Pattern: <Link to={`/patterns/${choice.pattern}`}>{getPattern(choice.pattern).title}</Link> · <Disagree where={`Story · ${story.title} · ${scene.title}`} detail={`“${choice.label}” changed trust by ${choice.trust}.`} />
+                  Trust {choice.trust >= 0 ? `+${choice.trust}` : choice.trust} · Learn more: <Link to={`/patterns/${choice.pattern}`}>{getPattern(choice.pattern).title}</Link> · <Disagree where={`Story · ${story.title} · ${scene.title}`} detail={`“${choice.label}” changed trust by ${choice.trust}.`} />
                 </p>
               </div>
             </div>
@@ -222,7 +227,7 @@ function Story({ story }) {
             {choice ? (
               choice.ui.map((b, k) => <MockBlock key={`u${k}`} b={b} state={choice.trust >= 0 ? 'good' : 'bad'} />)
             ) : (
-              <div className="m-slot-empty m-slot-focus">Your choice shows here</div>
+              <div className="m-slot-empty m-slot-focus">Pick an answer. It shows up here.</div>
             )}
           </MockFrame>
         </div>

@@ -80,21 +80,22 @@ function Result({ num, day, results, streak, fresh, challenge, replay }) {
         </p>
       ) : (
         <p className="tot-verdict">
-          {score === results.length ? 'Perfect day.' : score >= 3 ? 'Solid. Can your team beat it?' : 'Tough one today. Tomorrow’s a new set.'}
+          {score === results.length ? 'Perfect! All 5 right.' : score >= 3 ? 'Nice! Can your friends beat it?' : 'Tough one today. New rounds tomorrow.'}
         </p>
       )}
       {replay && <p className="small muted">This was a past Daily, played as a challenge. It doesn’t change your streak or today’s result.</p>}
       <div className="tot-stats">
-        {streak > 0 && <span className="pill-streak"><Flame size={14} strokeWidth={1.75} aria-hidden /> {streak} day{streak > 1 ? 's' : ''} in a row</span>}
-        <span><CalendarDays size={14} strokeWidth={1.75} aria-hidden /> Next Daily in {left}</span>
+        {streak > 0 && <span className="pill-streak"><Flame size={14} strokeWidth={1.75} aria-hidden /> {streak}-day streak</span>}
+        <span><CalendarDays size={14} strokeWidth={1.75} aria-hidden /> New Daily in {left}</span>
       </div>
+      <p className="small muted">Green = right, red = wrong. Share it:</p>
       <pre className="share-preview">{text}</pre>
       <div className="row wrap center">
         <button type="button" className="btn btn-primary btn-lg" onClick={dare}>
           <Swords size={15} strokeWidth={1.75} aria-hidden /> {dared ? 'Link copied!' : 'Challenge a friend'}
         </button>
         <button type="button" className="btn btn-ghost btn-lg" onClick={copy}>
-          <Copy size={15} strokeWidth={1.75} aria-hidden /> {copied ? 'Copied!' : 'Copy result'}
+          <Copy size={15} strokeWidth={1.75} aria-hidden /> {copied ? 'Copied!' : 'Copy my result'}
         </button>
         {typeof navigator !== 'undefined' && navigator.share && (
           <button type="button" className="btn btn-ghost btn-lg" onClick={nativeShare}>
@@ -105,9 +106,9 @@ function Result({ num, day, results, streak, fresh, challenge, replay }) {
         <a className="btn btn-ghost btn-lg" href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`} target="_blank" rel="noreferrer">LinkedIn</a>
       </div>
       <div className="daily-more">
-        <span className="muted small">Want more today?</span>
-        <Link to="/play/this-or-that" className="text-link"><Shuffle size={14} strokeWidth={1.75} aria-hidden /> Classic</Link>
-        <Link to="/play/this-or-that?mode=hard" className="text-link"><Eye size={14} strokeWidth={1.75} aria-hidden /> Hard mode</Link>
+        <span className="muted small">Play more:</span>
+        <Link to="/play/this-or-that" className="text-link"><Shuffle size={14} strokeWidth={1.75} aria-hidden /> This or That</Link>
+        <Link to="/play/this-or-that?mode=hard" className="text-link"><Eye size={14} strokeWidth={1.75} aria-hidden /> This or That: Hard</Link>
         <Link to="/play/story" className="text-link">Stories</Link>
         <Link to="/play/card" className="text-link">Your player card</Link>
       </div>
@@ -134,7 +135,11 @@ export default function Daily() {
       <Breadcrumbs items={[{ label: 'Play', to: '/play' }, { label: `Daily #${num}` }]} />
       <header className="page-head page-head-tight">
         <h1 className="display">Daily #{num}</h1>
-        <p className="lead">5 rounds, the same for everyone {replay ? 'that day' : 'today'}. One try. The last two are hard.</p>
+        <p className="lead">
+          {today && !replay
+            ? 'You played today’s Daily. Here is how you did.'
+            : `Tap the better AI screen, 5 times. ${replay ? 'Everyone got the same rounds that day.' : 'Everyone gets the same rounds today. You get one try.'} Rounds 3 and 5 are hard.`}
+        </p>
       </header>
       {challenge && !today && (
         <p className="challenge-banner">

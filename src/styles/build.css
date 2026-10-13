@@ -42,7 +42,8 @@
   transition: transform 0.15s, background 0.2s, opacity 0.2s;
 }
 .build-piece:hover { transform: translateX(4px); }
-.build-piece.is-on { cursor: pointer; background: var(--sand-dark); color: var(--ink-3); text-decoration: line-through; text-decoration-thickness: 1px; }
+/* Added pieces: a calm green "in your screen" look (a strike-through read as "wrong"). */
+.build-piece.is-on { cursor: pointer; background: var(--positive-soft); box-shadow: inset 0 0 0 1px var(--positive); color: var(--ink); }
 .build-piece.is-on svg { color: var(--positive); }
 .build-drop {
   border-radius: 16px;

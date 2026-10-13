@@ -47,7 +47,7 @@ export const subtle = [
     'action-approval',
     'An agent is about to send emails for you.',
     [ai('Your follow-up emails are ready.')],
-    modal('Are you sure?', 'This action cannot be undone.', ['Cancel', '!OK'], { pin: 'Vague: sure about what?' }),
+    modal('Are you sure?', 'This action cannot be undone.', ['Cancel', '!OK'], { pin: 'Sure about what?' }),
     modal('Send 48 emails to clients?', 'They go out now from you@studio.com. You can’t unsend.', ['Cancel', '!Send 48 emails'], { pin: 'Says exactly what happens' })
   ),
   pair(
@@ -71,7 +71,7 @@ export const subtle = [
     'confidence-signals',
     'The AI reads a blurry receipt.',
     [card('Receipt scan', 'Coffee Corner · 14 Sep')],
-    rows([{ label: 'Total', value: '$48.00' }, { label: 'Tax', value: '$3.80' }], { pin: 'Guess looks certain' }),
+    rows([{ label: 'Total', value: '$48.00' }, { label: 'Tax', value: '$3.80' }], { pin: 'A guess that looks sure' }),
     rows([{ label: 'Total', value: '$48.00' }, { label: 'Tax', value: '$3.80', tag: 'Check', tone: 'warn' }], { pin: 'Flags the unsure part' })
   ),
   pair(
@@ -79,7 +79,7 @@ export const subtle = [
     'prompt-starters',
     'The first screen of a new AI notes app.',
     [note('Hi! What can I help with?')],
-    chips(['Ask me anything', 'Get started', 'Help'], { pin: 'Vague examples' }),
+    chips(['Ask me anything', 'Get started', 'Help'], { pin: 'Too general to help' }),
     chips([':file Summarize my last meeting', ':pen Draft a follow-up email'], { pin: 'Specific, real examples' }),
     [ph('Ask anything…')]
   ),
@@ -105,7 +105,7 @@ export const subtle = [
     'feedback-loop',
     'You rated an AI answer thumbs down.',
     [ai('Here are 3 headline ideas for your page.')],
-    toast('Thanks for your feedback!', null, { pin: 'Nothing to learn from' }),
+    toast('Thanks for your feedback!', null, { pin: 'Doesn’t ask what was wrong' }),
     chips(['Too long', 'Wrong tone', 'Not accurate', 'Other'], { pin: 'Asks what was wrong, in one tap' })
   ),
   pair(
@@ -137,7 +137,7 @@ export const subtle = [
     'set-expectations',
     'An AI that writes meeting notes.',
     [note('Meeting notes AI')],
-    note('Perfect notes for every meeting.', { pin: 'Overpromises' }),
+    note('Perfect notes for every meeting.', { pin: 'Promises too much' }),
     note('Good at decisions and to-dos. May miss names. Check before sharing.', { pin: 'Honest about limits' })
   ),
   pair(
@@ -153,7 +153,7 @@ export const subtle = [
     'task-status',
     'An agent is booking 3 flights in the background.',
     [user('Book flights for the team offsite.')],
-    note('Working on it…', { pin: 'Can’t tell how far along' }),
+    note('Working on it…', { pin: 'Can’t see how far it got' }),
     steps([['Alex · booked', 'done'], ['Priya · booked', 'done'], ['Sam · waiting for seat choice', 'active']], { pin: 'Clear status for each task' })
   ),
   pair(
@@ -161,13 +161,13 @@ export const subtle = [
     'interrupt-redirect',
     'An agent is halfway through a big edit.',
     [steps([['Rename layers', 'done'], ['Rebuild components', 'active']])],
-    buttons(['-Cancel all'], { pin: 'Only all-or-nothing' }),
+    buttons(['-Cancel all'], { pin: 'Can only stop everything' }),
     buttons(['Pause', 'Change instructions', '-Stop'], { pin: 'Pause and steer it' })
   ),
   pair(
     'read-back',
     'read-back',
-    'A voice assistant sets a transfer.',
+    'You ask a voice assistant to send money.',
     [{ type: 'voice', state: 'listening', label: 'You', text: 'Send fifteen hundred to Ravi' }],
     { type: 'voice', state: 'speaking', label: 'Assistant', text: 'Done. Money sent.', pin: 'Didn’t check what it heard' },
     { type: 'voice', state: 'speaking', label: 'Assistant', text: 'Send ₹1,500 to Ravi Kumar? Say yes to confirm.', pin: 'Reads it back first' }
@@ -177,8 +177,8 @@ export const subtle = [
     'preview-changes',
     'The AI will fix spelling in your whole doc.',
     [ai('I found 9 spelling fixes.')],
-    buttons(['!Apply all'], { pin: 'Changes without a look' }),
-    { type: 'diff', items: [['recieve', 'receive'], ['seperate', 'separate']], pin: 'Preview before applying' },
+    buttons(['!Apply all'], { pin: 'Changes things before you look' }),
+    { type: 'diff', items: [['recieve', 'receive'], ['seperate', 'separate']], pin: 'Shows the changes first' },
     [buttons(['Review all 9', '!Apply'])]
   ),
   pair(
@@ -192,7 +192,7 @@ export const subtle = [
   pair(
     'site-scope',
     'screen-control',
-    'A browser agent asks for access before shopping.',
+    'An agent wants to shop on a website for you.',
     [user('Order printer paper')],
     modal('Allow control of your computer?', 'All sites and apps.', ['No', '!Allow'], { pin: 'Asks for everything' }),
     modal('Let the agent use officesupply.com?', 'Only this site, until the order is done.', ['No', '!Allow'], { pin: 'Just what the task needs' })
@@ -202,8 +202,8 @@ export const subtle = [
     'screen-control',
     'An agent is clicking through a website for you.',
     [banner('info', 'Agent is in control', 'officesupply.com')],
-    note('Please don’t touch the mouse.', { pin: 'Locks the person out' }),
-    buttons(['!Take over'], { pin: 'Grab control any time' })
+    note('Please don’t touch the mouse.', { pin: 'You can’t step in' }),
+    buttons(['!Take over'], { pin: 'Take back control any time' })
   ),
   pair(
     'app-source',
@@ -216,15 +216,15 @@ export const subtle = [
   pair(
     'read-only',
     'connected-apps',
-    'Connecting an AI to someone’s email.',
+    'You connect an AI to your email.',
     [note('Connect Gmail')],
     modal('Allow access to Gmail?', 'Read, send and delete email.', ['No', '!Allow'], { pin: 'More than needed' }),
-    modal('Allow read-only access to Gmail?', 'It can’t send or delete.', ['No', '!Allow'], { pin: 'Smallest access first' })
+    modal('Allow read-only access to Gmail?', 'It can’t send or delete.', ['No', '!Allow'], { pin: 'Asks only for what it needs' })
   ),
   pair(
     'thumbs-undo',
     'feedback-loop',
-    'A thumbs-down was tapped by mistake.',
+    'You tapped thumbs-down by mistake.',
     [ai('Here’s your summary.')],
     toast('Feedback sent', null, { pin: 'Can’t take it back' }),
     toast('Feedback sent', 'Undo', { pin: 'Easy to take back' })
@@ -234,7 +234,7 @@ export const subtle = [
     'editable-output',
     'The AI drafted a reply email.',
     [user('Reply yes to the meeting')],
-    buttons(['Copy', ':retry Regenerate'], { pin: 'Fix = start over' }),
+    buttons(['Copy', ':retry Regenerate'], { pin: 'To fix it, start over' }),
     buttons(['Edit', 'Copy', ':retry Regenerate'], { pin: 'Edit in place' })
   ),
   pair(
@@ -250,7 +250,7 @@ export const subtle = [
     'bias-check',
     'An AI makes images for a careers page.',
     [user('Images of engineers at work')],
-    note('4 images · all men in their 30s', { pin: 'Repeats one stereotype' }),
+    note('4 images · all men in their 30s', { pin: 'Shows only one kind of person' }),
     note('4 images · varied ages, genders and backgrounds', { pin: 'Shows real variety' })
   ),
   pair(

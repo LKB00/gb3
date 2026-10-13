@@ -46,7 +46,7 @@ export function GoalToast() {
       <Burst count={20} />
       <Target size={18} strokeWidth={1.75} aria-hidden />
       <span>
-        <strong>Daily goal done!</strong> {streak > 1 ? `🔥 ${streak}-day streak` : 'Streak started 🔥'}
+        <strong>Daily goal done!</strong> {streak > 1 ? `🔥 ${streak}-day streak` : 'Day streak started 🔥'}
       </span>
     </div>
   );
@@ -139,13 +139,13 @@ export function TodayCard() {
       </div>
       <div className="today-text">
         <p className="label">Today</p>
-        <p className="today-title">{pct >= 1 ? 'Daily goal done!' : `${DAILY_GOAL - todayMoves} more moves today`}</p>
+        <p className="today-title">{pct >= 1 ? 'Daily goal done!' : `${DAILY_GOAL - todayMoves} more ${DAILY_GOAL - todayMoves === 1 ? 'answer' : 'answers'} for today’s goal`}</p>
         <p className="small muted">
-          A move is any answer in any game.{' '}
+          Any answer in any game counts. Miss a day? A skip day keeps your day streak.{' '}
           {freezeReady ? (
-            <span className="freeze"><Snowflake size={12} strokeWidth={2} aria-hidden /> 1 free skip day ready</span>
+            <span className="freeze"><Snowflake size={12} strokeWidth={2} aria-hidden /> 1 skip day ready</span>
           ) : (
-            <span className="freeze is-used"><Snowflake size={12} strokeWidth={2} aria-hidden /> Skip day used this week</span>
+            <span className="freeze is-used"><Snowflake size={12} strokeWidth={2} aria-hidden /> Skip day used (1 per 7 days)</span>
           )}
         </p>
       </div>
