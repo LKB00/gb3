@@ -28,6 +28,14 @@
   /* ---- Pages: each page fades and rises in ---- */
   .route { animation: route-in 0.38s var(--ease-out) backwards; }
 
+  /* ---- After the splash screen: the bars slide in and the page rises (src/lib/splash.js adds .sp-reveal) ---- */
+  @keyframes intro-rise { from { opacity: 0; transform: translateY(22px) scale(0.985); } }
+  @keyframes intro-down { from { opacity: 0; transform: translateY(-100%); } }
+  @keyframes intro-up { from { opacity: 0; transform: translateY(100%); } }
+  .sp-reveal .route { animation: intro-rise 0.7s var(--ease-out) 0.08s backwards; }
+  .sp-reveal .topnav { animation: intro-down 0.55s var(--ease-out) backwards; }
+  .sp-reveal .bottomnav { animation: intro-up 0.55s var(--ease-out) 0.1s backwards; }
+
   /* ---- Lists and grids: children arrive one after another ---- */
   :where(.games, .badges, .play-grid, .index-list, .story-picks, .ladder, .tools, .card-grid, .power-opts, .level-stats, .daily-grid) > * {
     animation: rise 0.5s var(--ease-out) backwards;

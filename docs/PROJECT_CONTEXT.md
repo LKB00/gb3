@@ -4,7 +4,7 @@
 > with the same context: what the site is, what the owner wants, how to work, how to ship, what was decided and why,
 > and what is still open. Keep it up to date (see [Keeping this file current](#14-keeping-this-file-current)).
 >
-> Last updated: **2026-10-03**, after reverting logo to simple lime circle. Live site: <https://gb3.lokeshbhatia.com/>
+> Last updated: **2026-10-13**, after adding the splash screen. Live site: <https://gb3.lokeshbhatia.com/>
 
 ## Contents
 1. [Snapshot](#1-snapshot) (name and brand: see [section 8b](#8b-brand))
@@ -334,6 +334,15 @@ On by default; two separate switches on the Me page; the top-bar speaker toggles
 
 **Motion** (`styles/motion.css`, all inside `@media (prefers-reduced-motion: no-preference)`, so reduced-motion users get none):
 - page enter (`.route`), staggered arrival of tiles/badges/lists (`--i` by `nth-child`), scene slide-in for Lab/Story/This or That (keyed elements remount), pop for right and shake for wrong answers, meters and the goal ring fill when shown, rolling XP/score numbers, press feedback, hover lift only with a mouse, scroll-reveal of `.block` sections using `animation-timeline: view()` (progressive enhancement), light/dark cross-fade (`html.theme-fade`).
+
+**Splash screen** (inline in `index.html`, ended by `src/lib/splash.js`): shows before any download. The app icon springs in, the bad
+answer pops (its ✕ draws), the good answer pops with "typing" dots that loop while the JS loads, then the dots turn into a ✓, the tile
+bounces with a lime ring, and the splash fades and blurs away while the top bar, bottom bar and page rise in (`html.sp-reveal`, in
+`motion.css`). Full splash once per browser visit (`sessionStorage` key `gb3-splash`), at least about 0.95 s from page start so it never
+looks cut off; later loads in the same visit get **quick mode** (`sp-quick`: invisible unless loading takes over 0.35 s). Reduced motion:
+no movement, just a fade. After 9 s still loading, it shows "Taking a while. Reload". It has `pointer-events: none`, so it never blocks taps.
+The same early script also applies the saved dark/light choice before the first paint, and Google Fonts load without blocking the paint
+(`media="print"` + `onload`). `<SplashDone />` in `main.jsx` sits outside the ErrorBoundary, so the splash also ends if a page crashes.
 
 **Phone experience** (<= 720px, `styles/phone.css`): bottom nav, back button, edge-to-edge games, sticky action bars above the nav (Next/Check), `focus-mode` for Speed, `hover: none` press feedback, compact top bar below 440px, and a **landscape** compaction (`max-width: 900px` and `max-height: 480px`: icon-only bottom bar, 44px). `pointer: coarse` makes small targets at least 32px.
 

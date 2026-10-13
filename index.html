@@ -8,7 +8,9 @@
     <link rel="icon" href="./favicon-32.png" sizes="32x32" type="image/png" />
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Lato:wght@400;700&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet" />
+    <!-- Fonts load without blocking the first paint, so the splash shows at once -->
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Lato:wght@400;700&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Lato:wght@400;700&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet" /></noscript>
     <title>Good Bot, Bad Bot · Can you spot good AI design?</title>
     <!-- Link previews (LinkedIn, X, WhatsApp, Slack) -->
     <meta property="og:type" content="website" />
@@ -32,8 +34,131 @@
     <meta name="theme-color" content="#161819" media="(prefers-color-scheme: dark)" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="GB3" />
+    <!-- Before the first paint: dark mode choice + splash mode (full once per visit, quick after) -->
+    <script>
+      (function () {
+        var root = document.documentElement;
+        try {
+          var t = localStorage.getItem('theme');
+          if (t) root.dataset.theme = t;
+          if (sessionStorage.getItem('gb3-splash')) root.classList.add('sp-quick');
+          else sessionStorage.setItem('gb3-splash', '1');
+        } catch (e) { /* storage blocked: full splash, system theme */ }
+        // Still loading after 9 s? Show a reload hint instead of an endless splash.
+        setTimeout(function () { var s = document.getElementById('splash'); if (s) s.classList.add('is-slow'); }, 9000);
+      })();
+    </script>
+    <!-- Splash screen styles. Inline so they paint before any download. The site's own CSS removes nothing here;
+         src/lib/splash.js plays the ending and removes the element. -->
+    <style>
+      #splash {
+        --sp-bg: #fbfbf7; --sp-ink: #24282c; --sp-ink-2: #5b5e61; --sp-glow: rgba(194, 239, 114, 0.55);
+        --sp-tile-edge: rgba(36, 40, 44, 0);
+        --sp-ease: cubic-bezier(0.22, 1, 0.36, 1); --sp-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+        position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center;
+        background: var(--sp-bg); color: var(--sp-ink); pointer-events: none;
+        font-family: 'Bricolage Grotesque', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+        transition: opacity 0.45s var(--sp-ease), visibility 0s linear 0.45s;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme='light']) #splash { --sp-bg: #161819; --sp-ink: #ecebe4; --sp-ink-2: #b1b2ae; --sp-glow: rgba(194, 239, 114, 0.22); --sp-tile-edge: rgba(255, 255, 255, 0.09); }
+      }
+      :root[data-theme='dark'] #splash { --sp-bg: #161819; --sp-ink: #ecebe4; --sp-ink-2: #b1b2ae; --sp-glow: rgba(194, 239, 114, 0.22); --sp-tile-edge: rgba(255, 255, 255, 0.09); }
+
+      .sp-stage { position: relative; display: grid; justify-items: center; gap: 0; text-align: center; padding: 0 16px; }
+      .sp-glow { position: absolute; top: 60px; left: 50%; width: 340px; height: 340px; margin: -170px 0 0 -170px; border-radius: 50%;
+        background: radial-gradient(closest-side, var(--sp-glow), transparent); opacity: 0.8; }
+      .sp-icon { position: relative; width: 120px; height: 120px; display: block; overflow: visible;
+        filter: drop-shadow(0 18px 30px rgba(36, 40, 44, 0.18)) drop-shadow(0 2px 4px rgba(36, 40, 44, 0.1)); }
+      .sp-tile { stroke: var(--sp-tile-edge); stroke-width: 6; }
+      .sp-icon * { transform-box: fill-box; }
+      .sp-x, .sp-check { fill: none; stroke: #24282c; stroke-linecap: round; stroke-linejoin: round; }
+      .sp-x { stroke-width: 64; }
+      .sp-check { stroke-width: 68; stroke-dasharray: 360; stroke-dashoffset: 360; }
+      .sp-dots circle { fill: #24282c; transform-origin: center; }
+      .sp-word { margin-top: 30px; font-size: 26px; line-height: 1.15; font-weight: 800; letter-spacing: -0.02em; }
+      .sp-word span { color: var(--sp-ink-2); }
+      .sp-tag { margin-top: 8px; font: 400 15px/1.4 'Lato', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif; color: var(--sp-ink-2); }
+      .sp-slow { margin-top: 22px; font: 400 14px/1.4 'Lato', ui-sans-serif, system-ui, sans-serif; color: var(--sp-ink-2); display: none; pointer-events: auto; }
+      .sp-slow a { color: inherit; font-weight: 700; }
+      #splash.is-slow .sp-slow { display: block; }
+
+      /* Ready: the "typing" dots turn into a check, the tile does one happy bounce. */
+      #splash.is-ready .sp-dots { opacity: 0; transition: opacity 0.12s; }
+      #splash.is-ready .sp-check { stroke-dashoffset: 0; transition: stroke-dashoffset 0.34s var(--sp-ease) 0.06s; }
+      /* Leaving: everything fades while the stage drifts up and softly blurs. */
+      #splash.is-out { opacity: 0; visibility: hidden; }
+
+      @media (prefers-reduced-motion: no-preference) {
+        @keyframes sp-tile-in { from { opacity: 0; transform: scale(0.72); } }
+        @keyframes sp-pop { 0% { opacity: 0; transform: scale(0.3) rotate(-8deg); } 60% { opacity: 1; } }
+        @keyframes sp-draw { from { stroke-dashoffset: 160; } }
+        @keyframes sp-shift { to { transform: translate(-14px, -8px) scale(0.96); opacity: 0.88; } }
+        @keyframes sp-type { 0%, 60%, 100% { transform: translateY(0); opacity: 0.45; } 30% { transform: translateY(-34px); opacity: 1; } }
+        @keyframes sp-fade-up { from { opacity: 0; transform: translateY(10px); filter: blur(4px); } }
+        @keyframes sp-breathe { 0%, 100% { transform: scale(0.92); opacity: 0.55; } 50% { transform: scale(1.06); opacity: 0.95; } }
+        @keyframes sp-happy { 0% { transform: scale(1); } 35% { transform: scale(1.08); } 70% { transform: scale(0.98); } 100% { transform: scale(1); } }
+        @keyframes sp-ring { from { opacity: 0.7; transform: scale(0.6); } to { opacity: 0; transform: scale(1.9); } }
+
+        .sp-glow { animation: sp-breathe 2.4s ease-in-out infinite; }
+        .sp-icon { animation: sp-tile-in 0.7s var(--sp-spring) both; }
+        .sp-bad { transform-origin: 80% 100%; animation: sp-pop 0.5s var(--sp-spring) 0.18s both, sp-shift 0.5s var(--sp-ease) 0.62s forwards; }
+        .sp-x { stroke-dasharray: 160; animation: sp-draw 0.3s var(--sp-ease) 0.44s both; }
+        .sp-x + .sp-x { animation-delay: 0.54s; }
+        .sp-good { transform-origin: 15% 100%; animation: sp-pop 0.55s var(--sp-spring) 0.5s both; }
+        .sp-dots circle { animation: sp-type 1s ease-in-out 0.9s infinite both; }
+        .sp-dots circle:nth-child(2) { animation-delay: 1.05s; }
+        .sp-dots circle:nth-child(3) { animation-delay: 1.2s; }
+        .sp-word { animation: sp-fade-up 0.6s var(--sp-ease) 0.62s both; }
+        .sp-tag { animation: sp-fade-up 0.6s var(--sp-ease) 0.76s both; }
+        .sp-ring { position: absolute; top: 0; left: 50%; width: 120px; height: 120px; margin-left: -60px; border-radius: 30px;
+          border: 2px solid #c2ef72; opacity: 0; }
+        #splash.is-ready .sp-icon { animation: sp-happy 0.5s var(--sp-spring); }
+        #splash.is-ready .sp-ring { animation: sp-ring 0.7s var(--sp-ease) 0.08s; }
+        #splash.is-out .sp-stage { transform: translateY(-14px) scale(1.04); filter: blur(6px); transition: transform 0.45s var(--sp-ease), filter 0.45s var(--sp-ease); }
+
+        /* Quick mode (second load in the same visit): stay invisible unless loading is slow. */
+        @keyframes sp-show { from { opacity: 0; } to { opacity: 1; } }
+        .sp-quick #splash:not(.is-out) { opacity: 0; animation: sp-show 0.3s ease 0.35s forwards; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .sp-ring { display: none; }
+        #splash.is-ready .sp-check { transition: none; }
+      }
+    </style>
   </head>
   <body>
+    <!-- Splash screen: the bad answer shows up, the good one "types" while the site loads, then turns into a check. -->
+    <div id="splash" role="status" aria-label="Loading Good Bot, Bad Bot">
+      <div class="sp-stage">
+        <div class="sp-glow"></div>
+        <div class="sp-ring"></div>
+        <svg class="sp-icon" viewBox="0 0 1024 1024" aria-hidden="true">
+          <rect class="sp-tile" x="3" y="3" width="1018" height="1018" rx="225" fill="#24282c" />
+          <g transform="translate(512 512) scale(1.16) translate(-512 -512) translate(0 34)">
+            <g class="sp-bad">
+              <rect x="430" y="150" width="440" height="330" rx="110" fill="#f6a5a0" />
+              <polygon points="600,470 800,610 770,470" fill="#f6a5a0" />
+              <path class="sp-x" d="M628 255 L738 365" />
+              <path class="sp-x" d="M738 255 L628 365" />
+            </g>
+            <g class="sp-good">
+              <g stroke="#24282c" stroke-width="34" stroke-linejoin="round">
+                <rect x="150" y="360" width="440" height="330" rx="110" fill="#c2ef72" />
+                <polygon points="265,680 195,810 410,680" fill="#c2ef72" />
+              </g>
+              <rect x="167" y="377" width="406" height="296" rx="93" fill="#c2ef72" />
+              <polygon points="277,668 212,780 392,668" fill="#c2ef72" />
+              <g class="sp-dots"><circle cx="286" cy="532" r="30" /><circle cx="370" cy="532" r="30" /><circle cx="454" cy="532" r="30" /></g>
+              <path class="sp-check" d="M262 528 L340 606 L482 442" />
+            </g>
+          </g>
+        </svg>
+        <div class="sp-word">Good Bot, <span>Bad Bot</span></div>
+        <div class="sp-tag">Can you spot good AI design?</div>
+        <div class="sp-slow">Taking a while. <a href="">Reload</a></div>
+      </div>
+    </div>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
