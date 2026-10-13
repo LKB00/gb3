@@ -19,7 +19,7 @@ export default function Badges() {
             <Link to={`/patterns?category=${c.id}`}>
               <span className={`badge-icon badge-${c.id}`} aria-hidden>{won ? <Check size={18} strokeWidth={2.25} /> : `${got}/${list.length}`}</span>
               <span className="badge-name">{c.name}</span>
-              <span className="badge-sub">{gold ? 'Gold · all 3 stars' : won ? 'Complete' : `${list.length - got} to go`}</span>
+              <span className="badge-sub">{gold ? 'Gold · all 3 stars' : won ? 'Complete' : `${list.length - got} cards to go`}</span>
             </Link>
           </li>
         );

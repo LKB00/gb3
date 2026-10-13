@@ -100,8 +100,9 @@ export default function Power() {
           </span>
           <p className="tot-big"><CountUp value={points} /><span>/{MAX}</span>{result.gain > 0 && <XpPop amount={result.gain} />}</p>
           <p className="tot-verdict">
-            {stars === 3 ? 'You know when to trust the AI. Great instincts.' : stars === 2 ? 'Good sense of risk. A few levels off.' : 'Tricky! Look at the clues: money, undo, how often.'}
+            {stars === 3 ? 'Great instincts! You know when to let the AI act.' : stars === 2 ? 'Nice! A few answers were a step off.' : 'Tricky! Check the clues: money, undo, how often.'}
           </p>
+          <p className="label">Best level for each task</p>
           <ul className="power-recap">
             {hand.map((x, k) => (
               <li key={x.id} className={log[k] === 2 ? 'is-good' : log[k] === 1 ? 'is-close' : 'is-bad'}>
@@ -112,13 +113,13 @@ export default function Power() {
             ))}
           </ul>
           <div className="tot-stats">
-            {result.record && points > 0 ? <span className="pill-new">New best!</span> : <span>Best: {stats.powerBest || 0}/{MAX}</span>}
+            {result.record && points > 0 ? <span className="pill-new">New best!</span> : <span>Your best: {stats.powerBest || 0}/{MAX}</span>}
           </div>
           <div className="row wrap center">
             <button type="button" className="btn btn-primary btn-lg" onClick={again}>
               <RotateCcw size={15} strokeWidth={1.75} aria-hidden /> Play again
             </button>
-            <Link to="/autonomy" className="btn btn-ghost btn-lg">See the ladder</Link>
+            <Link to="/autonomy" className="btn btn-ghost btn-lg">Learn the 5 levels</Link>
           </div>
         </div>
       </div>
@@ -131,7 +132,8 @@ export default function Power() {
       <Breadcrumbs items={[{ label: 'Play', to: '/play' }, { label: 'How much power?' }]} />
       <header className="page-head page-head-tight">
         <h1 className="display">How much power?</h1>
-        <p className="lead">How much should the AI do on its own? Pick the level for each task. Exact = 2 points, one step off = 1.</p>
+        <p className="lead">An AI helper gets a task. How much should it do without asking you? Pick a level: 1 = it only gives ideas, 5 = it does it all alone.</p>
+        <p className="small muted">Exact level = 2 points. One step off = 1 point. 8 tasks.</p>
       </header>
 
       <div className="power">
@@ -149,11 +151,13 @@ export default function Power() {
           <p className="power-where">{t.detail}</p>
           <p className="power-text">{t.text}</p>
           <div className="power-tags">
+            <span className="small muted">Clues:</span>
             {t.tags.map((g) => <span key={g} className={`power-tag tag-${g}`}>{TAGS[g]}</span>)}
           </div>
         </div>
 
-        <div className="power-opts" key={t.id} role="radiogroup" aria-label="Pick a level">
+        <p className="label">How much can the AI do alone?</p>
+        <div className="power-opts" key={t.id} role="radiogroup" aria-label="How much can the AI do alone?">
           {levels.map((l) => {
             let cls = '';
             if (answered) {
@@ -185,11 +189,11 @@ export default function Power() {
         {answered && (
           <div ref={whyRef} className={'lab-why power-why ' + (off === 0 ? 'lab-why-good' : off === 1 ? 'power-why-close' : 'lab-why-bad')} aria-live="polite">
             <strong>
-              {off === 0 ? <><Check size={15} strokeWidth={2.25} aria-hidden /> Exactly right · +2</> : off === 1 ? <><Gauge size={15} strokeWidth={2} aria-hidden /> Close · +1. Best: {right.name}</> : <><X size={15} strokeWidth={2.25} aria-hidden /> Best: {right.name}</>}
+              {off === 0 ? <><Check size={15} strokeWidth={2.25} aria-hidden /> Spot on! +2 points</> : off === 1 ? <><Gauge size={15} strokeWidth={2} aria-hidden /> So close! +1 point. Best: {right.n} {right.name}</> : <><X size={15} strokeWidth={2.25} aria-hidden /> Not quite. Best: {right.n} {right.name}</>}
             </strong>
             <span>{t.why}</span>
             <span className="power-needs">
-              Needs:{' '}
+              Cards that help here:{' '}
               {right.patterns.slice(0, 3).map((id, k) => (
                 <span key={id}>{k > 0 && ' · '}<Link to={`/patterns/${id}`}>{getPattern(id).title}</Link></span>
               ))}
