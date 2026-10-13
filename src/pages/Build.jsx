@@ -12,6 +12,7 @@ import MockFrame, { MockBlock } from '../mock/Mock';
 import Breadcrumbs from '../components/Breadcrumbs';
 import Burst, { XpPop } from '../components/Burst';
 import { useTitle } from '../lib/useTitle';
+import { useReveal } from '../lib/useReveal';
 
 // Build mode: a blank AI screen and a box of pieces. Tap (or drag) pieces onto
 // the screen, then check. Good pieces are patterns; traps are common mistakes.
@@ -33,6 +34,7 @@ function Builder({ build }) {
   const [result, setResult] = useState(null);
   const [gain, setGain] = useState(0);
   const [over, setOver] = useState(false);
+  const resultRef = useReveal(result);
 
   const add = (id) => {
     if (placed.includes(id)) return;
@@ -138,7 +140,7 @@ function Builder({ build }) {
       </div>
 
       {result && (
-        <div className="build-result" aria-live="polite">
+        <div ref={resultRef} className="build-result" aria-live="polite">
           {result.stars === 3 && <Burst count={26} />}
           <div className="build-result-head">
             <span className="lab-stars" aria-label={`${result.stars} of 3 stars`}>

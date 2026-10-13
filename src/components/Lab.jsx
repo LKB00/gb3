@@ -7,6 +7,7 @@ import FlipCard from './FlipCard';
 import { fx } from '../game/fx';
 import { track } from '../game/track';
 import Disagree from './Disagree';
+import { useReveal } from '../lib/useReveal';
 
 // Challenge ("Fix it"), built as a guided flow:
 //   one decision at a time → instant feedback → fix mistakes → next step → summary.
@@ -30,6 +31,7 @@ export default function Lab({ id, lab, title, next }) {
   const d = decisions[step];
   const picked = choice[d.id];
   const pickedOpt = picked !== undefined ? d.options[picked] : undefined;
+  const whyRef = useReveal(pickedOpt ? `${d.id}-${picked}` : null);
   const best = (dec) => dec.options.findIndex((o) => o.ok);
   const mistakes = decisions.reduce((n, x) => n + (tried[x.id] || []).filter((k) => !x.options[k].ok).length, 0);
   const stars = mistakes === 0 ? 3 : mistakes === 1 ? 2 : 1;
@@ -151,7 +153,7 @@ export default function Lab({ id, lab, title, next }) {
             {!pickedOpt && <p className="lab-hint">Tap an option. It shows up on the screen, and you’ll see if it’s right.</p>}
 
             {pickedOpt && (
-              <div className={'lab-why ' + (pickedOpt.ok ? 'lab-why-good' : 'lab-why-bad')}>
+              <div ref={whyRef} className={'lab-why ' + (pickedOpt.ok ? 'lab-why-good' : 'lab-why-bad')}>
                 <strong>
                   {pickedOpt.ok ? <Check size={14} strokeWidth={2.25} aria-hidden /> : <TriangleAlert size={14} strokeWidth={2} aria-hidden />}
                   {pickedOpt.ok ? 'Good choice!' : 'Not quite'}

@@ -4,7 +4,7 @@
 > with the same context: what the site is, what the owner wants, how to work, how to ship, what was decided and why,
 > and what is still open. Keep it up to date (see [Keeping this file current](#14-keeping-this-file-current)).
 >
-> Last updated: **2026-10-13**, after adding the splash screen. Live site: <https://gb3.lokeshbhatia.com/>
+> Last updated: **2026-10-13**, after the plain-English copy pass on every game. Live site: <https://gb3.lokeshbhatia.com/>
 
 ## Contents
 1. [Snapshot](#1-snapshot) (name and brand: see [section 8b](#8b-brand))
@@ -290,6 +290,8 @@ src/
 - Generic motion rules use `:where()` (zero weight) so a component's own animation wins.
 
 ### 6.5 Important patterns in the code
+- **Feedback stays in view on phones**: `lib/useReveal.js` (`useReveal(key)` returns a ref; `revealEl(el)`) scrolls just enough to show answer feedback that landed below the fold or behind the bottom tab bar / sticky "Next" bars. Used by Fix it (`.lab-why`), Stories (`.story-outcome`), Build (`.build-result`) and Spot the flaw (newest found note). It never moves the page when the feedback is already visible.
+- **Copy style for games** (Oct 2026 pass): every game answers "What is this? What do I do? How do I win? What just happened?" on screen, in short easy sentences. Same words everywhere: "XP", "streak" / "in a row" (answers), "day streak" (days played), "round", "card", "stars", "trust". Daily says rounds 3 and 5 are hard. Note: a pattern's `lab.goal` (visuals.js) is also the brief line in This or That, Daily and Speed, so write goals that work in both places.
 - **One storage layer**: `lib/storage.js` (`readJSON`, `writeJSON`, `useStored`). Every write dispatches the `progress-change` event, so all hooks update together.
 - **Data is cleaned when read** (`progress.js`: `cleanStats`, `cleanStars`, `cleanDaily`, `cleanDays`, `cleanList`). Wrong types, NaN, huge numbers, unknown ids and bad date keys are dropped or clamped. **When you add a saved field, add it to the clean functions**, or bad data could crash a page.
 - **Best-score helpers**: `saveBest(field, value)` and `saveBestIn(field, id, value)` keep the maximum. A new best score = a `saveBest` line + a line in `xpParts()`.

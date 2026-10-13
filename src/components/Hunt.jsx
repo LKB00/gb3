@@ -1,11 +1,12 @@
 import { ArrowRight, Check, MousePointerClick } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import MockFrame, { MockBlock } from '../mock/Mock';
 import { getPattern } from '../data/patterns';
 import { markHuntDone, markPlayed, useHuntsDone, XP } from '../progress';
 import Burst, { XpPop } from './Burst';
 import { fx } from '../game/fx';
+import { revealEl } from '../lib/useReveal';
 
 // Spot the flaw: tap the parts of the screen that are wrong.
 export default function Hunt({ scenario }) {
@@ -23,6 +24,11 @@ export default function Hunt({ scenario }) {
     if (done && !revealed) markHuntDone(scenario.id);
   }, [done, revealed, scenario.id]);
   const shown = revealed ? [...found, ...mistakes.filter((i) => !found.includes(i))] : found;
+  // On a phone the list sits below the screen: show the newest mistake's note after each find.
+  const listRef = useRef(null);
+  useEffect(() => {
+    if (found.length) requestAnimationFrame(() => revealEl(listRef.current?.lastElementChild));
+  }, [found.length]);
 
   const click = (i) => {
     const b = scenario.blocks[i];
@@ -73,7 +79,7 @@ export default function Hunt({ scenario }) {
           <p className="demo-muted hunt-hint"><MousePointerClick size={14} strokeWidth={1.75} aria-hidden /> This screen has {mistakes.length} hidden mistakes. Tap each one.</p>
         )}
 
-        <ol className="hunt-list">
+        <ol className="hunt-list" ref={listRef}>
           {shown.map((i, n) => {
             const m = scenario.blocks[i].mistake;
             const p = getPattern(m.pattern);

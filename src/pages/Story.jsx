@@ -12,6 +12,7 @@ import { useTitle } from '../lib/useTitle';
 import { fx } from '../game/fx';
 import { track } from '../game/track';
 import Disagree from '../components/Disagree';
+import { useReveal } from '../lib/useReveal';
 
 // Story mode: design an AI agent through one short story. Every choice changes
 // how much the person trusts it, and the ending depends on that trust.
@@ -93,6 +94,7 @@ function Story({ story }) {
   const scene = story.scenes[sceneId];
   const choice = picked !== null ? scene.choices[picked] : null;
   const sceneNo = history.length + (picked === null ? 1 : 0);
+  const outcomeRef = useReveal(choice ? `${sceneNo}-${picked}` : null);
 
   const pick = (i) => {
     if (picked !== null) return;
@@ -206,7 +208,7 @@ function Story({ story }) {
           </div>
 
           {choice && (
-            <div className={'story-outcome ' + (choice.trust >= 0 ? 'is-up' : 'is-down')} aria-live="polite">
+            <div ref={outcomeRef} className={'story-outcome ' + (choice.trust >= 0 ? 'is-up' : 'is-down')} aria-live="polite">
               <span className="story-avatar" aria-hidden>{story.person[0]}</span>
               <div>
                 <p>{choice.reaction}</p>
