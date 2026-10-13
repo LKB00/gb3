@@ -18,8 +18,8 @@ import Disagree from './Disagree';
 //   onDone: called with [true/false per round] instead of showing the score screen
 const VERDICT = [
   [1, 'Flawless. You have real AI design sense.'],
-  [0.8, 'Sharp eye. Just a couple got past you.'],
-  [0.5, 'Not bad. A few tricky ones in there.'],
+  [0.8, 'Sharp eye. You missed only a couple.'],
+  [0.5, 'Not bad. Some of these were tricky.'],
   [0, 'Warm-up round. Play again, it gets easier.'],
 ];
 
@@ -129,8 +129,8 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
         <p className="tot-big"><CountUp value={score} /><span>/{deck.length}</span></p>
         <p className="tot-verdict">{verdict}</p>
         <div className="tot-stats">
-          <span><Flame size={14} strokeWidth={1.75} aria-hidden /> Best streak this run: <strong>{runBest}</strong></span>
-          {recordXp > 0 && <span className="pill-new">New record · +{recordXp} XP</span>}
+          <span><Flame size={14} strokeWidth={1.75} aria-hidden /> Most right in a row: <strong>{runBest}</strong></span>
+          {recordXp > 0 && <span className="pill-new">New best · +{recordXp} XP</span>}
         </div>
         <div className="row wrap center">
           <button type="button" className="btn btn-primary btn-lg" onClick={again}>
@@ -139,7 +139,7 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
           {mode === 'classic' ? (
             <Link to="/play/this-or-that?mode=hard" className="btn btn-ghost btn-lg"><Eye size={15} strokeWidth={1.75} aria-hidden /> Try Hard mode</Link>
           ) : (
-            <Link to="/play/daily" className="btn btn-ghost btn-lg">Today’s Daily</Link>
+            <Link to="/play/daily" className="btn btn-ghost btn-lg">Play today’s Daily</Link>
           )}
         </div>
       </div>
@@ -154,18 +154,18 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
             <span key={n} className={'tot-pip' + (n < i ? (results[n] ? ' is-right' : ' is-wrong') : '') + (n === i ? ' is-now' : '')} />
           ))}
         </span>
-        <span className="tot-score"><Check size={14} strokeWidth={2.25} aria-hidden /> {score}</span>
+        <span className="tot-score"><Check size={14} strokeWidth={2.25} aria-hidden /> {score} right</span>
         <span className={'tot-streak' + (streak >= 3 ? ' is-hot' : '')} key={streak}>
-          <Flame size={14} strokeWidth={1.75} aria-hidden /> {streak}
+          <Flame size={14} strokeWidth={1.75} aria-hidden /> {streak} in a row
         </span>
       </div>
 
       <div className="tot-q">
         <div className="row">
           <span className={`tag tag-${p.category}`}>{getCategory(p.category).name}</span>
-          {round.hard && <span className="tag tag-hard"><Eye size={11} strokeWidth={2} aria-hidden /> Hard · one detail differs</span>}
+          {round.hard && <span className="tag tag-hard"><Eye size={11} strokeWidth={2} aria-hidden /> Hard · find the 1 small difference</span>}
         </div>
-        <h3 aria-level="2">Which one is better?</h3>
+        <h3 aria-level="2">Tap the better AI screen</h3>
         <p>{round.brief}</p>
       </div>
 
@@ -201,16 +201,16 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
         {answered && (
           <>
             <p>
-              <strong className={right ? 'txt-good' : 'txt-bad'}>{right ? (streak >= 3 ? `${streak} in a row!` : 'Nice pick.') : 'Not quite.'}</strong>{' '}
-              The pattern is <Link to={`/patterns/${p.id}`}>{p.title}</Link>.{' '}
+              <strong className={right ? 'txt-good' : 'txt-bad'}>{right ? (streak >= 3 ? `${streak} in a row!` : 'Right!') : 'Not quite. The green one is better.'}</strong>{' '}
+              This idea is called <Link to={`/patterns/${p.id}`}>{p.title}</Link>.{' '}
               <Disagree where={`This or That · ${round.brief}`} detail={`Better: “${round.good.caption}”. Worse: “${round.bad.caption}”.`} />
             </p>
             <button type="button" className="btn btn-primary" onClick={next} ref={nextRef}>
-              {i < deck.length - 1 ? 'Next' : onDone ? 'See result' : 'See score'} <ArrowRight size={14} strokeWidth={1.75} aria-hidden />
+              {i < deck.length - 1 ? 'Next' : onDone ? 'See my result' : 'See my score'} <ArrowRight size={14} strokeWidth={1.75} aria-hidden />
             </button>
           </>
         )}
-        {!answered && <p className="tot-keys">Tap a screen, or press ← / →</p>}
+        {!answered && <p className="tot-keys">Click a screen, or press ← / → on your keyboard</p>}
       </div>
     </div>
   );

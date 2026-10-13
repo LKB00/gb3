@@ -17,9 +17,9 @@ export default function Home() {
   return (
     <div className="page page-wide">
       <header className="home-hero">
-        <p className="eyebrow">A playground for AI interaction design</p>
+        <p className="eyebrow">Quick games about AI design</p>
         <h1 className="display display-xl">Can you spot good AI design?</h1>
-        <p className="lead">Quick games about the patterns behind ChatGPT, Copilot, Perplexity and more. Play a round right now.</p>
+        <p className="lead">See two AI screens, like ChatGPT or Copilot. Tap the better one. Try it below.</p>
         {xp > 0 && (
           <p className="home-me">
             You’re a <strong>{level.name}</strong> · {xp} XP · {passed.length}/{patterns.length} cards{streak > 0 && ` · 🔥 ${streak}-day streak`} · <Link to="/play/card">Your player card</Link>

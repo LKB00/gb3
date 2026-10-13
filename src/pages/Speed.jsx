@@ -175,7 +175,7 @@ export default function Speed() {
         <div className="speed-intro">
           <Timer size={36} strokeWidth={1.5} aria-hidden />
           <h1 className="display">Speed round</h1>
-          <p className="lead">60 seconds. Tap the better AI screen, as fast as you can. 3 in a row = ×2 points. A wrong tap costs 1 point.</p>
+          <p className="lead">You have 60 seconds. Tap the better AI screen, fast. Right = 1 point. Get 3 right in a row and you score double. Wrong = lose 1 point.</p>
           {challenge && (
             <p className="challenge-banner">
               <Swords size={16} strokeWidth={1.75} aria-hidden /> <strong>{challenge.from}</strong> scored <strong>{challenge.score}</strong>. Same screens, same order. Beat it!
@@ -184,7 +184,7 @@ export default function Speed() {
           <button type="button" className="btn btn-primary btn-lg" onClick={() => start(!!challenge)}>
             <Zap size={15} strokeWidth={2} aria-hidden /> {challenge ? 'Accept challenge' : 'Start'}
           </button>
-          <p className="small muted">Best: {stats.speedBest || 0} points · Keys: ← / →</p>
+          <p className="small muted">Your best: {stats.speedBest || 0} points · Keyboard: ← / →</p>
         </div>
       )}
 
@@ -202,8 +202,8 @@ export default function Speed() {
             </button>
             <span className={'speed-time' + (secs <= 10 ? ' is-low' : '')}><Timer size={16} strokeWidth={2} aria-hidden /> {secs}s</span>
             <span className="speed-track" aria-hidden><span style={{ width: `${(left / (SECONDS * 1000)) * 100}%` }} /></span>
-            <span className="speed-points" key={points}>{points}</span>
-            {combo >= 3 && <span className="speed-combo" key={`c${combo}`}>×2</span>}
+            <span className="speed-points" key={points}>{points}<small> pts</small></span>
+            {combo >= 3 && <span className="speed-combo" key={`c${combo}`}>×2 pts</span>}
           </div>
           <p className="speed-brief">{round.brief}</p>
           <div className="speed-options">
@@ -229,9 +229,9 @@ export default function Speed() {
         <div className="tot tot-over speed-over">
           {result.record && points > 0 && <Burst count={28} />}
           <p className="label">Time’s up</p>
-          <p className="tot-big"><CountUp value={points} /><span> pts</span>{result.gain > 0 && <XpPop amount={result.gain} />}</p>
+          <p className="tot-big"><CountUp value={points} /><span> {points === 1 ? 'point' : 'points'}</span>{result.gain > 0 && <XpPop amount={result.gain} />}</p>
           <p className="tot-verdict">
-            {right} right out of {answered} · {answered ? Math.round((right / answered) * 100) : 0}% accuracy
+            You got {right} of {answered} right ({answered ? Math.round((right / answered) * 100) : 0}%)
           </p>
           {challenge && seed === challenge.seed && (
             <p className={'challenge-result is-' + verdict(points, challenge.score, challenge.from).tone}>
@@ -239,7 +239,7 @@ export default function Speed() {
             </p>
           )}
           <div className="tot-stats">
-            {result.record && points > 0 ? <span className="pill-new">New best!</span> : <span>Best: {stats.speedBest || 0} pts</span>}
+            {result.record && points > 0 ? <span className="pill-new">New best!</span> : <span>Your best: {stats.speedBest || 0} points</span>}
           </div>
           <div className="row wrap center">
             <button type="button" className="btn btn-primary btn-lg" onClick={() => start(false)}>
@@ -248,7 +248,7 @@ export default function Speed() {
             <button type="button" className="btn btn-ghost btn-lg" onClick={share}>
               <Swords size={15} strokeWidth={1.75} aria-hidden /> {copied ? 'Link copied!' : 'Challenge a friend'}
             </button>
-            <Link to="/play/this-or-that" className="btn btn-ghost btn-lg">Learn them slowly</Link>
+            <Link to="/play/this-or-that" className="btn btn-ghost btn-lg">Play with no timer</Link>
           </div>
         </div>
       )}
