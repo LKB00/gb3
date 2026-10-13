@@ -81,8 +81,9 @@ export default function Lab({ id, lab, title, next }) {
   return (
     <div className={'lab' + (finished ? ' lab-finished' : '')}>
       <header className="lab-head">
-        <p className="label">The brief</p>
+        <p className="label">Fix it · your job</p>
         <p className="lab-goal">{lab.goal}</p>
+        {!finished && <p className="lab-hint">Pick the best option at each step. No wrong picks = 3 stars.</p>}
         <ol className="lab-steps" aria-label="Steps">
           {decisions.map((x, n) => {
             const done = finished || (choice[x.id] === best(x) && n !== step);
@@ -101,7 +102,7 @@ export default function Lab({ id, lab, title, next }) {
       </header>
 
       <div className="lab-preview">
-        <p className="label">Live preview</p>
+        <p className="label">Your AI screen</p>
         <MockFrame title={title}>
           {layout.map((item, i) => {
             if (!item.slot) return <MockBlock key={i} b={item} />;
@@ -147,16 +148,16 @@ export default function Lab({ id, lab, title, next }) {
               })}
             </div>
 
-            {!pickedOpt && <p className="lab-hint">Pick one. You’ll see it in the preview and get feedback right away.</p>}
+            {!pickedOpt && <p className="lab-hint">Tap an option. It shows up on the screen, and you’ll see if it’s right.</p>}
 
             {pickedOpt && (
               <div className={'lab-why ' + (pickedOpt.ok ? 'lab-why-good' : 'lab-why-bad')}>
                 <strong>
                   {pickedOpt.ok ? <Check size={14} strokeWidth={2.25} aria-hidden /> : <TriangleAlert size={14} strokeWidth={2} aria-hidden />}
-                  {pickedOpt.ok ? 'Good choice' : 'Common mistake'}
+                  {pickedOpt.ok ? 'Good choice!' : 'Not quite'}
                 </strong>
                 <span>{pickedOpt.why}</span>
-                {!pickedOpt.ok && <span className="lab-why-try">Try another option.</span>}
+                {!pickedOpt.ok && <span className="lab-why-try">Pick another option.</span>}
                 <Disagree where={`Fix it · ${id} · ${d.label}`} detail={`“${pickedOpt.label}” was marked ${pickedOpt.ok ? 'good' : 'a mistake'}: ${pickedOpt.why}`} />
               </div>
             )}
@@ -169,10 +170,10 @@ export default function Lab({ id, lab, title, next }) {
               )}
               {pickedOpt?.ok && (
                 <button type="button" className="btn btn-primary" onClick={advance}>
-                  {step < total - 1 ? 'Next step' : 'Finish'} <ArrowRight size={14} strokeWidth={1.75} aria-hidden />
+                  {step < total - 1 ? 'Next step' : 'Finish and get the card'} <ArrowRight size={14} strokeWidth={1.75} aria-hidden />
                 </button>
               )}
-              <button type="button" className="lab-skip" onClick={skip}>Reveal the answer (no card)</button>
+              <button type="button" className="lab-skip" onClick={skip}>Just show me the answer (no card)</button>
             </div>
           </>
         ) : (
@@ -180,7 +181,7 @@ export default function Lab({ id, lab, title, next }) {
             {!skipped && <Burst count={stars === 3 ? 26 : 16} />}
             <p className="lab-count">{skipped ? 'The answer' : 'Card collected'}</p>
             <h3 className="lab-q" aria-level="2">
-              {skipped ? 'Here’s the winning design.' : stars === 3 ? 'Perfect run!' : stars === 2 ? 'Nice save!' : 'Got there!'}
+              {skipped ? 'Here are the best picks.' : stars === 3 ? 'Perfect run!' : stars === 2 ? 'Nice save!' : 'Got there!'}
               {gained > 0 && <XpPop amount={gained} />}
             </h3>
             {!skipped && (
@@ -188,11 +189,12 @@ export default function Lab({ id, lab, title, next }) {
                 {[1, 2, 3].map((n) => (
                   <Star key={n} size={22} strokeWidth={1.5} className={n <= stars ? 'is-on' : ''} style={{ animationDelay: `${n * 120}ms` }} aria-hidden />
                 ))}
-                <span>{mistakes === 0 ? 'No mistakes' : `${mistakes} mistake${mistakes > 1 ? 's' : ''} fixed`}</span>
+                <span>{mistakes === 0 ? 'No wrong picks' : `${mistakes} wrong pick${mistakes > 1 ? 's' : ''}`}</span>
               </p>
             )}
+            {!skipped && stars < 3 && <p className="lab-hint">Want 3 stars? Tap Try again and make no wrong picks.</p>}
             {!skipped && <FlipCard id={id} stars={stars} />}
-            {skipped && <p className="lab-hint">No card this time. Play again to collect it.</p>}
+            {skipped && <p className="lab-hint">No card this time. Tap Try again to win it.</p>}
             <ul className="lab-summary">
               {decisions.map((x) => {
                 const fixed = !skipped && (tried[x.id] || [])[0] !== best(x);
@@ -204,7 +206,7 @@ export default function Lab({ id, lab, title, next }) {
                     <span>
                       <span className="lab-sum-q">{x.label}</span>
                       <strong>{x.options[best(x)].label}</strong>
-                      {fixed && <span className="lab-sum-note">Fixed after a slip</span>}
+                      {fixed && <span className="lab-sum-note">Wrong at first, then fixed</span>}
                     </span>
                   </li>
                 );

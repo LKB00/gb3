@@ -38,12 +38,12 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'Design the first screen of an AI writing assistant.',
+      goal: 'Build the welcome screen of an AI writing app.',
       frame: [slot('message'), slot('examples'), slot('click')],
       decisions: [
         {
           id: 'message',
-          label: 'Welcome message',
+          label: 'What does the welcome say?',
           options: [
             opt('"Hello! I am an AI."', false, 'Says nothing useful. Tell people what the AI is for.', [note('Hello! I am an AI.')]),
             opt('"Write, summarize or brainstorm"', true, 'States the purpose in a few words.', [note('Write, summarize or brainstorm. Try one:')]),
@@ -51,7 +51,7 @@ export const visuals = {
         },
         {
           id: 'examples',
-          label: 'Examples',
+          label: 'Show example requests?',
           options: [
             opt('None', false, 'The "blank box" problem: new users do not know what to type, and leave.', []),
             opt('12 generic ones', false, 'Too many, too vague. People skim past all of them.', [
@@ -64,7 +64,7 @@ export const visuals = {
         },
         {
           id: 'click',
-          label: 'Clicking an example…',
+          label: 'Tapping an example…',
           options: [
             opt('Sends it right away', false, 'People lose the chance to adjust it, and get a result they did not quite want.', [
               user('Write onboarding copy'),
@@ -97,7 +97,7 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'The request is vague: "Make a launch post". What should the AI do?',
+      goal: 'Someone asks: "Make a launch post." That is vague. What should the AI do?',
       frame: [user('Make a launch post for the new dashboard.'), slot('first'), slot('answer'), slot('skip')],
       decisions: [
         {
@@ -116,7 +116,7 @@ export const visuals = {
           label: 'People answer by…',
           options: [
             opt('Typing a reply', false, 'Typing is slow, especially on phones.', [ph('Type your answer…')]),
-            opt('Tapping a chip', true, 'One tap is fastest.', [chips(['Customers', 'Team', 'Investors'])]),
+            opt('Tapping a button', true, 'One tap is fastest.', [chips(['Customers', 'Team', 'Investors'])]),
           ],
         },
         {
@@ -124,7 +124,7 @@ export const visuals = {
           label: 'Can they skip?',
           options: [
             opt('No, they must answer', false, 'Forcing answers blocks people who just want a quick draft.', []),
-            opt('"Just guess" option', true, 'Respect people who want speed over precision.', [chips(['Just guess'])]),
+            opt('"Just guess" option', true, 'Some people just want it fast. Let them.', [chips(['Just guess'])]),
           ],
         },
       ],
@@ -143,15 +143,15 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'Design an AI sidebar inside a docs app.',
+      goal: 'An AI side panel in a docs app answers using your files.',
       frame: [slot('show'), slot('change'), input('Summarize this.'), slot('limit')],
       decisions: [
         {
           id: 'show',
-          label: 'Show what the AI will use?',
+          label: 'Show which files the AI reads?',
           options: [
             opt('No, the AI decides', false, 'People cannot catch the AI using the wrong file.', []),
-            opt('Context chips', true, 'People can see the AI is using the right file.', [chips([':file Q3-report.pdf'])]),
+            opt('Yes, show the files', true, 'People can see the AI is using the right file.', [chips([':file Q3-report.pdf'])]),
           ],
         },
         {
@@ -164,10 +164,10 @@ export const visuals = {
         },
         {
           id: 'limit',
-          label: 'The file is too long…',
+          label: 'The file is too long for the AI…',
           options: [
             opt('Cut it silently', false, 'The AI answers from half the file and nobody knows.', []),
-            opt('Say what was used', true, 'Honest about limits, so people can check the rest.', [note('Used the first 50 of 80 pages.', { tone: 'warn' })]),
+            opt('Say what was used', true, 'It is honest about what it skipped, so people can check.', [note('Used the first 50 of 80 pages.', { tone: 'warn' })]),
           ],
         },
       ],
@@ -190,15 +190,15 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'Help people adjust an AI-written reply.',
+      goal: 'The AI wrote a reply. Help people make it shorter or friendlier.',
       frame: [ai('Hi Sam, thanks for the update! Friday works for me…'), slot('how'), slot('count')],
       decisions: [
         {
           id: 'how',
           label: 'To change tone or length, people…',
           options: [
-            opt('Type it in the prompt', false, 'Most people do not know what to type.', [ph('e.g. "make it formal, under 80 words"')]),
-            opt('Tap chips + slider', true, 'Simple controls do the prompt work for them.', [
+            opt('Type it in the chat box', false, 'Most people do not know what to type.', [ph('e.g. "make it formal, under 80 words"')]),
+            opt('Tap buttons and a slider', true, 'Simple buttons do the typing for them.', [
               chips(['Friendly', 'Formal', 'Short'], { on: 1 }),
               slider('Length', 35, 'Short', 'Long'),
             ]),
@@ -208,7 +208,7 @@ export const visuals = {
           id: 'count',
           label: 'How many settings?',
           options: [
-            opt('15 up front', false, 'A wall of controls is harder than the prompt.', [
+            opt('15 up front', false, 'Too many settings is harder than just typing.', [
               rows([
                 { label: 'Tone', value: 'Formal' },
                 { label: 'Length', value: '80 words' },
@@ -218,7 +218,7 @@ export const visuals = {
                 { label: '+ 10 more…', value: '' },
               ]),
             ]),
-            opt('2–3 + "More"', true, 'Show the common ones. Hide the rest.', [buttons([':more More options'])]),
+            opt('Show 2–3, hide the rest', true, 'Show the common ones. Hide the rest.', [buttons([':more More options'])]),
           ],
         },
       ],
@@ -243,7 +243,7 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'An AI task takes 20 seconds. Design the waiting state.',
+      goal: 'The AI needs 20 seconds to answer. What do people see while they wait?',
       frame: [user('Summarize my 3 interview notes.'), slot('progress'), slot('text'), slot('stop')],
       decisions: [
         {
@@ -296,7 +296,7 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'Generate a headline for a landing page.',
+      goal: 'The AI writes a headline for a website. How should it show the results?',
       frame: [user('Write a headline for our project app.'), slot('count'), slot('next')],
       decisions: [
         {
@@ -307,14 +307,14 @@ export const visuals = {
             opt('3 different', true, 'A few real choices, easy to compare.', [
               variants(['Track every project in one place.', 'Your projects, finally organized.', 'Stop chasing updates.']),
             ]),
-            opt('10 similar', false, 'Choice overload: near-copies are tiring to compare.', [
+            opt('10 similar', false, 'Too many near-copies. They are tiring to compare.', [
               variants(['Track projects.', 'Track your projects.', 'Track all projects.', 'Projects, tracked.', 'Track projects here.', 'Track projects easily.']),
             ]),
           ],
         },
         {
           id: 'next',
-          label: 'After choosing…',
+          label: 'After people pick one…',
           options: [
             opt('Nothing', false, 'Dead end: people cannot build on what they like.', []),
             opt('"Use" + "More like this"', true, 'People can refine the one they like.', [buttons(['!Use B', 'More like B'])]),
@@ -336,12 +336,12 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'Design the "try again" control.',
+      goal: 'People don’t like the answer, so they tap "Try again". What happens?',
       frame: [user('Tagline for a coffee shop'), ai('Fresh beans, warm hearts.'), slot('regen'), slot('steer')],
       decisions: [
         {
           id: 'regen',
-          label: 'When people retry…',
+          label: 'When people tap "Try again"…',
           options: [
             opt('Replace the answer', false, 'If the new one is worse, the better one is gone forever.', [buttons([':retry Regenerate'])]),
             opt('Keep versions ‹ 2/3 ›', true, 'People can go back and compare.', [buttons([':left', '2 / 3', ':right', ':retry Retry'])]),
@@ -349,7 +349,7 @@ export const visuals = {
         },
         {
           id: 'steer',
-          label: 'Can they guide the retry?',
+          label: 'Can they say what to change?',
           options: [
             opt('No, random retry', false, 'Random retries waste time.', []),
             opt('Quick hints', true, 'A hint like "shorter" gets closer, faster.', [chips(['Shorter', 'Funnier', 'More formal'])]),
@@ -376,23 +376,23 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'AI wrote an email. It is 80% right.',
+      goal: 'The AI wrote an email. It is 80% right. Help people fix the rest.',
       frame: [slot('label'), slot('edit'), slot('part')],
       decisions: [
         {
           id: 'edit',
           label: 'How can people change it?',
           options: [
-            opt('Copy or regenerate', false, 'People lose the good 80% to fix the bad 20%.', [ai(email)]),
-            opt('Edit text directly', true, 'Output is a draft. Let people shape it.', [edit(email)]),
+            opt('Copy it, or ask again', false, 'People lose the good 80% to fix the bad 20%.', [ai(email)]),
+            opt('Edit text directly', true, 'AI text is a first draft. Let people change it.', [edit(email)]),
           ],
         },
         {
           id: 'part',
-          label: 'AI help for one part',
+          label: 'To fix just one part…',
           options: [
-            opt('Regenerate all', false, 'Everything changes, even the parts people liked.', [buttons([':retry Regenerate all'])]),
-            opt('Rewrite selection', true, 'Change only what needs fixing.', [buttons([':sparkle Rewrite selection'])]),
+            opt('Rewrite everything', false, 'Everything changes, even the parts people liked.', [buttons([':retry Regenerate all'])]),
+            opt('Rewrite only the selected part', true, 'Change only what needs fixing.', [buttons([':sparkle Rewrite selection'])]),
           ],
         },
         {
@@ -419,7 +419,7 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'Add AI autocomplete to a message box.',
+      goal: 'The AI suggests the next words while people type a message.',
       frame: [slot('style'), slot('accept'), slot('typing')],
       decisions: [
         {
@@ -432,11 +432,11 @@ export const visuals = {
         },
         {
           id: 'accept',
-          label: 'It is accepted…',
+          label: 'How do people accept it?',
           options: [
             opt('Automatically', false, 'Takes control away. People must undo what they never asked for.', [note('Applied automatically')]),
-            opt('By a pop-up each time', false, 'Interrupts typing every few seconds.', [modal('Use the AI suggestion?', '', ['Yes', 'No'])]),
-            opt('With Tab', true, 'Easy to take, easy to ignore.', [note('Tab accept · Esc ignore')]),
+            opt('A pop-up asks each time', false, 'Interrupts typing every few seconds.', [modal('Use the AI suggestion?', '', ['Yes', 'No'])]),
+            opt('Press Tab', true, 'Easy to take, easy to ignore.', [note('Tab accept · Esc ignore')]),
           ],
         },
         {
@@ -444,7 +444,7 @@ export const visuals = {
           label: 'While a suggestion loads…',
           options: [
             opt('Typing waits', false, 'Never make people wait to type their own words.', [spinner('Please wait…')]),
-            opt('Typing never waits', true, 'The AI works around the person, not the other way.', []),
+            opt('Typing never waits', true, 'The AI should wait for people, not the other way round.', []),
           ],
         },
       ],
@@ -467,12 +467,12 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'An AI agent renames and cleans up layers in a design file.',
+      goal: 'An AI agent cleans up a design file on its own. Keep people safe.',
       frame: [slot('stop'), slot('after'), slot('risky')],
       decisions: [
         {
           id: 'stop',
-          label: 'While it runs',
+          label: 'While it works',
           options: [
             opt('No controls', false, 'If it goes wrong, people can only watch.', [steps([['Renaming 24 layers', 'active']])]),
             opt('Stop button', true, 'People can stop it the moment it goes wrong.', [steps([['Renaming 24 layers', 'active']]), buttons(['-:stop Stop'])]),
@@ -490,7 +490,7 @@ export const visuals = {
           id: 'risky',
           label: 'Before deleting layers',
           options: [
-            opt('Just delete', false, 'Actions that cannot be undone need a check first.', [toast('Deleted 12 layers')]),
+            opt('Just delete', false, 'Deleting cannot be undone. Ask before doing it.', [toast('Deleted 12 layers')]),
             opt('Confirm with details', true, 'People see exactly what will go.', [modal('Delete 12 unused layers?', 'They are hidden and not used anywhere.', ['Cancel', '-Delete 12'])]),
           ],
         },
@@ -514,7 +514,7 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'AI improves the wording of a 3-page document.',
+      goal: 'The AI rewrote parts of a 3-page document. How do people check it?',
       frame: [slot('show'), slot('choose'), slot('count')],
       decisions: [
         {
@@ -527,7 +527,7 @@ export const visuals = {
         },
         {
           id: 'choose',
-          label: 'People can…',
+          label: 'How do people accept changes?',
           options: [
             opt('Accept all or nothing', false, 'One bad change forces people to reject the good ones too.', [buttons(['!Accept all', 'Reject all'])]),
             opt('Accept each change', true, 'Keep the good, drop the bad.', [buttons([':check Accept', ':x Reject', 'Next'])]),
@@ -535,7 +535,7 @@ export const visuals = {
         },
         {
           id: 'count',
-          label: 'Show progress?',
+          label: 'Show how many are left?',
           options: [
             opt('No', false, 'People do not know if they reviewed everything.', []),
             opt('"12 changes · 3 reviewed"', true, 'People know how much is left.', [note('12 changes · 3 reviewed')]),
@@ -562,20 +562,20 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'Write the welcome card for a new AI research assistant.',
+      goal: 'Write the welcome card for a new AI research helper.',
       frame: [slot('promise'), slot('can'), slot('mistakes')],
       decisions: [
         {
           id: 'promise',
-          label: 'Headline',
+          label: 'The headline',
           options: [
-            opt('"Knows everything!"', false, 'Over-promising leads to blind trust, then disappointment.', [banner('info', 'Meet Max', 'The AI that knows everything!')]),
+            opt('"Knows everything!"', false, 'Promising too much makes people trust it blindly. Then they feel let down.', [banner('info', 'Meet Max', 'The AI that knows everything!')]),
             opt('"Your research assistant"', true, 'Names a clear, honest role.', [card('Your research assistant', 'Works with your uploaded notes.')]),
           ],
         },
         {
           id: 'can',
-          label: 'What it can do',
+          label: 'Describe what it can do with…',
           options: [
             opt('A 10-item feature list', false, 'Nobody reads 10 bullets.', [
               list(['• Summaries', '• Themes', '• Quotes', '• Personas', '• Journeys', '• Charts', '• Tags', '• + 3 more']),
@@ -585,7 +585,7 @@ export const visuals = {
         },
         {
           id: 'mistakes',
-          label: 'Mention mistakes?',
+          label: 'Say it can make mistakes?',
           options: [
             opt('No', false, 'People will copy wrong answers without checking.', []),
             opt('"Can make mistakes"', true, 'A small, always-visible reminder.', [note('Can make mistakes. Check important info.')]),
@@ -615,7 +615,7 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'Answer "Why do users struggle with export?" from company docs.',
+      goal: 'The AI answers a question using company docs. How do people check it?',
       frame: [user('Why do users struggle with export?'), slot('place'), slot('preview'), slot('gap')],
       decisions: [
         {
@@ -640,10 +640,10 @@ export const visuals = {
         },
         {
           id: 'gap',
-          label: 'No source for a point',
+          label: 'No source for one fact',
           options: [
-            opt('Say nothing', false, 'Unsupported claims look supported.', []),
-            opt('Say it clearly', true, 'Honest gaps build trust.', [note('No source about export speed, so I left it out.', { tone: 'warn' })]),
+            opt('Say nothing', false, 'Facts with no source look just as true as the rest.', []),
+            opt('Say it clearly', true, 'Saying “I have no source” is honest. People trust it more.', [note('No source about export speed, so I left it out.', { tone: 'warn' })]),
           ],
         },
       ],
@@ -662,16 +662,16 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'AI read an invoice. Some fields are unclear.',
+      goal: 'The AI read an invoice, but it is unsure about some parts.',
       frame: [slot('show'), slot('hint'), slot('filter')],
       decisions: [
         {
           id: 'show',
-          label: 'Show confidence as…',
+          label: 'Show how sure it is with…',
           options: [
             opt('Nothing', false, 'Everything looks equally sure, so people trust the mistakes too.', [invoiceRows([{}, {}, {}, {}])]),
-            opt('Exact percent', false, 'False precision. People over-read numbers like 61.4%.', [invoiceRows([{ tag: '98.7%' }, { tag: '97.2%' }, { tag: '61.4%' }, { tag: '43.0%' }])]),
-            opt('Words + icon + color', true, 'Clear, and not color-only (works for color-blind people too).', [invoiceRows([sure, sure, checkIt, notSure])]),
+            opt('Exact percent', false, 'Numbers like 61.4% look exact, but they are not. People trust them too much.', [invoiceRows([{ tag: '98.7%' }, { tag: '97.2%' }, { tag: '61.4%' }, { tag: '43.0%' }])]),
+            opt('Words + icon + color', true, 'Clear for everyone. Words help people who can’t see colors well.', [invoiceRows([sure, sure, checkIt, notSure])]),
           ],
         },
         {
@@ -684,7 +684,7 @@ export const visuals = {
         },
         {
           id: 'filter',
-          label: 'Help review',
+          label: 'Help people check',
           options: [
             opt('Nothing', false, 'Reviewers must re-check every field.', []),
             opt('"Show only check (2)"', true, 'People spend time where it matters.', [buttons(['Show only "check this" (2)'])]),
@@ -710,12 +710,12 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'People can post AI-written updates in your team app.',
+      goal: 'In a team app, people can post updates the AI wrote for them.',
       frame: [slot('label'), text('Our new onboarding cuts setup time in half. Try it today!'), slot('edited')],
       decisions: [
         {
           id: 'label',
-          label: 'Label the post?',
+          label: 'Show that AI wrote it?',
           options: [
             opt('No label', false, 'Readers feel tricked when they find out later.', [avatar('Asha K', 'Product designer')]),
             opt('Tiny grey "ai" at the end', false, 'Hidden labels do not count. Almost nobody sees them.', [
@@ -753,15 +753,15 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'An app recommends a course to a learner.',
+      goal: 'An app suggests a course to a learner. Help them see why.',
       frame: [card('Advanced Prototyping', '', { tag: 'Recommended' }), slot('why'), slot('fix')],
       decisions: [
         {
           id: 'why',
-          label: 'Explain it with…',
+          label: 'Explain the pick with…',
           options: [
             opt('Nothing', false, 'People cannot judge it, so they ignore it or follow blindly.', []),
-            opt('Score "0.92"', false, 'Jargon. A number with no meaning is not an explanation.', [note('Match score: 0.92')]),
+            opt('Score "0.92"', false, 'A number like 0.92 means nothing to people. It is not a reason.', [note('Match score: 0.92')]),
             opt('2 plain reasons', true, 'People can judge if the reasons are right.', [list(['✓ You finished "Figma Basics"', '✓ You opened 4 prototyping lessons'])]),
           ],
         },
@@ -796,7 +796,7 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'Your assistant can remember things about people.',
+      goal: 'The AI can remember things about people. Keep them in control.',
       frame: [slot('notice'), slot('manage'), slot('off')],
       decisions: [
         {
@@ -823,7 +823,7 @@ export const visuals = {
         },
         {
           id: 'off',
-          label: 'Private option?',
+          label: 'Can people turn memory off?',
           options: [
             opt('No', false, 'Some chats should never be remembered.', []),
             opt('Memory switch', true, 'People choose when the AI remembers.', [toggle('Memory', true)]),
@@ -846,7 +846,7 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'Find out when your AI answers are bad.',
+      goal: 'Make it easy for people to tell you when the AI got it wrong.',
       frame: [ai('Here are 4 ideas for your empty state…'), slot('ask'), slot('reason'), slot('after')],
       decisions: [
         {
@@ -862,7 +862,7 @@ export const visuals = {
           id: 'reason',
           label: 'After thumbs down',
           options: [
-            opt('Required text box', false, 'Required typing kills most feedback.', [ph('Describe the problem (required)')]),
+            opt('Required text box', false, 'If typing is a must, most people give up.', [ph('Describe the problem (required)')]),
             opt('Optional quick reasons', true, 'Fast for people, useful for your team.', [chips(['Not accurate', 'Too long', 'Wrong tone'])]),
           ],
         },
@@ -894,12 +894,12 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'An upload failed: the file is too big for the AI.',
+      goal: 'An upload failed because the file is too big. What should the error say?',
       frame: [slot('input'), slot('msg'), slot('next')],
       decisions: [
         {
           id: 'msg',
-          label: 'The message',
+          label: 'What does the error say?',
           options: [
             opt('"Error 413"', false, 'Codes mean nothing to most people.', [banner('bad', 'Error 413', 'Request failed.')]),
             opt('"Something went wrong"', false, 'Too vague. People do not know what to fix.', [banner('bad', 'Something went wrong', '')]),
@@ -908,7 +908,7 @@ export const visuals = {
         },
         {
           id: 'input',
-          label: 'The person\'s message',
+          label: 'What they typed',
           options: [
             opt('Clear it', false, 'Making people retype is the most annoying mistake.', [ph('Ask anything…')]),
             opt('Keep it', true, 'Nothing is lost.', [input('Make a mood board from brand-guide.pdf')]),
@@ -916,7 +916,7 @@ export const visuals = {
         },
         {
           id: 'next',
-          label: 'Next step',
+          label: 'What can they do next?',
           options: [
             opt('None', false, 'A dead end. People give up.', []),
             opt('1–2 concrete actions', true, 'People know exactly what to do.', [buttons(['!Use first 30 pages', 'Upload smaller file'])]),
@@ -944,12 +944,12 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'Someone asks an agent: "Clean up our design system file".',
+      goal: 'Someone asks an AI agent: "Clean up our design file." What comes first?',
       frame: [user('Clean up our design system file'), slot('start'), slot('size'), slot('edit')],
       decisions: [
         {
           id: 'start',
-          label: 'Before working',
+          label: 'Before it starts',
           options: [
             opt('Start right away', false, 'If the agent misunderstood, you find out after the damage is done.', [steps([['Deleting unused components', 'active']])]),
             opt('Show a plan, wait', true, 'Mistakes are caught before they cost anything.', [
@@ -960,7 +960,7 @@ export const visuals = {
         },
         {
           id: 'size',
-          label: 'Plan detail',
+          label: 'How long is the plan?',
           options: [
             opt('38 technical steps', false, 'Nobody reviews a 38-step plan.', [note('Step 1/38: resolve node tree… Step 2/38: …')]),
             opt('4 steps + time', true, 'Short enough to actually read.', [note('4 steps · about 5 minutes')]),
@@ -990,7 +990,7 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'Your agent wants to email 240 customers.',
+      goal: 'An AI agent is about to email 240 customers. When should it ask first?',
       frame: [slot('ask'), slot('level'), slot('settings')],
       decisions: [
         {
@@ -1006,15 +1006,15 @@ export const visuals = {
         },
         {
           id: 'level',
-          label: 'Small actions (drafts)',
+          label: 'For small, safe actions',
           options: [
-            opt('Ask every time', false, 'Approval fatigue: people stop reading and click Yes to everything.', [modal('Create a draft?', '', ['!Yes'])]),
+            opt('Ask every time', false, 'Too many questions. People stop reading and click Yes to everything.', [modal('Create a draft?', '', ['!Yes'])]),
             opt('Just do them', true, 'Drafts are safe. Save "asks" for risky moments.', [note('Drafted 3 replies (not sent)')]),
           ],
         },
         {
           id: 'settings',
-          label: 'Autonomy setting',
+          label: 'Can people choose when it asks?',
           options: [
             opt('None', false, 'People have different comfort levels.', []),
             opt('"Ask before sending"', true, 'People choose how much freedom the AI gets.', [toggle('Ask before sending emails', true)]),
@@ -1047,7 +1047,7 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'A 15-minute AI research task, and a support bot.',
+      goal: 'An AI task takes 15 minutes, and a help bot gets stuck. Keep people informed.',
       frame: [slot('wait'), slot('done'), slot('human')],
       decisions: [
         {
@@ -1055,14 +1055,14 @@ export const visuals = {
           label: 'During the 15 minutes',
           options: [
             opt('Lock the screen', false, 'People cannot do any other work.', [spinner('Please keep this window open (15 min)')]),
-            opt('Background + status', true, 'People keep working and can check anytime.', [
+            opt('Run in the background, show status', true, 'People keep working and can check anytime.', [
               rows([{ label: 'Competitor research', value: '60%', tag: 'Running', tone: 'accent' }]),
             ]),
           ],
         },
         {
           id: 'done',
-          label: 'When done or stuck',
+          label: 'When it is done or stuck',
           options: [
             opt('Nothing', false, 'Stuck tasks stay stuck forever.', []),
             opt('Notify', true, 'People come back at the right moment.', [toast('Research needs your input', 'Open')]),
@@ -1070,9 +1070,9 @@ export const visuals = {
         },
         {
           id: 'human',
-          label: 'The bot can\'t help',
+          label: 'The help bot is stuck',
           options: [
-            opt('"Please rephrase"', false, 'The bot loop: people get angry and leave.', [ai('Sorry, I didn\'t get that. Please rephrase.')]),
+            opt('"Please rephrase"', false, 'The bot goes in circles. People get angry and leave.', [ai('Sorry, I didn\'t get that. Please rephrase.')]),
             opt('"Talk to a person"', true, 'A clear way out, with the chat attached.', [buttons(['!Talk to a person']), note('Your chat is shared, so you don\'t repeat yourself.')]),
           ],
         },
@@ -1096,7 +1096,7 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'Help people discover AI summaries in an email app.',
+      goal: 'An email app can sum up long threads with AI. How do people find out?',
       frame: [text('Re: Q3 roadmap (14 replies)'), slot('where'), slot('when'), slot('after')],
       decisions: [
         {
@@ -1117,9 +1117,9 @@ export const visuals = {
         },
         {
           id: 'after',
-          label: 'After people skip it',
+          label: 'If people say no',
           options: [
-            opt('Keep asking', false, 'Repeating a “no” feels pushy and erodes trust.', [note('Asks again tomorrow', { tone: 'warn' })]),
+            opt('Keep asking', false, 'Asking again after a “no” feels pushy. People trust it less.', [note('Asks again tomorrow', { tone: 'warn' })]),
             opt('Back off', true, 'Respecting the choice keeps the feature welcome.', [note('Hidden for this thread · Turn off in Settings')]),
           ],
         },
@@ -1143,7 +1143,7 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'People want to change one step in a long AI answer.',
+      goal: 'The AI gave a long answer. People want to change just one part.',
       frame: [slot('select'), slot('quote'), slot('scope')],
       decisions: [
         {
@@ -1209,7 +1209,7 @@ export const visuals = {
           label: 'Show what it understood?',
           options: [
             opt('No, just act', false, 'A misheard number becomes a wrong booking.', []),
-            opt('Live transcript', true, 'Mistakes are visible before anything happens.', [edit('Book a table for 4 people at 7 pm', { sel: '4' })]),
+            opt('Show the words it heard', true, 'Mistakes are visible before anything happens.', [edit('Book a table for 4 people at 7 pm', { sel: '4' })]),
           ],
         },
         {
@@ -1246,15 +1246,15 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'Set up how much freedom an email agent gets.',
+      goal: 'An AI agent handles email. Decide how much it can do on its own.',
       frame: [slot('levels'), slot('default'), slot('change')],
       decisions: [
         {
           id: 'levels',
-          label: 'How are levels set?',
+          label: 'How do people set its freedom?',
           options: [
             opt('One on/off switch', false, 'Safe and risky tasks get the same freedom.', [toggle('AI agent', true)]),
-            opt('Per task, in plain words', true, 'Risk differs by task, so freedom should too.', [
+            opt('Per task, in plain words', true, 'Some tasks are riskier than others, so freedom should differ too.', [
               rows([
                 { label: 'Draft replies', value: '', tag: 'Act on its own', tone: 'ok' },
                 { label: 'Send emails', value: '', tag: 'Ask first', tone: 'warn' },
@@ -1264,15 +1264,15 @@ export const visuals = {
         },
         {
           id: 'default',
-          label: 'Default for new tasks',
+          label: 'At the start, it should…',
           options: [
-            opt('Act on its own', false, 'A risky default makes the first mistake a big one.', [note('New tasks: Act on its own', { tone: 'warn' })]),
+            opt('Act on its own', false, 'If it acts alone from day one, its first mistake can be a big one.', [note('New tasks: Act on its own', { tone: 'warn' })]),
             opt('Ask first', true, 'Start safe, let people loosen it as trust grows.', [note('New tasks: Ask first')]),
           ],
         },
         {
           id: 'change',
-          label: 'Changing the level later',
+          label: 'Where can people change it later?',
           options: [
             opt('Deep in Settings', false, 'Hard-to-reach controls feel like no control.', [note('Settings › Advanced › Agents › Permissions')]),
             opt('Right where the agent works', true, 'People adjust in the moment they need it.', [buttons([':more Ask first'])]),
@@ -1304,7 +1304,7 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'An agent tidied a design file while you were away.',
+      goal: 'An AI agent changed a design file while you were away. Show what it did.',
       frame: [slot('record'), slot('words'), slot('undo')],
       decisions: [
         {
@@ -1330,7 +1330,7 @@ export const visuals = {
         },
         {
           id: 'undo',
-          label: 'Reversing changes',
+          label: 'Can people undo changes?',
           options: [
             opt('Not possible', false, 'Without undo, people stop letting the agent act.', []),
             opt('Undo each step or restore', true, 'Mistakes are cheap, so people trust the agent more.', [buttons(['Undo step', ':retry Restore to 10:00'])]),
@@ -1356,12 +1356,12 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'An agent is researching competitors and is going the wrong way.',
+      goal: 'An AI agent is doing research, but it is going the wrong way.',
       frame: [steps([['Found 5 of 12 competitors', 'done'], ['Searching more…', 'active']]), slot('stop'), slot('correct'), slot('resume')],
       decisions: [
         {
           id: 'stop',
-          label: 'The control to stop',
+          label: 'The stop button',
           options: [
             opt('Cancel (deletes progress)', false, 'Losing all work punishes people for correcting the agent.', [buttons(['-Cancel'])]),
             opt('Pause (keeps progress)', true, 'People can stop without losing anything.', [buttons(['Pause'])]),
@@ -1372,7 +1372,7 @@ export const visuals = {
           label: 'While paused',
           options: [
             opt('Nothing to do', false, 'Pausing is useless if you cannot change direction.', []),
-            opt('Type a correction', true, 'Turns a stop into a steer.', [input('Only include companies in India')]),
+            opt('Type a correction', true, 'People can stop it and point it the right way.', [input('Only include companies in India')]),
           ],
         },
         {
@@ -1380,7 +1380,7 @@ export const visuals = {
           label: 'After the correction',
           options: [
             opt('Start over', false, 'Throws away the 5 good results.', [note('Restarting from step 1…', { tone: 'warn' })]),
-            opt('Resume from here', true, 'Keeps good work, applies the change going forward.', [buttons(['!Resume with this change'])]),
+            opt('Resume from here', true, 'Keeps the good work and uses the fix from now on.', [buttons(['!Resume with this change'])]),
           ],
         },
       ],
@@ -1403,7 +1403,7 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'Three AI agents team up to write a market report.',
+      goal: 'Three AI agents work together on one report. Show how they work.',
       frame: [user('Write a market report on AI note apps'), slot('show'), slot('handoff'), slot('owner')],
       decisions: [
         {
@@ -1419,7 +1419,7 @@ export const visuals = {
           id: 'handoff',
           label: 'When one agent hands off to another…',
           options: [
-            opt('Say what was passed on', true, 'Hand-offs are where mistakes slip in. Making them visible helps people check.', [note('Research → Writer: 24 sources, 6 key numbers')]),
+            opt('Say what was passed on', true, 'Mistakes slip in when work is passed on. Showing it helps people check.', [note('Research → Writer: 24 sources, 6 key numbers')]),
             opt('Hand off silently', false, 'If a number is wrong, nobody can tell which agent changed it.', []),
           ],
         },
@@ -1427,7 +1427,7 @@ export const visuals = {
           id: 'owner',
           label: 'Who answers for the final report?',
           options: [
-            opt('“The research agent said so”', false, 'Passing blame between agents breaks trust.', [ai('The research agent said the market grows 300%.')]),
+            opt('“The research agent said so”', false, 'Blaming another agent breaks trust.', [ai('The research agent said the market grows 300%.')]),
             opt('One lead agent owns it', true, 'One voice reports back, explains, and fixes.', [note('Lead agent: I checked all 6 numbers. One is an estimate.')]),
           ],
         },
@@ -1451,7 +1451,7 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'An agent orders office supplies by using a website for you.',
+      goal: 'An AI agent uses a shop website for you to order office supplies.',
       frame: [user('Order more printer paper'), slot('access'), slot('while'), slot('pay')],
       decisions: [
         {
@@ -1459,7 +1459,7 @@ export const visuals = {
           label: 'Ask for access to…',
           options: [
             opt('Your whole computer, once', false, 'Far more access than the task needs. People can’t judge the risk.', [modal('Allow full computer control?', '', ['No', '!Allow'])]),
-            opt('Just this one site', true, 'A small, clear scope is easy to say yes to.', [modal('Let the agent use officesupply.com?', 'Only this site, until the order is done.', ['No', '!Allow'])]),
+            opt('Just this one site', true, 'Asking for a little is easy to say yes to.', [modal('Let the agent use officesupply.com?', 'Only this site, until the order is done.', ['No', '!Allow'])]),
           ],
         },
         {
@@ -1497,7 +1497,7 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'An assistant connects to someone’s mail and calendar.',
+      goal: 'An AI helper wants to use your email and calendar. Keep it safe.',
       frame: [slot('ask'), slot('list'), slot('answer')],
       decisions: [
         {
@@ -1543,7 +1543,7 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'A 30-second AI video uses a lot of credits.',
+      goal: 'Making a 30-second AI video costs a lot of credits. Show the cost.',
       frame: [slot('when'), slot('cheaper'), slot('limit')],
       decisions: [
         {
@@ -1564,7 +1564,7 @@ export const visuals = {
         },
         {
           id: 'limit',
-          label: 'Near the monthly limit',
+          label: 'Almost out of credits',
           options: [
             opt('Fail when it runs out', false, 'A task stopping halfway wastes time and credits.', [banner('bad', 'Out of credits', 'Task stopped at 80%.')]),
             opt('Warn before starting', true, 'People can plan instead of being cut off.', [banner('warn', 'This uses most of your remaining credits', '120 of 140 left.')]),
@@ -1590,7 +1590,7 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'Design the voice mode of an assistant app.',
+      goal: 'Design a talking AI helper. People must know who is talking.',
       frame: [slot('listen'), slot('speak'), slot('barge')],
       decisions: [
         {
@@ -1606,7 +1606,7 @@ export const visuals = {
           label: 'While it speaks',
           options: [
             opt('Same look as listening', false, 'People cannot tell whose turn it is.', [{ type: 'voice', state: 'listening', label: 'Listening' }]),
-            opt('Distinct speaking state', true, 'Each turn looks different, so turn-taking feels natural.', [{ type: 'voice', state: 'speaking', label: 'Speaking', text: 'You have 3 meetings today…' }]),
+            opt('A different look for speaking', true, 'Listening and speaking look different, so people know whose turn it is.', [{ type: 'voice', state: 'speaking', label: 'Speaking', text: 'You have 3 meetings today…' }]),
           ],
         },
         {
@@ -1614,7 +1614,7 @@ export const visuals = {
           label: 'When people talk over it',
           options: [
             opt('It keeps talking', false, 'People must wait for long answers they do not need.', [note('Please wait until I finish.', { tone: 'warn' })]),
-            opt('It stops and listens', true, 'Interrupting is how people talk; the AI should allow it.', [note('Stopped. Listening…')]),
+            opt('It stops and listens', true, 'People cut in when they talk. The AI should let them.', [note('Stopped. Listening…')]),
           ],
         },
       ],
@@ -1637,7 +1637,7 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'A voice assistant can send money to contacts.',
+      goal: 'You can ask a voice helper to send money to friends. Make it safe.',
       frame: [user('Send forty dollars to Priya'), slot('confirm'), slot('detail'), slot('no')],
       decisions: [
         {
@@ -1645,12 +1645,12 @@ export const visuals = {
           label: 'Before sending',
           options: [
             opt('Send right away', false, 'A misheard amount or name sends money to the wrong place.', [toast('Sent $14 to Pria K.')]),
-            opt('Read back, wait for yes', true, 'People catch mistakes before money moves.', [{ type: 'voice', state: 'speaking', label: 'Speaking', text: 'Send $40 to Priya Shah. Right?' }]),
+            opt('Repeat it, wait for “yes”', true, 'People catch mistakes before money moves.', [{ type: 'voice', state: 'speaking', label: 'Speaking', text: 'Send $40 to Priya Shah. Right?' }]),
           ],
         },
         {
           id: 'detail',
-          label: 'What it reads back',
+          label: 'What does it repeat?',
           options: [
             opt('Every detail', false, 'Long read-backs are hard to follow and get skipped.', [note('Sending forty point zero zero US dollars from checking account ending 4821 to Priya Shah, phone ending…')]),
             opt('Amount + person', true, 'Only the details that are easy to mishear and costly to get wrong.', [note('$40 to Priya Shah')]),
@@ -1690,7 +1690,7 @@ export const visuals = {
           id: 'pick',
           label: 'How do people choose the object?',
           options: [
-            opt('Describe it in words', false, 'Locations are hard to describe and easy to misread.', [{ type: 'image' }]),
+            opt('Describe it in words', false, '“Where” is hard to say in words, and easy to get wrong.', [{ type: 'image' }]),
             opt('Brush or circle it', true, 'Pointing is fast and exact.', [{ type: 'image', sel: [40, 22, 24, 52], selLabel: 'Selected' }]),
           ],
         },
@@ -1698,8 +1698,8 @@ export const visuals = {
           id: 'ask',
           label: 'Then they…',
           options: [
-            opt('Write a full prompt', false, 'Long prompts for a simple edit slow people down.', [ph('Describe the whole image you want…')]),
-            opt('Say a short action', true, 'The selection carries the “where”; words only need the “what”.', [chips(['Remove', 'Replace with…', 'Make it blue'])]),
+            opt('Write a long request', false, 'Long typing for a small edit slows people down.', [ph('Describe the whole image you want…')]),
+            opt('Say a short action', true, 'The circle shows where. Words only need to say what.', [chips(['Remove', 'Replace with…', 'Make it blue'])]),
           ],
         },
         {
@@ -1734,12 +1734,12 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'Someone asks a smart display: “Find me a flight to Mumbai tomorrow.”',
+      goal: 'Someone asks a smart screen: “Find me a flight to Mumbai tomorrow.”',
       frame: [slot('speak'), slot('screen'), slot('next')],
       decisions: [
         {
           id: 'speak',
-          label: 'What it says',
+          label: 'What does it say out loud?',
           options: [
             opt('Reads all options', false, 'People forget the first option by the time the third is read.', [{ type: 'voice', state: 'speaking', label: 'Speaking', text: 'Option one, the 7:05 flight… option two… option three…' }]),
             opt('A one-line summary', true, 'Short to hear, easy to remember.', [{ type: 'voice', state: 'speaking', label: 'Speaking', text: 'I found 3 flights. The cheapest is $212.' }]),
@@ -1755,7 +1755,7 @@ export const visuals = {
         },
         {
           id: 'next',
-          label: 'To choose',
+          label: 'How do people pick one?',
           options: [
             opt('Voice only', false, 'Tapping is faster when the option is right there.', [note('Say “book the first one”')]),
             opt('Tap or say it', true, 'People use whichever is easier in the moment.', [chips(['Book 7:05', 'More options']), note('Or say “book the first one”')]),
@@ -1781,23 +1781,23 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'An image generator gets a prompt about people: “a CEO giving a talk”.',
+      goal: 'Someone asks an image AI for “a CEO giving a talk”. Make it fair.',
       frame: [user('A CEO giving a talk'), slot('default'), slot('choose'), slot('report')],
       decisions: [
         {
           id: 'default',
-          label: 'When the prompt does not say who',
+          label: 'When the request doesn’t say who',
           options: [
-            opt('Use whatever the model gives', false, 'Models repeat the biases in their data, like “CEO = older white man”.', [card('4 images', 'All four show the same kind of person.')]),
-            opt('Show variety', true, 'Varied defaults avoid teaching stereotypes.', [card('4 images', 'Different genders, ages and skin tones.')]),
+            opt('Use whatever the model gives', false, 'AI copies unfair patterns from its data, like “CEO = older white man”.', [card('4 images', 'All four show the same kind of person.')]),
+            opt('Show variety', true, 'Showing many kinds of people avoids unfair stereotypes.', [card('4 images', 'Different genders, ages and skin tones.')]),
           ],
         },
         {
           id: 'choose',
           label: 'If people want something specific',
           options: [
-            opt('They must know prompt tricks', false, 'Only expert users get fair control.', []),
-            opt('Simple filters they choose', true, 'People choose, the product does not assume.', [chips(['Any', 'Woman', 'Man', 'Older', 'Younger'], { on: 0 })]),
+            opt('They must know special words', false, 'Only expert users get fair control.', []),
+            opt('Simple filters people pick', true, 'People choose. The app does not guess who they mean.', [chips(['Any', 'Woman', 'Man', 'Older', 'Younger'], { on: 0 })]),
           ],
         },
         {
@@ -1805,7 +1805,7 @@ export const visuals = {
           label: 'When output is unfair',
           options: [
             opt('No way to report', false, 'The team never learns where the model is biased.', []),
-            opt('One-click report', true, 'Reports find problems tests missed.', [buttons(['Report unfair result'])]),
+            opt('One-click report', true, 'Reports find problems the team missed.', [buttons(['Report unfair result'])]),
           ],
         },
       ],
