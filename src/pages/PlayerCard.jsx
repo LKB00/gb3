@@ -4,7 +4,7 @@ import { patterns } from '../data/patterns';
 import { archetype, wonGroups } from '../game/archetype';
 import { useGameStats, usePassed, useStars, useStreak, useXP } from '../progress';
 import { copyText } from '../lib/clipboard';
-import LogoMark from '../components/LogoMark';
+import LogoMark, { ICON_SVG } from '../components/LogoMark';
 import Breadcrumbs from '../components/Breadcrumbs';
 import { useTitle } from '../lib/useTitle';
 
@@ -53,12 +53,24 @@ function useCardData() {
 }
 
 // Draws the same card on a canvas (1080 × 1350, good for LinkedIn and Instagram).
-// The lime circle logo (same drawing as components/LogoMark.jsx), top-left at (x, y), scaled.
-function drawLogo(g, x, y, k) {
-  const c = (cx, cy, r, fill) => { g.beginPath(); g.arc(x + cx * k, y + cy * k, r * k, 0, Math.PI * 2); g.fillStyle = fill; g.fill(); };
-  c(12, 12, 10, LIME);
-  g.strokeStyle = INK;
-  g.lineWidth = 1 * k;
+// The app icon (same drawing as components/LogoMark.jsx), top-left at (x, y), size px.
+function loadIcon() {
+  const img = new Image();
+  img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(ICON_SVG);
+  return img.decode().then(() => img, () => null);
+}
+function drawLogo(g, icon, x, y, size) {
+  if (!icon) return;
+  g.save();
+  g.beginPath();
+  g.roundRect(x, y, size, size, size * 0.22);
+  g.clip();
+  g.drawImage(icon, x, y, size, size);
+  g.restore();
+  g.strokeStyle = 'rgba(255, 255, 255, 0.16)';
+  g.lineWidth = 2;
+  g.beginPath();
+  g.roundRect(x, y, size, size, size * 0.22);
   g.stroke();
 }
 
@@ -75,6 +87,7 @@ function fillFit(g, text, x, y, maxWidth, weight, size, family, minSize = 24) {
 
 async function drawCard(name, data) {
   await document.fonts?.ready;
+  const icon = await loadIcon();
   const W = 1080;
   const H = 1350;
   const cv = document.createElement('canvas');
@@ -92,7 +105,7 @@ async function drawCard(name, data) {
 
   round(0, 0, W, H, 64, INK);
   // header
-  drawLogo(g, 84, 96, 2.1);
+  drawLogo(g, icon, 84, 86, 72);
   g.fillStyle = '#c9ccc4';
   g.font = `700 30px ${sans}`;
   g.fillText('GOOD BOT, BAD BOT · PLAYER CARD', 200, 131);

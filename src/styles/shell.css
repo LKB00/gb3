@@ -35,11 +35,13 @@
   text-decoration: none;
   flex: none;
 }
+/* The app icon (components/LogoMark.jsx). A hairline keeps the dark tile visible in dark mode. */
 .logo-mark {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: radial-gradient(circle, var(--lime) 0 3.5px, #24282c 4px);
+  display: block;
+  width: 24px;
+  height: auto;
+  aspect-ratio: 1;
+  border-radius: 22%;
   box-shadow: 0 0 0 var(--hair) var(--line);
   flex: none;
 }

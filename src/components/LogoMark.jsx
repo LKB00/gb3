@@ -1,3 +1,18 @@
+// The app icon "Two answers": a bad answer (red, ✕) behind a good answer (lime, ✓).
+// Same drawing as public/favicon.svg. ICON_SVG is also drawn on the player card canvas.
+const DRAWING = `<rect width="1024" height="1024" rx="225" fill="#24282c"/>
+<g transform="translate(512 512) scale(1.16) translate(-512 -512) translate(0 34)">
+<rect x="430" y="150" width="440" height="330" rx="110" fill="#f6a5a0"/>
+<polygon points="600,470 800,610 770,470" fill="#f6a5a0"/>
+<path d="M628 255 L738 365 M738 255 L628 365" fill="none" stroke="#24282c" stroke-width="64" stroke-linecap="round"/>
+<g stroke="#24282c" stroke-width="34" stroke-linejoin="round"><rect x="150" y="360" width="440" height="330" rx="110" fill="#c2ef72"/><polygon points="265,680 195,810 410,680" fill="#c2ef72"/></g>
+<rect x="167" y="377" width="406" height="296" rx="93" fill="#c2ef72"/>
+<polygon points="277,668 212,780 392,668" fill="#c2ef72"/>
+<path d="M262 528 L340 606 L482 442" fill="none" stroke="#24282c" stroke-width="68" stroke-linecap="round" stroke-linejoin="round"/>
+</g>`;
+
+export const ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">${DRAWING}</svg>`;
+
 export default function LogoMark({ className = 'logo-mark' }) {
-  return <span className={className} aria-hidden />;
+  return <svg className={className} viewBox="0 0 1024 1024" aria-hidden="true" focusable="false" dangerouslySetInnerHTML={{ __html: DRAWING }} />;
 }
