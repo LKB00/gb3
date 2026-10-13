@@ -147,7 +147,7 @@
   font-weight: 800;
   letter-spacing: 0.08em;
 }
-.flip-back .logo-mark { width: 64px; --logo-gap: #2c3136; }
+.flip-back .logo-mark { width: 64px; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.14); }
 .flip-front {
   transform: rotateY(180deg);
   display: flex;
@@ -365,4 +365,4 @@
 .challenge-result.is-bad { background: var(--negative-soft); color: var(--negative); }
 
 /* Logo on the dark player card */
-.pc-brand .logo-mark { width: 30px; --logo-gap: #24282c; }
+.pc-brand .logo-mark { width: 30px; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.16); }
