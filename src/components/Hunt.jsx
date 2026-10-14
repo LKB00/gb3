@@ -11,7 +11,8 @@ import { revealEl } from '../lib/useReveal';
 // Spot the flaw: tap the parts of the screen that are wrong.
 // What you found is kept for this tab (run 'hunt:<id>'), so a link, Back or a refresh keeps it.
 // onOver(true) tells the page the screen is done (all found, or answers shown).
-export default function Hunt({ scenario, onOver }) {
+// children (the page's next step) sit at the end of the side column, right under the result.
+export default function Hunt({ scenario, onOver, children }) {
   const [saved] = useState(() => readHuntRun(scenario));
   const [found, setFound] = useState(saved?.found ?? []); // block indexes, in the order found
   const [fine, setFine] = useState(null); // last "this part is fine" click
@@ -118,6 +119,7 @@ export default function Hunt({ scenario, onOver }) {
           <button className="btn btn-ghost btn-sm" onClick={() => setRevealed(true)}>Show me the answers</button>
         )}
         {revealed && <p className="demo-muted hunt-hint">No worries. Here they all are. Find them yourself next time for XP.</p>}
+        {children}
       </div>
     </div>
   );

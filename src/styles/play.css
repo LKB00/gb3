@@ -188,3 +188,68 @@ a.pattern-card:hover { transform: translateY(-3px); }
 .lab-stars span { margin-left: 6px; }
 .hunt-win { position: relative; }
 .page-head + .hunt-tabs { margin-top: 24px; }
+
+/* ---- Today strip: before the first answer of the day (Play page) ---- */
+.today-strip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 16px;
+  background: var(--sand);
+}
+.today-strip-goal {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 4px var(--sand-dark);
+  font-family: var(--display);
+  font-size: 14px;
+  font-weight: 800;
+}
+.today-strip-goal small { font-size: 10px; color: var(--ink-3); }
+.today-strip-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; line-height: 20px; }
+.today-strip-text strong { font-family: var(--display); font-size: 16px; }
+.today-strip .today-flame { flex: none; font-size: 20px; }
+
+/* Today card extras: the skip-day note and the quick-rounds button */
+.today-text .today-saved {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 4px 0;
+  font-size: 13px;
+  line-height: 19px;
+  font-weight: 700;
+  color: #356d92;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .today-text .today-saved { color: #8cc0e0; }
+}
+:root[data-theme='dark'] .today-text .today-saved { color: #8cc0e0; }
+.today-text .today-go { margin-top: 10px; }
+
+/* ---- Badges as one row (Play page): scrolls sideways on phones ---- */
+@media (max-width: 720px) {
+  .play-badges .section-sub { display: none; }
+  .badges-row {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: 112px;
+    gap: 8px;
+    overflow-x: auto;
+    margin: 0 -16px;
+    padding: 0 16px 4px;
+    scrollbar-width: none;
+    scroll-snap-type: x proximity;
+    scroll-padding-inline: 16px;
+  }
+  .badges-row::-webkit-scrollbar { height: 0; }
+  .badges-row .badge { scroll-snap-align: start; }
+  .badges-row .badge a { height: 100%; padding: 12px 8px; }
+  .badges-row .badge-icon { width: 40px; height: 40px; font-size: 12px; }
+  .badges-row .badge-sub { font-size: 11px; line-height: 15px; }
+}

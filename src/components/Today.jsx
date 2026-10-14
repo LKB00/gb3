@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Flame, Snowflake, Target, TrendingUp, Volume2 } from 'lucide-react';
+import { ArrowRight, Flame, Snowflake, Target, TrendingUp, Volume2 } from 'lucide-react';
 import { DAILY_GOAL, dayKey, useStreak, useXP } from '../progress';
+import { goalRounds } from '../game/decks';
 import Burst from './Burst';
 import { fx, turnAllOff } from '../game/fx';
 
@@ -126,10 +127,41 @@ export function LevelUpToast() {
 
 const WEEK = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
+// Did the skip day save yesterday? Then say so plainly:
+// "You missed Tuesday. Your skip day kept your 7-day streak."
+function skipNote(streak, frozen) {
+  const y = new Date();
+  y.setDate(y.getDate() - 1);
+  if (!frozen.includes(dayKey(y)) || streak < 1) return null;
+  const day = y.toLocaleDateString('en-US', { weekday: 'long' });
+  return `You missed ${day}. Your skip day kept your ${streak}-day streak.`;
+}
+
+// Before the first answer of the day (Play page): one small line instead of the whole card,
+// so the games sit above the fold. The full card comes back once you play.
+export function TodayStrip() {
+  const { streak, frozen, todayMoves } = useStreak();
+  const saved = skipNote(streak, frozen);
+  return (
+    <div className="today-strip">
+      <span className="today-strip-goal" aria-hidden>{Math.min(todayMoves, DAILY_GOAL)}<small>/{DAILY_GOAL}</small></span>
+      <span className="today-strip-text">
+        <strong>Today’s goal: {DAILY_GOAL} answers</strong>
+        <span className="small muted">{saved || (streak > 0 ? `Play today to keep your ${streak}-day streak.` : 'Any game counts. Start a day streak!')}</span>
+      </span>
+      <span className="today-flame" aria-label={`${streak}-day streak`}><Flame size={18} strokeWidth={2} aria-hidden /> {streak}</span>
+    </div>
+  );
+}
+
 // Today: goal ring, streak, freeze and the last 7 days.
-export function TodayCard() {
+// `go` = show the "Play N quick rounds" button while the goal is open (off where another one is shown).
+export function TodayCard({ go = true }) {
   const { streak, frozen, freezeReady, todayMoves, days } = useStreak();
   const pct = Math.min(1, todayMoves / DAILY_GOAL);
+  const left = DAILY_GOAL - todayMoves;
+  const rounds = goalRounds(left);
+  const saved = skipNote(streak, frozen);
   const r = 26;
   const c = 2 * Math.PI * r;
   const last7 = Array.from({ length: 7 }, (_, i) => {
@@ -150,14 +182,20 @@ export function TodayCard() {
       <div className="today-text">
         <p className="label">Today</p>
         <p className="today-title">{pct >= 1 ? 'Daily goal done. Nice!' : `${DAILY_GOAL - todayMoves} more ${DAILY_GOAL - todayMoves === 1 ? 'answer' : 'answers'} to hit today’s goal`}</p>
+        {saved && <p className="today-saved"><Snowflake size={13} strokeWidth={2} aria-hidden /> {saved}</p>}
         <p className="small muted">
-          Every answer in every game counts. Miss a day? A skip day saves your day streak.{' '}
+          Every answer in every game counts.{saved ? ' ' : ' Miss a day? A skip day saves your day streak. '}
           {freezeReady ? (
             <span className="freeze"><Snowflake size={12} strokeWidth={2} aria-hidden /> 1 skip day ready</span>
           ) : (
             <span className="freeze is-used"><Snowflake size={12} strokeWidth={2} aria-hidden /> Skip day used. You get 1 a week.</span>
           )}
         </p>
+        {go && left > 0 && (
+          <Link to={`/play/this-or-that?rounds=${rounds}`} className="btn btn-primary today-go">
+            Play {rounds} quick rounds <ArrowRight size={14} strokeWidth={1.75} aria-hidden />
+          </Link>
+        )}
       </div>
       <div className="today-streak">
         <span className={'today-flame' + (todayMoves > 0 ? ' is-lit' : '')}><Flame size={20} strokeWidth={2} aria-hidden /> {streak}</span>

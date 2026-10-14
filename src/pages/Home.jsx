@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, CalendarDays, Zap } from 'lucide-react';
 import { getPattern, patterns } from '../data/patterns';
@@ -17,7 +18,8 @@ export default function Home() {
   const { xp, level } = useXP();
   const { streak, days } = useStreak();
   const daily = useDaily();
-  const back = xp > 0 || Object.keys(days).length > 0;
+  // Decided once per visit, so the first answer of a new player doesn't reshuffle the page mid-game.
+  const [back] = useState(() => xp > 0 || Object.keys(days).length > 0);
   const dailyDone = !!daily[dayKey()];
   const name = playerName();
 
@@ -34,7 +36,7 @@ export default function Home() {
         )}
         {p && (
           <Link to={`/patterns/${p.id}`} className="btn btn-ghost btn-lg">
-            {passed.includes(p.id) ? `See the ${p.title} card` : `Win the ${p.title} card`}
+            {passed.includes(p.id) ? `See the “${p.title}” card` : `Win the “${p.title}” card`}
           </Link>
         )}
       </>
