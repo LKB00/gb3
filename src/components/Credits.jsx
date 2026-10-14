@@ -11,21 +11,17 @@ function LinkedInIcon() {
 
 export default function Credits() {
   return (
-    <div className="credits">
-      <p className="credits-main">
-        Good Bot, Bad Bot is a free game about good AI design. Made with care by{' '}
-        <a href={creator.portfolio} target="_blank" rel="noopener noreferrer">{creator.name}</a>
-        {creator.linkedin && (
-          <>
-            {' '}
-            <a className="credits-icon" href={creator.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`${creator.name} on LinkedIn`}>
-              <LinkedInIcon />
-            </a>
-          </>
-        )}
-        .
-      </p>
-      <p className="credits-note">Your progress stays on this device. We never see it. Icons by Lucide (ISC license).</p>
-    </div>
+    <p className="credits">
+      Designed and developed by{' '}
+      <a href={creator.portfolio} target="_blank" rel="noopener noreferrer">{creator.name}</a>
+      {creator.linkedin && (
+        <>
+          {' '}
+          <a className="credits-icon" href={creator.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`${creator.name} on LinkedIn`}>
+            <LinkedInIcon />
+          </a>
+        </>
+      )}
+    </p>
   );
 }
