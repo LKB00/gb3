@@ -322,7 +322,7 @@
 .credits { margin: 0; text-align: center; }
 .credits a { color: var(--ink-2); text-decoration: underline; text-underline-offset: 2px; }
 .credits a:hover { color: var(--ink); }
-.credits-icon { display: inline-flex; vertical-align: -3px; text-decoration: none !important; }
+.credits-icon { display: inline-flex; vertical-align: -3px; margin-left: 6px; text-decoration: none !important; }
 @media (max-width: 720px) {
   .site-footer {
     width: auto;

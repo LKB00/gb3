@@ -139,7 +139,7 @@
   .tabs {
     -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
     mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
-    padding-right: 24px;
+    padding-right: 32px; /* the last tab can scroll clear of the fade */
   }
 
   /* Focus mode (Speed round): nothing but the game */

@@ -147,7 +147,7 @@ export function saveDaily(key, results) {
 
 // A Daily in progress: today's answers so far, so a refresh can't reset the one try.
 // Saved as { day: 'YYYY-MM-DD', r: [true, false, …] }; anything else reads as "not started".
-const cleanDailyRun = (o) => (o && isDay(o.day) && Array.isArray(o.r) ? { day: o.day, r: o.r.slice(0, 20).map(Boolean) } : null);
+const cleanDailyRun = (o) => (o && isDay(o.day) && Array.isArray(o.r) ? { day: o.day, r: o.r.slice(0, 5).map(Boolean) } : null);
 export function readDailyRun(day) {
   const run = cleanDailyRun(readJSON('daily-run', null));
   return run && run.day === day ? run.r : [];
