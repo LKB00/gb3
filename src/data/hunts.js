@@ -95,7 +95,7 @@ export const hunts = [
       { type: 'buttons', items: [':up 12', 'Comment'] },
       {
         type: 'ai', text: 'Since your divorce last year, here are some solo events nearby…',
-        mistake: { text: 'It brings up a private fact the person never knew was saved. Creepy.', pattern: 'memory-controls' },
+        mistake: { text: 'It uses a private fact nobody knew was saved. Creepy. Show what it keeps.', pattern: 'memory-controls' },
       },
       {
         type: 'card', title: 'Recommended: Leadership 101', text: 'Match score: 0.92', tag: 'For you',

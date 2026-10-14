@@ -64,7 +64,10 @@ export default function Principles() {
               {haxGuidelines.filter((g) => g.phase === phase).map((g) => (
                 <li key={g.n} className="hax-item">
                   <span className="index-num">{g.n}</span>
-                  <span className="hax-name">{g.name}</span>
+                  <span>
+                    <span className="hax-name">{g.name}</span>
+                    {g.plain && <span className="small muted" style={{ display: 'block' }}>{g.plain}</span>}
+                  </span>
                   <span className="hax-links">
                     {g.patterns.length ? (
                       g.patterns.map((pid) => (
