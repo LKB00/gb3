@@ -66,7 +66,7 @@ export default function Principles() {
                   <span className="index-num">{g.n}</span>
                   <span>
                     <span className="hax-name">{g.name}</span>
-                    {g.plain && <span className="small muted" style={{ display: 'block' }}>{g.plain}</span>}
+                    {g.plain && <span className="small muted hax-plain">{g.plain}</span>}
                   </span>
                   <span className="hax-links">
                     {g.patterns.length ? (
