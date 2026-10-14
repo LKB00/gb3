@@ -70,14 +70,14 @@ export default function App() {
   const [from, setFrom] = useState(null);
   useLayoutEffect(() => {
     const t = trail.current;
-    if (t.last && t.last.key !== key) {
+    if (t.last && t.last.loc !== location) {
       if (navType === 'PUSH') t.from.set(key, t.last);
       else if (navType === 'REPLACE' && t.from.has(t.last.key)) t.from.set(key, t.from.get(t.last.key));
     }
-    setFrom(t.from.get(key) || null);
+    setFrom((key !== 'default' && t.from.get(key)) || null); // "default" = an entry opened by typing or pasting a link: no record
     // Runs as this entry is left, before the next page sets its own tab title.
-    return () => { t.last = { key, path: pathname, search: location.search, title: document.title }; };
-  }, [key]); // eslint-disable-line react-hooks/exhaustive-deps -- one record per history entry
+    return () => { t.last = { loc: location, key, path: pathname, search: location.search, title: document.title }; };
+  }, [location]); // eslint-disable-line react-hooks/exhaustive-deps -- one record per visit to a history entry
 
   return (
     <div className="shell">
