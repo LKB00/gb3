@@ -291,6 +291,7 @@ src/
 
 ### 6.5 Important patterns in the code
 - **Feedback stays in view on phones**: `lib/useReveal.js` (`useReveal(key)` returns a ref; `revealEl(el)`) scrolls just enough to show answer feedback that landed below the fold or behind the bottom tab bar / sticky "Next" bars. Used by Fix it (`.lab-why`), Stories (`.story-outcome`), Build (`.build-result`) and Spot the flaw (newest found note). It never moves the page when the feedback is already visible.
+- **Voice and copy guide**: [docs/VOICE.md](VOICE.md) is the rulebook for every string on the site (who is talking, feelings per moment, one word per thing, words to avoid, checklist).
 - **Copy style for games** (Oct 2026 pass): every game answers "What is this? What do I do? How do I win? What just happened?" on screen, in short easy sentences. Same words everywhere: "XP", "streak" / "in a row" (answers), "day streak" (days played), "round", "card", "stars", "trust". Daily says rounds 3 and 5 are hard. Note: a pattern's `lab.goal` (visuals.js) is also the brief line in This or That, Daily and Speed, so write goals that work in both places.
 - **One storage layer**: `lib/storage.js` (`readJSON`, `writeJSON`, `useStored`). Every write dispatches the `progress-change` event, so all hooks update together.
 - **Data is cleaned when read** (`progress.js`: `cleanStats`, `cleanStars`, `cleanDaily`, `cleanDays`, `cleanList`). Wrong types, NaN, huge numbers, unknown ids and bad date keys are dropped or clamped. **When you add a saved field, add it to the clean functions**, or bad data could crash a page.
