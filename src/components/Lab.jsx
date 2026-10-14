@@ -195,7 +195,7 @@ export default function Lab({ id, lab, title, next }) {
                 {[1, 2, 3].map((n) => (
                   <Star key={n} size={22} strokeWidth={1.5} className={n <= stars ? 'is-on' : ''} style={{ animationDelay: `${n * 120}ms` }} aria-hidden />
                 ))}
-                <span>{mistakes === 0 ? 'No wrong picks' : `${mistakes} wrong pick${mistakes > 1 ? 's' : ''}`}</span>
+                <span>{mistakes === 0 ? 'Flawless. Not a single miss.' : mistakes === 1 ? 'Just 1 miss. So close to perfect!' : `${mistakes} misses, and you still cracked it.`}</span>
               </p>
             )}
             {!skipped && stars < 3 && <p className="lab-hint">Every miss taught you a trick. Play again for all 3 stars.</p>}
