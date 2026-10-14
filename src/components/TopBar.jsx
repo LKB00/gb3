@@ -41,12 +41,12 @@ export default function TopBar() {
         </nav>
         <div className="topnav-right">
           <StreakPill />
-          <Link to="/me" className="xp-pill" aria-label={`${xp} XP, level: ${level.name}`} title={level.name}>
+          <Link to="/me" className="xp-pill" aria-label={`${xp} XP, ${level.name}. See your progress`} title={level.name}>
             <Zap size={14} strokeWidth={2} aria-hidden />
             <span key={xp} className="xp-num">{shownXp}</span>
             <span className="xp-unit">XP</span>
           </Link>
-          <button className="icon-btn hide-phone" onClick={toggleSound} aria-pressed={sound} aria-label={sound ? 'Turn sound and vibration off' : 'Turn sound and vibration on'} title={sound ? 'Sound on' : 'Sound off'}>
+          <button className="icon-btn hide-phone" onClick={toggleSound} aria-pressed={sound} aria-label={sound ? 'Turn sound and vibration off' : 'Turn sound and vibration on'} title={sound ? 'Sound is on' : 'Sound is off'}>
             {sound ? <Volume2 size={16} strokeWidth={1.75} aria-hidden /> : <VolumeX size={16} strokeWidth={1.75} aria-hidden />}
           </button>
           <button className="icon-btn hide-phone" onClick={toggleTheme} aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}>

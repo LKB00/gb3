@@ -26,6 +26,7 @@ function deal() {
   return shuffle([...first, ...rest]);
 }
 
+const YES = ['Spot on!', 'Nailed it!', 'Perfect call!'];
 const starsFor = (pts) => (pts >= 14 ? 3 : pts >= 10 ? 2 : 1);
 
 export default function Power() {
@@ -100,7 +101,7 @@ export default function Power() {
           </span>
           <p className="tot-big"><CountUp value={points} /><span>/{MAX}</span>{result.gain > 0 && <XpPop amount={result.gain} />}</p>
           <p className="tot-verdict">
-            {stars === 3 ? 'Great instincts! You know when to let the AI act.' : stars === 2 ? 'Nice! A few answers were a step off.' : 'Tricky! Check the clues: money, undo, how often.'}
+            {stars === 3 ? 'Great instincts! You know when the AI should ask first.' : stars === 2 ? 'Nice! Only a few were one step off.' : 'Tricky one! Next time, follow the clues: money, undo, how often.'}
           </p>
           <p className="label">Best level for each task</p>
           <ul className="power-recap">
@@ -119,7 +120,7 @@ export default function Power() {
             <button type="button" className="btn btn-primary btn-lg" onClick={again}>
               <RotateCcw size={15} strokeWidth={1.75} aria-hidden /> Play again
             </button>
-            <Link to="/autonomy" className="btn btn-ghost btn-lg">Learn the 5 levels</Link>
+            <Link to="/autonomy" className="btn btn-ghost btn-lg">See the 5 levels</Link>
           </div>
         </div>
       </div>
@@ -189,7 +190,7 @@ export default function Power() {
         {answered && (
           <div ref={whyRef} className={'lab-why power-why ' + (off === 0 ? 'lab-why-good' : off === 1 ? 'power-why-close' : 'lab-why-bad')} aria-live="polite">
             <strong>
-              {off === 0 ? <><Check size={15} strokeWidth={2.25} aria-hidden /> Spot on! +2 points</> : off === 1 ? <><Gauge size={15} strokeWidth={2} aria-hidden /> So close! +1 point. Best: {right.n} {right.name}</> : <><X size={15} strokeWidth={2.25} aria-hidden /> Not quite. Best: {right.n} {right.name}</>}
+              {off === 0 ? <><Check size={15} strokeWidth={2.25} aria-hidden /> {YES[i % YES.length]} +2 points</> : off === 1 ? <><Gauge size={15} strokeWidth={2} aria-hidden /> So close! +1 point. Best fit: {right.n} {right.name}</> : <><X size={15} strokeWidth={2.25} aria-hidden /> Easy to miss. Best fit: {right.n} {right.name}</>}
             </strong>
             <span>{t.why}</span>
             <span className="power-needs">

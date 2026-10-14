@@ -13,7 +13,7 @@ export default function Credits() {
   return (
     <div className="credits">
       <p className="credits-main">
-        Good Bot, Bad Bot is a free game for learning good AI design. Made by{' '}
+        Good Bot, Bad Bot is a free game about good AI design. Made with care by{' '}
         <a href={creator.portfolio} target="_blank" rel="noopener noreferrer">{creator.name}</a>
         {creator.linkedin && (
           <>
@@ -25,7 +25,7 @@ export default function Credits() {
         )}
         .
       </p>
-      <p className="credits-note">Your progress stays in your browser. Icons by Lucide (ISC license).</p>
+      <p className="credits-note">Your progress stays on this device. We never see it. Icons by Lucide (ISC license).</p>
     </div>
   );
 }

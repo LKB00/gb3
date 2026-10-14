@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
 import { getPrinciple, patternPrinciples } from '../data/principles';
 
-export const TYPE_LABEL = { heuristic: 'Heuristic', law: 'Law of UX', psychology: 'Psychology' };
+export const TYPE_LABEL = { heuristic: 'Usability rule', law: 'Law of UX', psychology: 'Psychology' };
 
 // The principles a pattern relies on, each with how it applies here.
 export default function PrincipleList({ id }) {

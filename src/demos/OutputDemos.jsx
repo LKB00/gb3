@@ -4,7 +4,7 @@ import { useTypewriter } from './useTypewriter';
 
 const steps = ['Reading your 3 interview notes', 'Finding repeated themes', 'Writing the summary'];
 const summary =
-  'Top themes: (1) People cannot find saved items — 3 of 3 users looked in the wrong menu. (2) Onboarding feels long; two users skipped it. (3) Users love the dark mode and asked for it on mobile. Suggested next step: test a "Saved" tab in the main navigation.';
+  'Top themes: (1) People can’t find saved items: all 3 users looked in the wrong menu. (2) Onboarding feels long; two users skipped it. (3) Users love the dark mode and asked for it on mobile. Suggested next step: test a "Saved" tab in the main navigation.';
 
 export function StreamingResponse() {
   const [phase, setPhase] = useState('idle'); // idle | steps | writing | done | stopped
@@ -55,7 +55,7 @@ export function StreamingResponse() {
             })}
           </ul>
           {tw.output && <p className="stream-text">{tw.output}{phase === 'writing' && <span className="caret" />}</p>}
-          {phase === 'stopped' && <p className="demo-muted">Stopped. Partial result kept.</p>}
+          {phase === 'stopped' && <p className="demo-muted">Stopped. What I wrote so far is kept.</p>}
         </div>
       )}
       <div className="row">
@@ -76,7 +76,7 @@ const variants = {
 };
 const moreVariants = {
   A: { label: 'Clear', text: 'See project status at a glance.' },
-  B: { label: 'Friendly', text: 'Less chaos, more done — together.' },
+  B: { label: 'Friendly', text: 'Less chaos, more done, together.' },
   C: { label: 'Bold', text: 'Deadlines, handled.' },
 };
 

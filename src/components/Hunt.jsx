@@ -58,7 +58,7 @@ export default function Hunt({ scenario }) {
                 b={b}
                 state={state}
                 marker={n >= 0 ? n + 1 : undefined}
-                pin={fine === i ? 'This part is fine. Keep looking!' : undefined}
+                pin={fine === i ? 'This part is fine. Keep hunting!' : undefined}
                 onClick={() => click(i)}
                 label={`Screen part ${i + 1}`}
               />
@@ -76,7 +76,7 @@ export default function Hunt({ scenario }) {
         </div>
 
         {shown.length === 0 && (
-          <p className="demo-muted hunt-hint"><MousePointerClick size={14} strokeWidth={1.75} aria-hidden /> This screen has {mistakes.length} hidden mistakes. Tap each one.</p>
+          <p className="demo-muted hunt-hint"><MousePointerClick size={14} strokeWidth={1.75} aria-hidden /> {mistakes.length} mistakes are hiding here. Tap each one you spot.</p>
         )}
 
         <ol className="hunt-list" ref={listRef}>
@@ -98,14 +98,14 @@ export default function Hunt({ scenario }) {
         {done && !revealed && (
           <p className="demo-ok hunt-win">
             <Burst />
-            <Check size={14} strokeWidth={2} aria-hidden /> You found every mistake!
+            <Check size={14} strokeWidth={2} aria-hidden /> Sharp eyes! You found every mistake.
             {!wasDone && <XpPop amount={XP.hunt} />}
           </p>
         )}
         {!done && !revealed && (
           <button className="btn btn-ghost btn-sm" onClick={() => setRevealed(true)}>Show me the answers</button>
         )}
-        {revealed && <p className="demo-muted hunt-hint">Here are all the answers. Find them all yourself next time to get XP.</p>}
+        {revealed && <p className="demo-muted hunt-hint">No worries. Here they all are. Find them yourself next time for XP.</p>}
       </div>
     </div>
   );

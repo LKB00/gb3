@@ -197,13 +197,13 @@ export default function PlayerCard() {
   };
   const download = async () => {
     const blob = await toBlob();
-    if (!blob) return flash('Could not make the image');
+    if (!blob) return flash('Couldn’t make the image. Try again?');
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
     a.download = 'good-bot-bad-bot-player-card.png';
     a.click();
     setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-    flash('Image saved');
+    flash('Saved! Go show it off.');
   };
   const text = `I’m “${data.type.name}” on Good Bot, Bad Bot: level ${data.levelNum} ${data.level.name}, ${data.xp} XP. What kind of AI designer are you? ${window.location.origin}${window.location.pathname}`;
   const share = async () => {
@@ -216,7 +216,7 @@ export default function PlayerCard() {
     }
   };
   const copy = async () => {
-    if (await copyText(text)) flash('Text copied');
+    if (await copyText(text)) flash('Copied! Paste it anywhere.');
   };
 
   return (
@@ -248,10 +248,10 @@ export default function PlayerCard() {
 
         <div className="pc-side">
           <h1 className="display">Your player card</h1>
-          <p className="lead">What kind of AI designer are you? Your title comes from the card group you win most. Play more and it can change.</p>
+          <p className="lead">What kind of AI designer are you? Your title comes from the cards you collect most. Play more and watch it change.</p>
           <label className="pc-field">
             <span className="label">Name on the card</span>
-            <input value={name} maxLength={24} placeholder="Player" onChange={(e) => save(e.target.value)} />
+            <input value={name} maxLength={24} placeholder="Your name" onChange={(e) => save(e.target.value)} />
           </label>
           <div className="row wrap">
             <button type="button" className="btn btn-primary btn-lg" onClick={download}>
@@ -266,7 +266,7 @@ export default function PlayerCard() {
               <Copy size={15} strokeWidth={1.75} aria-hidden /> Copy text
             </button>
           </div>
-          <p className="small muted" role="status">{msg || 'Save it to share anywhere. It is made on your device. Nothing is uploaded.'}</p>
+          <p className="small muted" role="status">{msg || 'Save it and share it anywhere. It’s made on your device. Nothing is uploaded.'}</p>
         </div>
       </div>
     </div>

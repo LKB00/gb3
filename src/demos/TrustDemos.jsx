@@ -5,7 +5,7 @@ import { useState } from 'react';
 
 const sources = [
   { id: 1, title: 'Q3 user research report', quote: '"7 of 10 participants could not find the export button."' },
-  { id: 2, title: 'Support tickets — September', quote: '"Export" was the 2nd most common topic, with 312 tickets.' },
+  { id: 2, title: 'Support tickets, September', quote: '"Export" was the 2nd most common topic, with 312 tickets.' },
   { id: 3, title: 'Analytics dashboard', quote: 'Only 4% of weekly users opened the export menu.' },
 ];
 
@@ -46,7 +46,7 @@ export function Citations() {
 const fields = [
   { label: 'Vendor', value: 'Pixel Studio Ltd.', level: 'high' },
   { label: 'Invoice date', value: '12 Sep 2026', level: 'high' },
-  { label: 'Total', value: '₹ 48,500', level: 'medium', hint: 'Blurry digit — may be 46,500' },
+  { label: 'Total', value: '₹ 48,500', level: 'medium', hint: 'Blurry digit. Could be 46,500' },
   { label: 'Tax ID', value: '29AB…C1Z?', level: 'low', hint: 'Part of the text is missing' },
 ];
 const levelText = { high: 'Sure', medium: 'Check this', low: 'Not sure' };
@@ -89,7 +89,7 @@ export function ConfidenceSignals() {
           ))}
         </tbody>
       </table>
-      <p className="demo-note">Words + icon + color, not color only. People know where to look first.</p>
+      <p className="demo-note">Words and color, not color alone. Your eye goes straight to what needs checking.</p>
     </div>
   );
 }
@@ -130,7 +130,7 @@ export function AiDisclosure() {
           onChange={(e) => { setText(e.target.value); setEdited(true); }}
         />
       </article>
-      <p className="demo-note">Edit the text — the label changes from “AI generated” to “AI-assisted”. Tap the label to learn more.</p>
+      <p className="demo-note">Edit the text and watch the label switch to “AI-assisted”. Tap the label to see why.</p>
     </div>
   );
 }

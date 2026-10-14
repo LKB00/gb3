@@ -6,6 +6,7 @@ import { usePassed } from '../progress';
 import LibraryTabs from '../components/LibraryTabs';
 
 const levels = ['Basics', 'Core', 'Advanced'];
+const LEVEL_LABEL = { Basics: 'Start here', Core: 'Go deeper', Advanced: 'Pro moves' };
 
 export default function Learn() {
   useTitle('Deep dives');
@@ -15,12 +16,12 @@ export default function Learn() {
       <LibraryTabs />
       <header className="page-head">
         <h1 className="display">Deep dives</h1>
-        <p className="lead">Short reads for when you want the full story behind the cards. Each one ends with cards to play.</p>
+        <p className="lead">Short reads for when you want the story behind the cards. Each one ends with cards to play.</p>
       </header>
 
       {levels.map((level) => (
         <section key={level} className="block">
-          <p className="label">{level}</p>
+          <p className="label">{LEVEL_LABEL[level]}</p>
           <ul className="index-list">
             {lessons.filter((l) => l.level === level).map((l) => (
               <li key={l.id}>

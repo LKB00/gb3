@@ -7,14 +7,14 @@ import { useTitle } from '../lib/useTitle';
 import LibraryTabs from '../components/LibraryTabs';
 
 export default function AntiPatterns() {
-  useTitle('Anti-patterns');
+  useTitle('Dark patterns');
   return (
     <div className="page page-wide">
       <LibraryTabs />
       <header className="page-head">
-        <h1 className="display">AI dark patterns to avoid</h1>
+        <h1 className="display">AI dark patterns: never ship these</h1>
         <p className="lead">
-          Designs that make an AI product look good in a demo but harm the people using it. Learn to spot them, and what to do instead.
+          They look great in a demo. They hurt the people using the product. Here’s how to spot each one, and what to build instead.
         </p>
       </header>
 
@@ -34,9 +34,9 @@ export default function AntiPatterns() {
                 </div>
                 <p>{a.what}</p>
                 <dl className="anti-dl">
-                  <dt>Why it harms</dt>
+                  <dt>Why it hurts</dt>
                   <dd>{a.harm}</dd>
-                  <dt>Do instead</dt>
+                  <dt>Do this instead</dt>
                   <dd>
                     <span className="anti-fix"><Check size={14} strokeWidth={2} aria-hidden /> {a.fix}</span>
                     <span className="row">
@@ -55,7 +55,7 @@ export default function AntiPatterns() {
       <section className="block">
         <div className="section-head">
           <h2>Sources</h2>
-          <p className="section-sub">The groups on this page come from published research on AI dark patterns.</p>
+          <p className="section-sub">These groups come from research on AI dark patterns.</p>
         </div>
         <ul className="ref-list">
           {antipatternSources.map((s) => (

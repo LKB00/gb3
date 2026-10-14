@@ -80,15 +80,15 @@ function Result({ num, day, results, streak, fresh, challenge, replay }) {
         </p>
       ) : (
         <p className="tot-verdict">
-          {score === results.length ? 'Perfect! All 5 right.' : score >= 3 ? 'Nice! Can your friends beat it?' : 'Tough one today. New rounds tomorrow.'}
+          {score === results.length ? 'Perfect 5! Frame this one.' : score >= 3 ? 'Nice run! Dare a friend to beat it.' : 'Tough set today. Fresh rounds tomorrow!'}
         </p>
       )}
-      {replay && <p className="small muted">This was a past Daily, played as a challenge. It doesn’t change your streak or today’s result.</p>}
+      {replay && <p className="small muted">A past Daily, just for fun. Your streak and today’s score stay safe.</p>}
       <div className="tot-stats">
         {streak > 0 && <span className="pill-streak"><Flame size={14} strokeWidth={1.75} aria-hidden /> {streak}-day streak</span>}
         <span><CalendarDays size={14} strokeWidth={1.75} aria-hidden /> New Daily in {left}</span>
       </div>
-      <p className="small muted">Green = right, red = wrong. Share it:</p>
+      <p className="small muted">Green = right, red = missed. Show it off:</p>
       <pre className="share-preview">{text}</pre>
       <div className="row wrap center">
         <button type="button" className="btn btn-primary btn-lg" onClick={dare}>
@@ -137,13 +137,13 @@ export default function Daily() {
         <h1 className="display">Daily #{num}</h1>
         <p className="lead">
           {today && !replay
-            ? 'You played today’s Daily. Here is how you did.'
-            : `Tap the better AI screen, 5 times. ${replay ? 'Everyone got the same rounds that day.' : 'Everyone gets the same rounds today. You get one try.'} Rounds 3 and 5 are hard.`}
+            ? 'Done for today! Here’s how you did.'
+            : `Tap the better AI screen, 5 times. ${replay ? 'Everyone got the same rounds that day.' : 'Everyone gets the same rounds today. You get one shot.'} Rounds 3 and 5 are extra tricky.`}
         </p>
       </header>
       {challenge && !today && (
         <p className="challenge-banner">
-          <Swords size={16} strokeWidth={1.75} aria-hidden /> <strong>{challenge.from}</strong> got <strong>{challenge.score}/5</strong> on Daily #{num}. Your turn!
+          <Swords size={16} strokeWidth={1.75} aria-hidden /> <strong>{challenge.from}</strong> got <strong>{challenge.score}/5</strong> on Daily #{num}. Your turn to beat it!
         </p>
       )}
       <div className="view">

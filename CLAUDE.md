@@ -16,4 +16,5 @@ Short rules:
 - Saved data is cleaned when read (`src/progress.js`). Add new saved fields to the clean functions there, so bad data can never crash a page.
 - Copy to clipboard only through `src/lib/clipboard.js` (it has fallbacks).
 - Write UI text in plain, easy English. Keep it playful, not like a course.
+  Follow **[docs/VOICE.md](docs/VOICE.md)** for every string: clear first, then warm, with feeling and a spark.
 - Update `docs/PROJECT_CONTEXT.md` in the same PR when behaviour, rules or counts change.

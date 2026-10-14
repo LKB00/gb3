@@ -26,7 +26,7 @@ export default function Me() {
         <TodayCard />
         <Link to="/play/card" className="me-row">
           <IdCard size={20} strokeWidth={1.75} aria-hidden />
-          <span><strong>Your player card</strong><span className="small muted">See your AI-designer type and share it</span></span>
+          <span><strong>Your player card</strong><span className="small muted">Find your AI designer type and show it off</span></span>
           <ChevronRight size={18} strokeWidth={1.75} aria-hidden />
         </Link>
       </div>
@@ -41,12 +41,12 @@ export default function Me() {
         <div className="me-stack">
           <button type="button" className="me-row" onClick={toggleSound} aria-pressed={sound}>
             {sound ? <Volume2 size={20} strokeWidth={1.75} aria-hidden /> : <VolumeX size={20} strokeWidth={1.75} aria-hidden />}
-            <span><strong>Sound effects</strong><span className="small muted">Taps, right and wrong, wins, level ups</span></span>
+            <span><strong>Sound effects</strong><span className="small muted">Little sounds for taps, answers and wins</span></span>
             <span className={'switch' + (sound ? ' is-on' : '')} aria-hidden />
           </button>
           <button type="button" className="me-row" onClick={toggleHaptic} aria-pressed={haptic}>
             <Smartphone size={20} strokeWidth={1.75} aria-hidden />
-            <span><strong>Vibration</strong><span className="small muted">Feel taps and wins on your phone</span></span>
+            <span><strong>Vibration</strong><span className="small muted">A small buzz on taps and wins, on phones</span></span>
             <span className={'switch' + (haptic ? ' is-on' : '')} aria-hidden />
           </button>
           <button type="button" className="me-row" onClick={toggleTheme} aria-pressed={isDark}>

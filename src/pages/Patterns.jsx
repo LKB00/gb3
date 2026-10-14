@@ -33,7 +33,7 @@ export default function Patterns() {
     <div className="page page-wide">
       <header className="page-head page-head-tight cards-head">
         <h1 className="display">Your cards</h1>
-        <p className="lead">Every card is an AI design pattern. Win its “Fix it” challenge to collect it, with up to 3 stars.</p>
+        <p className="lead">Each card is one AI design pattern: a proven way to make AI feel good to use. Win its Fix it game to collect it, with up to 3 stars.</p>
         <div className="collect-bar">
           <span className="meter" aria-hidden><span style={{ width: `${(passed.length / patterns.length) * 100}%` }} /></span>
           <span className="small"><strong>{passed.length}</strong> of {patterns.length} collected</span>
@@ -70,8 +70,8 @@ export default function Patterns() {
         </div>
       ) : (
         <div className="empty">
-          <p>No cards match “{query}”.</p>
-          <button className="btn btn-ghost" onClick={() => setParams({}, { replace: true })}>Clear filters</button>
+          <p>No cards match “{query}”. Try another word.</p>
+          <button className="btn btn-ghost" onClick={() => setParams({}, { replace: true })}>Show all cards</button>
         </div>
       )}
     </div>

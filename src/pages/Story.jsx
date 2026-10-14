@@ -54,7 +54,7 @@ function StoryPicker() {
       <Breadcrumbs items={[{ label: 'Play', to: '/play' }, { label: 'Stories' }]} />
       <header className="page-head page-head-tight">
         <h1 className="display">Stories</h1>
-        <p className="lead">Pick a story. You decide what an AI helper does. Good choices make the person trust it more. Your trust at the end picks 1 of 4 endings.</p>
+        <p className="lead">Pick a story and design the AI in it. Every choice wins or loses a person’s trust. Their trust at the end picks 1 of 4 endings.</p>
       </header>
       <div className="story-picks">
         {stories.map((st) => (
@@ -64,7 +64,7 @@ function StoryPicker() {
             <span>{st.teaser}</span>
             <span className="game-meta">
               {st.person} · {st.role}
-              {best[st.id] != null && <> · your best: trust {best[st.id]}/100</>}
+              {best[st.id] != null && <> · best trust: {best[st.id]}/100</>}
             </span>
           </Link>
         ))}
@@ -143,7 +143,7 @@ function Story({ story }) {
           <p className="label">The end · final trust {trust}/100</p>
           <h1 className="display">{ending.title}{gain > 0 && <XpPop amount={gain} />}</h1>
           <p className="lead">{ending.text}</p>
-          {ending !== story.endings[0] && <p className="small">Get trust {story.endings[0].min} or more for the best ending.</p>}
+          {ending !== story.endings[0] && <p className="small">The best ending needs trust {story.endings[0].min}. Play again and swap the choices that lost trust.</p>}
           <p className="label">Your choices</p>
           <ol className="story-recap">
             {history.map((h, n) => {
@@ -180,7 +180,7 @@ function Story({ story }) {
         <div>
           <p className="label">Scene {sceneNo} · {scene.title}</p>
           <h1 className="display">{story.title}</h1>
-          <p className="small muted">You design {story.agent}. Pick what it does. Keep {story.person}’s trust high.</p>
+          <p className="small muted">You design {story.agent}. Pick what it does. Keep {story.person} on your side.</p>
         </div>
         <TrustMeter trust={trust} delta={choice ? choice.trust : null} person={story.person} />
       </header>
@@ -213,7 +213,7 @@ function Story({ story }) {
               <div>
                 <p>{choice.reaction}</p>
                 <p className="small">
-                  Trust {choice.trust >= 0 ? `+${choice.trust}` : choice.trust} · Learn more: <Link to={`/patterns/${choice.pattern}`}>{getPattern(choice.pattern).title}</Link> · <Disagree where={`Story · ${story.title} · ${scene.title}`} detail={`“${choice.label}” changed trust by ${choice.trust}.`} />
+                  Trust {choice.trust >= 0 ? `+${choice.trust}` : choice.trust} · The trick: <Link to={`/patterns/${choice.pattern}`}>{getPattern(choice.pattern).title}</Link> · <Disagree where={`Story · ${story.title} · ${scene.title}`} detail={`“${choice.label}” changed trust by ${choice.trust}.`} />
                 </p>
               </div>
             </div>
@@ -227,7 +227,7 @@ function Story({ story }) {
             {choice ? (
               choice.ui.map((b, k) => <MockBlock key={`u${k}`} b={b} state={choice.trust >= 0 ? 'good' : 'bad'} />)
             ) : (
-              <div className="m-slot-empty m-slot-focus">Pick an answer. It shows up here.</div>
+              <div className="m-slot-empty m-slot-focus">Pick a choice. {story.person} sees it here.</div>
             )}
           </MockFrame>
         </div>
@@ -235,7 +235,7 @@ function Story({ story }) {
         {choice && (
           <div className="lab-nav story-nav">
             <button type="button" className="btn btn-primary" onClick={next}>
-              {(choice.next !== undefined ? choice.next : scene.next) ? 'Next scene' : 'See the ending'} <ArrowRight size={14} strokeWidth={1.75} aria-hidden />
+              {(choice.next !== undefined ? choice.next : scene.next) ? 'Next scene' : 'See how it ends'} <ArrowRight size={14} strokeWidth={1.75} aria-hidden />
             </button>
           </div>
         )}

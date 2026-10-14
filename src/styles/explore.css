@@ -348,17 +348,17 @@
   font-weight: 700;
   line-height: 22px;
 }
+.hax-plain { display: block; }
 .hax-links {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
 }
+/* Phones hide the number (.index-num), so the guideline gets the full width. */
 @media (max-width: 720px) {
   .hax-item {
-    grid-template-columns: 24px minmax(0, 1fr);
-  }
-  .hax-links {
-    grid-column: 2;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
   }
 }
 

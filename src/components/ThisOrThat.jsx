@@ -17,11 +17,14 @@ import Disagree from './Disagree';
 //   deck:   a fixed list of rounds (used by the Daily challenge)
 //   onDone: called with [true/false per round] instead of showing the score screen
 const VERDICT = [
-  [1, 'Flawless. You have real AI design sense.'],
-  [0.8, 'Sharp eye. You missed only a couple.'],
-  [0.5, 'Not bad. Some of these were tricky.'],
-  [0, 'Warm-up round. Play again, it gets easier.'],
+  [1, 'Perfect round. Frame it!'],
+  [0.8, 'Sharp eye! Only a couple got past you.'],
+  [0.5, 'Good run. A few sneaky ones slipped by.'],
+  [0, 'Tough round. Every miss taught you a trick.'],
 ];
+// A little variety for the moment right after a pick. Picked by round number, so it never jumps around.
+const YES = ['Nailed it!', 'Sharp eye!', 'That’s the one!', 'Yes!'];
+const NO = ['So close. The green one wins.', 'Easy to miss. The green one wins.', 'Not quite. The green one wins.'];
 
 export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedDeck, onDone }) {
   const [deck, setDeck] = useState(() => fixedDeck || makeDeck(mode, rounds));
@@ -130,7 +133,7 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
         <p className="tot-verdict">{verdict}</p>
         <div className="tot-stats">
           <span><Flame size={14} strokeWidth={1.75} aria-hidden /> Most right in a row: <strong>{runBest}</strong></span>
-          {recordXp > 0 && <span className="pill-new">New best · +{recordXp} XP</span>}
+          {recordXp > 0 && <span className="pill-new">New best streak! +{recordXp} XP</span>}
         </div>
         <div className="row wrap center">
           <button type="button" className="btn btn-primary btn-lg" onClick={again}>
@@ -201,16 +204,16 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
         {answered && (
           <>
             <p>
-              <strong className={right ? 'txt-good' : 'txt-bad'}>{right ? (streak >= 3 ? `${streak} in a row!` : 'Right!') : 'Not quite. The green one is better.'}</strong>{' '}
-              This idea is called <Link to={`/patterns/${p.id}`}>{p.title}</Link>.{' '}
+              <strong className={right ? 'txt-good' : 'txt-bad'}>{right ? (streak >= 3 ? `${streak} in a row. On fire!` : YES[i % YES.length]) : NO[i % NO.length]}</strong>{' '}
+              The trick: <Link to={`/patterns/${p.id}`}>{p.title}</Link>.{' '}
               <Disagree where={`This or That · ${round.brief}`} detail={`Better: “${round.good.caption}”. Worse: “${round.bad.caption}”.`} />
             </p>
             <button type="button" className="btn btn-primary" onClick={next} ref={nextRef}>
-              {i < deck.length - 1 ? 'Next' : onDone ? 'See my result' : 'See my score'} <ArrowRight size={14} strokeWidth={1.75} aria-hidden />
+              {i < deck.length - 1 ? 'Next round' : onDone ? 'See my result' : 'See my score'} <ArrowRight size={14} strokeWidth={1.75} aria-hidden />
             </button>
           </>
         )}
-        {!answered && <p className="tot-keys">Click a screen, or press ← / → on your keyboard</p>}
+        {!answered && <p className="tot-keys">Click the better screen, or press ← / →</p>}
       </div>
     </div>
   );

@@ -271,15 +271,15 @@ function mergeObj(a = {}, b = {}) {
 export function importProgress(code) {
   try {
     const raw = String(code).trim();
-    if (raw.length > 200000) return { ok: false, error: 'That code is too long to be a backup code.' };
-    if (!raw.startsWith('AIP1.')) return { ok: false, error: 'This doesn’t look like a Good Bot, Bad Bot backup code.' };
+    if (raw.length > 200000) return { ok: false, error: 'That’s too long to be a backup code. Copy it again and paste it here.' };
+    if (!raw.startsWith('AIP1.')) return { ok: false, error: 'That doesn’t look like a backup code. Ours start with AIP1.' };
     let b64 = raw.slice(5).replace(/-/g, '+').replace(/_/g, '/');
     while (b64.length % 4) b64 += '=';
     const data = JSON.parse(decodeURIComponent(escape(atob(b64))));
     const plain = (x) => x && typeof x === 'object' && !Array.isArray(x);
     if (!plain(data)) throw new Error('bad');
     if (!LISTS.some((k) => Array.isArray(data[k])) && !OBJECTS.some((k) => plain(data[k]))) {
-      return { ok: false, error: 'That code has no progress in it.' };
+      return { ok: false, error: 'That code is empty. Make a fresh one on your other device.' };
     }
     // Clean what comes in, merge it with what is here (the best of both), clean again, save.
     for (const k of LISTS) {
@@ -296,6 +296,6 @@ export function importProgress(code) {
     window.dispatchEvent(new Event(CHANGE));
     return { ok: true };
   } catch {
-    return { ok: false, error: 'That code didn’t work. Check that you copied all of it.' };
+    return { ok: false, error: 'That code didn’t work. It may be cut off. Copy all of it and try again.' };
   }
 }

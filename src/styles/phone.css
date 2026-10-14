@@ -133,6 +133,12 @@
   .site-footer { display: none; }
   .crumbs { display: none; }
   .goal-toast { bottom: calc(var(--bottomnav-h) + 16px + env(safe-area-inset-bottom, 0px)); }
+  /* Tab rows scroll sideways on phones: fade the right edge so the next tab peeks out */
+  .tabs {
+    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
+    mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
+    padding-right: 24px;
+  }
 
   /* Focus mode (Speed round): nothing but the game */
   .focus-mode .topnav,

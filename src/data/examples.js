@@ -16,14 +16,14 @@ export const realExamples = {
   ],
   'structured-controls': [
     { product: 'Notion AI', company: 'Notion', what: 'Offers “Make shorter”, “Make longer” and “Change tone” on selected text.' },
-    { product: 'Help me write', company: 'Google', what: 'In Gmail and Docs, one tap to formalize, elaborate or shorten a draft.' },
+    { product: 'Help me write', company: 'Google', what: 'In Gmail and Docs, one tap makes a draft more formal, longer or shorter.' },
   ],
   'streaming-response': [
     { product: 'ChatGPT', company: 'OpenAI', what: 'Streams the answer word by word, with a Stop button while it writes.' },
     { product: 'Perplexity', company: 'Perplexity', what: 'Shows its steps, like searching and reading sources, before answering.' },
   ],
   'multiple-variants': [
-    { product: 'Midjourney', company: 'Midjourney', what: 'Returns a grid of four images, each with buttons to vary or upscale it.' },
+    { product: 'Midjourney', company: 'Midjourney', what: 'Returns a grid of four images, each with buttons to vary or enlarge it.' },
     { product: 'Firefly', company: 'Adobe', what: 'Generates several image options at once to choose from.' },
   ],
   'regenerate-history': [
@@ -43,7 +43,7 @@ export const realExamples = {
     { product: 'Gmail', company: 'Google', what: '“Undo send” gives you a few seconds to take an email back.' },
   ],
   'preview-changes': [
-    { product: 'GitHub Copilot edits', company: 'GitHub', what: 'Shows proposed code changes as a diff you can keep or undo.' },
+    { product: 'GitHub Copilot edits', company: 'GitHub', what: 'Shows suggested code changes, old next to new, to keep or undo.' },
     { product: 'Google Docs', company: 'Google', what: 'Suggesting mode shows edits that can be accepted or rejected one by one.' },
   ],
   'set-expectations': [
@@ -56,11 +56,11 @@ export const realExamples = {
   ],
   'confidence-signals': [
     { product: 'Google Docs and Word', company: 'Google · Microsoft', what: 'Underline only the words that may be wrong, so you check just those.' },
-    { product: 'Google Translate', company: 'Google', what: 'Shows alternatives when a translation is ambiguous, like gender-specific words.' },
+    { product: 'Google Translate', company: 'Google', what: 'Shows both options when a word could go two ways, like male and female forms.' },
   ],
   'ai-disclosure': [
     { product: 'Instagram and Facebook', company: 'Meta', what: 'Add an “AI info” label to content made or edited with AI.' },
-    { product: 'YouTube', company: 'Google', what: 'Labels videos that creators mark as altered or synthetic content.' },
+    { product: 'YouTube', company: 'Google', what: 'Labels videos that creators mark as changed or made with AI.' },
   ],
   'explain-why': [
     { product: 'Netflix', company: 'Netflix', what: 'Rows like “Because you watched…” say why titles are recommended.' },
