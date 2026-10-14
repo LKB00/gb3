@@ -90,7 +90,8 @@ export default function Patterns() {
       const where = group ? ` in ${group.name}` : '';
       return { text: show ? `Nothing left to do here${where}. Nice work!` : `No “${query}” cards${where}. Other groups have some.`, action: 'Search all cards', keep: true };
     }
-    return { text: `No cards match “${query}”. Try one of these, or another word.`, action: 'Show all cards', near: nearby(ws) };
+    const near = nearby(ws);
+    return { text: near.length ? `No cards match “${query}”. Maybe one of these?` : `No cards match “${query}”. Try another word.`, action: 'Show all cards', near };
   };
   const e = list.length ? null : empty();
   const clearFilters = () => setParams(e?.keep && query ? { q: query } : {}, { replace: true });
