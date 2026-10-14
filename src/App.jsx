@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Navigate, Route, Routes, useLocation, useNavigationType } from 'react-router-dom';
 import TopBar from './components/TopBar';
 import ErrorBoundary from './components/ErrorBoundary';
@@ -63,12 +63,27 @@ export default function App() {
   useEffect(() => {
     trackPage(pathname);
   }, [pathname]);
+  // Where this history entry was opened from, so the top-bar Back can say "‹ ChatGPT teardown"
+  // and step back in history (scroll spot kept) instead of opening a fresh copy of the page.
+  // Kept for this visit only; after a reload Back falls back to the parent page.
+  const trail = useRef({ from: new Map(), last: null }); // entry key -> { path, search, title } it came from
+  const [from, setFrom] = useState(null);
+  useLayoutEffect(() => {
+    const t = trail.current;
+    if (t.last && t.last.loc !== location) {
+      if (navType === 'PUSH') t.from.set(key, t.last);
+      else if (navType === 'REPLACE' && t.from.has(t.last.key)) t.from.set(key, t.from.get(t.last.key));
+    }
+    setFrom((key !== 'default' && t.from.get(key)) || null); // "default" = an entry opened by typing or pasting a link: no record
+    // Runs as this entry is left, before the next page sets its own tab title.
+    return () => { t.last = { loc: location, key, path: pathname, search: location.search, title: document.title }; };
+  }, [location]); // eslint-disable-line react-hooks/exhaustive-deps -- one record per visit to a history entry
 
   return (
     <div className="shell">
       {/* With HashRouter, "#main" would be read as a page path, so move focus by hand */}
       <a href="#main" className="skip-link" onClick={(e) => { e.preventDefault(); document.getElementById('main')?.focus(); }}>Skip to content</a>
-      <TopBar />
+      <TopBar from={from} />
       <main id="main" className="main" tabIndex={-1}>
         <ErrorBoundary key={pathname}>
         <div className="route">

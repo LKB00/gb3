@@ -38,12 +38,16 @@
     <script>
       (function () {
         var root = document.documentElement;
+        // A deep link (a card, a challenge, a Daily) gets the quick splash: the visitor came for that page.
+        // The full splash is only for the home page, once per visit.
+        var path = location.hash.replace(/^#/, '').split('?')[0] || '/';
+        if (path !== '/') root.classList.add('sp-quick');
         try {
           var t = localStorage.getItem('theme');
           if (t) root.dataset.theme = t;
           if (sessionStorage.getItem('gb3-splash')) root.classList.add('sp-quick');
-          else sessionStorage.setItem('gb3-splash', '1');
-        } catch (e) { /* storage blocked: full splash, system theme */ }
+          else if (path === '/') sessionStorage.setItem('gb3-splash', '1');
+        } catch (e) { /* storage blocked: full splash on home, system theme */ }
         // Still loading after 9 s? Show a reload hint instead of an endless splash.
         setTimeout(function () { var s = document.getElementById('splash'); if (s) s.classList.add('is-slow'); }, 9000);
       })();

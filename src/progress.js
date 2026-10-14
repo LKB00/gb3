@@ -157,6 +157,84 @@ export function saveDailyRun(day, r) {
 }
 export const useDaily = () => useCleaned('daily', cleanDaily);
 
+// ---- Games in progress ("runs") ----
+// A run lives in sessionStorage (this tab only, gone when the tab closes), so a link,
+// Back or a refresh resumes the game instead of wiping it. Keys: 'run:story:<id>',
+// 'run:build:<id>', 'run:power', 'run:hunt:<id>', 'run:spot'.
+// Every run is cleaned when read: anything with the wrong shape reads as null = start fresh.
+const RUN = 'run:';
+export function readRun(key) {
+  try {
+    const v = JSON.parse(sessionStorage.getItem(RUN + key));
+    return v && typeof v === 'object' && !Array.isArray(v) ? v : null;
+  } catch {
+    return null;
+  }
+}
+export function saveRun(key, value) {
+  try {
+    sessionStorage.setItem(RUN + key, JSON.stringify(value));
+  } catch {
+    /* storage blocked: the run lives in React state only */
+  }
+}
+export function clearRun(key) {
+  try {
+    sessionStorage.removeItem(RUN + key);
+  } catch {
+    /* nothing to clear */
+  }
+}
+const isInt = (x, min, max) => Number.isInteger(x) && x >= min && x <= max;
+const uniq = (l) => new Set(l).size === l.length;
+
+// Story: { sceneId, trust, picked, history: [{ scene, choice, delta }] }. Needs the story to check scene ids.
+export function readStoryRun(story) {
+  const r = readRun('story:' + story.id);
+  const scenes = story.scenes;
+  const has = (id) => typeof id === 'string' && Object.prototype.hasOwnProperty.call(scenes, id);
+  if (!r || !has(r.sceneId) || !isInt(r.trust, 0, 100) || !Array.isArray(r.history) || r.history.length > 50) return null;
+  const history = r.history.filter((h) => h && has(h.scene) && isInt(h.choice, 0, scenes[h.scene].choices.length - 1) && isInt(h.delta, -100, 100));
+  if (history.length !== r.history.length) return null;
+  const picked = r.picked === null ? null : isInt(r.picked, 0, scenes[r.sceneId].choices.length - 1) ? r.picked : undefined;
+  if (picked === undefined) return null;
+  // A pick is always the last step in the history.
+  const last = history[history.length - 1];
+  if (picked !== null && !(last && last.scene === r.sceneId && last.choice === picked)) return null;
+  return { sceneId: r.sceneId, trust: r.trust, picked, history: history.map(({ scene, choice, delta }) => ({ scene, choice, delta })) };
+}
+
+// Build: { order: [pieceId], placed: [pieceId], checked }. Needs the brief to check piece ids.
+export function readBuildRun(build) {
+  const r = readRun('build:' + build.id);
+  const ids = build.pieces.map((p) => p.id);
+  if (!r || !Array.isArray(r.placed) || !Array.isArray(r.order)) return null;
+  const placed = r.placed.filter((id) => ids.includes(id));
+  if (placed.length !== r.placed.length || !uniq(placed)) return null;
+  const order = r.order.length === ids.length && uniq(r.order) && r.order.every((id) => ids.includes(id)) ? r.order : null;
+  return { order, placed, checked: r.checked === true && placed.length > 0 };
+}
+
+// How much power?: { ids: [taskId x rounds], i, pick, log: [0..2] }. Points are worked out from the log.
+export function readPowerRun(tasks, rounds) {
+  const r = readRun('power');
+  if (!r || !Array.isArray(r.ids) || r.ids.length !== rounds || !uniq(r.ids) || !Array.isArray(r.log)) return null;
+  const hand = r.ids.map((id) => tasks.find((t) => t.id === id));
+  if (hand.some((t) => !t) || !isInt(r.i, 0, rounds - 1)) return null;
+  const pick = r.pick === null ? null : isInt(r.pick, 1, 5) ? r.pick : undefined;
+  if (pick === undefined || r.log.length !== r.i + (pick === null ? 0 : 1) || !r.log.every((x) => isInt(x, 0, 2))) return null;
+  return { hand, i: r.i, pick, log: r.log };
+}
+
+// Spot the flaw, one screen: { found: [block index], revealed }. Only real mistakes count.
+export function readHuntRun(scenario) {
+  const r = readRun('hunt:' + scenario.id);
+  if (!r || !Array.isArray(r.found)) return null;
+  const found = r.found.filter((i) => isInt(i, 0, scenario.blocks.length - 1) && scenario.blocks[i].mistake);
+  if (found.length !== r.found.length || !uniq(found)) return null;
+  return { found, revealed: r.revealed === true };
+}
+
 // Days in a row with a Daily played, ending today (or yesterday, so it isn't lost before you play).
 export function dailyStreak(daily, today = new Date()) {
   const d = new Date(today);

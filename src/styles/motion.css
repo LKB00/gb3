@@ -27,6 +27,8 @@
 
   /* ---- Pages: each page fades and rises in ---- */
   .route { animation: route-in 0.38s var(--ease-out) backwards; }
+  /* Scenes slide in from the side; clip so the page never gets wider for a moment (clip keeps sticky bars working). */
+  .route { overflow-x: clip; }
 
   /* ---- After the splash screen: the bars slide in and the page rises (src/lib/splash.js adds .sp-reveal) ---- */
   @keyframes intro-rise { from { opacity: 0; transform: translateY(22px) scale(0.985); } }

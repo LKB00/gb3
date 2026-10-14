@@ -4,7 +4,9 @@ import { ArrowLeft, ArrowRight, Check, Gamepad2, Lightbulb, ScrollText, Star, X 
 import { getCategory, getPattern, patterns } from '../data/patterns';
 import { visuals } from '../data/visuals';
 import { lessons } from '../data/lessons';
+import { teardowns } from '../data/teardowns';
 import { usePassed, useStars } from '../progress';
+import { nextTarget } from '../game/useRandomChallenge';
 import DemoFrame from '../components/DemoFrame';
 import Compare from '../components/Compare';
 import Lab from '../components/Lab';
@@ -26,6 +28,39 @@ const VIEWS = [
   { id: 'understand', label: 'Why it works', icon: Lightbulb },
   { id: 'reference', label: 'Cheat sheet', icon: ScrollText },
 ];
+
+// Where to go from a card: real products that use it, and cards from the same group.
+function MoreLinks({ p, passed }) {
+  const seen = teardowns.filter((t) => t.journey.some((s) => s.patterns.includes(p.id)));
+  const group = patterns.filter((x) => x.category === p.category);
+  const at = group.indexOf(p);
+  const related = [...group.slice(at + 1), ...group.slice(0, at)].slice(0, 3);
+  if (!seen.length && !related.length) return null;
+  return (
+    <div className="more-links">
+      {seen.length > 0 && (
+        <div className="more-row">
+          <p className="label">Seen in</p>
+          <div className="row wrap">
+            {seen.map((t) => <Link key={t.id} to={`/teardowns/${t.id}`} className="chip">{t.product}</Link>)}
+          </div>
+        </div>
+      )}
+      {related.length > 0 && (
+        <div className="more-row">
+          <p className="label">Related cards</p>
+          <div className="row wrap">
+            {related.map((x) => (
+              <Link key={x.id} to={`/patterns/${x.id}`} className={'chip' + (passed.includes(x.id) ? '' : ' chip-missing')}>
+                {x.title}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 function Section({ title, sub, children }) {
   return (
@@ -62,10 +97,13 @@ export default function PatternDetail() {
   const prev = patterns[idx - 1];
   const next = patterns[idx + 1];
   const done = passed.includes(p.id);
+  // The next card a collector needs: not collected yet, else under 3 stars.
+  const target = nextTarget(p.id, passed, stars);
+  const targetLabel = target?.kind === 'missing' ? 'Next missing card' : 'Next card for 3 stars';
   const relatedLessons = lessons.filter((l) => l.patterns.includes(p.id));
 
   return (
-    <article className="page">
+    <article className={`page pattern-page is-view-${view}`}>
       <Breadcrumbs
         items={[
           { label: 'Cards', to: '/patterns' },
@@ -97,20 +135,26 @@ export default function PatternDetail() {
         ))}
       </div>
 
-      {view === 'do' && (
-        <div className="view">
-          <Lab
-            key={p.id}
-            id={p.id}
-            lab={v.lab}
-            next={
-              <button type="button" className="btn btn-primary" onClick={() => go('understand')}>
-                See why it works <ArrowRight size={14} strokeWidth={1.75} aria-hidden />
+      {/* Fix it stays mounted while you read the other tabs, so your step is still there when you come back. */}
+      <div className="view" hidden={view !== 'do'}>
+        <Lab
+          key={p.id}
+          id={p.id}
+          lab={v.lab}
+          next={
+            <>
+              {target && (
+                <Link to={`/patterns/${target.pattern.id}`} className="btn btn-primary">
+                  {targetLabel} <ArrowRight size={14} strokeWidth={1.75} aria-hidden />
+                </Link>
+              )}
+              <button type="button" className={'btn ' + (target ? 'btn-ghost' : 'btn-primary')} onClick={() => go('understand')}>
+                See why it works {!target && <ArrowRight size={14} strokeWidth={1.75} aria-hidden />}
               </button>
-            }
-          />
-        </div>
-      )}
+            </>
+          }
+        />
+      </div>
 
       {view === 'understand' && (
         <div className="view">
@@ -183,6 +227,8 @@ export default function PatternDetail() {
         </div>
       )}
 
+      {view !== 'do' && <MoreLinks p={p} passed={passed} />}
+
       <nav className="pager" aria-label="More cards">
         {prev ? (
           <Link to={`/patterns/${prev.id}`} className="pager-link">
@@ -190,17 +236,24 @@ export default function PatternDetail() {
             <span><ArrowLeft size={14} strokeWidth={1.75} aria-hidden /> {prev.title}</span>
           </Link>
         ) : <span />}
-        {next ? (
-          <Link to={`/patterns/${next.id}`} className="pager-link pager-next">
-            <span className="label">Next card</span>
-            <span>{next.title} <ArrowRight size={14} strokeWidth={1.75} aria-hidden /></span>
-          </Link>
-        ) : (
-          <Link to="/play" className="pager-link pager-next">
-            <span className="label">Last card</span>
-            <span>Go play more games <ArrowRight size={14} strokeWidth={1.75} aria-hidden /></span>
-          </Link>
-        )}
+        <div className="pager-end">
+          {next ? (
+            <Link to={`/patterns/${next.id}`} className="pager-link pager-next">
+              <span className="label">Next card</span>
+              <span>{next.title} <ArrowRight size={14} strokeWidth={1.75} aria-hidden /></span>
+            </Link>
+          ) : (
+            <Link to="/play" className="pager-link pager-next">
+              <span className="label">Last card</span>
+              <span>Go play more games <ArrowRight size={14} strokeWidth={1.75} aria-hidden /></span>
+            </Link>
+          )}
+          {target && target.pattern.id !== next?.id && (
+            <Link to={`/patterns/${target.pattern.id}`} className="pager-target">
+              {targetLabel}: {target.pattern.title}
+            </Link>
+          )}
+        </div>
       </nav>
     </article>
   );

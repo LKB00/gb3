@@ -57,3 +57,6 @@ export function dailyDeck(key = dayKey()) {
   const hard = makeDeck('hard', 2, rng);
   return [easy[0], easy[1], hard[0], easy[2], hard[1]];
 }
+
+// How many This or That rounds to offer for the moves still missing from the daily goal (3 to 10).
+export const goalRounds = (movesLeft) => Math.min(10, Math.max(3, Math.ceil(movesLeft) || 0));

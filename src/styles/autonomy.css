@@ -213,7 +213,10 @@
 .power-opt .ladder-text { flex-direction: row; align-items: baseline; flex-wrap: wrap; gap: 0 8px; }
 .power-why-close strong { color: #b38716; }
 .power-needs { font-size: 13px; color: var(--ink-2); }
-.power-needs a { font-weight: 700; }
+.power-needs a, .power-needs .peek-link { font-weight: 700; }
+/* Spot the flaw lives in lab.css; these two sit here with the other pinned "next" bars.
+   "See the fix" opens a card peek (a button), so it keeps the link look. */
+.hunt-list .hunt-fix.peek-link { font-size: 13px; font-weight: 700; text-decoration-thickness: var(--hair); text-underline-offset: 3px; text-align: left; }
 .power-recap { list-style: none; margin: 8px 0; padding: 0; display: grid; gap: 6px; width: 100%; max-width: 560px; text-align: left; }
 .power-recap li { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 12px; background: var(--card); font-size: 14px; line-height: 20px; }
 .power-recap li span { flex: 1; }
@@ -261,6 +264,19 @@
     box-shadow: 0 8px 28px rgba(36, 40, 44, 0.18);
   }
   .power-nav .btn-primary { flex: 1; justify-content: center; }
+  /* Spot the flaw: once a screen is done, its next step is pinned in thumb reach too. */
+  .hunt-next {
+    position: sticky;
+    bottom: calc(var(--bottomnav-h) + env(safe-area-inset-bottom, 0px) + 8px);
+    z-index: 5;
+    align-self: stretch;
+    margin: 4px -8px 0;
+    padding: 10px 12px;
+    border-radius: 18px;
+    background: var(--card);
+    box-shadow: 0 8px 28px rgba(36, 40, 44, 0.18);
+  }
+  .hunt-next .btn-primary { flex: 1; justify-content: center; }
 }
 @media (hover: none) {
   .power-opt:not(:disabled):active, .ladder-step:active, .finder-opt:active { transform: scale(0.98); }

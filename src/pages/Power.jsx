@@ -6,7 +6,9 @@ import { getPattern } from '../data/patterns';
 import { fx } from '../game/fx';
 import { shuffle } from '../lib/random';
 import { track } from '../game/track';
-import { markPlayed, savePower, useGameStats, XP } from '../progress';
+import { clearRun, markPlayed, readPowerRun, savePower, saveRun, useGameStats, XP } from '../progress';
+import { games } from '../config/games';
+import { PeekLink } from '../components/PatternPeek';
 import Breadcrumbs from '../components/Breadcrumbs';
 import CountUp from '../components/CountUp';
 import Disagree from '../components/Disagree';
@@ -29,16 +31,27 @@ function deal() {
 
 const YES = ['Spot on!', 'Nailed it!', 'Perfect call!'];
 const starsFor = (pts) => (pts >= 14 ? 3 : pts >= 10 ? 2 : 1);
+// The game after this one on the Play page (skipping tiles without a page of their own).
+const NEXT_GAME = (() => {
+  const k = games.findIndex((g) => g.id === 'power');
+  return [...games.slice(k + 1), ...games.slice(0, k)].find((g) => g.to);
+})();
 
 export default function Power() {
   useTitle('How much power?');
   const stats = useGameStats();
-  const [hand, setHand] = useState(deal);
-  const [i, setI] = useState(0);
-  const [pick, setPick] = useState(null);
-  const [points, setPoints] = useState(0);
-  const [log, setLog] = useState([]);
+  // A game in progress (this tab) resumes with the same 8 tasks: a link, Back or a refresh never resets it.
+  const [saved] = useState(() => readPowerRun(tasks, ROUNDS));
+  const [hand, setHand] = useState(() => saved?.hand ?? deal());
+  const [i, setI] = useState(saved?.i ?? 0);
+  const [pick, setPick] = useState(saved?.pick ?? null);
+  const [points, setPoints] = useState(() => (saved ? saved.log.reduce((a, b) => a + b, 0) : 0));
+  const [log, setLog] = useState(saved?.log ?? []);
   const [result, setResult] = useState(null);
+  useEffect(() => {
+    if (result) clearRun('power');
+    else saveRun('power', { ids: hand.map((x) => x.id), i, pick, log });
+  }, [hand, i, pick, log, result]);
   const nextRef = useRef(null);
   const whyRef = useRef(null);
 
@@ -91,6 +104,7 @@ export default function Power() {
     setPoints(0);
     setLog([]);
     setResult(null);
+    window.scrollTo(0, 0);
   };
 
   if (result) {
@@ -121,7 +135,12 @@ export default function Power() {
             {result.record && points > 0 ? <span className="pill-new">New best!</span> : <span>Your best: {stats.powerBest || 0}/{MAX}</span>}
           </div>
           <div className="row wrap center">
-            <button type="button" className="btn btn-primary btn-lg" onClick={again}>
+            {NEXT_GAME && (
+              <Link to={NEXT_GAME.to} className="btn btn-primary btn-lg">
+                Next game: {NEXT_GAME.title} <ArrowRight size={15} strokeWidth={1.75} aria-hidden />
+              </Link>
+            )}
+            <button type="button" className={'btn btn-lg ' + (NEXT_GAME ? 'btn-ghost' : 'btn-primary')} onClick={again}>
               <RotateCcw size={15} strokeWidth={1.75} aria-hidden /> Play again
             </button>
             <Link to="/autonomy" className="btn btn-ghost btn-lg">See the 5 levels</Link>
@@ -200,7 +219,7 @@ export default function Power() {
             <span className="power-needs">
               Cards that help here:{' '}
               {right.patterns.slice(0, 3).map((id, k) => (
-                <span key={id}>{k > 0 && ' · '}<Link to={`/patterns/${id}`}>{getPattern(id).title}</Link></span>
+                <span key={id}>{k > 0 && ' · '}<PeekLink id={id}>{getPattern(id).title}</PeekLink></span>
               ))}
             </span>
           </div>

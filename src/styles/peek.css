@@ -1,0 +1,56 @@
+/* Card peek (components/PatternPeek.jsx): a sheet over the game, so a link never ends the run.
+   Phones: slides up from the bottom, in thumb reach. Desktop: a centred card. */
+.peek-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+.peek-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(20, 23, 26, 0.45);
+}
+.peek {
+  width: min(480px, 100%);
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px 22px 22px;
+  border-radius: 24px;
+  background: var(--card);
+  color: var(--ink);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+}
+.peek-head { display: flex; align-items: center; justify-content: space-between; }
+.peek-title { margin: 4px 0 0; font-family: var(--display); font-size: 24px; line-height: 30px; }
+.peek-summary { margin: 0 0 6px; color: var(--ink-2); font-size: 16px; line-height: 24px; }
+.peek-text { margin: 0; font-size: 15px; line-height: 23px; }
+.peek-dos { margin: 4px 0 0; padding-left: 20px; font-size: 14px; line-height: 22px; color: var(--ink-2); }
+.peek-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+@media (max-width: 720px) {
+  .peek-backdrop { place-items: end stretch; padding: 0; }
+  .peek {
+    width: 100%;
+    max-height: 85dvh;
+    border-radius: 24px 24px 0 0;
+    padding-bottom: calc(22px + env(safe-area-inset-bottom, 0px));
+  }
+  .peek-actions .btn { flex: 1; justify-content: center; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes peek-fade { from { opacity: 0; } }
+  @keyframes peek-up { from { transform: translateY(40px); opacity: 0; } }
+  .peek-backdrop { animation: peek-fade 0.2s ease; }
+  .peek { animation: peek-up 0.32s var(--ease-out, ease-out); }
+}

@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Angry, ArrowRight, Frown, Meh, RotateCcw, Smile } from 'lucide-react';
 import { getStory, stories } from '../data/story';
 import { getPattern } from '../data/patterns';
-import { markPlayed, saveStoryBest, storyBests, useGameStats } from '../progress';
+import { clearRun, markPlayed, readStoryRun, saveRun, saveStoryBest, storyBests, useGameStats } from '../progress';
 import MockFrame, { MockBlock } from '../mock/Mock';
 import Breadcrumbs from '../components/Breadcrumbs';
 import Burst, { XpPop } from '../components/Burst';
@@ -12,6 +11,7 @@ import { useTitle } from '../lib/useTitle';
 import { fx } from '../game/fx';
 import { track } from '../game/track';
 import Disagree from '../components/Disagree';
+import { PeekLink } from '../components/PatternPeek';
 import { useReveal } from '../lib/useReveal';
 
 // Story mode: design an AI agent through one short story. Every choice changes
@@ -22,6 +22,13 @@ const mood = (t) => (t >= 75 ? Smile : t >= 50 ? Meh : t >= 25 ? Frown : Angry);
 const tone = (t) => (t >= 75 ? 'good' : t >= 50 ? 'ok' : t >= 25 ? 'warn' : 'bad');
 
 const signed = (n) => (n > 0 ? `+${n}` : String(n));
+
+// After an ending: the next story without its best ending yet, else simply the next one.
+function nextStory(story, bests) {
+  const k = stories.indexOf(story);
+  const after = [...stories.slice(k + 1), ...stories.slice(0, k)];
+  return after.find((s) => (bests[s.id] ?? -1) < s.endings[0].min) || after[0];
+}
 
 function TrustMeter({ trust, delta, person }) {
   const Face = mood(trust);
@@ -86,12 +93,19 @@ export default function StoryRoute() {
 function Story({ story }) {
   useTitle(story.title);
   const stats = useGameStats();
-  const [sceneId, setSceneId] = useState(story.start);
-  const [trust, setTrust] = useState(story.trustStart);
-  const [picked, setPicked] = useState(null);
-  const [history, setHistory] = useState([]);
+  // A run in progress (this tab) picks up where it was: a link, Back or a refresh never restarts the story.
+  const [saved] = useState(() => readStoryRun(story));
+  const [sceneId, setSceneId] = useState(saved?.sceneId ?? story.start);
+  const [trust, setTrust] = useState(saved?.trust ?? story.trustStart);
+  const [picked, setPicked] = useState(saved?.picked ?? null);
+  const [history, setHistory] = useState(saved?.history ?? []);
   const [ended, setEnded] = useState(false);
   const [gain, setGain] = useState(0);
+  const runKey = 'story:' + story.id;
+  useEffect(() => {
+    if (ended) clearRun(runKey);
+    else saveRun(runKey, { sceneId, trust, picked, history });
+  }, [runKey, sceneId, trust, picked, history, ended]);
 
   const scene = story.scenes[sceneId];
   const choice = picked !== null ? scene.choices[picked] : null;
@@ -140,11 +154,13 @@ function Story({ story }) {
     setHistory([]);
     setEnded(false);
     setGain(0);
+    window.scrollTo(0, 0);
   };
 
   if (ended) {
     const ending = story.endings.find((e) => trust >= e.min);
     const Face = mood(trust);
+    const after = nextStory(story, { ...storyBests(stats), [story.id]: Math.max(storyBests(stats)[story.id] ?? 0, trust) });
     return (
       <div className="page page-wide">
         <Breadcrumbs items={[{ label: 'Play', to: '/play' }, { label: 'Stories', to: '/play/story' }, { label: story.title }]} />
@@ -166,14 +182,17 @@ function Story({ story }) {
                   <span>
                     <span className="story-recap-scene">{sc.title}</span>
                     <strong>{c.label}</strong>
-                    <Link to={`/patterns/${c.pattern}`} className="story-recap-pattern">{getPattern(c.pattern).title}</Link>
+                    <PeekLink id={c.pattern} className="story-recap-pattern">{getPattern(c.pattern).title}</PeekLink>
                   </span>
                 </li>
               );
             })}
           </ol>
           <div className="row wrap center">
-            <button type="button" className="btn btn-primary btn-lg" onClick={restart}>
+            <Link to={`/play/story/${after.id}`} className="btn btn-primary btn-lg">
+              Next story: {after.title} <ArrowRight size={15} strokeWidth={1.75} aria-hidden />
+            </Link>
+            <button type="button" className="btn btn-ghost btn-lg" onClick={restart}>
               <RotateCcw size={15} strokeWidth={1.75} aria-hidden /> Play again
             </button>
             <Link to="/play" className="btn btn-ghost btn-lg">More games</Link>
@@ -224,7 +243,7 @@ function Story({ story }) {
               <div>
                 <p>{choice.reaction}</p>
                 <p className="small">
-                  Trust {signed(lastDelta)} · The trick: <Link to={`/patterns/${choice.pattern}`}>{getPattern(choice.pattern).title}</Link> · <Disagree where={`Story · ${story.title} · ${scene.title}`} detail={`“${choice.label}” changed trust by ${choice.trust}.`} />
+                  Trust {signed(lastDelta)} · The trick: <PeekLink id={choice.pattern}>{getPattern(choice.pattern).title}</PeekLink> · <Disagree where={`Story · ${story.title} · ${scene.title}`} detail={`“${choice.label}” changed trust by ${choice.trust}.`} />
                 </p>
               </div>
             </div>

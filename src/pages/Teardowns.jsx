@@ -7,6 +7,7 @@ import NotFound from './NotFound';
 import LibraryTabs from '../components/LibraryTabs';
 import Breadcrumbs from '../components/Breadcrumbs';
 
+// Card links open "Why it works" (?view=understand): this is a place to read. Games and the Cards grid open Play.
 const NOTE = 'Based on public features when we last looked. Apps change fast. We’re not linked to these companies, and the names belong to them.';
 
 export function TeardownList() {
@@ -72,7 +73,7 @@ export function TeardownDetail() {
                 <p>{j.what}</p>
                 <div className="row">
                   {j.patterns.map((pid) => (
-                    <Link key={pid} to={`/patterns/${pid}`} className={`tag tag-${getPattern(pid).category}`}>{getPattern(pid).title}</Link>
+                    <Link key={pid} to={`/patterns/${pid}?view=understand`} className={`tag tag-${getPattern(pid).category}`}>{getPattern(pid).title}</Link>
                   ))}
                 </div>
               </div>
@@ -99,7 +100,7 @@ export function TeardownDetail() {
               <Lightbulb size={14} strokeWidth={2} aria-hidden />
               <span>
                 {b.text}{' '}
-                <Link to={`/patterns/${b.pattern}`} className="text-link">{getPattern(b.pattern).title}</Link>
+                <Link to={`/patterns/${b.pattern}?view=understand`} className="text-link">{getPattern(b.pattern).title}</Link>
               </span>
             </li>
           ))}
@@ -109,7 +110,7 @@ export function TeardownDetail() {
       <section className="block">
         <h2>Patterns spotted ({used.length})</h2>
         <div className="row wrap">
-          {used.map((pid) => <Link key={pid} to={`/patterns/${pid}`} className="chip">{getPattern(pid).title}</Link>)}
+          {used.map((pid) => <Link key={pid} to={`/patterns/${pid}?view=understand`} className="chip">{getPattern(pid).title}</Link>)}
         </div>
         <p className="footnote">{NOTE}</p>
       </section>

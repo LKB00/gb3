@@ -74,11 +74,17 @@
   .topnav-links,
   .hide-phone { display: none !important; }
   .topnav-inner { height: 52px; }
-  .topnav-inner.has-back .logo { display: none; }
+  /* Deep pages: Back comes first, and the app icon stays next to it, so a visitor from a shared link still sees whose site this is */
+  .topnav-inner.has-back { gap: 6px; }
+  .topnav-inner.has-back .logo-text { display: none !important; }
+  .topnav-inner.has-back .logo { flex: none; padding: 4px; margin: -4px; border-radius: 10px; }
+  .topnav-inner.has-back .logo-mark { width: 22px; }
   .topnav-back {
     display: inline-flex;
     align-items: center;
     gap: 2px;
+    flex: 0 1 auto;
+    min-width: 0;
     margin-left: -6px;
     padding: 6px 8px 6px 2px;
     border-radius: 10px;
@@ -88,6 +94,9 @@
     text-decoration: none;
   }
   .topnav-back:active { background: var(--sand-dark); }
+  .topnav-back svg { flex: none; }
+  /* A long page name ("‹ How agents ask for…") shortens instead of pushing the streak and XP off */
+  .topnav-back-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .logo-text { display: inline !important; }
   /* The name is the part that gives way when streak and XP are big: it shortens with "…". */
   .logo { flex: 0 1 auto; min-width: 0; }
@@ -141,6 +150,33 @@
     mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
     padding-right: 32px; /* the last tab can scroll clear of the fade */
   }
+  /* Explore tabs: six short labels in a 3 x 2 grid, so every section is one tap away (no hidden tabs off the edge) */
+  .lib-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    padding-right: 0;
+    border-bottom: none;
+    -webkit-mask-image: none;
+    mask-image: none;
+    overflow: visible;
+  }
+  .lib-tabs .tab {
+    justify-content: center;
+    height: 36px;
+    min-width: 0;
+    margin: 0;
+    padding: 0 6px;
+    border: none;
+    border-radius: 10px;
+    background: var(--sand);
+    font-size: 13px;
+    white-space: nowrap;
+  }
+  .lib-tabs .tab.active { background: var(--ink); color: var(--paper); }
+  .lib-tabs .tab:focus-visible { outline-offset: 2px; }
+  .lib-tabs .tab-long { display: none; }
+  .lib-tabs .tab-short { display: inline; overflow: hidden; text-overflow: ellipsis; }
 
   /* Focus mode (Speed round): nothing but the game */
   .focus-mode .topnav,

@@ -45,7 +45,7 @@ function useCardData() {
     xp,
     stats: [
       ['Cards', `${passed.length}/${patterns.length}`],
-      ['Stars', String(starTotal)],
+      ['Stars', `${starTotal}/${patterns.length * 3}`],
       ['Day streak', String(streak)],
       ['Best streak', String(stats.bestStreak || 0)],
     ],
@@ -173,9 +173,20 @@ async function drawCard(name, data) {
   return cv;
 }
 
+// Can this browser share an image file (most phones)? Then sharing is the main button.
+function canShareFiles() {
+  try {
+    return typeof navigator !== 'undefined' && !!navigator.canShare?.({ files: [new File([''], 'card.png', { type: 'image/png' })] });
+  } catch {
+    return false;
+  }
+}
+
 export default function PlayerCard() {
   useTitle('Player card');
   const [name, setName] = useState(readName);
+  const [shareFiles] = useState(canShareFiles);
+  const canShare = typeof navigator !== 'undefined' && !!navigator.share;
   const [msg, setMsg] = useState('');
   const data = useCardData();
 
@@ -246,27 +257,41 @@ export default function PlayerCard() {
           </div>
         </div>
 
-        <div className="pc-side">
-          <h1 className="display">Your player card</h1>
-          <p className="lead">What kind of AI designer are you? Your title comes from the cards you collect most. Play more and watch it change.</p>
+        {/* On phones the name and Share/Save come right after the title, above the card, so no scrolling is needed. */}
+        <h1 className="display pc-title">Your player card</h1>
+        <p className="lead pc-lead">What kind of AI designer are you? Your title comes from the cards you collect most. Play more and watch it change.</p>
+        <div className="pc-actions">
           <label className="pc-field">
             <span className="label">Name on the card</span>
             <input value={name} maxLength={24} placeholder="Your name" onChange={(e) => save(e.target.value)} />
           </label>
           <div className="row wrap">
-            <button type="button" className="btn btn-primary btn-lg" onClick={download}>
-              <Download size={15} strokeWidth={1.75} aria-hidden /> Save image
-            </button>
-            {typeof navigator !== 'undefined' && navigator.share && (
-              <button type="button" className="btn btn-ghost btn-lg" onClick={share}>
-                <Share2 size={15} strokeWidth={1.75} aria-hidden /> Share
-              </button>
+            {shareFiles ? (
+              <>
+                <button type="button" className="btn btn-primary btn-lg" onClick={share}>
+                  <Share2 size={15} strokeWidth={1.75} aria-hidden /> Share image
+                </button>
+                <button type="button" className="btn btn-ghost btn-lg" onClick={download}>
+                  <Download size={15} strokeWidth={1.75} aria-hidden /> Save
+                </button>
+              </>
+            ) : (
+              <>
+                <button type="button" className="btn btn-primary btn-lg" onClick={download}>
+                  <Download size={15} strokeWidth={1.75} aria-hidden /> Save image
+                </button>
+                {canShare && (
+                  <button type="button" className="btn btn-ghost btn-lg" onClick={share}>
+                    <Share2 size={15} strokeWidth={1.75} aria-hidden /> Share
+                  </button>
+                )}
+              </>
             )}
             <button type="button" className="btn btn-ghost btn-lg" onClick={copy}>
               <Copy size={15} strokeWidth={1.75} aria-hidden /> Copy text
             </button>
           </div>
-          <p className="small muted" role="status">{msg || 'Save it and share it anywhere. It’s made on your device. Nothing is uploaded.'}</p>
+          <p className="small muted" role="status">{msg || 'It’s made on your device. Nothing is uploaded.'}</p>
         </div>
       </div>
     </div>

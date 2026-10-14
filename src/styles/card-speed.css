@@ -4,13 +4,30 @@
 .pc-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr); /* a long name can't push the page wider than the phone */
-  gap: 32px;
-  align-items: center;
+  grid-template-areas: 'title' 'lead' 'card' 'actions';
+  gap: 16px;
+  justify-items: start;
 }
+.pc-title { grid-area: title; }
+.pc-lead { grid-area: lead; }
+.pc-card { grid-area: card; }
+.pc-actions { grid-area: actions; display: flex; flex-direction: column; gap: 16px; align-items: flex-start; width: 100%; }
 @media (min-width: 900px) {
-  .pc-layout { grid-template-columns: 400px minmax(0, 1fr); gap: 56px; }
+  .pc-layout {
+    grid-template-columns: 400px minmax(0, 1fr);
+    grid-template-rows: 1fr auto auto auto 1fr;
+    grid-template-areas: 'card .' 'card title' 'card lead' 'card actions' 'card .';
+    column-gap: 56px;
+  }
 }
-.pc-side { display: flex; flex-direction: column; gap: 16px; align-items: flex-start; }
+/* Phones: sharing is the goal, so the name and Share/Save sit above the card (no scrolling) */
+@media (max-width: 720px) {
+  .pc-layout { grid-template-areas: 'title' 'actions' 'card' 'lead'; gap: 12px; }
+  .pc-actions { gap: 10px; }
+  .pc-actions .pc-field { max-width: none; }
+  .pc-actions .row { gap: 8px; }
+  .pc-card { margin-top: 8px; justify-self: center; }
+}
 .pc-card {
   width: 100%;
   max-width: 400px;
@@ -294,6 +311,15 @@
   25% { transform: translateX(-6px); }
   75% { transform: translateX(6px); }
 }
+/* Phones: the brief and timer stay on top, the two screens sit low, in thumb reach */
+@media (max-width: 720px) {
+  /* Fill the screen minus the page's bottom padding, so a tap low down never scrolls the page */
+  body.focus-mode .speed { min-height: calc(100vh - 24px); min-height: calc(100dvh - 24px); }
+  .speed-options {
+    margin-top: auto;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .speed-time.is-low, .speed-option, .speed-count span { animation: none; }
 }
@@ -369,6 +395,47 @@
 .challenge-result.is-good { background: var(--positive-soft); color: var(--positive); }
 .challenge-result.is-ok { background: var(--sand-dark); color: var(--ink); }
 .challenge-result.is-bad { background: var(--negative-soft); color: var(--negative); }
+/* One line to name yourself before a dare, so the friend sees who sent it */
+.dare-name {
+  width: 100%;
+  max-width: 320px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: var(--hair) solid var(--line);
+  border-radius: 9999px;
+  background: var(--card);
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px; /* 16px stops phones zooming in on focus */
+  text-align: center;
+}
+.dare-name::placeholder { color: var(--ink-3); }
+.dare-name:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.speed-missed {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.speed-missed ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.speed-missed li {
+  max-width: 100%;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  background: var(--card);
+  font-size: 13px;
+  line-height: 18px;
+}
+.speed-missed .peek-link { min-height: 28px; overflow-wrap: anywhere; }
+.speed-dare { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; }
 
 /* Logo on the dark player card */
 .pc-brand .logo-mark { width: 30px; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.16); }

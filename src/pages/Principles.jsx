@@ -5,6 +5,7 @@ import { getPattern } from '../data/patterns';
 import { useTitle } from '../lib/useTitle';
 import LibraryTabs from '../components/LibraryTabs';
 
+// Card links open "Why it works" (?view=understand): this is a place to read, not to play.
 export default function Principles() {
   useTitle('Principles');
   const [params] = useSearchParams();
@@ -41,7 +42,7 @@ export default function Principles() {
                 <div className="row">
                   <span className="label">Used in</span>
                   {patternsUsing(p.id).map((pid) => (
-                    <Link key={pid} to={`/patterns/${pid}`} className="chip chip-sm">{getPattern(pid).title}</Link>
+                    <Link key={pid} to={`/patterns/${pid}?view=understand`} className="chip chip-sm">{getPattern(pid).title}</Link>
                   ))}
                 </div>
               </li>
@@ -71,7 +72,7 @@ export default function Principles() {
                   <span className="hax-links">
                     {g.patterns.length ? (
                       g.patterns.map((pid) => (
-                        <Link key={pid} to={`/patterns/${pid}`} className="chip chip-sm">{getPattern(pid).title}</Link>
+                        <Link key={pid} to={`/patterns/${pid}?view=understand`} className="chip chip-sm">{getPattern(pid).title}</Link>
                       ))
                     ) : (
                       <span className="footnote">No card for this one yet. Test your AI with lots of different people.</span>

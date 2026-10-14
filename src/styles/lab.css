@@ -429,3 +429,15 @@
   color: var(--positive);
 }
 .lab-q-step:focus { outline: none; } /* focused by script after Next step, for keyboard players */
+
+/* Phones: the first question and option sit above the bottom bar, no scroll needed.
+   (Selectors start with .lab so they win over phone.css, which loads later.) */
+@media (max-width: 720px) {
+  .lab .lab-head { gap: 2px; }
+  .lab .lab-head > .lab-hint { display: none; } /* the same tip sits under the options */
+  .lab .lab-steps { margin-top: 6px; }
+  .lab .lab-preview { gap: 4px; }
+  .lab .lab-preview > .label { display: none; }
+  .lab .lab-preview .m-frame { zoom: 0.8; }
+  .lab.lab-finished .lab-preview .m-frame { zoom: 0.9; }
+}

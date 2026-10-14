@@ -10,12 +10,14 @@ import { fx } from '../game/fx';
 import CountUp from './CountUp';
 import { track } from '../game/track';
 import Disagree from './Disagree';
+import { PeekLink } from './PatternPeek';
 
 // This or That: two versions of the same AI screen. Tap the better one.
 // Quick rounds, instant answer, a streak to protect. No reading needed to start.
 //   mode:   'classic' (clear differences) or 'hard' (one small detail differs)
 //   deck:   a fixed list of rounds (used by the Daily challenge)
 //   onDone: called with [true/false per round] instead of showing the score screen
+//   next:   ({ missed, last }) => buttons for the score screen (pattern ids). "Play again" then goes quiet.
 const VERDICT = [
   [1, 'Perfect round. Frame it!'],
   [0.8, 'Sharp eye! Only a couple got past you.'],
@@ -27,7 +29,7 @@ const YES = ['Nailed it!', 'Sharp eye!', 'That’s the one!', 'Yes!'];
 const NO = ['So close. The green one wins.', 'Easy to miss. The green one wins.', 'Not quite. The green one wins.'];
 
 // `start` resumes a run (answers already given, e.g. a Daily after a refresh); `onAnswer` gets every answer so far.
-export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedDeck, onDone, start, onAnswer }) {
+export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedDeck, onDone, start, onAnswer, next: nextStep }) {
   const [deck, setDeck] = useState(() => fixedDeck || makeDeck(mode, rounds));
   const resumeAt = start && fixedDeck ? Math.min(start.length, fixedDeck.length - 1) : 0;
   const [i, setI] = useState(resumeAt);
@@ -129,6 +131,15 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
 
   if (over) {
     const verdict = VERDICT.find(([min]) => score >= min * deck.length)[1];
+    // Every pattern met this run, misses first, so a curious tap is right there.
+    const met = deck.map((r, n) => ({ id: r.pattern, ok: results[n] }));
+    const tricks = [...met.filter((m) => !m.ok), ...met.filter((m) => m.ok)].filter((m, n, all) => all.findIndex((x) => x.id === m.id) === n);
+    const missed = tricks.filter((m) => !m.ok).map((m) => m.id);
+    const replay = (
+      <button type="button" className={nextStep ? 'text-link tot-again' : 'btn btn-primary btn-lg'} onClick={again}>
+        <RotateCcw size={15} strokeWidth={1.75} aria-hidden /> Play again
+      </button>
+    );
     return (
       <div className="tot tot-over">
         {score >= deck.length * 0.8 && <Burst count={24} />}
@@ -139,15 +150,31 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
           <span><Flame size={14} strokeWidth={1.75} aria-hidden /> Most right in a row: <strong>{runBest}</strong></span>
           {recordXp > 0 && <span className="pill-new">New best streak! +{recordXp} XP</span>}
         </div>
-        <div className="row wrap center">
-          <button type="button" className="btn btn-primary btn-lg" onClick={again}>
-            <RotateCcw size={15} strokeWidth={1.75} aria-hidden /> Play again
-          </button>
-          {mode === 'classic' ? (
-            <Link to="/play/this-or-that?mode=hard" className="btn btn-ghost btn-lg"><Eye size={15} strokeWidth={1.75} aria-hidden /> Try Hard mode</Link>
-          ) : (
-            <Link to="/play/daily" className="btn btn-ghost btn-lg">Play today’s Daily</Link>
-          )}
+        {nextStep ? (
+          <>
+            <div className="row wrap center">{nextStep({ missed, last: deck[deck.length - 1].pattern })}</div>
+            {replay}
+          </>
+        ) : (
+          <div className="row wrap center">
+            {replay}
+            {mode === 'classic' ? (
+              <Link to="/play/this-or-that?mode=hard" className="btn btn-ghost btn-lg"><Eye size={15} strokeWidth={1.75} aria-hidden /> Try Hard mode</Link>
+            ) : (
+              <Link to="/play/daily" className="btn btn-ghost btn-lg">Play today’s Daily</Link>
+            )}
+          </div>
+        )}
+        <div className="tot-tricks">
+          <p className="small muted">Tricks you met. Tap one for a quick look:</p>
+          <ul>
+            {tricks.map((m) => (
+              <li key={m.id} className={m.ok ? 'is-right' : 'is-wrong'}>
+                {m.ok ? <Check size={12} strokeWidth={2.5} aria-label="Right" /> : <X size={12} strokeWidth={2.5} aria-label="Missed" />}
+                <PeekLink id={m.id}>{getPattern(m.id).title}</PeekLink>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     );
@@ -209,7 +236,7 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
           <>
             <p>
               <strong className={right ? 'txt-good' : 'txt-bad'}>{right ? (streak >= 3 ? `${streak} in a row. On fire!` : YES[i % YES.length]) : NO[i % NO.length]}</strong>{' '}
-              The trick: <Link to={`/patterns/${p.id}`}>{p.title}</Link>.{' '}
+              The trick: <PeekLink id={p.id}>{p.title}</PeekLink>.{' '}
               <Disagree where={`This or That · ${round.brief}`} detail={`Better: “${round.good.caption}”. Worse: “${round.bad.caption}”.`} />
             </p>
             <button type="button" className="btn btn-primary" onClick={next} ref={nextRef}>

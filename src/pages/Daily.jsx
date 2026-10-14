@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { CalendarDays, Copy, Eye, Flame, Share2, Shuffle, Swords } from 'lucide-react';
-import { challengeLink, useChallenge, verdict } from '../game/challenge';
-import { dailyDeck, dailyLabel, dailyNumber } from '../game/decks';
+import { CalendarDays, Copy, Eye, Flame, Shuffle, Swords, Target } from 'lucide-react';
+import { challengeLink, dailyDareText, useChallenge, useDare, verdict } from '../game/challenge';
+import { dailyDeck, dailyLabel, dailyNumber, goalRounds } from '../game/decks';
 import { dayKey } from '../lib/dates';
-import { dailyStreak, readDailyRun, saveDaily, saveDailyRun, useDaily, XP } from '../progress';
+import { DAILY_GOAL, readDailyRun, saveDaily, saveDailyRun, useDaily, useStreak, XP } from '../progress';
 import ThisOrThat from '../components/ThisOrThat';
 import Breadcrumbs from '../components/Breadcrumbs';
 import CountUp from '../components/CountUp';
@@ -34,13 +34,35 @@ function useCountdown() {
 export function shareText(num, results, streak) {
   const grid = results.map((r) => (r ? '🟩' : '🟥')).join('');
   const url = `${window.location.origin}${window.location.pathname}#/play/daily`;
-  return `Good Bot, Bad Bot Daily #${num} · ${results.filter(Boolean).length}/${results.length}\n${grid}${streak > 1 ? `\n🔥 ${streak} days in a row` : ''}\nCan you spot good AI design? ${url}`;
+  return `Good Bot, Bad Bot Daily #${num} · ${results.filter(Boolean).length}/${results.length}\n${grid}${streak > 1 ? `\n🔥 ${streak}-day streak` : ''}\nCan you spot good AI design? ${url}`;
 }
 
-function Result({ num, day, results, streak, fresh, challenge, replay }) {
+// After the Daily: the daily goal is the next step, so it comes before sharing.
+function GoalStep() {
+  const { todayMoves } = useStreak();
+  const left = DAILY_GOAL - todayMoves;
+  if (left <= 0) {
+    return (
+      <div className="daily-next is-done">
+        <p><Target size={16} strokeWidth={1.75} aria-hidden /> <strong>Goal done. See you tomorrow!</strong></p>
+      </div>
+    );
+  }
+  const rounds = goalRounds(left);
+  return (
+    <div className="daily-next">
+      <p><Target size={16} strokeWidth={1.75} aria-hidden /> {left} more {left === 1 ? 'answer' : 'answers'} to hit today’s goal.</p>
+      <Link to={`/play/this-or-that?rounds=${rounds}`} className="btn btn-primary btn-lg">
+        <Shuffle size={15} strokeWidth={1.75} aria-hidden /> Play {rounds} quick rounds
+      </Link>
+    </div>
+  );
+}
+
+function Result({ num, day, results, streak, fresh, challenge, replay, goalDone }) {
   const left = useCountdown();
   const [copied, setCopied] = useState(false);
-  const [dared, setDared] = useState(false);
+  const dare = useDare();
   const score = results.filter(Boolean).length;
   const text = shareText(num, results, streak);
   const url = `${window.location.origin}${window.location.pathname}#/play/daily`;
@@ -51,20 +73,11 @@ function Result({ num, day, results, streak, fresh, challenge, replay }) {
       setTimeout(() => setCopied(false), 2000);
     }
   };
-  const dare = async () => {
-    const link = challengeLink('/play/daily', { d: day, vs: score, r: results.map((x) => (x ? 1 : 0)).join('') });
-    if (await copyText(`I got ${score}/${results.length} on Good Bot, Bad Bot Daily #${num}. Can you beat me? ${link}`)) {
-      setDared(true);
-      setTimeout(() => setDared(false), 2000);
-    }
-  };
-  const nativeShare = async () => {
-    try {
-      await navigator.share({ text });
-    } catch {
-      /* cancelled */
-    }
-  };
+  const sendDare = () =>
+    dare.send(() => ({
+      text: dailyDareText({ score, total: results.length, num, vs: challenge }),
+      url: challengeLink('/play/daily', { d: day, vs: score, r: results.map((x) => (x ? 1 : 0)).join('') }),
+    }));
 
   return (
     <div className="tot tot-over daily-result">
@@ -88,26 +101,38 @@ function Result({ num, day, results, streak, fresh, challenge, replay }) {
         {streak > 0 && <span className="pill-streak"><Flame size={14} strokeWidth={1.75} aria-hidden /> {streak}-day streak</span>}
         <span><CalendarDays size={14} strokeWidth={1.75} aria-hidden /> New Daily in {left}</span>
       </div>
-      <p className="small muted">Green = right, red = missed. Show it off:</p>
-      <pre className="share-preview">{text}</pre>
-      <div className="row wrap center">
-        <button type="button" className="btn btn-primary btn-lg" onClick={dare}>
-          <Swords size={15} strokeWidth={1.75} aria-hidden /> {dared ? 'Link copied!' : 'Challenge a friend'}
-        </button>
-        <button type="button" className="btn btn-ghost btn-lg" onClick={copy}>
-          <Copy size={15} strokeWidth={1.75} aria-hidden /> {copied ? 'Copied!' : 'Copy my result'}
-        </button>
-        {typeof navigator !== 'undefined' && navigator.share && (
-          <button type="button" className="btn btn-ghost btn-lg" onClick={nativeShare}>
-            <Share2 size={15} strokeWidth={1.75} aria-hidden /> Share
-          </button>
+      <GoalStep />
+      <div className="daily-share">
+        {dare.askName && (
+          <input
+            className="dare-name"
+            value={dare.name}
+            onChange={(e) => dare.setName(e.target.value)}
+            maxLength={24}
+            placeholder="Your name (so friends know it’s you)"
+            aria-label="Your name (so friends know it’s you)"
+            autoComplete="nickname"
+          />
         )}
-        <a className="btn btn-ghost btn-lg" href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`} target="_blank" rel="noreferrer">Post on X</a>
-        <a className="btn btn-ghost btn-lg" href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`} target="_blank" rel="noreferrer">LinkedIn</a>
+        <div className="row wrap center">
+          <button type="button" className={'btn btn-lg ' + (goalDone ? 'btn-primary' : 'btn-ghost')} onClick={sendDare}>
+            <Swords size={15} strokeWidth={1.75} aria-hidden /> {dare.copied ? 'Link copied!' : challenge ? `Send it back to ${challenge.from}` : 'Challenge a friend'}
+          </button>
+          <button type="button" className="btn btn-ghost btn-lg" onClick={copy}>
+            <Copy size={15} strokeWidth={1.75} aria-hidden /> {copied ? 'Copied!' : 'Copy my result'}
+          </button>
+        </div>
+        <details className="daily-more-share">
+          <summary>More ways to share</summary>
+          <pre className="share-preview">{text}</pre>
+          <div className="row wrap center">
+            <a className="btn btn-ghost" href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`} target="_blank" rel="noreferrer">Post on X</a>
+            <a className="btn btn-ghost" href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`} target="_blank" rel="noreferrer">LinkedIn</a>
+          </div>
+        </details>
       </div>
       <div className="daily-more">
         <span className="muted small">Play more:</span>
-        <Link to="/play/this-or-that" className="text-link"><Shuffle size={14} strokeWidth={1.75} aria-hidden /> This or That</Link>
         <Link to="/play/this-or-that?mode=hard" className="text-link"><Eye size={14} strokeWidth={1.75} aria-hidden /> This or That: Hard</Link>
         <Link to="/play/story" className="text-link">Stories</Link>
         <Link to="/play/card" className="text-link">Your player card</Link>
@@ -131,6 +156,7 @@ export default function Daily() {
   const [fresh, setFresh] = useState(false);
   const [replayResult, setReplayResult] = useState(null);
   const today = replay ? replayResult : daily[key];
+  const { streak, todayMoves } = useStreak(); // the day streak, same as the top bar flame
 
   return (
     <div className="page page-wide">
@@ -150,7 +176,7 @@ export default function Daily() {
       )}
       <div className="view">
         {today ? (
-          <Result num={num} day={key} results={today} streak={dailyStreak(daily)} fresh={fresh && !replay} challenge={challenge} replay={replay} />
+          <Result num={num} day={key} results={today} streak={streak} fresh={fresh && !replay} challenge={challenge} replay={replay} goalDone={todayMoves >= DAILY_GOAL} />
         ) : (
           <ThisOrThat
             key={key /* a new day (or another day's link) is a new board */}

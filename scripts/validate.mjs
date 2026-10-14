@@ -45,6 +45,7 @@ for (const p of patterns) {
   if (!catIds.has(p.category)) bad(w, `unknown category "${p.category}"`);
   for (const f of ['title', 'summary', 'problem', 'solution']) if (!p[f]?.trim()) bad(w, `empty ${f}`);
   for (const f of ['when', 'avoid', 'dos', 'donts']) if (!p[f]?.length) bad(w, `empty ${f}`);
+  if (p.keywords !== undefined && (!Array.isArray(p.keywords) || p.keywords.some((k) => typeof k !== 'string' || !k.trim()))) bad(w, 'keywords must be a list of words');
   if (p.demo && !demoKeys.has(p.demo)) bad(w, `demo "${p.demo}" is not in demos/index.js`);
   if (!realExamples[p.id]?.length) bad(w, 'no real examples');
   if (!patternPrinciples[p.id]?.length) bad(w, 'no principles linked');
@@ -98,6 +99,10 @@ for (const a of antipatterns) {
   checkBlocks(`dark pattern ${a.id}`, a.blocks);
 }
 dupes(glossary.map((g) => g.term)).forEach((t) => bad('glossary', `duplicate term "${t}"`));
+for (const g of glossary) {
+  if (g.patterns !== undefined && !Array.isArray(g.patterns)) bad(`glossary ${g.term}`, 'patterns is not a list');
+  else (g.patterns || []).forEach((id) => mustPattern(`glossary ${g.term}`, id));
+}
 for (const r of furtherReading) if (!/^https:\/\//.test(r.url)) bad('furtherReading', `link is not https: ${r.url}`);
 
 // ---- Games: Spot the flaw, hard pairs ----

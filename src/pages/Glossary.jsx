@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowUpRight, Search } from 'lucide-react';
 import { furtherReading, glossary } from '../data/glossary';
+import { getPattern } from '../data/patterns';
 import { useTitle } from '../lib/useTitle';
 import LibraryTabs from '../components/LibraryTabs';
 
@@ -32,6 +34,15 @@ export default function Glossary() {
             <dd>
               <p>{g.def}</p>
               <p className="gloss-design"><span className="label">Why it matters</span> {g.design}</p>
+              {g.patterns?.length > 0 && (
+                <div className="gloss-cards">
+                  <span className="label">See it on a card</span>
+                  {/* A read place, so the card opens on "Why it works" (Play is one tab away) */}
+                  {g.patterns.map((pid) => (
+                    <Link key={pid} to={`/patterns/${pid}?view=understand`} className={`tag tag-${getPattern(pid).category}`}>{getPattern(pid).title}</Link>
+                  ))}
+                </div>
+              )}
             </dd>
           </div>
         ))}

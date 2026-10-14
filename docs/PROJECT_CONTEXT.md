@@ -159,26 +159,26 @@ The owner looks at a **private Claude Artifact**. It is one self-contained HTML 
 ### 5.2 Pages and routes (`src/App.jsx`)
 | Route | Page | Notes |
 |---|---|---|
-| `/` | Home | Status line (level, XP, cards, streak), a 5-round This or That right on the page, the Daily banner and the game tiles |
-| `/play` | Play hub | Level card, Today card (goal + streak), Daily banner, game tiles, badges |
+| `/` | Home | First visit: hero + a 5-round This or That + Daily banner + game tiles. Returning players (any XP or played day): a compact hello and the Daily banner **above** the game. The score screen offers the Daily (or Speed if the Daily is done), a card to win, and a quiet Play again |
+| `/play` | Play hub | Level card, Today (a compact strip until the first answer of the day, then the full card with goal, streak and a "Play N quick rounds" button), Daily banner, game tiles, badges (a sideways row on phones) |
 | `/play/daily` | Daily challenge | See 5.3 |
-| `/play/this-or-that` | This or That | `?mode=hard` for Hard mode |
+| `/play/this-or-that` | This or That | `?mode=hard` for Hard mode; `?rounds=3..10` for a shorter run (default 10), used by the daily-goal buttons |
 | `/play/speed` | Speed round | `?vs=&seed=&from=` for challenge links |
 | `/play/power` | How much power? | Autonomy-level game |
 | `/play/build` | Build mode | `?brief=research|travel|writer|car` |
 | `/play/story`, `/play/story/:id` | Stories | ids: `tidy`, `nova`, `sage`, `pilot` |
 | `/play/spot-the-flaw` | Spot the flaw | 10 screens |
 | `/play/card` | Player card | Image made in the browser |
-| `/patterns`, `/patterns/:id` | Cards | 37 patterns; tabs `?view=do|understand|reference` (shown as Play, Why it works, Cheat sheet; default `do`); `?category=` filter |
+| `/patterns`, `/patterns/:id` | Cards | 37 patterns; tabs `?view=do|understand|reference` (shown as Play, Why it works, Cheat sheet; default `do`); `?category=` filter; `?show=missing|stars` (To collect / Not 3 stars yet); search also reads id, group, when/avoid/dos/donts, examples, product names and `keywords`. Read places (teardowns, glossary, principles, deep-dive pictures) link to `?view=understand`; games and the grid open Play |
 | `/autonomy` | Autonomy ladder | `?level=1..5`; has a level finder |
 | `/teardowns`, `/teardowns/:id` | Teardowns | ChatGPT, Perplexity, GitHub Copilot, Claude Code |
 | `/anti-patterns` | Dark patterns | 8 |
 | `/principles` | Principles | UX laws + Microsoft HAX 18 guidelines; `?focus=` scrolls to one |
-| `/glossary` | Glossary | 22 terms + further reading |
+| `/glossary` | Glossary | 22 terms (19 link to their cards via `patterns`) + further reading |
 | `/learn`, `/learn/:id` | Deep dives | 9 short reads |
 | `/me` | Me | Level, today, badges, settings (sound, vibration, dark mode), backup |
 | `/practice` | redirects to `/play` | old link |
-| `*` | Not found | |
+| `*` | Not found | A mistyped `/patterns/<x>` offers the closest card and a card search |
 
 ### 5.3 Game rules (exact)
 **XP and levels** (`src/progress.js`, `XP`, `LEVELS`, `xpParts`)
@@ -199,7 +199,7 @@ Levels (XP needed): Rookie 0, Prompt tinkerer 100, Pattern spotter 300, Interact
 The day streak counts days with at least one move. **One free "skip day" per 7 days** keeps the streak if a day is missed. The skip day is ready again after 7 played days since the most recent skip day. The Today card and the flame refresh at local midnight and when the tab comes back. If today is not played
 yet, the streak is still kept (you still have time). Streak math is `streakInfo` in `progress.js`.
 
-**This or That** (`components/ThisOrThat.jsx`): 10 rounds. Two versions of the same AI screen; tap the better one. Classic uses one round
+**This or That** (`components/ThisOrThat.jsx`): 10 rounds. Two versions of the same AI screen; tap the better one. Classic uses one round Card links in games open a **card peek** (`components/PatternPeek.jsx`, `<PeekLink>`), so a run is never lost; the score screen lists the tricks met (misses first).
 per pattern (visuals), Hard uses the 30 "one small detail differs" pairs (`data/subtle.js`). Pins/captions appear after answering. Keys: Left/Right (or A/B), Enter for next.
 Shortcuts with Ctrl/Cmd/Alt and held keys are ignored. Streak of 3+ plays the combo sound.
 
@@ -207,11 +207,11 @@ Shortcuts with Ctrl/Cmd/Alt and held keys are ignored. Streak of 3+ plays the co
 **One try per day**; the first result of the day is saved. Answers are saved as you go (`daily-run`), so a refresh continues the run instead of restarting it. A new day (or another day's link) gets a fresh board. A friend score above 5 in a link is ignored. Daily #1 = **1 Oct 2026**; the displayed number is never below 1 (`dailyLabel`). Result shows a Wordle-style
 grid, share/copy, countdown to the next Daily, and "challenge a friend". Playing a friend's challenge for a past day replays it but does not save it.
 
-**Speed round** (`pages/Speed.jsx`): 60 seconds, 3-2-1 countdown. Classic and hard rounds mixed from a **seeded** deck (`speed:<seed>`).
+**Speed round** (`pages/Speed.jsx`): 60 seconds, 3-2-1 countdown. Classic and hard rounds mixed from a **seeded** deck (`speed:<seed>`). The result shows up to 3 missed tricks as peeks. On phones the two screens sit low, in thumb reach.
 Right = +1; **3 in a row turns on x2**; wrong = **-1 point (never below 0)** so random tapping does not pay. Last 5 seconds tick. A "quit" button is on screen.
 While playing, the body gets class `focus-mode` (top/bottom bars hidden on phones). Result: points, accuracy, new best, XP, share link.
 
-**Fix it** (`components/Lab.jsx`, one per pattern, reached from the card's Play tab): step by step, one decision at a time with instant feedback; 3 stars = no mistakes,
+**Fix it** (`components/Lab.jsx`, one per pattern, reached from the card's Play tab): step by step, one decision at a time with instant feedback; 3 stars = no mistakes, The end screen's primary is **Next missing card** (else Next card for 3 stars) via `nextTarget()` in `game/useRandomChallenge.js`. The Play tab stays mounted (hidden) so switching tabs keeps your step.
 2 = one mistake, 1 = more. Finishing flips a **collectible card** (`FlipCard`) with a glow and star chimes. "Reveal the answer (no card)" exists for people who give up.
 
 **Spot the flaw** (`components/Hunt.jsx`): a realistic AI screen with hidden mistakes; tap what is wrong, tap fine parts to be told they are fine. Each of the 10 screens gives 30 XP once.
@@ -229,12 +229,14 @@ Stars: **3** = all needs and no traps; **2** = (missing + traps) <= 2; else **1*
 **Autonomy ladder** (`pages/Autonomy.jsx`): five levels with who decides, who acts, good for, watch out, patterns to build, and a mock screen. The **level finder** asks 4 questions
 (how bad if wrong, can it be undone, how often, needs taste) and `suggestLevel()` returns a starting level. Idea taken from research on aiuxplayground.com ("autonomy is a product decision").
 
-**Challenge a friend** (`game/challenge.js`): everything is in the link. Params: `vs` (whole number 0 to 999), `from` (name, max 24 chars, control chars stripped),
+**Challenge a friend** (`game/challenge.js`): everything is in the link. Params: `vs` (whole number 0 to 999), `from` (name, max 24 chars, control chars stripped), Dares use the share sheet when there is one, else copy; without a saved name a one-line name box appears (saved to `player-name`). Answering a friend's link says "Send it back to <name>" and the text names them.
 `seed` (letters/digits, max 16), `d` (YYYY-MM-DD, Daily), `r` (up to 5 chars of 0/1, Daily grid). A Speed challenge **needs a seed** or it is ignored. Bad params are ignored safely.
 
-**Player card** (`pages/PlayerCard.jsx`): name (max 24 chars), "AI designer type" (from the group you mastered most), level, XP, stats and badges. Drawn on a 1080x1350 canvas and saved/shared as an image. Long text shrinks to fit (`fillFit`).
+**Player card** (`pages/PlayerCard.jsx`): name (max 24 chars), "AI designer type" (from the group you mastered most), level, XP, stats and badges. Drawn on a 1080x1350 canvas and saved/shared as an image. Long text shrinks to fit (`fillFit`). Stars show as N/111. "Share image" is primary when the browser can share files; on phones the name and buttons sit above the card.
 
-**Badges** (`components/play/Badges.jsx`): one per pattern group; collect all cards for the badge, all with 3 stars for gold.
+**Badges** (`components/play/Badges.jsx`): one per pattern group; collect all cards for the badge, all with 3 stars for gold. Each badge links to the first missing card in its group (then the first under 3 stars); a won badge that isn't gold says how many need 3 stars.
+
+**Games in progress survive a link, Back and a refresh** (sessionStorage, this tab only): Stories (per story), Build (per brief, pieces kept until Start over), How much power? (the same 8 tasks), Spot the flaw (per screen, plus the current screen). Card links inside every game open a card peek. Every game end has a next step: Next story (the next story without its best ending), Next job (the next brief without 3 stars), Next game, and Spot the flaw's pinned Next screen.
 
 **Install and backup** (`components/play/AppAndBackup.jsx`, on the Me page): install prompt (Android/desktop `beforeinstallprompt`, iOS hint) and backup code (see section 7).
 
@@ -273,14 +275,14 @@ src/
 ### 6.2 Routing and layout
 - `HashRouter` so GitHub Pages needs no server rules. Links look like `/#/patterns/citations`.
 - `App.jsx` renders `TopBar`, then `<main>` with `ErrorBoundary key={pathname}` and `div.route` (re-keyed on path change so each page plays the enter animation and a crash resets on navigation), `Footer`, then `BottomNav` (phones only).
-- Phones (<= 720px): bottom tab bar (Home, Play, Cards, Explore, Me), a back button in the top bar (`parentOf()` in `config/nav.js`), no breadcrumbs, no footer.
+- Phones (<= 720px): bottom tab bar (Home, Play, Cards, Explore, Me), a back button in the top bar (`backOf()` in `config/nav.js`): if you came from its parent it goes back in history (scroll kept); if you came from another page it names it ("‹ ChatGPT teardown") and goes back there; after a reload it falls back to the parent. The app icon stays next to Back. Explore tabs are a 3 x 2 grid on phones. No breadcrumbs, no footer.
 - New pages start at the top. Browser Back/Forward returns to the saved scroll spot for that history entry (`App.jsx`, a Map keyed by `location.key`; `history.scrollRestoration = 'manual'`). The skip link focuses `<main>` instead of changing the hash (HashRouter would read `#main` as a route). `parentOf()` shows no Back button for unknown deep paths.
 
 ### 6.3 Data model (`src/data`)
 - `patterns.js`: `{ id, title, category, summary, problem, solution, when[], avoid[], dos[], donts[], examples[], demo? }` and `categories` (7).
 - `visuals.js`: per pattern `{ compare: { bad, good }, lab: { goal, frame[], decisions[{ id, label, options[{ label, ok, why, blocks[] }] }] } }`. Exactly **one** `ok` option per decision. A `{ slot: id }` in `frame` marks where a decision's chosen blocks appear. An option with empty `blocks` means "adds nothing".
 - Screen **blocks** are plain objects `{ type, ... }` drawn by `mock/Mock.jsx` (user, ai, note, text, chips, buttons, input, ghost, edit, steps, spinner, banner, toast, variants, rows, card, list, check, diff, modal, slider, toggle, avatar, voice, image, blank/empty). Build them with `mock/blocks.js`. Button label prefixes: `!Label` primary, `-Label` danger. Text: `[1]` = citation pill, `**x**` = bold, `:icon text` = icon.
-- Others: `examples.js` (real products per pattern), `principles.js` (UX laws, `patternPrinciples` as `[principleId, reason]` pairs, HAX guidelines), `lessons.js`, `teardowns.js`, `antipatterns.js`, `glossary.js`, `hunts.js`, `subtle.js`, `story.js`, `builds.js`, `autonomy.js`.
+- Others: `examples.js` (real products per pattern), `principles.js` (UX laws, `patternPrinciples` as `[principleId, reason]` pairs, HAX guidelines), `lessons.js`, `teardowns.js`, `antipatterns.js`, `glossary.js`, `hunts.js`, `subtle.js`, `story.js`, `builds.js`, `autonomy.js`. `patterns.js` has optional `keywords[]` for search; `glossary.js` entries may have `patterns: [ids]` (both checked by validate). Card pages show "Seen in" (teardowns) and "Related cards".
 - Every cross reference (pattern ids, scene names, ...) is verified by `npm run validate`.
 
 ### 6.4 Styles (`src/styles/index.css` imports, in this order, and order matters)
@@ -295,6 +297,7 @@ src/
 - **Copy style for games** (Oct 2026 pass): every game answers "What is this? What do I do? How do I win? What just happened?" on screen, in short easy sentences. Same words everywhere: "XP", "streak" / "in a row" (answers), "day streak" (days played), "round", "card", "stars", "trust". Daily says rounds 3 and 5 are hard. Note: a pattern's `lab.goal` (visuals.js) is also the brief line in This or That, Daily and Speed, so write goals that work in both places.
 - **One storage layer**: `lib/storage.js` (`readJSON`, `writeJSON`, `useStored`). Every write dispatches the `progress-change` event, so all hooks update together. Hooks also listen to the browser `storage` event, so other open tabs update. When storage is blocked, writes are kept in memory for the visit. The theme is one shared value (`theme-change` event); sound and vibration switches also keep an in-memory fallback.
 - **Data is cleaned when read** (`progress.js`: `cleanStats`, `cleanStars`, `cleanDaily`, `cleanDays`, `cleanList`). Wrong types, NaN, huge numbers, unknown ids and bad date keys are dropped or clamped. **When you add a saved field, add it to the clean functions**, or bad data could crash a page.
+- **Runs in progress**: `readRun` / `saveRun` / `clearRun` in `progress.js` (sessionStorage keys `run:story:<id>` `{sceneId, trust, picked, history}`, `run:build:<id>` `{order, placed, checked}`, `run:power` `{ids, i, pick, log}`, `run:hunt:<id>` `{found, revealed}`, `run:spot` `{screen}`), each with a `read*Run` cleaner so bad data starts a fresh game. Not part of backup codes.
 - **Best-score helpers**: `saveBest(field, value)` and `saveBestIn(field, id, value)` keep the maximum. A new best score = a `saveBest` line + a line in `xpParts()`.
 - **Seeded randomness**: `lib/random.js` `seeded(key)` (mulberry32) so the Daily and challenge links give everyone the same rounds.
 - **Clipboard** only through `lib/clipboard.js` `copyText()` (clipboard API, then `execCommand`, then a prompt box).
@@ -339,7 +342,7 @@ On by default; two separate switches on the Me page; the top-bar speaker toggles
 **Motion** (`styles/motion.css`, all inside `@media (prefers-reduced-motion: no-preference)`, so reduced-motion users get none):
 - page enter (`.route`), staggered arrival of tiles/badges/lists (`--i` by `nth-child`), scene slide-in for Lab/Story/This or That (keyed elements remount), pop for right and shake for wrong answers, meters and the goal ring fill when shown, rolling XP/score numbers, press feedback, hover lift only with a mouse, scroll-reveal of `.block` sections using `animation-timeline: view()` (progressive enhancement), light/dark cross-fade (`html.theme-fade`).
 
-**Splash screen** (inline in `index.html`, ended by `src/lib/splash.js`): shows before any download. The app icon springs in, the bad
+**Splash screen** (full splash only for the home page on the first load of a visit; deep links and challenge links get the quick one) (inline in `index.html`, ended by `src/lib/splash.js`): shows before any download. The app icon springs in, the bad
 answer pops (its ✕ draws), the good answer pops with "typing" dots that loop while the JS loads, then the dots turn into a ✓, the tile
 bounces with a lime ring, and the splash fades and blurs away while the top bar, bottom bar and page rise in (`html.sp-reveal`, in
 `motion.css`). Full splash once per browser visit (`sessionStorage` key `gb3-splash`), at least about 0.95 s from page start so it never
