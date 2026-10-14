@@ -2,43 +2,43 @@
 // `type` groups them on the Principles page; `source` says where the idea comes from.
 
 export const principleTypes = [
-  { id: 'heuristic', name: 'Usability heuristics', blurb: 'From Jakob Nielsen’s 10 usability heuristics (1994), the best-known rules of thumb for interface design.' },
-  { id: 'law', name: 'Laws of UX', blurb: 'Well-tested findings about how people perceive and decide.' },
-  { id: 'psychology', name: 'Psychology & trust', blurb: 'How people think, feel and trust, especially with AI.' },
+  { id: 'heuristic', name: 'Usability heuristics', blurb: 'Jakob Nielsen’s 10 rules of thumb from 1994. Designers still lean on them every day.' },
+  { id: 'law', name: 'Laws of UX', blurb: 'Tested findings about how people see, choose and decide.' },
+  { id: 'psychology', name: 'Psychology & trust', blurb: 'How people think, feel and decide who to trust, especially with AI.' },
 ];
 
 export const principles = [
   // Nielsen heuristics
-  { id: 'visibility', type: 'heuristic', name: 'Visibility of system status', def: 'Keep people informed about what is happening, with timely feedback.' },
-  { id: 'control', type: 'heuristic', name: 'User control and freedom', def: 'Give people a clear way out: stop, undo, cancel.' },
-  { id: 'error-prevention', type: 'heuristic', name: 'Error prevention', def: 'Stop problems before they happen, for example by confirming risky actions.' },
-  { id: 'recognition', type: 'heuristic', name: 'Recognition rather than recall', def: 'Show options so people do not have to remember or invent them.' },
-  { id: 'minimalist', type: 'heuristic', name: 'Aesthetic and minimalist design', def: 'Show only what matters right now. Extra things compete for attention.' },
-  { id: 'recover', type: 'heuristic', name: 'Help users recover from errors', def: 'Explain the problem in plain words and suggest a way forward.' },
-  { id: 'match', type: 'heuristic', name: 'Match with the real world', def: 'Use words and ideas people already know, not system jargon.' },
+  { id: 'visibility', type: 'heuristic', name: 'Visibility of system status', def: 'Always show what’s going on. Nobody likes staring at a frozen screen.' },
+  { id: 'control', type: 'heuristic', name: 'User control and freedom', def: 'Give people an easy way out: stop, undo, cancel.' },
+  { id: 'error-prevention', type: 'heuristic', name: 'Error prevention', def: 'Stop mistakes before they happen, like asking before a risky action.' },
+  { id: 'recognition', type: 'heuristic', name: 'Recognition rather than recall', def: 'Show the options. Picking is easier than remembering.' },
+  { id: 'minimalist', type: 'heuristic', name: 'Aesthetic and minimalist design', def: 'Show only what matters right now. Everything extra fights for attention.' },
+  { id: 'recover', type: 'heuristic', name: 'Help users recover from errors', def: 'When something breaks, say what happened in plain words and offer a way forward.' },
+  { id: 'match', type: 'heuristic', name: 'Match with the real world', def: 'Use words people already know, not system talk.' },
 
   // Laws of UX
-  { id: 'hicks', type: 'law', name: 'Hick’s law', def: 'The more choices there are, the longer it takes to decide.' },
-  { id: 'choice-overload', type: 'law', name: 'Choice overload', def: 'Too many similar options make choosing harder and less satisfying.' },
-  { id: 'doherty', type: 'law', name: 'Doherty threshold', def: 'People stay engaged when the system responds in under about 400 ms.' },
-  { id: 'goal-gradient', type: 'law', name: 'Goal-gradient effect', def: 'People push on when they can see how close they are to the end.' },
+  { id: 'hicks', type: 'law', name: 'Hick’s law', def: 'More choices, slower decisions.' },
+  { id: 'choice-overload', type: 'law', name: 'Choice overload', def: 'Too many similar options make choosing harder and less fun.' },
+  { id: 'doherty', type: 'law', name: 'Doherty threshold', def: 'Reply in under about 0.4 seconds and people stay in the flow.' },
+  { id: 'goal-gradient', type: 'law', name: 'Goal-gradient effect', def: 'The closer the finish line looks, the harder people push.' },
   { id: 'jakobs', type: 'law', name: 'Jakob’s law', def: 'People expect your product to work like the products they already use.' },
-  { id: 'teslers', type: 'law', name: 'Tesler’s law', def: 'Complexity cannot be removed, only moved. Let the system carry it.' },
-  { id: 'peak-end', type: 'law', name: 'Peak-end rule', def: 'People judge an experience by its most intense moment and its end.' },
-  { id: 'von-restorff', type: 'law', name: 'Von Restorff effect', def: 'The item that looks different is the one people notice and remember.' },
+  { id: 'teslers', type: 'law', name: 'Tesler’s law', def: 'Some hard stuff never goes away. Let the product carry it, not the person.' },
+  { id: 'peak-end', type: 'law', name: 'Peak-end rule', def: 'People remember the strongest moment, and the ending.' },
+  { id: 'von-restorff', type: 'law', name: 'Von Restorff effect', def: 'The thing that looks different is the thing people notice and remember.' },
 
   // Psychology & trust
-  { id: 'automation-bias', type: 'psychology', name: 'Automation bias', def: 'People tend to accept what an automated system says, even when it is wrong.' },
-  { id: 'calibrated-trust', type: 'psychology', name: 'Calibrated trust', def: 'Good AI design makes trust match how reliable the system really is.' },
-  { id: 'mental-model', type: 'psychology', name: 'Mental models', def: 'People act on what they believe a system can do, right or wrong.' },
+  { id: 'automation-bias', type: 'psychology', name: 'Automation bias', def: 'People tend to believe a machine, even when it’s wrong.' },
+  { id: 'calibrated-trust', type: 'psychology', name: 'Calibrated trust', def: 'People should trust the AI exactly as much as it deserves. No more, no less.' },
+  { id: 'mental-model', type: 'psychology', name: 'Mental models', def: 'What people believe a system can do. They act on that belief, right or wrong.' },
   { id: 'transparency', type: 'psychology', name: 'Operational transparency', def: 'People value a result more when they can see the work behind it.' },
-  { id: 'ikea', type: 'psychology', name: 'IKEA effect', def: 'People value things more when they helped make them.' },
-  { id: 'loss-aversion', type: 'psychology', name: 'Loss aversion', def: 'Losing something feels worse than gaining the same thing feels good.' },
-  { id: 'agency', type: 'psychology', name: 'Sense of agency', def: 'People need to feel that they, not the system, decide the outcome.' },
-  { id: 'cognitive-load', type: 'psychology', name: 'Cognitive load', def: 'Every extra thing to read, type or remember costs mental effort.' },
-  { id: 'habituation', type: 'psychology', name: 'Habituation', def: 'Warnings that appear too often stop being read.' },
-  { id: 'stereotype', type: 'psychology', name: 'Stereotype reinforcement', def: 'Repeated images of who does what shape what people believe is normal.' },
-  { id: 'working-memory', type: 'psychology', name: 'Working memory limits', def: 'People can hold only a few items in mind at once, especially when listening.' },
+  { id: 'ikea', type: 'psychology', name: 'IKEA effect', def: 'People love things more when they helped make them. Like that wobbly shelf you built.' },
+  { id: 'loss-aversion', type: 'psychology', name: 'Loss aversion', def: 'Losing something hurts more than winning the same thing feels good.' },
+  { id: 'agency', type: 'psychology', name: 'Sense of agency', def: 'People need to feel they’re in charge, not the machine.' },
+  { id: 'cognitive-load', type: 'psychology', name: 'Cognitive load', def: 'Every extra thing to read, type or remember tires the brain a little.' },
+  { id: 'habituation', type: 'psychology', name: 'Habituation', def: 'See a warning too often and you stop reading it.' },
+  { id: 'stereotype', type: 'psychology', name: 'Stereotype reinforcement', def: 'Show the same people in the same jobs again and again, and people start to think it’s normal.' },
+  { id: 'working-memory', type: 'psychology', name: 'Working memory limits', def: 'People can hold only a few things in their head at once, even fewer when listening.' },
 ];
 
 export const getPrinciple = (id) => principles.find((p) => p.id === id);
@@ -52,16 +52,16 @@ export const patternPrinciples = {
   ],
   'clarifying-questions': [
     ['error-prevention', 'One question up front prevents a wrong, wasted result.'],
-    ['cognitive-load', 'Tap-to-answer chips are easier than typing an answer.'],
+    ['cognitive-load', 'Tapping a chip is easier than typing an answer.'],
   ],
   'visible-context': [
     ['visibility', 'People can see which file the AI is reading.'],
-    ['mental-model', 'Showing context corrects the belief that the AI “sees everything”.'],
+    ['mental-model', 'Showing what it reads clears up the idea that the AI “sees everything”.'],
     ['control', 'People can remove or add context.'],
   ],
   'structured-controls': [
     ['recognition', 'Tone and length are visible choices, not words to remember.'],
-    ['teslers', 'The product writes the complex prompt, so people do not have to.'],
+    ['teslers', 'The product writes the tricky prompt, so people don’t have to.'],
     ['hicks', 'Two or three common controls keep the screen simple.'],
   ],
   'streaming-response': [
@@ -96,12 +96,12 @@ export const patternPrinciples = {
   ],
   'set-expectations': [
     ['mental-model', 'An honest intro sets the right picture of what the AI can do.'],
-    ['calibrated-trust', 'Saying “can make mistakes” keeps trust realistic.'],
+    ['calibrated-trust', '“Can make mistakes” keeps trust realistic.'],
     ['automation-bias', 'A visible reminder makes people check instead of copy.'],
   ],
   citations: [
     ['calibrated-trust', 'People can check a claim instead of trusting it blindly.'],
-    ['automation-bias', 'Sources invite checking, the antidote to blind acceptance.'],
+    ['automation-bias', 'Sources invite people to check, not just accept.'],
     ['transparency', 'Showing where facts came from makes the answer more valuable.'],
   ],
   'confidence-signals': [
@@ -116,7 +116,7 @@ export const patternPrinciples = {
   'explain-why': [
     ['transparency', 'Reasons show the work behind a recommendation.'],
     ['calibrated-trust', 'People can judge if the reasons are right.'],
-    ['match', 'Plain reasons, not model scores.'],
+    ['match', 'Reasons in plain words, not model scores.'],
   ],
   'memory-controls': [
     ['visibility', 'People see when something is saved, and what.'],
@@ -124,12 +124,12 @@ export const patternPrinciples = {
   ],
   'feedback-loop': [
     ['cognitive-load', 'One click is easy enough that people actually do it.'],
-    ['peak-end', 'Fixing a bad answer right away improves how the whole session is remembered.'],
+    ['peak-end', 'Fixing a bad answer fast makes the whole chat feel better looking back.'],
     ['minimalist', 'Feedback buttons stay quieter than the answer.'],
   ],
   'graceful-errors': [
     ['recover', 'Plain words and a next step get people moving again.'],
-    ['loss-aversion', 'Keeping the person’s text avoids the pain of losing work.'],
+    ['loss-aversion', 'Keeping the person’s text saves them the pain of lost work.'],
     ['peak-end', 'A good recovery turns a low point into a good ending.'],
   ],
   'plan-first': [
@@ -179,7 +179,7 @@ export const patternPrinciples = {
   ],
   'agent-handoff': [
     ['visibility', 'People can see which agent is doing which step right now.'],
-    ['mental-model', 'A visible team of agents matches how the work really happens.'],
+    ['mental-model', 'Seeing the team of agents matches how the work really happens.'],
     ['calibrated-trust', 'Knowing which agent made a claim helps people judge it.'],
   ],
   'screen-control': [
@@ -189,12 +189,12 @@ export const patternPrinciples = {
   ],
   'connected-apps': [
     ['visibility', 'One list shows everything the AI can reach.'],
-    ['transparency', 'Showing the source app next to an answer explains where it came from.'],
+    ['transparency', 'The source app next to an answer shows where it came from.'],
     ['control', 'One-tap disconnect makes it easy to say no.'],
   ],
   'cost-estimate': [
     ['visibility', 'The cost is visible before the action.'],
-    ['loss-aversion', 'Surprise charges feel like a loss; estimates prevent them.'],
+    ['loss-aversion', 'Surprise charges sting. A price up front prevents them.'],
     ['error-prevention', 'A warning before the limit prevents half-finished tasks.'],
   ],
   'voice-turn-taking': [
@@ -207,17 +207,17 @@ export const patternPrinciples = {
     ['cognitive-load', 'Only the key details are read back, so it stays short.'],
   ],
   'point-to-edit': [
-    ['cognitive-load', 'Pointing replaces describing a location in words.'],
+    ['cognitive-load', 'Pointing beats describing a spot in words.'],
     ['control', 'Only the selected area changes.'],
     ['agency', 'People decide exactly what the AI touches.'],
   ],
   'mode-switch': [
-    ['working-memory', 'Spoken lists overload memory; a screen holds the details.'],
+    ['working-memory', 'Long spoken lists are hard to hold in your head. A screen holds the details.'],
     ['recognition', 'Seeing options beats remembering them.'],
   ],
   'bias-check': [
-    ['stereotype', 'Varied defaults avoid teaching narrow pictures of who does what.'],
-    ['automation-bias', 'People tend to accept AI defaults as neutral, even when they are not.'],
+    ['stereotype', 'Mixed defaults don’t teach a narrow picture of who does what.'],
+    ['automation-bias', 'People take AI defaults as neutral, even when they aren’t.'],
     ['agency', 'Filters let people choose instead of the model assuming.'],
   ],
 };

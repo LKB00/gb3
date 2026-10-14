@@ -7,7 +7,7 @@ import NotFound from './NotFound';
 import LibraryTabs from '../components/LibraryTabs';
 import Breadcrumbs from '../components/Breadcrumbs';
 
-const NOTE = 'Based on well-known public features; products change often. Not affiliated with these companies. Product names belong to their owners.';
+const NOTE = 'Based on public features when we last looked. Apps change fast. We’re not linked to these companies, and the names belong to them.';
 
 export function TeardownList() {
   useTitle('Teardowns');
@@ -15,8 +15,8 @@ export function TeardownList() {
     <div className="page page-wide page-lib-read">
       <LibraryTabs />
       <header className="page-head">
-        <h1 className="display">How real AI products use the patterns</h1>
-        <p className="lead">Step-by-step breakdowns of well-known AI products: which patterns they use at each stage, what works, and what could be better.</p>
+        <h1 className="display">How the big AI apps do it</h1>
+        <p className="lead">Walk through famous AI apps, one step at a time. See the patterns they use, what they got right, and what we’d fix.</p>
       </header>
       <div className="block">
         <ul className="index-list">
@@ -25,7 +25,7 @@ export function TeardownList() {
               <Link to={`/teardowns/${t.id}`} className="index-row index-row-icon">
                 <span className="ex-mark td-mark" aria-hidden>{t.product[0]}</span>
                 <span className="index-title">{t.product}</span>
-                <span className="index-sum">{t.type} · {t.journey.length} stages · {new Set(t.journey.flatMap((j) => j.patterns)).size} patterns</span>
+                <span className="index-sum">{t.type} · {t.journey.length} steps · {new Set(t.journey.flatMap((j) => j.patterns)).size} patterns</span>
                 <ChevronRight size={16} strokeWidth={1.75} className="index-chev" aria-hidden />
               </Link>
             </li>
@@ -60,8 +60,8 @@ export function TeardownDetail() {
 
       <section className="block">
         <div className="section-head">
-          <h2>The journey, stage by stage</h2>
-          <p className="section-sub">What happens at each moment, and the pattern behind it.</p>
+          <h2>Step by step</h2>
+          <p className="section-sub">What you see at each moment, and the pattern behind it.</p>
         </div>
         <ol className="td-journey">
           {t.journey.map((j, i) => (
@@ -82,7 +82,7 @@ export function TeardownDetail() {
       </section>
 
       <section className="block">
-        <h2>What works</h2>
+        <h2>What they got right</h2>
         <ul className="rule-list rule-do">
           {t.works.map((w) => <li key={w}><ThumbsUp size={14} strokeWidth={2} aria-hidden />{w}</li>)}
         </ul>
@@ -90,8 +90,8 @@ export function TeardownDetail() {
 
       <section className="block">
         <div className="section-head">
-          <h2>What could be better</h2>
-          <p className="section-sub">Our suggestions, using patterns from this site.</p>
+          <h2>What we’d fix</h2>
+          <p className="section-sub">Our own ideas, not the company’s plans.</p>
         </div>
         <ul className="rule-list td-better">
           {t.better.map((b) => (
@@ -107,7 +107,7 @@ export function TeardownDetail() {
       </section>
 
       <section className="block">
-        <h2>Patterns used ({used.length})</h2>
+        <h2>Patterns spotted ({used.length})</h2>
         <div className="row wrap">
           {used.map((pid) => <Link key={pid} to={`/patterns/${pid}`} className="chip">{getPattern(pid).title}</Link>)}
         </div>

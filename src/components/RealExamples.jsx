@@ -19,7 +19,7 @@ export default function RealExamples({ id }) {
           </article>
         ))}
       </div>
-      <p className="footnote">Simplified descriptions of public features. Product names belong to their owners.</p>
+      <p className="footnote">Short, simple takes on public features. Product names belong to their owners.</p>
     </>
   );
 }

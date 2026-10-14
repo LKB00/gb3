@@ -13,7 +13,7 @@ export default function DemoFrame({ name }) {
       <div className="demo-bar">
         <span className="label">Live demo</span>
         <button className="btn btn-ghost btn-sm" onClick={() => setKey((k) => k + 1)}>
-          <RotateCcw size={13} strokeWidth={1.75} aria-hidden /> Reset
+          <RotateCcw size={13} strokeWidth={1.75} aria-hidden /> Start over
         </button>
       </div>
       <div className="demo-body">

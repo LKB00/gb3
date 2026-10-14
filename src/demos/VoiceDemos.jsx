@@ -74,7 +74,7 @@ export function VoiceTurns() {
           {state === 'speaking' && <span className="caret" />}
         </p>
       )}
-      {state === 'interrupted' && <p className="demo-ok">Stopped speaking the moment you talked.</p>}
+      {state === 'interrupted' && <p className="demo-ok">It went quiet the moment you spoke.</p>}
       <div className="row">
         {(state === 'idle' || state === 'done' || state === 'interrupted') && (
           <button className="btn btn-primary" onClick={talk}>
@@ -88,7 +88,7 @@ export function VoiceTurns() {
           </button>
         )}
       </div>
-      <p className="demo-note">Simulated, no microphone used. Press Talk, then Interrupt while it is speaking.</p>
+      <p className="demo-note">No microphone needed. Press Talk, then Interrupt while it speaks.</p>
     </div>
   );
 }

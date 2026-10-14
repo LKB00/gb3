@@ -9,7 +9,7 @@ const draft = [
   'Could you share the research file before Friday so we can plan the next test?',
 ];
 const rewrites = [
-  ['Hi Priya, great to see you at yesterday\'s design review!', 'Hi Priya — thank you for your time at the review.'],
+  ['Hi Priya, great to see you at yesterday\'s design review!', 'Hi Priya, thank you for your time at the review.'],
   ['Your checkout feedback helped a lot; the new button order is already live in the prototype.', 'We used your checkout notes right away.'],
   ['Could you send the research file by Friday? It will help us plan the next test.', 'Please share the research file before Friday if you can.'],
 ];
@@ -60,7 +60,7 @@ export function EditableOutput() {
           </div>
         ))}
       </div>
-      <p className="demo-note">Type in any sentence, or rewrite just one part. The rest stays the same.</p>
+      <p className="demo-note">Type in any sentence, or tap Rewrite this on one. The rest stays put.</p>
     </div>
   );
 }
@@ -113,7 +113,7 @@ export function InlineSuggestion() {
             <button className="btn btn-ghost btn-sm" onClick={() => setDismissed(true)}>Ignore <kbd>Esc</kbd></button>
           </>
         ) : (
-          <span className="demo-muted">{accepted ? `Accepted ${accepted} suggestion${accepted > 1 ? 's' : ''}.` : 'No suggestion right now.'}</span>
+          <span className="demo-muted">{accepted ? `Accepted ${accepted} suggestion${accepted > 1 ? 's' : ''}.` : 'Keep typing for a hint.'}</span>
         )}
       </div>
       <p className="demo-note">The grey text is only an idea. Nothing changes until you accept it.</p>

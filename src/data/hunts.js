@@ -11,12 +11,12 @@ export const hunts = [
     blocks: [
       {
         type: 'banner', tone: 'info', title: 'Meet Max', text: 'The AI that knows everything!',
-        mistake: { text: 'It promises too much. Say what it is good at, and that it can be wrong.', pattern: 'set-expectations' },
+        mistake: { text: 'It promises too much, so people trust it blindly. Say what it’s good at, and that it can be wrong.', pattern: 'set-expectations' },
       },
       { type: 'user', text: 'What did users say about the new checkout?' },
       {
         type: 'ai', text: 'Users love the new checkout, and conversion went up 40%.',
-        mistake: { text: 'A big claim with no source. Show where each fact comes from.', pattern: 'citations' },
+        mistake: { text: 'A big claim, and no way to check it. Show where each fact comes from.', pattern: 'citations' },
       },
       {
         type: 'buttons', items: [':retry Regenerate'],
@@ -24,7 +24,7 @@ export const hunts = [
       },
       {
         type: 'modal', title: 'Rate this chat (1–10) to continue', text: '', buttons: ['!Submit'],
-        mistake: { text: 'A must-answer survey blocks the chat. Use quick thumbs up / down instead.', pattern: 'feedback-loop' },
+        mistake: { text: 'A must-answer survey blocks the chat. Offer quick thumbs up / down instead.', pattern: 'feedback-loop' },
       },
       { type: 'input', placeholder: 'Ask Max…' },
     ],
@@ -38,16 +38,16 @@ export const hunts = [
       { type: 'user', text: 'Tidy up my design file' },
       {
         type: 'steps', items: [{ label: 'Step 3 of 38: Deleting unused components', state: 'active' }],
-        mistake: { text: 'It started a 38-step job with no plan for you to check first.', pattern: 'plan-first' },
+        mistake: { text: 'It jumped into a 38-step job with no plan to check first.', pattern: 'plan-first' },
       },
       {
         type: 'spinner', text: 'Please keep this tab open (12 min)',
-        mistake: { text: 'You can’t leave for 12 minutes. Run it in the background and show progress.', pattern: 'task-status' },
+        mistake: { text: 'People are trapped on this tab for 12 minutes. Run it in the background and show progress.', pattern: 'task-status' },
       },
       { type: 'rows', items: [{ label: 'Layers renamed', value: '24' }, { label: 'Styles created', value: '6' }] },
       {
         type: 'toast', text: 'Deleted 112 components', action: '',
-        mistake: { text: 'It deleted 112 things without asking, and there is no undo.', pattern: 'stop-and-undo' },
+        mistake: { text: 'It deleted 112 things without asking, and there’s no undo. Ouch.', pattern: 'stop-and-undo' },
       },
       {
         type: 'note', text: 'Your file was improved.',
@@ -68,7 +68,7 @@ export const hunts = [
           { label: 'Vendor', value: 'Pixel Studio', tag: '98.7%' },
           { label: 'Total', value: '₹ 48,500', tag: '61.4%' },
         ],
-        mistake: { text: 'Numbers like 61.4% look exact, but they are not. Use words like "Sure" or "Check this".', pattern: 'confidence-signals' },
+        mistake: { text: '61.4% looks exact, but it’s a rough guess. Use words like “Sure” or “Check this”.', pattern: 'confidence-signals' },
       },
       {
         type: 'banner', tone: 'bad', title: 'Error 422', text: 'Tax ID invalid.',
@@ -76,7 +76,7 @@ export const hunts = [
       },
       {
         type: 'toast', text: 'Auto-approved and paid ₹ 48,500', action: '',
-        mistake: { text: 'Paid money without asking, even though the total was unsure.', pattern: 'action-approval' },
+        mistake: { text: 'It paid without asking, even though it wasn’t sure of the total. Ask first.', pattern: 'action-approval' },
       },
       { type: 'buttons', items: ['Download PDF', 'Share'] },
     ],
@@ -89,13 +89,13 @@ export const hunts = [
     blocks: [
       {
         type: 'avatar', name: 'Ravi M', role: 'Design lead',
-        mistake: { text: 'This post was written by AI, but there is no label.', pattern: 'ai-disclosure' },
+        mistake: { text: 'AI wrote this post, but readers can’t tell. Add a label.', pattern: 'ai-disclosure' },
       },
       { type: 'text', text: 'Thrilled to share our Q3 design wins — synergy, innovation and impact!' },
       { type: 'buttons', items: [':up 12', 'Comment'] },
       {
         type: 'ai', text: 'Since your divorce last year, here are some solo events nearby…',
-        mistake: { text: 'It uses a private fact the person never knew was saved.', pattern: 'memory-controls' },
+        mistake: { text: 'It brings up a private fact the person never knew was saved. Creepy. Let people see and delete memories.', pattern: 'memory-controls' },
       },
       {
         type: 'card', title: 'Recommended: Leadership 101', text: 'Match score: 0.92', tag: 'For you',
@@ -115,12 +115,12 @@ export const hunts = [
       },
       {
         type: 'input', value: 'photo, 4k, ultra detailed, soft light, 16:9, --style raw --v 6 --no text',
-        mistake: { text: 'People must know secret codes like "--v 6". Offer simple style and size buttons.', pattern: 'structured-controls' },
+        mistake: { text: 'People must know secret codes like “--v 6”. Offer simple style and size buttons.', pattern: 'structured-controls' },
       },
       { type: 'chips', items: [':file brand-guide.pdf'], on: null },
       {
         type: 'variants', items: ['Red mug', 'Red mug.', 'A red mug', 'Red mug 2', 'Mug, red', 'Red cup'],
-        mistake: { text: 'Six near-copies. Show 3 truly different options.', pattern: 'multiple-variants' },
+        mistake: { text: 'Six near-copies. People can’t really choose. Show 3 truly different options.', pattern: 'multiple-variants' },
       },
       { type: 'buttons', items: ['!Use A', 'More like A'] },
     ],
@@ -159,21 +159,21 @@ export const hunts = [
     blocks: [
       {
         type: 'voice', state: 'idle', label: '…',
-        mistake: { text: 'No listening state. People cannot tell if they are being heard. Show who is talking.', pattern: 'voice-turn-taking' },
+        mistake: { text: 'People can’t tell if it’s listening. Show who is talking.', pattern: 'voice-turn-taking' },
       },
       { type: 'user', text: 'Order more of the oat milk I usually get' },
       {
         type: 'voice', state: 'speaking', label: 'Speaking', text: 'I found nine options. Option one, Oatly Barista, one litre, three ninety-nine. Option two…',
-        mistake: { text: 'A long list read aloud. Say a short summary and show the options on screen.', pattern: 'mode-switch' },
+        mistake: { text: 'A long list read aloud. People forget option one by option three. Say a summary, show the list.', pattern: 'mode-switch' },
       },
       {
         type: 'toast', text: 'Ordered 12 × Oat milk 1L for $47.88', action: '',
-        mistake: { text: 'Ordered without reading back the item, quantity and price. Read it back and wait for a yes.', pattern: 'read-back' },
+        mistake: { text: 'It ordered 12 without reading anything back. Read back the item, amount and price, then wait for a yes.', pattern: 'read-back' },
       },
       { type: 'chips', items: ['Track order', 'Reorder'] },
       {
         type: 'note', text: 'Please wait until I finish speaking.', tone: 'warn',
-        mistake: { text: 'People cannot interrupt. Stop speaking the moment the person talks.', pattern: 'voice-turn-taking' },
+        mistake: { text: 'People can’t cut in. Stop speaking the moment the person talks.', pattern: 'voice-turn-taking' },
       },
     ],
   },
@@ -194,12 +194,12 @@ export const hunts = [
       },
       {
         type: 'toast', text: 'Notes sent to all 48 attendees',
-        mistake: { text: 'Shared automatically, before anyone could check. Ask first.', pattern: 'action-approval' },
+        mistake: { text: 'Sent to 48 people before anyone could check. Ask first.', pattern: 'action-approval' },
       },
       { type: 'buttons', items: ['Edit notes', 'Copy'] },
       {
         type: 'note', text: 'Notely remembers everything said in your meetings.',
-        mistake: { text: 'Memory with no controls. Show what it keeps and let people delete it.', pattern: 'memory-controls' },
+        mistake: { text: 'It remembers everything, and people can’t stop it. Show what it keeps, and let people delete it.', pattern: 'memory-controls' },
       },
     ],
   },
@@ -235,11 +235,11 @@ export const hunts = [
       { type: 'image', height: 90, sel: [55, 20, 30, 45], selLabel: 'Selected' },
       {
         type: 'input', value: 'make it better',
-        mistake: { text: '“Make it better” is too vague. Offer clear edit ideas people can tap.', pattern: 'prompt-starters' },
+        mistake: { text: 'People don’t know what to ask, so they type “make it better”. Offer edit ideas to tap.', pattern: 'prompt-starters' },
       },
       {
         type: 'note', text: 'Edit applied to your original photo',
-        mistake: { text: 'The original photo is gone. Keep it, and show before and after.', pattern: 'preview-changes' },
+        mistake: { text: 'The original photo is gone forever. Keep it, and show before and after.', pattern: 'preview-changes' },
       },
       {
         type: 'buttons', items: [':retry Try again'],
@@ -248,7 +248,7 @@ export const hunts = [
       { type: 'chips', items: ['Brighter', 'Remove background', 'Warmer'] },
       {
         type: 'buttons', items: ['!Share'],
-        mistake: { text: 'The shared photo has no “Edited with AI” label. Add one.', pattern: 'ai-disclosure' },
+        mistake: { text: 'Viewers can’t tell AI edited this photo. Add an “Edited with AI” label.', pattern: 'ai-disclosure' },
       },
     ],
   },

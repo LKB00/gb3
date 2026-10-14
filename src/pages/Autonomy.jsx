@@ -49,9 +49,9 @@ function LevelDetail({ level }) {
         <ul className="ladder-list">
           {level.use.map((u) => <li key={u}>{u}</li>)}
         </ul>
-        <p className="label">Watch out</p>
+        <p className="label">Watch out for</p>
         <p className="ladder-risk">{level.risk}</p>
-        <p className="label">Patterns to build</p>
+        <p className="label">Cards that make it work</p>
         <div className="row wrap">
           {level.patterns.map((id) => (
             <Link key={id} to={`/patterns/${id}`} className="chip chip-sm">{getPattern(id).title}</Link>
@@ -106,11 +106,11 @@ function Finder({ onResult }) {
             <span className="ladder-n">{result.n}</span>
             <span>
               Start at <strong>{result.name}</strong>: {result.short}.
-              <span className="small muted"> A starting point, not a rule. Test it with real people.</span>
+              <span className="small muted"> A good first step, not a rule. Then watch real people use it.</span>
             </span>
           </>
         ) : (
-          <span className="muted">Answer all four to see a starting level.</span>
+          <span className="muted">Answer all four and your level pops up here.</span>
         )}
       </div>
     </div>
@@ -134,7 +134,7 @@ export default function Autonomy() {
       <header className="page-head">
         <h1 className="display">How much power should the AI have?</h1>
         <p className="lead">
-          Five levels, from “it only suggests” to “it just handles it”. The AI being <em>able</em> to do something doesn’t mean it <em>should</em>. Match the power to the risk.
+          Five levels, from “here’s an idea” to “already done”. An AI that <em>can</em> do something shouldn’t always <em>do</em> it. Give it as much power as the risk allows.
         </p>
       </header>
 
@@ -145,8 +145,8 @@ export default function Autonomy() {
 
       <section className="block">
         <div className="section-head">
-          <h2>Find the level</h2>
-          <p className="section-sub">Four quick questions about your feature.</p>
+          <h2>Find your level</h2>
+          <p className="section-sub">Think of one AI feature. Answer four quick questions.</p>
         </div>
         <Finder
           onResult={(k) => {
@@ -158,15 +158,15 @@ export default function Autonomy() {
 
       <section className="block ladder-block">
         <ul className="ladder-rules">
-          <li><strong>Start low, earn more.</strong> Begin at Confirm or Draft. Move up when people trust it and mistakes are rare.</li>
-          <li><strong>One product, many levels.</strong> Sorting email can be Act alone while sending email stays Confirm.</li>
-          <li><strong>Let people choose.</strong> An autonomy setting lets each person pick their own level per task.</li>
+          <li><strong>Start low, earn more.</strong> Begin at Draft or Confirm. Move up as people trust it and mistakes get rare.</li>
+          <li><strong>One product, many levels.</strong> Sorting email can run alone while sending email still asks first.</li>
+          <li><strong>Let people choose.</strong> A simple setting lets each person pick the level for each task.</li>
         </ul>
         <Link to="/play/power" className="ladder-cta">
           <Gauge size={22} strokeWidth={1.75} aria-hidden />
           <span>
-            <strong>Test yourself: How much power?</strong>
-            <span>8 real tasks. Pick the right level for each.</span>
+            <strong>Play: How much power?</strong>
+            <span>8 real tasks. Give each one the right amount of power.</span>
           </span>
           <ArrowRight size={18} strokeWidth={1.75} aria-hidden />
         </Link>

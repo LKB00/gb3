@@ -45,14 +45,14 @@ export default function Lesson() {
       ))}
 
       <section className="block">
-        <h2>Remember this</h2>
+        <h2>The short version</h2>
         <ul className="rule-list rule-do">
           {lesson.takeaways.map((t) => <li key={t}><Check size={14} strokeWidth={2} aria-hidden />{t}</li>)}
         </ul>
       </section>
 
       <section className="block">
-        <h2>Try it at work</h2>
+        <h2>Try it yourself</h2>
         <p className="prose">{lesson.exercise}</p>
       </section>
 
@@ -60,7 +60,7 @@ export default function Lesson() {
         <section className="block do-it">
           <div className="section-head">
             <p className="label"><FlaskConical size={12} strokeWidth={2} aria-hidden /> Your turn</p>
-            <h2>Play the cards from this read</h2>
+            <h2>Now play the cards</h2>
             <p className="section-sub">
               {lesson.patterns.filter((pid) => passed.includes(pid)).length} of {lesson.patterns.length} collected. About a minute each.
             </p>

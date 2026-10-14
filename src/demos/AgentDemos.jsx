@@ -49,7 +49,7 @@ export function AutonomyLevels() {
 
   return (
     <div className="demo-stack">
-      <p className="demo-muted">An email agent at five levels of autonomy. Move the dial.</p>
+      <p className="demo-muted">One email helper, five levels of freedom. Slide to see each one.</p>
       <div className="autonomy">
         <input
           type="range"
@@ -151,7 +151,7 @@ export function PauseRedirect() {
           id="redirect-rule"
           value={rule}
           onChange={(e) => setRule(e.target.value)}
-          placeholder="Add a correction, e.g. only companies in India"
+          placeholder="Add a correction, like “only India”"
           aria-label="Correction"
         />
       )}
@@ -161,7 +161,7 @@ export function PauseRedirect() {
         {state === 'paused' && <button className="btn btn-primary" onClick={resume}><Play size={14} strokeWidth={1.75} aria-hidden /> Resume</button>}
         {state === 'done' && <button className="btn btn-ghost" onClick={start}><RotateCcw size={14} strokeWidth={1.75} aria-hidden /> Run again</button>}
       </div>
-      <p className="demo-note">Pause while it runs, type “only India”, then Resume. The good results so far are kept.</p>
+      <p className="demo-note">Press Pause, type “only India”, then Resume. It keeps the matches it already found.</p>
     </div>
   );
 }

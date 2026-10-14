@@ -43,13 +43,13 @@ export function FeedbackLoop() {
       )}
       {sent && (
         <div className="toast" role="status">
-          <span>Thanks — this helps us improve.</span>
+          <span>Thanks! This helps the AI get better.</span>
           {picked.includes('Too long') && !tw.output && (
             <button className="btn btn-ghost btn-sm" onClick={() => tw.start('Title + one-line reason + one clear action. That\'s it.')}><Sparkles size={14} strokeWidth={1.75} aria-hidden /> Make it shorter</button>
           )}
         </div>
       )}
-      <p className="demo-note">Try thumbs down and choose “Too long” — the AI offers a fix right away.</p>
+      <p className="demo-note">Tap thumbs down and pick “Too long”. The AI offers a fix right away.</p>
     </div>
   );
 }
@@ -103,8 +103,8 @@ export function GracefulErrors() {
           </div>
         </div>
       )}
-      {state === 'ok' && <div className="toast" role="status">Working with pages 1–30…</div>}
-      <p className="demo-note">Switch between the two styles and press Send. Notice the bad one even clears your text.</p>
+      {state === 'ok' && <div className="toast" role="status">Reading pages 1 to 30…</div>}
+      <p className="demo-note">Press Send in each style. Ouch: the bad one even wipes your text.</p>
     </div>
   );
 }

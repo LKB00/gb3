@@ -118,7 +118,7 @@ export default function PatternDetail() {
             <Compare data={v.compare} />
           </Section>
           {p.demo && (
-            <Section title="Try the better version" sub="A small working demo.">
+            <Section title="Try it yourself" sub="A tiny version that really works. Tap around.">
               <DemoFrame name={p.demo} />
             </Section>
           )}
@@ -126,7 +126,7 @@ export default function PatternDetail() {
             <Link to="/autonomy" className="ladder-cta ladder-cta-sm">
               <span>
                 <strong>How much power should an agent have?</strong>
-                <span>See the 5-step autonomy ladder.</span>
+                <span>Climb the 5-step autonomy ladder.</span>
               </span>
               <ArrowRight size={16} strokeWidth={1.75} aria-hidden />
             </Link>
@@ -134,7 +134,7 @@ export default function PatternDetail() {
           <Section title="Seen in real products">
             <RealExamples id={p.id} />
           </Section>
-          <Section title="Why it works" sub="The UX and psychology principles behind it.">
+          <Section title="The science behind it" sub="Tap a rule to see how it shapes this design.">
             <PrincipleList id={p.id} />
           </Section>
         </div>
@@ -158,17 +158,17 @@ export default function PatternDetail() {
               </div>
             </div>
           </Section>
-          <Section title="Details">
+          <Section title="The short version">
             <dl className="details">
-              <dt>Solution</dt>
+              <dt>What to do</dt>
               <dd>{p.solution}</dd>
               <dt>Use it when</dt>
               <dd><ul>{p.when.map((w) => <li key={w}>{w}</li>)}</ul></dd>
-              <dt>Avoid it when</dt>
+              <dt>Skip it when</dt>
               <dd><ul>{p.avoid.map((w) => <li key={w}>{w}</li>)}</ul></dd>
               {relatedLessons.length > 0 && (
                 <>
-                  <dt>Lessons</dt>
+                  <dt>Read more</dt>
                   <dd className="row wrap">
                     {relatedLessons.map((l) => <Link key={l.id} to={`/learn/${l.id}`} className="chip">{l.title}</Link>)}
                   </dd>
@@ -193,8 +193,8 @@ export default function PatternDetail() {
           </Link>
         ) : (
           <Link to="/play" className="pager-link pager-next">
-            <span className="label">Next</span>
-            <span>More games <ArrowRight size={14} strokeWidth={1.75} aria-hidden /></span>
+            <span className="label">Last card</span>
+            <span>Go play more games <ArrowRight size={14} strokeWidth={1.75} aria-hidden /></span>
           </Link>
         )}
       </nav>

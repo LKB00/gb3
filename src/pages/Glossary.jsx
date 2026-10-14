@@ -15,13 +15,13 @@ export default function Glossary() {
       <LibraryTabs />
       <header className="page-head">
         <h1 className="display">AI words, in plain English</h1>
-        <p className="lead">The terms you will hear when designing AI features, and why each one matters for design.</p>
+        <p className="lead">The words you’ll hear when building AI features. Each one in plain English, with why designers care.</p>
       </header>
 
       <div className="filters">
         <label className="search">
           <Search size={15} strokeWidth={1.75} aria-hidden />
-          <input id="glossary-search" type="search" placeholder="Search terms" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Search terms" />
+          <input id="glossary-search" type="search" placeholder="Search a word" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Search a word" />
         </label>
       </div>
 
@@ -31,17 +31,17 @@ export default function Glossary() {
             <dt>{g.term}</dt>
             <dd>
               <p>{g.def}</p>
-              <p className="gloss-design"><span className="label">For design</span> {g.design}</p>
+              <p className="gloss-design"><span className="label">Why it matters</span> {g.design}</p>
             </dd>
           </div>
         ))}
       </dl>
-      {!list.length && <p className="empty">No terms match “{q}”.</p>}
+      {!list.length && <p className="empty">No words match “{q}”. Try a shorter search.</p>}
 
       <section className="block">
         <div className="section-head">
           <h2>Further reading</h2>
-          <p className="section-sub">The guidelines and libraries this site learns from.</p>
+          <p className="section-sub">The guides and libraries that inspired this site.</p>
         </div>
         <ul className="ref-list">
           {furtherReading.map((s) => (
