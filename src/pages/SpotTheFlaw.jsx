@@ -32,7 +32,7 @@ export default function SpotTheFlaw() {
         <Hunt key={scenario.id} scenario={scenario} />
         {idx < hunts.length - 1 && (
           <div className="actions">
-            <button className="btn btn-primary" onClick={() => setIdx(idx + 1)}>
+            <button className="btn btn-primary" onClick={() => { setIdx(idx + 1); window.scrollTo({ top: 0 }); }}>
               Next screen <ArrowRight size={15} strokeWidth={1.75} aria-hidden />
             </button>
           </div>
