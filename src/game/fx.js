@@ -224,8 +224,13 @@ export function turnAllOff() {
   setFlag('haptic', false);
 }
 
+// When a tap already played its own sound (right, win, flip…), the generic tap stays quiet.
+const UI = new Set(['tap', 'nav', 'toggle']);
+let ownSoundAt = -1;
+
 // Play a moment: fx('right', { streak: 4 })
 export function fx(name, opts) {
+  if (!UI.has(name)) ownSoundAt = performance.now();
   if (soundOn()) {
     firstSoundHint();
     try {
@@ -243,19 +248,35 @@ export function fx(name, opts) {
   }
 }
 
-// A soft tap on any button, link or tab, so the whole site feels physical.
-// Game answers play their own sounds, so they are skipped here.
+// A soft sound only when a tap really does something:
+// - on `click` (a real tap or Enter/Space), never on touch-down, so starting a scroll is silent;
+// - not for things that are off or already chosen (disabled, the current page, the selected tab or chip);
+// - not when the tap played its own sound (game answers, wins, the card flip): one sound per tap.
+// Switches (aria-pressed) click like a switch; menus and tabs get the "nav" sound.
 const SILENT = '.lab-opt, .tot-option, .story-choice, .build-piece, .speed-option, .power-opt, .mb-click, [data-fx="off"]';
+const ALREADY = '[aria-current="page"], [aria-selected="true"], [aria-checked="true"], .chip-on, .is-on';
+const samePage = (el) => {
+  const href = el.tagName === 'A' && el.getAttribute('href');
+  return !!href && href.startsWith('#') && href === window.location.hash;
+};
 export function listenForTaps() {
+  // Decide before the page reacts (capture), then play after it did (bubble), so we can tell
+  // "already chosen" from "just chosen" and skip taps whose handler made its own sound.
+  let pending = null;
   document.addEventListener(
-    'pointerdown',
+    'click',
     (e) => {
-      if (e.button !== 0) return;
-      const el = e.target.closest('button, a, [role="tab"], summary, label');
-      if (!el || el.closest(SILENT) || el.disabled) return;
-      const kind = el.closest('.bottomnav, .topnav-links, .tabs') ? 'nav' : 'tap';
-      fx(kind);
+      const el = e.target.closest('button, a, [role="tab"], summary');
+      const quiet = !el || el.closest(SILENT) || el.disabled || el.getAttribute('aria-disabled') === 'true' || el.matches(ALREADY) || samePage(el);
+      pending = quiet ? null : { el, at: performance.now() };
     },
-    { passive: true }
+    true
   );
+  document.addEventListener('click', () => {
+    const tap = pending;
+    pending = null;
+    if (!tap || ownSoundAt >= tap.at) return; // its own handler just played a sound
+    const kind = tap.el.hasAttribute('aria-pressed') ? 'toggle' : tap.el.closest('.bottomnav, .topnav-links, .tabs') ? 'nav' : 'tap';
+    fx(kind);
+  });
 }

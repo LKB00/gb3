@@ -203,7 +203,7 @@ export default function Speed() {
               <Swords size={16} strokeWidth={1.75} aria-hidden /> <span><strong>{challenge.from}</strong> scored <strong>{challenge.score}</strong>. Same screens, same order. Beat it!</span>
             </p>
           )}
-          <button type="button" className="btn btn-primary btn-lg" onClick={() => start(!!challenge)}>
+          <button type="button" className="btn btn-primary btn-lg" data-fx="off" /* the countdown ticks instead */ onClick={() => start(!!challenge)}>
             <Zap size={15} strokeWidth={2} aria-hidden /> {challenge ? 'Accept challenge' : 'Start the clock'}
           </button>
           <p className="small muted">Your best: {stats.speedBest || 0} points · Keyboard: ← / →</p>
@@ -287,7 +287,7 @@ export default function Speed() {
               <button type="button" className={'btn btn-lg ' + (vs ? 'btn-primary' : 'btn-ghost')} style={{ order: vs ? 0 : 1 }} onClick={share}>
                 <Swords size={15} strokeWidth={1.75} aria-hidden /> {dare.copied ? 'Link copied!' : vs ? `Send it back to ${vs.from}` : 'Challenge a friend'}
               </button>
-              <button type="button" className={'btn btn-lg ' + (vs ? 'btn-ghost' : 'btn-primary')} onClick={() => start(false)}>
+              <button type="button" className={'btn btn-lg ' + (vs ? 'btn-ghost' : 'btn-primary')} data-fx="off" onClick={() => start(false)}>
                 <RotateCcw size={15} strokeWidth={1.75} aria-hidden /> Play again
               </button>
             </div>
