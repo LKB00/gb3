@@ -3,11 +3,12 @@
 /* ---- Player card ---- */
 .pc-layout {
   display: grid;
+  grid-template-columns: minmax(0, 1fr); /* a long name can't push the page wider than the phone */
   gap: 32px;
   align-items: center;
 }
 @media (min-width: 900px) {
-  .pc-layout { grid-template-columns: 400px 1fr; gap: 56px; }
+  .pc-layout { grid-template-columns: 400px minmax(0, 1fr); gap: 56px; }
 }
 .pc-side { display: flex; flex-direction: column; gap: 16px; align-items: flex-start; }
 .pc-card {
@@ -44,6 +45,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.pc-name.is-long { font-size: 18px; } /* long names shrink to fit, like on the saved image */
 .pc-type {
   margin-top: 8px;
   font-family: var(--display);

@@ -319,6 +319,11 @@
   .levelup-toast { top: calc(60px + env(safe-area-inset-top, 0px)); }
   .sound-hint { top: calc(60px + env(safe-area-inset-top, 0px)); }
 }
+/* Both at once (first sound is often the level-up chime): the hint sits under the level-up toast. */
+.levelup-toast ~ .sound-hint { top: calc(124px + env(safe-area-inset-top, 0px)); }
+@media (max-width: 720px) {
+  .levelup-toast ~ .sound-hint { top: calc(112px + env(safe-area-inset-top, 0px)); }
+}
 
 /* Phone held sideways: very little height, so the bottom bar shrinks to icons only. */
 @media (max-width: 900px) and (max-height: 480px) {

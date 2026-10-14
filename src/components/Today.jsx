@@ -88,12 +88,22 @@ export function SoundHint() {
 }
 
 // "Level up!" the moment XP crosses into a new level, wherever you are.
+// XP that arrives from another open tab just catches this tab up, with no toast
+// (that tab already celebrated).
 export function LevelUpToast() {
   const { levelNum, level } = useXP();
   const prev = useRef(levelNum);
+  const otherTabAt = useRef(0);
   const [show, setShow] = useState(false);
   useEffect(() => {
-    if (levelNum > prev.current) {
+    const mark = () => {
+      otherTabAt.current = Date.now();
+    };
+    window.addEventListener('storage', mark);
+    return () => window.removeEventListener('storage', mark);
+  }, []);
+  useEffect(() => {
+    if (levelNum > prev.current && Date.now() - otherTabAt.current > 1000) {
       fx('levelup');
       setShow(true);
       const t = setTimeout(() => setShow(false), 4000);

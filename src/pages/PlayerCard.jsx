@@ -25,7 +25,7 @@ const PAPER = '#fbfbf7';
 
 function readName() {
   try {
-    return localStorage.getItem('player-name') || '';
+    return (localStorage.getItem('player-name') || '').slice(0, 24);
   } catch {
     return '';
   }
@@ -225,7 +225,7 @@ export default function PlayerCard() {
       <div className="pc-layout">
         <div className="pc-card" aria-label="Your player card">
           <p className="pc-brand"><LogoMark /> GOOD BOT, BAD BOT · PLAYER CARD</p>
-          <p className="pc-name">{name.trim() || 'Player'}</p>
+          <p className={'pc-name' + (name.trim().length > 16 ? ' is-long' : '')}>{name.trim() || 'Player'}</p>
           <p className="pc-type">{data.type.name}</p>
           <p className="pc-line">{data.type.line}</p>
           <div className="pc-level">
