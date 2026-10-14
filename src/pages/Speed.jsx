@@ -19,6 +19,14 @@ import { useTitle } from '../lib/useTitle';
 // the patterns are linked on the score screen.
 const SECONDS = 60;
 
+// One warm line for the score screen, based on how many picks were right.
+function speedVerdict(right, answered) {
+  if (!answered) return 'No picks this time. Ready when you are!';
+  const pct = Math.round((right / answered) * 100);
+  const mood = pct >= 85 ? 'Lightning!' : pct >= 60 ? 'Quick hands!' : 'Fast fingers! Slow down a little to score more.';
+  return `${mood} ${right} of ${answered} right (${pct}%).`;
+}
+
 // Same seed = same rounds in the same order, so a friend can play your exact run.
 const newSeed = () => Math.random().toString(36).slice(2, 10);
 function freshDeck(seed) {
@@ -175,14 +183,14 @@ export default function Speed() {
         <div className="speed-intro">
           <Timer size={36} strokeWidth={1.5} aria-hidden />
           <h1 className="display">Speed round</h1>
-          <p className="lead">You have 60 seconds. Tap the better AI screen, fast. Right = 1 point. Get 3 right in a row and you score double. Wrong = lose 1 point.</p>
+          <p className="lead">60 seconds. Tap the better AI screen, fast. Right&nbsp;=&nbsp;+1, wrong&nbsp;=&nbsp;−1. Get 3 in a row for double points.</p>
           {challenge && (
             <p className="challenge-banner">
               <Swords size={16} strokeWidth={1.75} aria-hidden /> <strong>{challenge.from}</strong> scored <strong>{challenge.score}</strong>. Same screens, same order. Beat it!
             </p>
           )}
           <button type="button" className="btn btn-primary btn-lg" onClick={() => start(!!challenge)}>
-            <Zap size={15} strokeWidth={2} aria-hidden /> {challenge ? 'Accept challenge' : 'Start'}
+            <Zap size={15} strokeWidth={2} aria-hidden /> {challenge ? 'Accept challenge' : 'Start the clock'}
           </button>
           <p className="small muted">Your best: {stats.speedBest || 0} points · Keyboard: ← / →</p>
         </div>
@@ -228,11 +236,9 @@ export default function Speed() {
       {phase === 'over' && result && (
         <div className="tot tot-over speed-over">
           {result.record && points > 0 && <Burst count={28} />}
-          <p className="label">Time’s up</p>
+          <p className="label">Time’s up!</p>
           <p className="tot-big"><CountUp value={points} /><span> {points === 1 ? 'point' : 'points'}</span>{result.gain > 0 && <XpPop amount={result.gain} />}</p>
-          <p className="tot-verdict">
-            You got {right} of {answered} right ({answered ? Math.round((right / answered) * 100) : 0}%)
-          </p>
+          <p className="tot-verdict">{speedVerdict(right, answered)}</p>
           {challenge && seed === challenge.seed && (
             <p className={'challenge-result is-' + verdict(points, challenge.score, challenge.from).tone}>
               <Swords size={16} strokeWidth={1.75} aria-hidden /> {verdict(points, challenge.score, challenge.from).text}
