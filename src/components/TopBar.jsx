@@ -1,4 +1,4 @@
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { ChevronLeft, Moon, Sun, Volume2, VolumeX, Zap } from 'lucide-react';
 import { useXP } from '../progress';
 import { useTheme } from '../lib/theme';
@@ -6,10 +6,17 @@ import { GoalToast, LevelUpToast, SoundHint, StreakPill } from './Today';
 import { useFx } from '../game/fx';
 import LogoMark from './LogoMark';
 import { useCountUp } from '../lib/useCountUp';
-import { EXPLORE_HOME, isExplore, isPlay, parentOf } from '../config/nav';
+import { EXPLORE_HOME, isCards, isExplore, isPlay, parentOf } from '../config/nav';
 
 // Four places: Play (games), Cards (the pattern collection), Explore (go deeper), Me (progress and settings).
 // On phones the places move to the bottom bar (BottomNav) and this bar gets simpler.
+// Plain Links with our own match, so the lit link and aria-current agree (Explore links to one of many pages).
+const links = [
+  { to: '/play', label: 'Play', match: isPlay },
+  { to: '/patterns', label: 'Cards', match: isCards },
+  { to: EXPLORE_HOME, label: 'Explore', match: isExplore },
+  { to: '/me', label: 'Me', match: (p) => p.startsWith('/me') },
+];
 export default function TopBar() {
   const { pathname } = useLocation();
   const { xp, level } = useXP();
@@ -34,10 +41,10 @@ export default function TopBar() {
           </span>
         </Link>
         <nav className="topnav-links" aria-label="Main">
-          <NavLink to="/play" className={() => (isPlay(pathname) ? 'active' : '')}>Play</NavLink>
-          <NavLink to="/patterns">Cards</NavLink>
-          <NavLink to={EXPLORE_HOME} className={() => (isExplore(pathname) ? 'active' : '')}>Explore</NavLink>
-          <NavLink to="/me">Me</NavLink>
+          {links.map(({ to, label, match }) => {
+            const on = match(pathname);
+            return <Link key={to} to={to} className={on ? 'active' : undefined} aria-current={on ? 'page' : undefined}>{label}</Link>;
+          })}
         </nav>
         <div className="topnav-right">
           <StreakPill />

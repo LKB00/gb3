@@ -12,7 +12,7 @@ import Breadcrumbs from '../components/Breadcrumbs';
 export default function Lesson() {
   const { id } = useParams();
   const lesson = getLesson(id);
-  useTitle(lesson?.title);
+  useTitle(lesson ? lesson.title : 'Page not found'); // this runs after NotFound's own title, so it must say the same
   const passed = usePassed();
   if (!lesson) return <NotFound />;
 

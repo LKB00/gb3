@@ -17,11 +17,12 @@ export const isPlay = (path) => path.startsWith('/play') || path.startsWith('/pr
 export const isCards = (path) => path.startsWith('/patterns');
 export const isExplore = (path) => EXPLORE_TABS.some((t) => path.startsWith(t.to));
 
-// Phone back button: the name of the parent page (anything else just says "Back").
+// Phone back button: the parent page and its name. Only these pages have child pages,
+// so an unknown deep path (a 404) gets no Back button that would lead to another 404.
 const PARENT_NAMES = { '/play': 'Play', '/play/story': 'Stories', '/patterns': 'Cards', '/learn': 'Deep dives', '/teardowns': 'Teardowns' };
 export function parentOf(path) {
   const parts = path.split('/').filter(Boolean);
   if (parts.length < 2) return null;
   const to = '/' + parts.slice(0, -1).join('/');
-  return { to, name: PARENT_NAMES[to] || 'Back' };
+  return PARENT_NAMES[to] ? { to, name: PARENT_NAMES[to] } : null;
 }

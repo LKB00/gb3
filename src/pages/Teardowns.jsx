@@ -40,7 +40,7 @@ export function TeardownList() {
 export function TeardownDetail() {
   const { id } = useParams();
   const t = getTeardown(id);
-  useTitle(t ? `${t.product} teardown` : null);
+  useTitle(t ? `${t.product} teardown` : 'Page not found'); // this runs after NotFound's own title, so it must say the same
   if (!t) return <NotFound />;
   const used = [...new Set(t.journey.flatMap((j) => j.patterns))];
 

@@ -9,20 +9,24 @@ const sources = [
   { id: 3, title: 'Analytics dashboard', quote: 'Only 4% of weekly users opened the export menu.' },
 ];
 
-export function Citations() {
-  const [open, setOpen] = useState(null);
-  const Cite = ({ n }) => (
+// Outside Citations so it is not a new component each render (that would drop focus).
+function Cite({ n, open, setOpen }) {
+  return (
     <button className={'cite' + (open === n ? ' cite-on' : '')} onClick={() => setOpen(open === n ? null : n)} aria-label={`Source ${n}`}>
       {n}
     </button>
   );
+}
+
+export function Citations() {
+  const [open, setOpen] = useState(null);
 
   return (
     <div className="demo-stack">
       <div className="bubble bubble-user">Why do people struggle with export?</div>
       <div className="bubble bubble-ai">
         <p>
-          Most people cannot find it: in testing, 7 of 10 participants missed the export button <Cite n={1} />. It is also a top support topic <Cite n={2} />, and very few users ever open the export menu <Cite n={3} />.
+          Most people cannot find it: in testing, 7 of 10 participants missed the export button <Cite n={1} open={open} setOpen={setOpen} />. It is also a top support topic <Cite n={2} open={open} setOpen={setOpen} />, and very few users ever open the export menu <Cite n={3} open={open} setOpen={setOpen} />.
         </p>
         <p className="demo-muted small">I found no source about export <em>speed</em>, so I did not include it.</p>
       </div>

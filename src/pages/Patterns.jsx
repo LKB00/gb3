@@ -12,7 +12,9 @@ export default function Patterns() {
   const passed = usePassed();
   const stars = useStars();
   const random = useRandomChallenge();
-  const category = params.get('category') || 'all';
+  const asked = params.get('category');
+  const group = categories.find((c) => c.id === asked);
+  const category = group ? group.id : 'all'; // an unknown group in the link shows all cards
   const query = params.get('q') || '';
 
   const update = (key, value) => {
@@ -70,8 +72,17 @@ export default function Patterns() {
         </div>
       ) : (
         <div className="empty">
-          <p>No cards match “{query}”. Try another word.</p>
-          <button className="btn btn-ghost" onClick={() => setParams({}, { replace: true })}>Show all cards</button>
+          {group ? (
+            <>
+              <p>No “{query}” cards in {group.name}. Other groups may have some.</p>
+              <button className="btn btn-ghost" onClick={() => update('category', 'all')}>Search all groups</button>
+            </>
+          ) : (
+            <>
+              <p>No cards match “{query}”. Try another word.</p>
+              <button className="btn btn-ghost" onClick={() => setParams({}, { replace: true })}>Show all cards</button>
+            </>
+          )}
         </div>
       )}
     </div>

@@ -191,6 +191,10 @@
 .tab:hover {
   color: var(--ink);
 }
+/* The row scrolls sideways, which clips anything outside it: keep the focus ring inside */
+.tabs .tab:focus-visible {
+  outline-offset: -2px;
+}
 .tab.active,
 .tab[aria-selected='true'] {
   color: var(--ink);
