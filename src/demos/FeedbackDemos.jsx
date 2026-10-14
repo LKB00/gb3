@@ -1,5 +1,5 @@
 import { Sparkles, ThumbsDown, ThumbsUp } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTypewriter } from './useTypewriter';
 
 /* ---------- Feedback loop ---------- */
@@ -14,7 +14,7 @@ export function FeedbackLoop() {
 
   const toggle = (r) => setPicked((p) => (p.includes(r) ? p.filter((x) => x !== r) : [...p, r]));
 
-  const reset = () => { setVote(null); setPicked([]); setSent(false); tw.setOutput(''); };
+  const reset = () => { tw.stop(); setVote(null); setPicked([]); setSent(false); tw.setOutput(''); };
 
   return (
     <div className="demo-stack">
@@ -62,16 +62,22 @@ export function GracefulErrors() {
   const [mode, setMode] = useState('good');
   const [state, setState] = useState('idle'); // idle | loading | error | ok
   const [prompt, setPrompt] = useState(defaultPrompt);
+  const timer = useRef(null);
+  const modeRef = useRef(mode);
+  modeRef.current = mode;
+  useEffect(() => () => clearTimeout(timer.current), []);
 
   const send = () => {
+    clearTimeout(timer.current);
     setState('loading');
-    setTimeout(() => {
+    timer.current = setTimeout(() => {
       setState('error');
-      if (mode === 'bad') setPrompt(''); // the bad version loses the user's text
+      if (modeRef.current === 'bad') setPrompt(''); // the bad version loses the user's text
     }, 900);
   };
 
   const switchTo = (m) => {
+    clearTimeout(timer.current); // a send from the other style must not land here
     setMode(m);
     setState('idle');
     setPrompt(defaultPrompt);

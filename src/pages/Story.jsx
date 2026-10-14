@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { Angry, ArrowRight, Frown, Meh, RotateCcw, Smile } from 'lucide-react';
@@ -21,6 +21,8 @@ const clamp = (n) => Math.max(0, Math.min(100, n));
 const mood = (t) => (t >= 75 ? Smile : t >= 50 ? Meh : t >= 25 ? Frown : Angry);
 const tone = (t) => (t >= 75 ? 'good' : t >= 50 ? 'ok' : t >= 25 ? 'warn' : 'bad');
 
+const signed = (n) => (n > 0 ? `+${n}` : String(n));
+
 function TrustMeter({ trust, delta, person }) {
   const Face = mood(trust);
   return (
@@ -32,7 +34,7 @@ function TrustMeter({ trust, delta, person }) {
           <strong>{trust}</strong>
           {delta != null && (
             <span key={`${trust}-${delta}`} className={'trust-delta ' + (delta >= 0 ? 'is-up' : 'is-down')}>
-              {delta >= 0 ? `+${delta}` : delta}
+              {signed(delta)}
             </span>
           )}
         </div>
@@ -95,6 +97,12 @@ function Story({ story }) {
   const choice = picked !== null ? scene.choices[picked] : null;
   const sceneNo = history.length + (picked === null ? 1 : 0);
   const outcomeRef = useReveal(choice ? `${sceneNo}-${picked}` : null);
+  const lastDelta = choice ? history[history.length - 1]?.delta ?? choice.trust : 0;
+  // Keyboard players: after a pick, the choices are disabled, so move focus to the Next button.
+  const nextRef = useRef(null);
+  useEffect(() => {
+    if (picked !== null) nextRef.current?.focus({ preventScroll: true });
+  }, [picked]);
 
   const pick = (i) => {
     if (picked !== null) return;
@@ -102,8 +110,10 @@ function Story({ story }) {
     setPicked(i);
     markPlayed();
     fx(c.trust >= 0 ? 'trustUp' : 'trustDown');
-    setTrust((t) => clamp(t + c.trust));
-    setHistory((h) => [...h, { scene: sceneId, choice: i }]);
+    // The real change: trust stops at 0 and 100, so "-30" from 10 is really -10.
+    const delta = clamp(trust + c.trust) - trust;
+    setTrust(trust + delta);
+    setHistory((h) => [...h, { scene: sceneId, choice: i, delta }]);
   };
 
   const next = () => {
@@ -111,7 +121,8 @@ function Story({ story }) {
     if (to) {
       setSceneId(to);
       setPicked(null);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({ top: 0, behavior: calm ? 'instant' : 'smooth' });
       return;
     }
     const prev = storyBests(stats)[story.id];
@@ -151,7 +162,7 @@ function Story({ story }) {
               const c = sc.choices[h.choice];
               return (
                 <li key={n}>
-                  <span className={'trust-delta ' + (c.trust >= 0 ? 'is-up' : 'is-down')}>{c.trust >= 0 ? `+${c.trust}` : c.trust}</span>
+                  <span className={'trust-delta ' + (c.trust >= 0 ? 'is-up' : 'is-down')}>{signed(h.delta ?? c.trust)}</span>
                   <span>
                     <span className="story-recap-scene">{sc.title}</span>
                     <strong>{c.label}</strong>
@@ -182,11 +193,11 @@ function Story({ story }) {
           <h1 className="display">{story.title}</h1>
           <p className="small muted">You design {story.agent}. Pick what it does. Keep {story.person} on your side.</p>
         </div>
-        <TrustMeter trust={trust} delta={choice ? choice.trust : null} person={story.person} />
+        <TrustMeter trust={trust} delta={choice ? lastDelta : null} person={story.person} />
       </header>
 
       <div className="story">
-        <div className="story-panel" key={sceneNo}>
+        <div className="story-panel" key={`panel-${sceneNo}`}>
           <p className="story-setup">{scene.setup}</p>
           <h2 className="story-q">{scene.question}</h2>
           <div className="story-choices">
@@ -213,14 +224,14 @@ function Story({ story }) {
               <div>
                 <p>{choice.reaction}</p>
                 <p className="small">
-                  Trust {choice.trust >= 0 ? `+${choice.trust}` : choice.trust} · The trick: <Link to={`/patterns/${choice.pattern}`}>{getPattern(choice.pattern).title}</Link> · <Disagree where={`Story · ${story.title} · ${scene.title}`} detail={`“${choice.label}” changed trust by ${choice.trust}.`} />
+                  Trust {signed(lastDelta)} · The trick: <Link to={`/patterns/${choice.pattern}`}>{getPattern(choice.pattern).title}</Link> · <Disagree where={`Story · ${story.title} · ${scene.title}`} detail={`“${choice.label}” changed trust by ${choice.trust}.`} />
                 </p>
               </div>
             </div>
           )}
         </div>
 
-        <div className="story-screen" key={sceneNo}>
+        <div className="story-screen" key={`screen-${sceneNo}`}>
           <p className="label">What {story.person} sees</p>
           <MockFrame title={story.app}>
             {scene.screen.map((b, k) => <MockBlock key={k} b={b} />)}
@@ -234,7 +245,7 @@ function Story({ story }) {
 
         {choice && (
           <div className="lab-nav story-nav">
-            <button type="button" className="btn btn-primary" onClick={next}>
+            <button ref={nextRef} type="button" className="btn btn-primary" onClick={next}>
               {(choice.next !== undefined ? choice.next : scene.next) ? 'Next scene' : 'See how it ends'} <ArrowRight size={14} strokeWidth={1.75} aria-hidden />
             </button>
           </div>

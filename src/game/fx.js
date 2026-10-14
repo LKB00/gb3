@@ -9,8 +9,11 @@ import { useEffect, useState } from 'react';
 // - Browsers only allow audio after a tap, so the first sound plays on the first tap.
 const KEYS = { sound: 'fx-sound', haptic: 'fx-haptic' };
 const EVENT = 'fx-change';
+// When storage is blocked, the switches still work for this visit.
+const memory = {};
 
 function readFlag(key) {
+  if (key in memory) return memory[key];
   try {
     const v = localStorage.getItem(key);
     if (v === null) {
@@ -31,8 +34,9 @@ export const fxOn = () => soundOn() || hapticOn();
 function setFlag(kind, on) {
   try {
     localStorage.setItem(KEYS[kind], on ? '1' : '0');
+    delete memory[KEYS[kind]];
   } catch {
-    /* not saved */
+    memory[KEYS[kind]] = on; // not saved, but kept for this visit
   }
   window.dispatchEvent(new Event(EVENT));
   if (on) fx(kind === 'sound' ? 'select' : 'tap');
@@ -44,7 +48,11 @@ function useFlag(kind) {
   useEffect(() => {
     const u = () => setOn(read());
     window.addEventListener(EVENT, u);
-    return () => window.removeEventListener(EVENT, u);
+    window.addEventListener('storage', u); // switched in another tab
+    return () => {
+      window.removeEventListener(EVENT, u);
+      window.removeEventListener('storage', u);
+    };
   }, [read]);
   return [on, () => setFlag(kind, !on)];
 }

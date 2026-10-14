@@ -1,3 +1,4 @@
+import { useLayoutEffect, useRef } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, Check, Gamepad2, Lightbulb, ScrollText, Star, X } from 'lucide-react';
 import { getCategory, getPattern, patterns } from '../data/patterns';
@@ -10,6 +11,7 @@ import Lab from '../components/Lab';
 import RealExamples from '../components/RealExamples';
 import PrincipleList from '../components/PrincipleList';
 import Breadcrumbs from '../components/Breadcrumbs';
+import { showActiveTab } from '../components/LibraryTabs';
 import { useTitle } from '../lib/useTitle';
 import NotFound from './NotFound';
 
@@ -43,7 +45,9 @@ export default function PatternDetail() {
   const passed = usePassed();
   const stars = useStars();
   const p = getPattern(id);
-  useTitle(p?.title);
+  useTitle(p ? p.title : 'Page not found'); // this runs after NotFound's own title, so it must say the same
+  const tabRow = useRef(null);
+  useLayoutEffect(() => showActiveTab(tabRow.current), [id, params]);
   if (!p) return <NotFound />;
 
   const view = VIEWS.some((v) => v.id === params.get('view')) ? params.get('view') : 'do';
@@ -84,7 +88,7 @@ export default function PatternDetail() {
         <p className="lead">{p.summary}</p>
       </header>
 
-      <div className="tabs view-tabs" role="tablist" aria-label="Views">
+      <div className="tabs view-tabs" role="tablist" aria-label="Views" ref={tabRow}>
         {VIEWS.map((t) => (
           <button key={t.id} role="tab" aria-selected={view === t.id} className={'tab' + (view === t.id ? ' active' : '')} onClick={() => go(t.id)}>
             <t.icon size={15} strokeWidth={1.75} aria-hidden />

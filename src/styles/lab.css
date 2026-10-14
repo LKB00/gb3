@@ -428,3 +428,4 @@
 .lab-link-done svg {
   color: var(--positive);
 }
+.lab-q-step:focus { outline: none; } /* focused by script after Next step, for keyboard players */

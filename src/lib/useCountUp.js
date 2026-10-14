@@ -16,9 +16,11 @@ export function useCountUp(value, { fromZero = false, ms = 700 } = {}) {
       return;
     }
     let raf;
-    const t0 = performance.now();
+    let t0;
     const tick = (now) => {
-      const p = Math.min(1, (now - t0) / ms);
+      // The first frame's time can be a little before this effect ran, so start the clock there.
+      if (t0 === undefined) t0 = now;
+      const p = Math.min(1, Math.max(0, (now - t0) / ms));
       const eased = 1 - Math.pow(1 - p, 3);
       const v = Math.round(from + (value - from) * eased);
       current.current = v;

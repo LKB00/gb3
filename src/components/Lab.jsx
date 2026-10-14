@@ -47,13 +47,19 @@ export default function Lab({ id, lab, title, next }) {
     setTried((t) => ({ ...t, [d.id]: (t[d.id] || []).includes(i) ? t[d.id] : [...(t[d.id] || []), i] }));
   };
 
-  const goTo = (n) => {
+  const qRef = useRef(null);
+  const goTo = (n, focus = false) => {
     setStep(n);
     setReached((r) => Math.max(r, n));
+    // Keyboard players: the Next button disappears, so land on the new question.
+    if (focus) requestAnimationFrame(() => qRef.current?.focus({ preventScroll: true }));
   };
 
   const advance = () => {
-    if (step < total - 1) return goTo(step + 1);
+    if (step < total - 1) return goTo(step + 1, true);
+    // A step changed to a wrong pick after it was passed: go back to it instead of finishing.
+    const open = decisions.findIndex((x) => !x.options[choice[x.id]]?.ok);
+    if (open >= 0) return goTo(open, true);
     setFinished(true);
     if (skipped) return;
     setGained(Math.max(0, stars - (savedStars[id] || 0)) * XP.star);
@@ -133,7 +139,7 @@ export default function Lab({ id, lab, title, next }) {
       <div className="lab-panel" aria-live="polite">
         {!finished ? (
           <>
-            <h3 className="lab-q lab-q-step" aria-level="2" key={`q-${d.id}`}>{d.label}</h3>
+            <h3 ref={qRef} tabIndex={-1} className="lab-q lab-q-step" aria-level="2" key={`q-${d.id}`}>{d.label}</h3>
             <div className="lab-options" key={`o-${d.id}`} role="radiogroup" aria-label={d.label}>
               {d.options.map((o, i) => {
                 const on = picked === i;

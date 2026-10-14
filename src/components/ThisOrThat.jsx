@@ -26,11 +26,13 @@ const VERDICT = [
 const YES = ['Nailed it!', 'Sharp eye!', 'That’s the one!', 'Yes!'];
 const NO = ['So close. The green one wins.', 'Easy to miss. The green one wins.', 'Not quite. The green one wins.'];
 
-export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedDeck, onDone }) {
+// `start` resumes a run (answers already given, e.g. a Daily after a refresh); `onAnswer` gets every answer so far.
+export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedDeck, onDone, start, onAnswer }) {
   const [deck, setDeck] = useState(() => fixedDeck || makeDeck(mode, rounds));
-  const [i, setI] = useState(0);
+  const resumeAt = start && fixedDeck ? Math.min(start.length, fixedDeck.length - 1) : 0;
+  const [i, setI] = useState(resumeAt);
   const [pick, setPick] = useState(null); // 0 or 1
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState(() => (start && fixedDeck ? start.slice(0, resumeAt) : []));
   const [streak, setStreak] = useState(0);
   const [runBest, setRunBest] = useState(0);
   const [over, setOver] = useState(false);
@@ -67,7 +69,9 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
       if (!ok) fx('wrong');
       else if (streak + 1 >= 3) fx('combo', { streak: streak + 1 });
       else fx('right', { streak });
-      setResults((r) => [...r, ok]);
+      const all = [...results, ok];
+      setResults(all);
+      onAnswer?.(all);
       if (ok) {
         const s = streak + 1;
         setStreak(s);
@@ -76,7 +80,7 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
         setStreak(0);
       }
     },
-    [pick, over, round.goodFirst, streak]
+    [pick, over, round.goodFirst, streak, results, onAnswer]
   );
 
   const next = useCallback(() => {

@@ -196,7 +196,7 @@ The owner looks at a **private Claude Artifact**. It is one self-contained HTML 
 Levels (XP needed): Rookie 0, Prompt tinkerer 100, Pattern spotter 300, Interaction designer 600, AI UX pro 1000, Legend 1300.
 
 **Moves, daily goal and streak.** Every answer in any game is a "move" (`markPlayed`). The daily goal is **10 moves** (`DAILY_GOAL`).
-The day streak counts days with at least one move. **One free "skip day" per 7 days** keeps the streak if a day is missed. If today is not played
+The day streak counts days with at least one move. **One free "skip day" per 7 days** keeps the streak if a day is missed. The skip day is ready again after 7 played days since the most recent skip day. The Today card and the flame refresh at local midnight and when the tab comes back. If today is not played
 yet, the streak is still kept (you still have time). Streak math is `streakInfo` in `progress.js`.
 
 **This or That** (`components/ThisOrThat.jsx`): 10 rounds. Two versions of the same AI screen; tap the better one. Classic uses one round
@@ -204,7 +204,7 @@ per pattern (visuals), Hard uses the 30 "one small detail differs" pairs (`data/
 Shortcuts with Ctrl/Cmd/Alt and held keys are ignored. Streak of 3+ plays the combo sound.
 
 **Daily** (`pages/Daily.jsx`): 5 rounds: easy, easy, hard, easy, hard. Same for everyone on the same date (seeded with `ai-patterns:<YYYY-MM-DD>`; the seed text keeps the old name on purpose, because changing it would change every day's rounds).
-**One try per day**; the first result of the day is saved. Daily #1 = **1 Oct 2026**; the displayed number is never below 1 (`dailyLabel`). Result shows a Wordle-style
+**One try per day**; the first result of the day is saved. Answers are saved as you go (`daily-run`), so a refresh continues the run instead of restarting it. A new day (or another day's link) gets a fresh board. A friend score above 5 in a link is ignored. Daily #1 = **1 Oct 2026**; the displayed number is never below 1 (`dailyLabel`). Result shows a Wordle-style
 grid, share/copy, countdown to the next Daily, and "challenge a friend". Playing a friend's challenge for a past day replays it but does not save it.
 
 **Speed round** (`pages/Speed.jsx`): 60 seconds, 3-2-1 countdown. Classic and hard rounds mixed from a **seeded** deck (`speed:<seed>`).
@@ -274,7 +274,7 @@ src/
 - `HashRouter` so GitHub Pages needs no server rules. Links look like `/#/patterns/citations`.
 - `App.jsx` renders `TopBar`, then `<main>` with `ErrorBoundary key={pathname}` and `div.route` (re-keyed on path change so each page plays the enter animation and a crash resets on navigation), `Footer`, then `BottomNav` (phones only).
 - Phones (<= 720px): bottom tab bar (Home, Play, Cards, Explore, Me), a back button in the top bar (`parentOf()` in `config/nav.js`), no breadcrumbs, no footer.
-- `window.scrollTo({ behavior: 'instant' })` on every path change.
+- New pages start at the top. Browser Back/Forward returns to the saved scroll spot for that history entry (`App.jsx`, a Map keyed by `location.key`; `history.scrollRestoration = 'manual'`). The skip link focuses `<main>` instead of changing the hash (HashRouter would read `#main` as a route). `parentOf()` shows no Back button for unknown deep paths.
 
 ### 6.3 Data model (`src/data`)
 - `patterns.js`: `{ id, title, category, summary, problem, solution, when[], avoid[], dos[], donts[], examples[], demo? }` and `categories` (7).
@@ -293,7 +293,7 @@ src/
 - **Feedback stays in view on phones**: `lib/useReveal.js` (`useReveal(key)` returns a ref; `revealEl(el)`) scrolls just enough to show answer feedback that landed below the fold or behind the bottom tab bar / sticky "Next" bars. Used by Fix it (`.lab-why`), Stories (`.story-outcome`), Build (`.build-result`) and Spot the flaw (newest found note). It never moves the page when the feedback is already visible.
 - **Voice and copy guide**: [docs/VOICE.md](VOICE.md) is the rulebook for every string on the site (who is talking, feelings per moment, one word per thing, words to avoid, checklist).
 - **Copy style for games** (Oct 2026 pass): every game answers "What is this? What do I do? How do I win? What just happened?" on screen, in short easy sentences. Same words everywhere: "XP", "streak" / "in a row" (answers), "day streak" (days played), "round", "card", "stars", "trust". Daily says rounds 3 and 5 are hard. Note: a pattern's `lab.goal` (visuals.js) is also the brief line in This or That, Daily and Speed, so write goals that work in both places.
-- **One storage layer**: `lib/storage.js` (`readJSON`, `writeJSON`, `useStored`). Every write dispatches the `progress-change` event, so all hooks update together.
+- **One storage layer**: `lib/storage.js` (`readJSON`, `writeJSON`, `useStored`). Every write dispatches the `progress-change` event, so all hooks update together. Hooks also listen to the browser `storage` event, so other open tabs update. When storage is blocked, writes are kept in memory for the visit. The theme is one shared value (`theme-change` event); sound and vibration switches also keep an in-memory fallback.
 - **Data is cleaned when read** (`progress.js`: `cleanStats`, `cleanStars`, `cleanDaily`, `cleanDays`, `cleanList`). Wrong types, NaN, huge numbers, unknown ids and bad date keys are dropped or clamped. **When you add a saved field, add it to the clean functions**, or bad data could crash a page.
 - **Best-score helpers**: `saveBest(field, value)` and `saveBestIn(field, id, value)` keep the maximum. A new best score = a `saveBest` line + a line in `xpParts()`.
 - **Seeded randomness**: `lib/random.js` `seeded(key)` (mulberry32) so the Daily and challenge links give everyone the same rounds.
@@ -315,7 +315,8 @@ src/
 | `hunts-done` | `['chat', ...]` | finished Spot-the-flaw screens (known ids only) |
 | `lab-stars` | `{ patternId: 1..3 }` | best stars per card |
 | `game-stats` | `{ bestStreak, speedBest, powerBest, builds: {id: 1..3}, stories: {id: 0..100}, storyBest? }` | best scores (`storyBest` is a legacy field for the first story) |
-| `daily` | `{ 'YYYY-MM-DD': [bool x5] }` | Daily results |
+| `daily` | `{ 'YYYY-MM-DD': [bool x5] }` | Daily results(only dates from 2026-10-01 up to tomorrow) |
+| `daily-run` | `{ day: 'YYYY-MM-DD', r: [bool] }` | Today's Daily in progress; cleared when it is saved |
 | `days` | `{ 'YYYY-MM-DD': moves }` | moves per day (streak, goal) |
 | `player-name` | string (max 24) | name for card and challenge links |
 | `theme` | `'light'` or `'dark'` | absent = follow the system |

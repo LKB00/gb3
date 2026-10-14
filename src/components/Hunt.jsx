@@ -26,11 +26,14 @@ export default function Hunt({ scenario }) {
   const shown = revealed ? [...found, ...mistakes.filter((i) => !found.includes(i))] : found;
   // On a phone the list sits below the screen: show the newest mistake's note after each find.
   const listRef = useRef(null);
+  const winRef = useRef(null);
   useEffect(() => {
-    if (found.length) requestAnimationFrame(() => revealEl(listRef.current?.lastElementChild));
-  }, [found.length]);
+    // The last find shows the win line (and XP) under the list: show that instead.
+    if (found.length) requestAnimationFrame(() => revealEl(done ? winRef.current : listRef.current?.lastElementChild));
+  }, [found.length, done]);
 
   const click = (i) => {
+    if (done || revealed) return; // the hunt is over: taps change nothing
     const b = scenario.blocks[i];
     if (b.mistake) {
       if (!found.includes(i)) {
@@ -96,7 +99,7 @@ export default function Hunt({ scenario }) {
         </ol>
 
         {done && !revealed && (
-          <p className="demo-ok hunt-win">
+          <p ref={winRef} className="demo-ok hunt-win">
             <Burst />
             <Check size={14} strokeWidth={2} aria-hidden /> Sharp eyes! You found every mistake.
             {!wasDone && <XpPop amount={XP.hunt} />}

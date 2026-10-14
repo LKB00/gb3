@@ -17,22 +17,25 @@ const rewrites = [
 export function EditableOutput() {
   const [lines, setLines] = useState(draft);
   const [history, setHistory] = useState([]);
-  const [edited, setEdited] = useState(false);
   const turn = useRef([0, 0, 0]);
+  const typing = useRef(false); // true once this focus has already saved an undo step
+  // "Edited by you" only while some sentence differs from every AI version of it.
+  const edited = lines.some((l, i) => l !== draft[i] && !rewrites[i].includes(l));
 
-  const change = (i, text, byUser) => {
+  const change = (i, text) => {
     setHistory((h) => [...h, lines]);
     setLines((ls) => ls.map((l, j) => (j === i ? text : l)));
-    if (byUser) setEdited(true);
   };
 
   const rewrite = (i) => {
     const n = turn.current[i] % rewrites[i].length;
     turn.current[i] += 1;
-    change(i, rewrites[i][n], false);
+    typing.current = false;
+    change(i, rewrites[i][n]);
   };
 
   const undo = () => {
+    typing.current = false;
     setLines(history[history.length - 1]);
     setHistory((h) => h.slice(0, -1));
   };
@@ -50,10 +53,11 @@ export function EditableOutput() {
               rows={2}
               value={line}
               aria-label={`Sentence ${i + 1}`}
-              onFocus={() => setHistory((h) => (h[h.length - 1] === lines ? h : [...h, lines]))}
+              onFocus={() => { typing.current = false; }}
               onChange={(e) => {
+                // One undo step per typing session: save the text before the first key.
+                if (!typing.current) { typing.current = true; setHistory((h) => [...h, lines]); }
                 setLines((ls) => ls.map((l, j) => (j === i ? e.target.value : l)));
-                setEdited(true);
               }}
             />
             <button className="btn btn-ghost btn-sm" onClick={() => rewrite(i)} title="Rewrite only this sentence"><Sparkles size={14} strokeWidth={1.75} aria-hidden /> Rewrite this</button>
@@ -77,6 +81,11 @@ export function InlineSuggestion() {
   const [value, setValue] = useState('');
   const [dismissed, setDismissed] = useState(false);
   const [accepted, setAccepted] = useState(0);
+  const input = useRef(null);
+  const layer = useRef(null);
+  // Long text scrolls inside the input; move the grey layer with it so the hint stays lined up.
+  const syncScroll = () => { if (layer.current && input.current) layer.current.scrollLeft = input.current.scrollLeft; };
+  useEffect(syncScroll);
 
   const match = value.length >= 2 && !dismissed ? phrases.find((p) => p.toLowerCase().startsWith(value.toLowerCase()) && p.length > value.length) : null;
   const ghost = match ? match.slice(value.length) : '';
@@ -90,12 +99,15 @@ export function InlineSuggestion() {
     <div className="demo-stack">
       <p className="demo-muted">Try typing <kbd>Th</kbd>, <kbd>Hi</kbd> or <kbd>Can</kbd>…</p>
       <div className="ghost-field">
-        <div className="ghost-layer" aria-hidden>
+        <div className="ghost-layer" aria-hidden ref={layer}>
           <span className="ghost-hidden">{value}</span>
           <span className="ghost-text">{ghost}</span>
         </div>
         <input
+          ref={input}
           value={value}
+          onScroll={syncScroll}
+          onSelect={syncScroll}
           onChange={(e) => { setValue(e.target.value); setDismissed(false); }}
           onKeyDown={(e) => {
             if (e.key === 'Tab' && ghost) { e.preventDefault(); accept(); }

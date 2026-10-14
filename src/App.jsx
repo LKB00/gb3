@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
+import { Navigate, Route, Routes, useLocation, useNavigationType } from 'react-router-dom';
 import TopBar from './components/TopBar';
 import ErrorBoundary from './components/ErrorBoundary';
 import BottomNav from './components/BottomNav';
@@ -28,19 +28,48 @@ import NotFound from './pages/NotFound';
 import { trackPage } from './game/track';
 
 export default function App() {
-  const { pathname } = useLocation();
+  const location = useLocation();
+  const { pathname, key } = location;
+  const navType = useNavigationType();
+  const scrolls = useRef(new Map()); // history entry key -> how far down the page was
+  // New page: start at the top. Back/Forward (POP): go back to where you were on that page.
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-  }, [pathname]);
+    if (navType !== 'POP') {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      return;
+    }
+    const y = scrolls.current.get(key) || 0;
+    let frame = 0;
+    let tries = 0;
+    // Wait (a few frames at most) until the page is tall enough to scroll that far.
+    const restore = () => {
+      const room = document.documentElement.scrollHeight - window.innerHeight;
+      if (room >= y || tries++ > 30) window.scrollTo({ top: y, left: 0, behavior: 'instant' });
+      else frame = requestAnimationFrame(restore);
+    };
+    restore();
+    return () => cancelAnimationFrame(frame);
+  }, [pathname]); // eslint-disable-line react-hooks/exhaustive-deps -- only a path change moves the page; filter changes keep it
+  useEffect(() => {
+    if ('scrollRestoration' in window.history) window.history.scrollRestoration = 'manual'; // we do it ourselves, above
+  }, []);
+  // Remember the scroll spot of the history entry on screen.
+  useEffect(() => {
+    if (!scrolls.current.has(key)) scrolls.current.set(key, window.scrollY);
+    const save = () => scrolls.current.set(key, window.scrollY);
+    window.addEventListener('scroll', save, { passive: true });
+    return () => window.removeEventListener('scroll', save);
+  }, [key]);
   useEffect(() => {
     trackPage(pathname);
   }, [pathname]);
 
   return (
     <div className="shell">
-      <a href="#main" className="skip-link">Skip to content</a>
+      {/* With HashRouter, "#main" would be read as a page path, so move focus by hand */}
+      <a href="#main" className="skip-link" onClick={(e) => { e.preventDefault(); document.getElementById('main')?.focus(); }}>Skip to content</a>
       <TopBar />
-      <main id="main" className="main">
+      <main id="main" className="main" tabIndex={-1}>
         <ErrorBoundary key={pathname}>
         <div className="route">
         <Routes>

@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { patterns } from './data/patterns';
 import { hunts } from './data/hunts';
 import { builds } from './data/builds';
@@ -36,7 +36,15 @@ const KNOWN = {
 const isDay = (k) => /^\d{4}-\d{2}-\d{2}$/.test(k);
 const cleanList = (l, key) => [...new Set(l.filter((x) => typeof x === 'string' && (!KNOWN[key] || KNOWN[key].has(x))))];
 const cleanStars = (o) => cleanMap(o, (v) => Math.round(num(v, 1, 3)) || null, (k) => KNOWN['labs-passed'].has(k));
-const cleanDaily = (o) => cleanMap(o, (v) => (Array.isArray(v) ? v.slice(0, 20).map(Boolean) : null), isDay);
+// Daily: 5 answers a day, only for days from Daily #1 (1 Oct 2026) up to tomorrow (time zones ahead).
+const DAILY_LEN = 5;
+const FIRST_DAILY = '2026-10-01';
+const dailyDayOk = (k) => {
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  return isDay(k) && k >= FIRST_DAILY && k <= dayKey(tomorrow);
+};
+const cleanDaily = (o) => cleanMap(o, (v) => (Array.isArray(v) ? v.slice(0, DAILY_LEN).map(Boolean) : null), dailyDayOk);
 const cleanDays = (o) => cleanMap(o, (v) => Math.round(num(v, 0, 100000)), isDay);
 function cleanStats(s) {
   const out = {
@@ -134,6 +142,18 @@ export function saveDaily(key, results) {
   const all = cleanDaily(readObj('daily'));
   if (all[key]) return;
   writeJSON('daily', { ...all, [key]: results });
+  writeJSON('daily-run', null);
+}
+
+// A Daily in progress: today's answers so far, so a refresh can't reset the one try.
+// Saved as { day: 'YYYY-MM-DD', r: [true, false, …] }; anything else reads as "not started".
+const cleanDailyRun = (o) => (o && isDay(o.day) && Array.isArray(o.r) ? { day: o.day, r: o.r.slice(0, 5).map(Boolean) } : null);
+export function readDailyRun(day) {
+  const run = cleanDailyRun(readJSON('daily-run', null));
+  return run && run.day === day ? run.r : [];
+}
+export function saveDailyRun(day, r) {
+  writeJSON('daily-run', { day, r });
 }
 export const useDaily = () => useCleaned('daily', cleanDaily);
 
@@ -204,6 +224,7 @@ export function streakInfo(days, today = new Date()) {
   const frozen = [];
   let count = 0;
   let lastFreeze = -Infinity; // index (in counted days) of the last freeze used
+  let newestFreeze = null; // played days between today and the most recent freeze
   const todayOpen = !played(d);
   if (todayOpen) d.setDate(d.getDate() - 1);
   for (;;) {
@@ -217,19 +238,43 @@ export function streakInfo(days, today = new Date()) {
     before.setDate(before.getDate() - 1);
     if ((count > 0 || todayOpen) && played(before) && count - lastFreeze >= 7) {
       frozen.push(dayKey(d));
+      if (newestFreeze === null) newestFreeze = count;
       lastFreeze = count;
       d.setDate(d.getDate() - 1);
       continue;
     }
     break;
   }
-  const freezeReady = count - lastFreeze >= 7;
+  // Ready again once 7 days have been played since the most recent skip day.
+  const freezeReady = newestFreeze === null || newestFreeze >= 7;
   return { streak: count, frozen, freezeReady, todayMoves: days[dayKey(today)] || 0 };
+}
+
+// Today's date key, which changes at local midnight (and is checked again when the tab comes back),
+// so the Today card and the streak flame don't show yesterday after midnight.
+function useTodayKey() {
+  const [key, setKey] = useState(dayKey);
+  useEffect(() => {
+    const check = () => setKey(dayKey());
+    const next = new Date();
+    next.setHours(24, 0, 1, 0);
+    const t = setTimeout(check, next - Date.now());
+    const onVisible = () => document.visibilityState === 'visible' && check();
+    document.addEventListener('visibilitychange', onVisible);
+    window.addEventListener('focus', check);
+    return () => {
+      clearTimeout(t);
+      document.removeEventListener('visibilitychange', onVisible);
+      window.removeEventListener('focus', check);
+    };
+  }, [key]);
+  return key;
 }
 
 export function useStreak() {
   const days = useDays();
-  return { ...streakInfo(days), days };
+  const today = useTodayKey();
+  return { ...streakInfo(days), days, today };
 }
 
 // ---- Backup code: move progress to another browser, no account needed ----
@@ -268,11 +313,27 @@ function mergeObj(a = {}, b = {}) {
   return out;
 }
 
+// Same rule as names in challenge links: no control characters, max 24.
+// eslint-disable-next-line no-control-regex
+const cleanName = (s) => (typeof s === 'string' ? s.replace(/[\u0000-\u001f\u007f]/g, '').trim().slice(0, 24) : '');
+
+function storageWorks() {
+  try {
+    localStorage.setItem('aip-test', '1');
+    localStorage.removeItem('aip-test');
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export function importProgress(code) {
   try {
-    const raw = String(code).trim();
-    if (raw.length > 200000) return { ok: false, error: 'That’s too long to be a backup code. Copy it again and paste it here.' };
-    if (!raw.startsWith('AIP1.')) return { ok: false, error: 'That doesn’t look like a backup code. Ours start with AIP1.' };
+    const text = String(code).trim();
+    if (text.length > 200000) return { ok: false, error: 'That’s too long to be a backup code. Copy it again and paste it here.' };
+    // The code may come wrapped in quotes or with a note around it: take the code itself.
+    const raw = text.match(/AIP1\.[A-Za-z0-9_-]+/)?.[0];
+    if (!raw) return { ok: false, error: 'That doesn’t look like a backup code. Ours start with AIP1.' };
     let b64 = raw.slice(5).replace(/-/g, '+').replace(/_/g, '/');
     while (b64.length % 4) b64 += '=';
     const data = JSON.parse(decodeURIComponent(escape(atob(b64))));
@@ -280,6 +341,9 @@ export function importProgress(code) {
     if (!plain(data)) throw new Error('bad');
     if (!LISTS.some((k) => Array.isArray(data[k])) && !OBJECTS.some((k) => plain(data[k]))) {
       return { ok: false, error: 'That code is empty. Make a fresh one on your other device.' };
+    }
+    if (!storageWorks()) {
+      return { ok: false, error: 'Your code looks fine, but this browser isn’t letting us save anything here. Allow site data (or leave private mode) and try again.' };
     }
     // Clean what comes in, merge it with what is here (the best of both), clean again, save.
     for (const k of LISTS) {
@@ -292,7 +356,8 @@ export function importProgress(code) {
       const here = CLEAN[k](readObj(k));
       localStorage.setItem(k, JSON.stringify(CLEAN[k](mergeObj(here, CLEAN[k](data[k])))));
     }
-    if (data.name && !localStorage.getItem('player-name')) localStorage.setItem('player-name', String(data.name).slice(0, 24));
+    const name = cleanName(data.name);
+    if (name && !localStorage.getItem('player-name')) localStorage.setItem('player-name', name);
     window.dispatchEvent(new Event(CHANGE));
     return { ok: true };
   } catch {

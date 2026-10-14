@@ -55,10 +55,13 @@ export default function Speed() {
   const endAt = useRef(0);
   const lastTick = useRef(SECONDS);
   const pointsRef = useRef(0);
+  const flashTimer = useRef(0);
+  useEffect(() => () => clearTimeout(flashTimer.current), []);
 
   // The first run of a challenge uses the friend's seed; "Play again" gets a new one.
   const start = (sameSeed = false) => {
-    const s = sameSeed ? seed : newSeed();
+    clearTimeout(flashTimer.current); // a flash from a quit run must not skip round 1
+    const s = sameSeed && challenge ? challenge.seed : newSeed();
     setSeed(s);
     setDeck(freshDeck(s));
     setI(0);
@@ -73,6 +76,18 @@ export default function Speed() {
     setCount(3);
     setPhase('count');
   };
+
+  // Another challenge link opened on this page: get ready with that friend's rounds.
+  const linkSeed = challenge?.seed;
+  useEffect(() => {
+    if (!linkSeed) return;
+    clearTimeout(flashTimer.current);
+    setSeed(linkSeed);
+    setDeck(freshDeck(linkSeed));
+    setFlash(null);
+    setResult(null);
+    setPhase('ready');
+  }, [linkSeed]);
 
   // Focus mode: on phones the top and bottom bars hide while the clock runs.
   useEffect(() => {
@@ -144,7 +159,7 @@ export default function Speed() {
         setCombo(0);
       }
       setFlash({ n, ok });
-      setTimeout(() => {
+      flashTimer.current = setTimeout(() => {
         setFlash(null);
         setI((x) => x + 1);
       }, ok ? 320 : 650);
@@ -186,7 +201,7 @@ export default function Speed() {
           <p className="lead">60 seconds. Tap the better AI screen, fast. Right&nbsp;=&nbsp;+1, wrong&nbsp;=&nbsp;−1. Get 3 in a row for double points.</p>
           {challenge && (
             <p className="challenge-banner">
-              <Swords size={16} strokeWidth={1.75} aria-hidden /> <strong>{challenge.from}</strong> scored <strong>{challenge.score}</strong>. Same screens, same order. Beat it!
+              <Swords size={16} strokeWidth={1.75} aria-hidden /> <span><strong>{challenge.from}</strong> scored <strong>{challenge.score}</strong>. Same screens, same order. Beat it!</span>
             </p>
           )}
           <button type="button" className="btn btn-primary btn-lg" onClick={() => start(!!challenge)}>
@@ -205,7 +220,7 @@ export default function Speed() {
       {phase === 'play' && (
         <div className="speed">
           <div className="speed-bar">
-            <button type="button" className="speed-quit" onClick={() => setPhase('ready')} aria-label="Quit this round">
+            <button type="button" className="speed-quit" onClick={() => { clearTimeout(flashTimer.current); setFlash(null); setPhase('ready'); }} aria-label="Quit this round">
               <X size={18} strokeWidth={2} aria-hidden />
             </button>
             <span className={'speed-time' + (secs <= 10 ? ' is-low' : '')}><Timer size={16} strokeWidth={2} aria-hidden /> {secs}s</span>
@@ -241,7 +256,7 @@ export default function Speed() {
           <p className="tot-verdict">{speedVerdict(right, answered)}</p>
           {challenge && seed === challenge.seed && (
             <p className={'challenge-result is-' + verdict(points, challenge.score, challenge.from).tone}>
-              <Swords size={16} strokeWidth={1.75} aria-hidden /> {verdict(points, challenge.score, challenge.from).text}
+              <Swords size={16} strokeWidth={1.75} aria-hidden /> <span>{verdict(points, challenge.score, challenge.from).text}</span>
             </p>
           )}
           <div className="tot-stats">

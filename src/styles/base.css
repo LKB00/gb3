@@ -68,6 +68,10 @@ kbd {
   position: absolute;
   left: -999px;
 }
+/* The skip link focuses <main> (tabIndex -1): no ring around the whole page */
+.main:focus {
+  outline: none;
+}
 .skip-link:focus {
   left: 16px;
   top: 8px;

@@ -4,7 +4,7 @@ import { CalendarDays, Copy, Eye, Flame, Share2, Shuffle, Swords } from 'lucide-
 import { challengeLink, useChallenge, verdict } from '../game/challenge';
 import { dailyDeck, dailyLabel, dailyNumber } from '../game/decks';
 import { dayKey } from '../lib/dates';
-import { dailyStreak, saveDaily, useDaily, XP } from '../progress';
+import { dailyStreak, readDailyRun, saveDaily, saveDailyRun, useDaily, XP } from '../progress';
 import ThisOrThat from '../components/ThisOrThat';
 import Breadcrumbs from '../components/Breadcrumbs';
 import CountUp from '../components/CountUp';
@@ -76,7 +76,7 @@ function Result({ num, day, results, streak, fresh, challenge, replay }) {
       </div>
       {challenge ? (
         <p className={'challenge-result is-' + verdict(score, challenge.score, challenge.from).tone}>
-          <Swords size={16} strokeWidth={1.75} aria-hidden /> {verdict(score, challenge.score, challenge.from).text}
+          <Swords size={16} strokeWidth={1.75} aria-hidden /> <span>{verdict(score, challenge.score, challenge.from).text}</span>
         </p>
       ) : (
         <p className="tot-verdict">
@@ -118,13 +118,15 @@ function Result({ num, day, results, streak, fresh, challenge, replay }) {
 
 export default function Daily() {
   useTitle('Daily challenge');
-  const challenge = useChallenge();
+  const link = useChallenge();
   const todayK = dayKey();
   // A challenge link for another day replays that day's rounds (not saved).
-  const key = challenge?.day && challenge.day <= todayK && dailyNumber(challenge.day) >= 1 ? challenge.day : todayK;
+  const key = link?.day && link.day <= todayK && dailyNumber(link.day) >= 1 ? link.day : todayK;
   const replay = key !== todayK;
   const num = dailyLabel(key);
   const deck = useMemo(() => dailyDeck(key), [key]);
+  // A friend's score can't be more than the number of rounds.
+  const challenge = link && link.score <= deck.length ? link : null;
   const daily = useDaily();
   const [fresh, setFresh] = useState(false);
   const [replayResult, setReplayResult] = useState(null);
@@ -143,7 +145,7 @@ export default function Daily() {
       </header>
       {challenge && !today && (
         <p className="challenge-banner">
-          <Swords size={16} strokeWidth={1.75} aria-hidden /> <strong>{challenge.from}</strong> got <strong>{challenge.score}/5</strong> on Daily #{num}. Your turn to beat it!
+          <Swords size={16} strokeWidth={1.75} aria-hidden /> <span><strong>{challenge.from}</strong> got <strong>{challenge.score}/5</strong> on Daily #{num}. Your turn to beat it!</span>
         </p>
       )}
       <div className="view">
@@ -151,7 +153,10 @@ export default function Daily() {
           <Result num={num} day={key} results={today} streak={dailyStreak(daily)} fresh={fresh && !replay} challenge={challenge} replay={replay} />
         ) : (
           <ThisOrThat
+            key={key /* a new day (or another day's link) is a new board */}
             deck={deck}
+            start={replay ? undefined : readDailyRun(key)}
+            onAnswer={replay ? undefined : (r) => saveDailyRun(key, r)}
             onDone={(r) => {
               setFresh(true);
               if (replay) setReplayResult(r);

@@ -52,6 +52,8 @@
 .me-row > span:nth-child(2) { flex: 1; display: flex; flex-direction: column; }
 .me-row strong { font-size: 15px; }
 .me-credits { margin-top: 48px; font-size: 12px; line-height: 18px; color: var(--ink-3); }
+/* Phones have no footer, so the Me page shows the credits; on bigger screens the footer already does. */
+@media (min-width: 721px) { .me-credits { display: none; } }
 .speed-quit {
   flex: none;
   width: 32px;
@@ -137,7 +139,7 @@
   .tabs {
     -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
     mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
-    padding-right: 24px;
+    padding-right: 32px; /* the last tab can scroll clear of the fade */
   }
 
   /* Focus mode (Speed round): nothing but the game */
@@ -317,6 +319,11 @@
   .levelup-toast { top: calc(60px + env(safe-area-inset-top, 0px)); }
   .sound-hint { top: calc(60px + env(safe-area-inset-top, 0px)); }
 }
+/* Both at once (first sound is often the level-up chime): the hint sits under the level-up toast. */
+.levelup-toast ~ .sound-hint { top: calc(124px + env(safe-area-inset-top, 0px)); }
+@media (max-width: 720px) {
+  .levelup-toast ~ .sound-hint { top: calc(112px + env(safe-area-inset-top, 0px)); }
+}
 
 /* Phone held sideways: very little height, so the bottom bar shrinks to icons only. */
 @media (max-width: 900px) and (max-height: 480px) {
@@ -326,9 +333,4 @@
   .bottomnav-icon { height: 28px; }
 }
 
-/* Very narrow phones: the short name GB3 (Good Bot, Bad Bot = G + B three times) replaces the full name. */
-.logo-short { display: none; }
-@media (max-width: 340px) {
-  .logo-full { display: none; }
-  .logo-short { display: inline; }
-}
+/* The top bar shows the short name GB3 (Good Bot, Bad Bot = G + B three times); the link's label says the full name. */
