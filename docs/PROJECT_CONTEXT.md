@@ -236,6 +236,8 @@ Stars: **3** = all needs and no traps; **2** = (missing + traps) <= 2; else **1*
 
 **Badges** (`components/play/Badges.jsx`): one per pattern group; collect all cards for the badge, all with 3 stars for gold. Each badge links to the first missing card in its group (then the first under 3 stars); a won badge that isn't gold says how many need 3 stars.
 
+**Games in progress survive a link, Back and a refresh** (sessionStorage, this tab only): Stories (per story), Build (per brief, pieces kept until Start over), How much power? (the same 8 tasks), Spot the flaw (per screen, plus the current screen). Card links inside every game open a card peek. Every game end has a next step: Next story (the next story without its best ending), Next job (the next brief without 3 stars), Next game, and Spot the flaw's pinned Next screen.
+
 **Install and backup** (`components/play/AppAndBackup.jsx`, on the Me page): install prompt (Android/desktop `beforeinstallprompt`, iOS hint) and backup code (see section 7).
 
 ---
@@ -295,6 +297,7 @@ src/
 - **Copy style for games** (Oct 2026 pass): every game answers "What is this? What do I do? How do I win? What just happened?" on screen, in short easy sentences. Same words everywhere: "XP", "streak" / "in a row" (answers), "day streak" (days played), "round", "card", "stars", "trust". Daily says rounds 3 and 5 are hard. Note: a pattern's `lab.goal` (visuals.js) is also the brief line in This or That, Daily and Speed, so write goals that work in both places.
 - **One storage layer**: `lib/storage.js` (`readJSON`, `writeJSON`, `useStored`). Every write dispatches the `progress-change` event, so all hooks update together. Hooks also listen to the browser `storage` event, so other open tabs update. When storage is blocked, writes are kept in memory for the visit. The theme is one shared value (`theme-change` event); sound and vibration switches also keep an in-memory fallback.
 - **Data is cleaned when read** (`progress.js`: `cleanStats`, `cleanStars`, `cleanDaily`, `cleanDays`, `cleanList`). Wrong types, NaN, huge numbers, unknown ids and bad date keys are dropped or clamped. **When you add a saved field, add it to the clean functions**, or bad data could crash a page.
+- **Runs in progress**: `readRun` / `saveRun` / `clearRun` in `progress.js` (sessionStorage keys `run:story:<id>` `{sceneId, trust, picked, history}`, `run:build:<id>` `{order, placed, checked}`, `run:power` `{ids, i, pick, log}`, `run:hunt:<id>` `{found, revealed}`, `run:spot` `{screen}`), each with a `read*Run` cleaner so bad data starts a fresh game. Not part of backup codes.
 - **Best-score helpers**: `saveBest(field, value)` and `saveBestIn(field, id, value)` keep the maximum. A new best score = a `saveBest` line + a line in `xpParts()`.
 - **Seeded randomness**: `lib/random.js` `seeded(key)` (mulberry32) so the Daily and challenge links give everyone the same rounds.
 - **Clipboard** only through `lib/clipboard.js` `copyText()` (clipboard API, then `execCommand`, then a prompt box).

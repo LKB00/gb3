@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Check } from 'lucide-react';
 import { hunts } from '../data/hunts';
@@ -7,7 +7,7 @@ import { clearRun, readHuntRun, readRun, saveRun, useHuntsDone } from '../progre
 import Hunt from '../components/Hunt';
 import Breadcrumbs from '../components/Breadcrumbs';
 import { useTitle } from '../lib/useTitle';
-import { useReveal } from '../lib/useReveal';
+import { revealEl } from '../lib/useReveal';
 
 // The game after this one on the Play page (skipping tiles without a page of their own).
 const NEXT_GAME = (() => {
@@ -34,8 +34,18 @@ export default function SpotTheFlaw() {
   const [over, setOver] = useState(false);
   const scenario = hunts[idx];
   const last = idx === hunts.length - 1;
-  // When the screen is done, bring its next step into view (it sits under the win line).
-  const nextRef = useReveal(over ? scenario.id : null);
+  // When the screen is done, bring its next step into view. On phones the bar is pinned,
+  // so show the win line just above it; elsewhere show the bar itself.
+  const nextRef = useRef(null);
+  useEffect(() => {
+    if (!over) return;
+    const id = requestAnimationFrame(() => {
+      const bar = nextRef.current;
+      const pinned = bar && getComputedStyle(bar).position === 'sticky';
+      revealEl(pinned ? bar.previousElementSibling : bar);
+    });
+    return () => cancelAnimationFrame(id);
+  }, [over, scenario.id]);
   useEffect(() => {
     saveRun('spot', { screen: scenario.id });
   }, [scenario.id]);

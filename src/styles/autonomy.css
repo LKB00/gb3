@@ -269,6 +269,7 @@
     position: sticky;
     bottom: calc(var(--bottomnav-h) + env(safe-area-inset-bottom, 0px) + 8px);
     z-index: 5;
+    align-self: stretch;
     margin: 4px -8px 0;
     padding: 10px 12px;
     border-radius: 18px;
