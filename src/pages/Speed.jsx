@@ -3,20 +3,21 @@ import { Link } from 'react-router-dom';
 import { RotateCcw, Swords, Timer, X, Zap } from 'lucide-react';
 import { makeDeck } from '../game/decks';
 import { seeded, shuffle } from '../lib/random';
-import { challengeLink, useChallenge, verdict } from '../game/challenge';
+import { challengeLink, speedDareText, useChallenge, useDare, verdict } from '../game/challenge';
 import { fx } from '../game/fx';
-import { copyText } from '../lib/clipboard';
 import { track } from '../game/track';
 import { markPlayed, saveSpeed, useGameStats, XP } from '../progress';
 import MockFrame, { MockBlock } from '../mock/Mock';
 import Breadcrumbs from '../components/Breadcrumbs';
 import CountUp from '../components/CountUp';
 import Burst, { XpPop } from '../components/Burst';
+import { getPattern } from '../data/patterns';
+import { PeekLink } from '../components/PatternPeek';
 import { useTitle } from '../lib/useTitle';
 
 // Speed round: 60 seconds, as many "which is better?" picks as you can.
 // 3 right in a row turns on a ×2 combo; a wrong pick costs 1 point. No explanations mid-round, just pace;
-// the patterns are linked on the score screen.
+// the score screen shows up to 3 tricks you missed, as quick card peeks.
 const SECONDS = 60;
 
 // One warm line for the score screen, based on how many picks were right.
@@ -52,6 +53,7 @@ export default function Speed() {
   const [combo, setCombo] = useState(0);
   const [flash, setFlash] = useState(null); // { n, ok }
   const [result, setResult] = useState(null);
+  const [missed, setMissed] = useState([]); // pattern ids of wrong picks, newest last
   const endAt = useRef(0);
   const lastTick = useRef(SECONDS);
   const pointsRef = useRef(0);
@@ -72,6 +74,7 @@ export default function Speed() {
     setCombo(0);
     setFlash(null);
     setResult(null);
+    setMissed([]);
     setLeft(SECONDS * 1000);
     setCount(3);
     setPhase('count');
@@ -157,6 +160,7 @@ export default function Speed() {
         pointsRef.current = Math.max(0, pointsRef.current - 1);
         setPoints(pointsRef.current);
         setCombo(0);
+        setMissed((m) => (m.includes(round.pattern) ? m : [...m, round.pattern]));
       }
       setFlash({ n, ok });
       flashTimer.current = setTimeout(() => {
@@ -164,7 +168,7 @@ export default function Speed() {
         setI((x) => x + 1);
       }, ok ? 320 : 650);
     },
-    [phase, flash, round.goodFirst, combo]
+    [phase, flash, round.goodFirst, round.pattern, combo]
   );
 
   useEffect(() => {
@@ -178,15 +182,10 @@ export default function Speed() {
     return () => window.removeEventListener('keydown', onKey);
   }, [choose]);
 
-  const [copied, setCopied] = useState(false);
-  const share = async () => {
-    const link = challengeLink('/play/speed', { seed, vs: points });
-    const text = `⚡ I scored ${points} in the Good Bot, Bad Bot speed round. Same screens, same order. Can you beat me? ${link}`;
-    if (await copyText(text)) {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
-  };
+  const dare = useDare();
+  const vs = challenge && seed === challenge.seed ? challenge : null; // only a dare on the friend's rounds answers them
+  const share = () =>
+    dare.send(() => ({ text: speedDareText({ points, vs }), url: challengeLink('/play/speed', { seed, vs: points }) }));
 
   const secs = Math.ceil(left / 1000);
 
@@ -262,14 +261,37 @@ export default function Speed() {
           <div className="tot-stats">
             {result.record && points > 0 ? <span className="pill-new">New best!</span> : <span>Your best: {stats.speedBest || 0} points</span>}
           </div>
-          <div className="row wrap center">
-            <button type="button" className="btn btn-primary btn-lg" onClick={() => start(false)}>
-              <RotateCcw size={15} strokeWidth={1.75} aria-hidden /> Play again
-            </button>
-            <button type="button" className="btn btn-ghost btn-lg" onClick={share}>
-              <Swords size={15} strokeWidth={1.75} aria-hidden /> {copied ? 'Link copied!' : 'Challenge a friend'}
-            </button>
-            <Link to="/play/this-or-that" className="btn btn-ghost btn-lg">Play with no timer</Link>
+          {missed.length > 0 && (
+            <div className="speed-missed">
+              <p className="small muted">Tricks you missed. Tap one for a quick look:</p>
+              <ul>
+                {missed.slice(-3).map((id) => (
+                  <li key={id}><PeekLink id={id}>{getPattern(id)?.title || id}</PeekLink></li>
+                ))}
+              </ul>
+            </div>
+          )}
+          <div className="speed-dare">
+            {dare.askName && (
+              <input
+                className="dare-name"
+                value={dare.name}
+                onChange={(e) => dare.setName(e.target.value)}
+                maxLength={24}
+                placeholder="Your name (so friends know it’s you)"
+                aria-label="Your name (so friends know it’s you)"
+                autoComplete="nickname"
+              />
+            )}
+            <div className="row wrap center">
+              <button type="button" className={'btn btn-lg ' + (vs ? 'btn-primary' : 'btn-ghost')} style={{ order: vs ? 0 : 1 }} onClick={share}>
+                <Swords size={15} strokeWidth={1.75} aria-hidden /> {dare.copied ? 'Link copied!' : vs ? `Send it back to ${vs.from}` : 'Challenge a friend'}
+              </button>
+              <button type="button" className={'btn btn-lg ' + (vs ? 'btn-ghost' : 'btn-primary')} onClick={() => start(false)}>
+                <RotateCcw size={15} strokeWidth={1.75} aria-hidden /> Play again
+              </button>
+            </div>
+            <Link to="/play/this-or-that" className="text-link">Play with no timer</Link>
           </div>
         </div>
       )}

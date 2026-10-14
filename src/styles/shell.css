@@ -236,6 +236,10 @@
 .view > .block:first-child {
   margin-top: 0;
 }
+/* Explore tabs: the long label on bigger screens, the short one in the phone grid (phone.css) */
+.tab-short {
+  display: none;
+}
 .lib-head {
   display: flex;
   flex-direction: column;

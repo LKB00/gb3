@@ -1,5 +1,6 @@
 // All AI design patterns shown on the site.
 // Each pattern has a matching live demo in src/demos (see `demo` key).
+// `keywords` (optional): extra words people search for that appear nowhere else on the card.
 
 export const categories = [
   { id: 'input', name: 'Input', blurb: 'Help people ask for the right thing.' },
@@ -16,6 +17,7 @@ export const patterns = [
     id: 'prompt-starters',
     title: 'Prompt starters',
     category: 'input',
+    keywords: ['onboarding', 'empty state', 'first run', 'suggested prompts', 'example prompts'],
     summary: 'Show a few example prompts, so nobody stares at an empty box.',
     problem:
       'An empty text box is scary. People don’t know what to type, or what the AI is good at. Many give up before they start.',
@@ -44,6 +46,7 @@ export const patterns = [
     id: 'clarifying-questions',
     title: 'Ask before acting',
     category: 'input',
+    keywords: ['follow-up question', 'disambiguation', 'ambiguity', 'human in the loop'],
     summary: 'When a request is unclear, the AI asks one quick question first.',
     problem:
       'People ask in a hurry and leave things out. If the AI guesses wrong, they wait, get the wrong thing, and start over.',
@@ -64,6 +67,7 @@ export const patterns = [
     id: 'streaming-response',
     title: 'Show progress',
     category: 'output',
+    keywords: ['loading', 'spinner', 'typing indicator', 'wait time', 'progress bar', 'skeleton'],
     summary: 'Show the answer as it appears, and what the AI is doing while people wait.',
     problem:
       'AI can take many seconds. A blank screen or a silent spinner makes people think the app froze.',
@@ -84,6 +88,7 @@ export const patterns = [
     id: 'multiple-variants',
     title: 'Offer options',
     category: 'output',
+    keywords: ['alternatives', 'choices', 'image generation'],
     summary: 'Give a few different results and let people pick their favorite.',
     problem:
       'Creative work has no single right answer. One result feels like a take-it-or-leave-it guess.',
@@ -100,6 +105,7 @@ export const patterns = [
     id: 'editable-output',
     title: 'Editable output',
     category: 'control',
+    keywords: ['canvas', 'artifact', 'rewrite', 'human in the loop'],
     summary: 'Treat the AI’s answer as a draft that people can change.',
     problem:
       'AI is often 80% right. If people can only accept or start over, they lose the good parts to fix one small bit.',
@@ -116,6 +122,7 @@ export const patterns = [
     id: 'inline-suggestions',
     title: 'Suggest, don\'t force',
     category: 'control',
+    keywords: ['autocomplete', 'ghost text', 'tab to accept', 'copilot', 'completion'],
     summary: 'Show AI ideas as light grey hints that people accept on purpose.',
     problem:
       'When AI changes things on its own, people feel they lost control. Then they stop trusting it.',
@@ -132,6 +139,7 @@ export const patterns = [
     id: 'stop-and-undo',
     title: 'Stop & undo',
     category: 'control',
+    keywords: ['cancel', 'abort', 'loading', 'reversible'],
     summary: 'People can stop the AI at any time and undo what it did.',
     problem:
       'AI can head the wrong way or make a change nobody wanted. With no way out, every click feels risky.',
@@ -148,6 +156,7 @@ export const patterns = [
     id: 'citations',
     title: 'Show sources',
     category: 'trust',
+    keywords: ['citation', 'references', 'footnotes', 'grounding', 'hallucination', 'fact check', 'rag'],
     summary: 'Link each claim to where it came from, so people can check it.',
     problem: 'AI can sound sure and still be wrong. People can’t tell which parts are true.',
     solution:
@@ -163,6 +172,7 @@ export const patterns = [
     id: 'confidence-signals',
     title: 'Show uncertainty',
     category: 'trust',
+    keywords: ['hallucination', 'accuracy', 'confidence score', 'grounding', 'not sure'],
     summary: 'Tell people how sure the AI is, in plain words.',
     problem:
       'When every answer looks equally sure, people trust all of it or none of it.',
@@ -179,6 +189,7 @@ export const patterns = [
     id: 'ai-disclosure',
     title: 'Label AI content',
     category: 'trust',
+    keywords: ['transparency', 'watermark', 'ai generated', 'deepfake', 'consent'],
     summary: 'Make it clear what the AI made and what a person made.',
     problem:
       'If people can’t tell AI work from human work, they feel tricked when they find out. Trust drops fast.',
@@ -195,6 +206,7 @@ export const patterns = [
     id: 'feedback-loop',
     title: 'Ask for feedback',
     category: 'feedback',
+    keywords: ['thumbs up', 'thumbs down', 'rating', 'rlhf', 'report'],
     summary: 'Let people rate a result in one tap and say what went wrong.',
     problem:
       'When the AI gets it wrong, the team never hears about it. People have no quick way to say “this is off”.',
@@ -211,6 +223,7 @@ export const patterns = [
     id: 'graceful-errors',
     title: 'Helpful errors',
     category: 'feedback',
+    keywords: ['error state', 'error message', 'fallback', 'refusal', 'recovery', 'hallucination'],
     summary: 'When the AI can’t help, say why and show what to do next.',
     problem:
       'AI fails in new ways. It refuses, times out, or doesn’t know. “Something went wrong” leaves people stuck.',
@@ -227,6 +240,7 @@ export const patterns = [
     id: 'visible-context',
     title: 'Show the context',
     category: 'input',
+    keywords: ['context window', 'attachments', 'grounding', 'rag', 'privacy'],
     summary: 'Show what the AI is looking at, and let people change it.',
     problem:
       'People can’t tell what the AI can “see”. It answers about the wrong file, or people paste things it already had.',
@@ -242,6 +256,7 @@ export const patterns = [
     id: 'structured-controls',
     title: 'Simple controls, not prompt tricks',
     category: 'input',
+    keywords: ['presets', 'sliders', 'buttons', 'prompt engineering'],
     summary: 'Give simple buttons and sliders for common asks like tone and length.',
     problem: 'People shouldn’t need “prompt magic” to get a shorter or friendlier answer. Most never learn it.',
     solution:
@@ -256,6 +271,7 @@ export const patterns = [
     id: 'regenerate-history',
     title: 'Versions & retry',
     category: 'output',
+    keywords: ['retry', 'regenerate', 'branching', 'history'],
     summary: 'Let people try again without losing earlier answers.',
     problem: '“Try again” throws away the old answer. If the new one is worse, the good one is gone for good.',
     solution: 'Keep every version. Show “2 / 3” with arrows so people can flip back. Let them say what to change on the next try.',
@@ -269,6 +285,7 @@ export const patterns = [
     id: 'preview-changes',
     title: 'Preview before apply',
     category: 'control',
+    keywords: ['diff', 'dry run', 'review changes', 'human in the loop', 'approval'],
     summary: 'Show what the AI will change before it changes it.',
     problem: 'When AI edits many things at once, people can’t see what changed. So they can’t check it, and they worry.',
     solution: 'Show each change as before and after. Let people accept all, reject all, or go one by one.',
@@ -282,6 +299,7 @@ export const patterns = [
     id: 'set-expectations',
     title: 'Set expectations',
     category: 'trust',
+    keywords: ['onboarding', 'disclaimer', 'limitations', 'hallucination', 'capabilities'],
     summary: 'Say early what the AI can do, what it can’t, and that it can be wrong.',
     problem: 'People expect AI to know everything, or nothing. Then they trust it blindly, or never use it.',
     solution:
@@ -296,6 +314,7 @@ export const patterns = [
     id: 'explain-why',
     title: 'Explain why',
     category: 'trust',
+    keywords: ['transparency', 'explainability', 'reasoning', 'recommendations'],
     summary: 'Show the main reasons behind an AI result, in simple words.',
     problem: 'When AI recommends or decides with no reason, people either follow blindly or ignore it.',
     solution: 'Show the 2 or 3 real reasons, in plain words, right next to the result. Let people fix a reason that’s wrong.',
@@ -309,6 +328,7 @@ export const patterns = [
     id: 'memory-controls',
     title: 'Memory you control',
     category: 'trust',
+    keywords: ['privacy', 'personalization', 'consent', 'forget', 'data controls'],
     summary: 'Show what the AI remembers, and let people edit or delete it.',
     problem:
       'An AI that remembers feels creepy when people don’t know what it knows. And one wrong memory keeps causing bad answers.',
@@ -324,6 +344,7 @@ export const patterns = [
     id: 'plan-first',
     title: 'Show the plan first',
     category: 'agents',
+    keywords: ['human in the loop', 'approval', 'planning', 'agent'],
     summary: 'Before a long task, the AI shows its plan so people can fix it early.',
     problem:
       'AI helpers often dive straight into long tasks. If they got it wrong, people find out at the end, after the time and money are gone.',
@@ -338,6 +359,7 @@ export const patterns = [
     id: 'action-approval',
     title: 'Ask before risky actions',
     category: 'agents',
+    keywords: ['permission', 'consent', 'confirmation', 'human in the loop', 'guardrails', 'agent'],
     summary: 'The AI asks first before it sends, pays, deletes or shares.',
     problem: 'AI helpers can send emails, buy things or delete data. One wrong move can cause real harm, and some can’t be taken back.',
     solution:
@@ -352,6 +374,7 @@ export const patterns = [
     id: 'task-status',
     title: 'Background tasks & handoff',
     category: 'agents',
+    keywords: ['loading', 'async', 'notification', 'background job', 'agent'],
     summary: 'For long tasks, show the status, let people walk away, and offer a human.',
     problem:
       'Long AI tasks freeze the screen or run out of sight. When they get stuck, nobody knows. And people can’t reach a human.',
@@ -367,6 +390,7 @@ export const patterns = [
     id: 'contextual-nudge',
     title: 'Offer help at the right moment',
     category: 'input',
+    keywords: ['proactive', 'tooltip', 'onboarding', 'discoverability'],
     summary: 'Offer AI help where and when it’s useful, not everywhere all the time.',
     problem:
       'AI features hide behind a button nobody notices. Or they pop up so often that people tune them out.',
@@ -382,6 +406,7 @@ export const patterns = [
     id: 'reply-to-part',
     title: 'Reply to a part',
     category: 'input',
+    keywords: ['highlight', 'quote', 'selection', 'follow-up'],
     summary: 'Let people select part of an answer and ask about just that.',
     problem:
       'People often want to ask about one line in a long answer. Retyping it is slow, and the AI may change the wrong part.',
@@ -397,6 +422,7 @@ export const patterns = [
     id: 'show-understanding',
     title: 'Show what it understood',
     category: 'voice',
+    keywords: ['confirmation', 'summary', 'intent', 'grounding'],
     summary: 'For voice and images, show what the AI heard or saw before it acts.',
     problem:
       'Speech and photos are easy to misread. If the AI acts on a wrong reading, people get an odd result and no clue why.',
@@ -412,6 +438,7 @@ export const patterns = [
     id: 'autonomy-dial',
     title: 'Choose how much the AI does',
     category: 'agents',
+    keywords: ['permission', 'human in the loop', 'autopilot', 'settings', 'agent'],
     summary: 'Let people set how much the AI does per task, from “suggest only” to “act alone”.',
     problem:
       'One fixed level of freedom never fits. Some tasks are safe to hand over. Others need a person to check. People want to decide.',
@@ -428,6 +455,7 @@ export const patterns = [
     id: 'action-log',
     title: 'Activity log & undo',
     category: 'agents',
+    keywords: ['audit', 'audit trail', 'history', 'transparency', 'agent'],
     summary: 'Keep an easy-to-read record of what the AI did, with undo for each step.',
     problem:
       'After an AI helper works, people can’t tell what it changed. When something breaks, they can’t find it or reverse it.',
@@ -443,6 +471,7 @@ export const patterns = [
     id: 'interrupt-redirect',
     title: 'Pause & redirect',
     category: 'agents',
+    keywords: ['human in the loop', 'steer', 'cancel', 'agent'],
     summary: 'Let people pause the AI mid-task, change the plan, and carry on.',
     problem:
       'When an AI helper heads the wrong way, people can often only wait it out, or cancel and lose all the work.',
@@ -459,6 +488,7 @@ export const patterns = [
     id: 'cost-estimate',
     title: 'Show the cost first',
     category: 'agents',
+    keywords: ['pricing', 'credits', 'tokens', 'usage', 'budget'],
     summary: 'Before a pricey AI task, show the time, credits or money it will use.',
     problem:
       'Some AI tasks eat lots of credits, money or time. A surprise bill feels like a trick, and people stop trying things.',
@@ -474,6 +504,7 @@ export const patterns = [
     id: 'agent-handoff',
     title: 'Show which agent is working',
     category: 'agents',
+    keywords: ['multi-agent', 'orchestration', 'handoff', 'agent'],
     summary: 'When several AI helpers share a task, show who does what, and who answers for it.',
     problem:
       'Big tasks are now split between AI helpers: one researches, one writes, one checks. If the screen hides this, people can’t tell where a mistake came from.',
@@ -489,6 +520,7 @@ export const patterns = [
     id: 'screen-control',
     title: 'Ask before using your screen',
     category: 'agents',
+    keywords: ['computer use', 'permission', 'consent', 'privacy', 'browser agent'],
     summary: 'When AI clicks and types for someone, show what it can touch and let them take over.',
     problem:
       'AI helpers can now use a browser or a whole computer. People can’t see what it’s allowed to do, or what it’s doing. Logins and payments feel scary.',
@@ -504,6 +536,7 @@ export const patterns = [
     id: 'connected-apps',
     title: 'Show what it can access',
     category: 'trust',
+    keywords: ['permission', 'privacy', 'integrations', 'oauth', 'scopes', 'consent', 'data access'],
     summary: 'List the apps the AI is connected to, what it can do in each, and how to switch it off.',
     problem:
       'AI assistants now connect to mail, calendars and work tools. People forget what they connected. They don’t know if the AI can only read, or also send and delete.',
@@ -519,6 +552,7 @@ export const patterns = [
     id: 'voice-turn-taking',
     title: 'Show who is talking',
     category: 'voice',
+    keywords: ['speech', 'listening', 'interruption', 'voice assistant', 'barge in'],
     summary: 'Make it obvious when the AI is listening, thinking or talking, and let people cut in.',
     problem:
       'With voice, there’s no text to look at. People talk over the AI, wait in awkward silence, or wonder if it heard them.',
@@ -535,6 +569,7 @@ export const patterns = [
     id: 'read-back',
     title: 'Read it back before acting',
     category: 'voice',
+    keywords: ['confirmation', 'voice assistant', 'speech', 'approval'],
     summary: 'For voice actions, repeat the key details and wait for a yes.',
     problem:
       'Voice tools mishear names, numbers and times. One wrong detail can send money or a message to the wrong person.',
@@ -550,6 +585,7 @@ export const patterns = [
     id: 'point-to-edit',
     title: 'Point at what to change',
     category: 'voice',
+    keywords: ['inpainting', 'selection', 'image editing', 'annotation'],
     summary: 'Let people circle part of an image, then say what to change.',
     problem:
       'Describing a spot in a picture is hard: “the second cup from the left”. The AI often edits the wrong thing.',
@@ -565,6 +601,7 @@ export const patterns = [
     id: 'mode-switch',
     title: 'Show it on screen',
     category: 'voice',
+    keywords: ['multimodal', 'screen', 'voice to screen', 'accessibility'],
     summary: 'Use voice for quick asks and answers. Use the screen for lists, choices and details.',
     problem:
       'Long lists, prices and choices are hard to remember by ear. People lose track after the third option.',
@@ -580,6 +617,7 @@ export const patterns = [
     id: 'bias-check',
     title: 'Check for bias',
     category: 'trust',
+    keywords: ['fairness', 'ethics', 'inclusive', 'stereotypes', 'diversity'],
     summary: 'Show varied, fair results by default, and let people report unfair ones.',
     problem:
       'AI learns from human data, biases and all. It can repeat stereotypes in images, text or rankings, and hurt the people it shows.',

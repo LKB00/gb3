@@ -294,6 +294,14 @@
   25% { transform: translateX(-6px); }
   75% { transform: translateX(6px); }
 }
+/* Phones: the brief and timer stay on top, the two screens sit low, in thumb reach */
+@media (max-width: 720px) {
+  .speed { min-height: 100vh; min-height: 100dvh; }
+  .speed-options {
+    margin-top: auto;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .speed-time.is-low, .speed-option, .speed-count span { animation: none; }
 }
@@ -369,6 +377,47 @@
 .challenge-result.is-good { background: var(--positive-soft); color: var(--positive); }
 .challenge-result.is-ok { background: var(--sand-dark); color: var(--ink); }
 .challenge-result.is-bad { background: var(--negative-soft); color: var(--negative); }
+/* One line to name yourself before a dare, so the friend sees who sent it */
+.dare-name {
+  width: 100%;
+  max-width: 320px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: var(--hair) solid var(--line);
+  border-radius: 9999px;
+  background: var(--card);
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px; /* 16px stops phones zooming in on focus */
+  text-align: center;
+}
+.dare-name::placeholder { color: var(--ink-3); }
+.dare-name:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.speed-missed {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.speed-missed ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.speed-missed li {
+  max-width: 100%;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  background: var(--card);
+  font-size: 13px;
+  line-height: 18px;
+}
+.speed-missed .peek-link { min-height: 28px; overflow-wrap: anywhere; }
+.speed-dare { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; }
 
 /* Logo on the dark player card */
 .pc-brand .logo-mark { width: 30px; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.16); }

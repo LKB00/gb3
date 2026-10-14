@@ -15,6 +15,7 @@ export function showActiveTab(row) {
 }
 
 // One header for every Explore page, so the deeper material feels like one place.
+// On phones the tabs sit in a 3 x 2 grid (phone.css), so none hide off the edge.
 export default function LibraryTabs() {
   const { pathname } = useLocation();
   const row = useRef(null);
@@ -22,9 +23,16 @@ export default function LibraryTabs() {
   return (
     <div className="lib-head">
       <p className="label">Explore</p>
-      <nav className="tabs" aria-label="Explore sections" ref={row}>
+      <nav className="tabs lib-tabs" aria-label="Explore sections" ref={row}>
         {EXPLORE_TABS.map((t) => (
-          <NavLink key={t.to} to={t.to} className="tab">{t.label}</NavLink>
+          <NavLink key={t.to} to={t.to} className="tab" aria-label={t.short ? t.label : undefined}>
+            {t.short ? (
+              <>
+                <span className="tab-long">{t.label}</span>
+                <span className="tab-short">{t.short}</span>
+              </>
+            ) : t.label}
+          </NavLink>
         ))}
       </nav>
     </div>

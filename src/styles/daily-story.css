@@ -58,6 +58,27 @@
 /* Hovering the banner (or the button) brightens the lime; the general dark hover would hide the text. */
 .daily-banner:hover .btn-primary,
 .daily-banner .btn-primary:hover:not(:disabled) { background: #d2f78f; }
+/* Done for today: the banner is a box with two links (goal first, result second), not one big link */
+.daily-banner.is-done:hover { transform: none; }
+.daily-banner-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+}
+.daily-banner-link {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+@media (max-width: 720px) {
+  .daily-banner-actions { width: 100%; justify-content: center; }
+}
 .daily-grid {
   display: flex;
   gap: 6px;
@@ -88,6 +109,42 @@
   white-space: pre-wrap;
   word-break: break-word;
 }
+/* Daily result: the daily goal first, then a short share block (more ways tucked away) */
+.daily-next {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 440px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: var(--card);
+  box-shadow: inset 0 0 0 var(--hair) var(--line);
+}
+.daily-next p { display: inline-flex; align-items: center; gap: 6px; font-size: 15px; line-height: 22px; }
+.daily-next svg { flex: none; color: var(--ink-2); }
+.daily-next.is-done svg { color: var(--positive); }
+.daily-share {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 520px;
+}
+.daily-more-share { width: 100%; text-align: center; }
+.daily-more-share summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.daily-more-share[open] { display: flex; flex-direction: column; align-items: center; gap: 10px; }
 .daily-more {
   display: flex;
   flex-wrap: wrap;
@@ -239,7 +296,7 @@
   animation: xp-rise 0.4s ease;
 }
 .story-outcome .small { margin-top: 4px; color: var(--ink-3); }
-.story-outcome a { color: var(--ink-2); font-weight: 700; }
+.story-outcome a, .story-outcome .peek-link { color: var(--ink-2); font-weight: 700; }
 .story-avatar {
   flex: none;
   width: 32px;
@@ -289,7 +346,7 @@
 }
 .story-recap li > span:last-child { display: flex; flex-direction: column; font-size: 14px; line-height: 20px; }
 .story-recap-scene { font-size: 12px; color: var(--ink-3); }
-.story-recap-pattern { font-size: 12px; color: var(--ink-2); }
+.story-recap-pattern, .story-recap .peek-link { align-self: flex-start; font-size: 12px; color: var(--ink-2); text-align: left; }
 .tot-big .xp-pop {
   font-size: 12px;
   line-height: 18px;

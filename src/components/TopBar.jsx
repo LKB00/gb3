@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ChevronLeft, Moon, Sun, Volume2, VolumeX, Zap } from 'lucide-react';
 import { useXP } from '../progress';
 import { useTheme } from '../lib/theme';
@@ -6,7 +6,7 @@ import { GoalToast, LevelUpToast, SoundHint, StreakPill } from './Today';
 import { useFx } from '../game/fx';
 import LogoMark from './LogoMark';
 import { useCountUp } from '../lib/useCountUp';
-import { EXPLORE_HOME, isCards, isExplore, isPlay, parentOf } from '../config/nav';
+import { EXPLORE_HOME, backOf, isCards, isExplore, isPlay } from '../config/nav';
 
 // Four places: Play (games), Cards (the pattern collection), Explore (go deeper), Me (progress and settings).
 // On phones the places move to the bottom bar (BottomNav) and this bar gets simpler.
@@ -17,20 +17,28 @@ const links = [
   { to: EXPLORE_HOME, label: 'Explore', match: isExplore },
   { to: '/me', label: 'Me', match: (p) => p.startsWith('/me') },
 ];
-export default function TopBar() {
+export default function TopBar({ from }) {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const { xp, level } = useXP();
   const shownXp = useCountUp(xp);
   const [isDark, toggleTheme] = useTheme();
   const [sound, toggleSound] = useFx();
-  const parent = parentOf(pathname);
+  const parent = backOf(pathname, from);
+  // A plain click steps back in history (the page returns at its old scroll spot).
+  // The link still points at the real page, so a new tab or a long press works too.
+  const goBack = (e) => {
+    if (!parent.history || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+    e.preventDefault();
+    navigate(-1);
+  };
 
   return (
     <header className="topnav">
       <div className={'topnav-inner' + (parent ? ' has-back' : '')}>
         {parent && (
-          <Link to={parent.to} className="topnav-back">
-            <ChevronLeft size={20} strokeWidth={2} aria-hidden /> {parent.name}
+          <Link to={parent.to} className="topnav-back" onClick={goBack} aria-label={`Back to ${parent.full || parent.name}`}>
+            <ChevronLeft size={20} strokeWidth={2} aria-hidden /> <span className="topnav-back-label">{parent.name}</span>
           </Link>
         )}
         <Link to="/" className="logo" aria-label="Good Bot, Bad Bot, home">

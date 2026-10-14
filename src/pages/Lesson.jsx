@@ -36,8 +36,9 @@ export default function Lesson() {
           {s.visual && (
             <div className="lesson-visual">
               <Compare data={visuals[s.visual].compare} />
-              <Link to={`/patterns/${s.visual}`} className="text-link">
-                Play the {getPattern(s.visual).title} card <ArrowRight size={14} strokeWidth={1.75} aria-hidden />
+              {/* A read place, so the card opens on "Why it works". The "Your turn" list below opens Play. */}
+              <Link to={`/patterns/${s.visual}?view=understand`} className="text-link">
+                Why {getPattern(s.visual).title} works <ArrowRight size={14} strokeWidth={1.75} aria-hidden />
               </Link>
             </div>
           )}

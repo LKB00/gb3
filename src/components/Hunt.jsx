@@ -1,23 +1,32 @@
 import { ArrowRight, Check, MousePointerClick } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
 import MockFrame, { MockBlock } from '../mock/Mock';
 import { getPattern } from '../data/patterns';
-import { markHuntDone, markPlayed, useHuntsDone, XP } from '../progress';
+import { markHuntDone, markPlayed, readHuntRun, saveRun, useHuntsDone, XP } from '../progress';
+import { PeekLink } from './PatternPeek';
 import Burst, { XpPop } from './Burst';
 import { fx } from '../game/fx';
 import { revealEl } from '../lib/useReveal';
 
 // Spot the flaw: tap the parts of the screen that are wrong.
-export default function Hunt({ scenario }) {
-  const [found, setFound] = useState([]); // block indexes, in the order found
+// What you found is kept for this tab (run 'hunt:<id>'), so a link, Back or a refresh keeps it.
+// onOver(true) tells the page the screen is done (all found, or answers shown).
+export default function Hunt({ scenario, onOver }) {
+  const [saved] = useState(() => readHuntRun(scenario));
+  const [found, setFound] = useState(saved?.found ?? []); // block indexes, in the order found
   const [fine, setFine] = useState(null); // last "this part is fine" click
-  const [revealed, setRevealed] = useState(false);
+  const [revealed, setRevealed] = useState(saved?.revealed ?? false);
   const doneBefore = useHuntsDone();
   const [wasDone] = useState(() => doneBefore.includes(scenario.id));
+  useEffect(() => {
+    saveRun('hunt:' + scenario.id, { found, revealed });
+  }, [scenario.id, found, revealed]);
 
   const mistakes = scenario.blocks.map((b, i) => (b.mistake ? i : -1)).filter((i) => i >= 0);
   const done = found.length === mistakes.length;
+  useEffect(() => {
+    onOver?.(done || revealed);
+  }, [onOver, done, revealed]);
 
   // Finding every mistake yourself (without revealing) completes the screen.
   useEffect(() => {
@@ -91,7 +100,7 @@ export default function Hunt({ scenario }) {
                 <span className="hunt-num">{n + 1}</span>
                 <div>
                   <p>{m.text}</p>
-                  <Link to={`/patterns/${p.id}`} className="hunt-fix">See the fix: {p.title} <ArrowRight size={13} strokeWidth={1.75} aria-hidden /></Link>
+                  <PeekLink id={p.id} className="hunt-fix">See the fix: {p.title} <ArrowRight size={13} strokeWidth={1.75} aria-hidden /></PeekLink>
                 </div>
               </li>
             );

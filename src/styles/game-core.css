@@ -266,7 +266,8 @@
   font-size: 15px;
   line-height: 22px;
 }
-.tot-result a { font-weight: 700; }
+.tot-result a,
+.tot-result .peek-link { font-weight: 700; }
 .tot-keys {
   color: var(--ink-3);
   font-size: 13px;
@@ -302,6 +303,46 @@
   color: var(--ink-2);
 }
 .tot-stats > span:first-child { display: inline-flex; align-items: center; gap: 4px; }
+/* Score screen: a quiet "Play again" when a next step is offered, then the tricks met this run */
+.tot-again {
+  min-height: 44px;
+  padding: 0 8px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.tot-tricks {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  max-width: 560px;
+  margin-top: 8px;
+}
+.tot-tricks ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tot-tricks li {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  max-width: 100%;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: var(--card);
+  font-size: 13px;
+  line-height: 18px;
+}
+.tot-tricks li svg { flex: none; }
+.tot-tricks li.is-right svg { color: var(--positive); }
+.tot-tricks li.is-wrong svg { color: var(--negative); }
+.tot-tricks .peek-link { min-height: 28px; overflow-wrap: anywhere; text-align: left; }
 
 /* ---- Game tiles ---- */
 .games {

@@ -295,3 +295,70 @@
   line-height: 22px;
   color: var(--ink-2);
 }
+
+/* ---------- Card page: keep Fix it mounted, links to more ---------- */
+/* The Play view stays in the page (hidden) so a game in progress survives a tab switch. */
+.view[hidden] { display: none; }
+
+/* "Seen in" teardowns and "Related cards", above the pager */
+.more-links {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 48px;
+}
+.more-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.more-row .chip { height: auto; min-height: 32px; padding: 6px 12px; font-size: 13px; }
+.chip-missing { border-style: dashed; color: var(--ink-2); }
+.more-links + .pager { margin-top: 32px; }
+
+/* Pager: the next card in order, plus the next one a collector still needs */
+.pager-end {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  min-width: 0;
+}
+.pager-target {
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--ink-2);
+  text-align: right;
+}
+
+/* Real products that have a teardown are links */
+.ex-card-link {
+  color: var(--ink);
+  text-decoration: none;
+  transition: border-color 0.15s;
+}
+.ex-card-link:hover { border-color: var(--ink-3); }
+.ex-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: auto;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* Phones: on the Play view, get the first question above the bottom bar */
+@media (max-width: 720px) {
+  .pattern-page.is-view-do .page-head .lead {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    overflow: hidden;
+    font-size: 14px;
+    line-height: 20px;
+  }
+  .pattern-page .view-tabs { margin-top: 16px; }
+  .pattern-page .view { margin-top: 16px; }
+  .pager-target { font-size: 12px; }
+}

@@ -116,3 +116,24 @@
   margin-top: 8px;
 }
 .lab-q-step { margin-top: 0; }
+
+/* Home for returning players: a short hello, then today's Daily, then the quick game */
+.home-hero.is-back {
+  gap: 6px;
+  padding-top: 8px;
+}
+.home-back-title {
+  font-family: var(--display);
+  font-size: 24px;
+  line-height: 30px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
+.home-daily { margin-top: 16px; }
+.home-daily + .home-game { margin-top: 20px; }
+@media (max-width: 720px) {
+  .home-back-title { font-size: 20px; line-height: 26px; }
+  .home-daily { margin-top: 12px; }
+  .home-daily + .home-game { margin-top: 16px; }
+}

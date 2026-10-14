@@ -316,6 +316,17 @@
 .gloss-design .label {
   margin-right: 4px;
 }
+/* The cards that put the word into practice */
+.gloss-cards {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+.gloss-cards .label {
+  margin-right: 2px;
+}
 @media (max-width: 560px) {
   .gloss-row {
     grid-template-columns: 1fr;

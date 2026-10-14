@@ -1,13 +1,14 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { AlertTriangle, Check, CircleDashed, Hammer, Plus, RotateCcw, Star, X } from 'lucide-react';
+import { AlertTriangle, ArrowRight, Check, CircleDashed, Hammer, Plus, RotateCcw, Star, X } from 'lucide-react';
 import { builds, getBuild } from '../data/builds';
 import { getPattern } from '../data/patterns';
 import { fx } from '../game/fx';
 import { shuffle } from '../lib/random';
 import { track } from '../game/track';
 import Disagree from '../components/Disagree';
-import { markPlayed, saveBuild, useGameStats, XP } from '../progress';
+import { PeekLink } from '../components/PatternPeek';
+import { clearRun, markPlayed, readBuildRun, saveBuild, saveRun, useGameStats, XP } from '../progress';
 import MockFrame, { MockBlock } from '../mock/Mock';
 import Breadcrumbs from '../components/Breadcrumbs';
 import Burst, { XpPop } from '../components/Burst';
@@ -27,14 +28,22 @@ function score(build, placed) {
   return { have, missing, traps, nice, stars };
 }
 
-function Builder({ build }) {
+function Builder({ build, nextJob, onNextJob }) {
   const stats = useGameStats();
-  const pieces = useMemo(() => shuffle(build.pieces), [build]);
-  const [placed, setPlaced] = useState([]);
-  const [result, setResult] = useState(null);
+  // Pieces on the screen are kept per brief for this tab, so switching jobs, a link,
+  // Back or a refresh never empties the screen. "Start over" clears it.
+  const [saved] = useState(() => readBuildRun(build));
+  const [pieces] = useState(() => (saved?.order ? saved.order.map((id) => build.pieces.find((p) => p.id === id)) : shuffle(build.pieces)));
+  const [placed, setPlaced] = useState(saved?.placed ?? []);
+  const [result, setResult] = useState(() => (saved?.checked ? score(build, saved.placed) : null));
   const [gain, setGain] = useState(0);
   const [over, setOver] = useState(false);
   const resultRef = useReveal(result);
+  const runKey = 'build:' + build.id;
+  useEffect(() => {
+    if (placed.length) saveRun(runKey, { order: pieces.map((p) => p.id), placed, checked: !!result });
+    else clearRun(runKey);
+  }, [runKey, pieces, placed, result]);
 
   const add = (id) => {
     if (placed.includes(id)) return;
@@ -62,7 +71,7 @@ function Builder({ build }) {
     setResult(null);
     setGain(0);
   };
-
+  const shipped = result?.stars === 3;
 
   return (
     <div className="build">
@@ -128,9 +137,21 @@ function Builder({ build }) {
           </MockFrame>
         </div>
         <div className="lab-nav">
-          <button type="button" className="btn btn-primary" onClick={check} disabled={placed.length === 0}>
-            <Hammer size={14} strokeWidth={1.75} aria-hidden /> Check my screen
-          </button>
+          {shipped ? (
+            nextJob ? (
+              <button type="button" className="btn btn-primary" onClick={() => onNextJob(nextJob.id)}>
+                Next job: {nextJob.title} <ArrowRight size={14} strokeWidth={1.75} aria-hidden />
+              </button>
+            ) : (
+              <Link to="/play" className="btn btn-primary">
+                All jobs built! More games <ArrowRight size={14} strokeWidth={1.75} aria-hidden />
+              </Link>
+            )
+          ) : (
+            <button type="button" className="btn btn-primary" onClick={check} disabled={placed.length === 0}>
+              <Hammer size={14} strokeWidth={1.75} aria-hidden /> Check my screen
+            </button>
+          )}
           {placed.length > 0 && (
             <button type="button" className="btn btn-ghost" onClick={reset}>
               <RotateCcw size={14} strokeWidth={1.75} aria-hidden /> Start over
@@ -151,13 +172,13 @@ function Builder({ build }) {
           <p className="small muted">{result.stars === 3 ? 'Every must-have piece, and not one trap. Clean.' : 'For 3 stars, add every must-have and drop every trap. Then check again.'}</p>
           <ul className="build-notes">
             {result.have.map((p) => (
-              <li key={p.id} className="is-good"><Check size={14} strokeWidth={2.25} aria-hidden /><span><strong>{p.label}.</strong> {p.why} <Link to={`/patterns/${p.pattern}`}>{getPattern(p.pattern).title}</Link></span></li>
+              <li key={p.id} className="is-good"><Check size={14} strokeWidth={2.25} aria-hidden /><span><strong>{p.label}.</strong> {p.why} <PeekLink id={p.pattern}>{getPattern(p.pattern).title}</PeekLink></span></li>
             ))}
             {result.nice.map((p) => (
               <li key={p.id} className="is-good"><Plus size={14} strokeWidth={2.25} aria-hidden /><span><strong>Bonus: {p.label}.</strong> {p.why}</span></li>
             ))}
             {result.traps.map((p) => (
-              <li key={p.id} className="is-bad"><AlertTriangle size={14} strokeWidth={2} aria-hidden /><span><strong>Trap: {p.label}.</strong> {p.why} <Link to={`/patterns/${p.pattern}`}>{getPattern(p.pattern).title}</Link></span></li>
+              <li key={p.id} className="is-bad"><AlertTriangle size={14} strokeWidth={2} aria-hidden /><span><strong>Trap: {p.label}.</strong> {p.why} <PeekLink id={p.pattern}>{getPattern(p.pattern).title}</PeekLink></span></li>
             ))}
             {result.missing.map((p) => (
               <li key={p.id} className="is-missing"><CircleDashed size={14} strokeWidth={2} aria-hidden /><span><strong>Missing: a piece for “{getPattern(p.pattern).title}”.</strong> Look for it in the pieces.</span></li>
@@ -176,6 +197,15 @@ export default function Build() {
   const stats = useGameStats();
   const build = getBuild(params.get('brief')) || builds[0];
   const best = stats.builds || {};
+  // The next job without 3 stars yet, after this one.
+  const k = builds.indexOf(build);
+  const nextJob = [...builds.slice(k + 1), ...builds.slice(0, k)].find((b) => best[b.id] !== 3) || null;
+  const goTo = (id) => setParams({ brief: id }, { replace: true });
+  const nextJobGo = (id) => {
+    goTo(id);
+    const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: calm ? 'instant' : 'smooth' });
+  };
   return (
     <div className="page page-wide">
       <Breadcrumbs items={[{ label: 'Play', to: '/play' }, { label: 'Build mode' }]} />
@@ -185,14 +215,14 @@ export default function Build() {
       </header>
       <div className="tabs tot-modes" role="tablist" aria-label="Briefs">
         {builds.map((b) => (
-          <button key={b.id} role="tab" aria-selected={b.id === build.id} className="tab" onClick={() => setParams({ brief: b.id }, { replace: true })}>
+          <button key={b.id} role="tab" aria-selected={b.id === build.id} className="tab" onClick={() => goTo(b.id)}>
             {b.title}
             {best[b.id] ? <span className="tab-count">{'★'.repeat(best[b.id])}</span> : null}
           </button>
         ))}
       </div>
       <div className="view">
-        <Builder key={build.id} build={build} />
+        <Builder key={build.id} build={build} nextJob={nextJob} onNextJob={nextJobGo} />
       </div>
     </div>
   );

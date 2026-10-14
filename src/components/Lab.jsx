@@ -36,6 +36,8 @@ export default function Lab({ id, lab, title, next }) {
   const picked = choice[d.id];
   const pickedOpt = picked !== undefined ? d.options[picked] : undefined;
   const whyRef = useReveal(pickedOpt ? `${d.id}-${picked}` : null);
+  // A won card: bring "Next missing card" into view (on desktop it sits below the fold).
+  const endRef = useReveal(finished && !skipped ? 'won' : null);
   const best = (dec) => dec.options.findIndex((o) => o.ok);
   const mistakes = decisions.reduce((n, x) => n + (tried[x.id] || []).filter((k) => !x.options[k].ok).length, 0);
   const stars = mistakes === 0 ? 3 : mistakes === 1 ? 2 : 1;
@@ -224,7 +226,7 @@ export default function Lab({ id, lab, title, next }) {
                 );
               })}
             </ul>
-            <div className="lab-nav">
+            <div className="lab-nav lab-end" ref={endRef}>
               {next}
               <button type="button" className="btn btn-ghost" onClick={restart}>
                 <RotateCcw size={14} strokeWidth={1.75} aria-hidden /> Play again
