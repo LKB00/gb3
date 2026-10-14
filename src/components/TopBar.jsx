@@ -35,10 +35,7 @@ export default function TopBar() {
         )}
         <Link to="/" className="logo" aria-label="Good Bot, Bad Bot, home">
           <LogoMark />
-          <span className="logo-text">
-            <span className="logo-full">Good Bot, Bad Bot</span>
-            <span className="logo-short" aria-hidden="true">GB3</span>
-          </span>
+          <span className="logo-text" aria-hidden="true">GB3</span>
         </Link>
         <nav className="topnav-links" aria-label="Main">
           {links.map(({ to, label, match }) => {

@@ -333,9 +333,4 @@
   .bottomnav-icon { height: 28px; }
 }
 
-/* Very narrow phones: the short name GB3 (Good Bot, Bad Bot = G + B three times) replaces the full name. */
-.logo-short { display: none; }
-@media (max-width: 340px) {
-  .logo-full { display: none; }
-  .logo-short { display: inline; }
-}
+/* The top bar shows the short name GB3 (Good Bot, Bad Bot = G + B three times); the link's label says the full name. */
