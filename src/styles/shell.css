@@ -305,6 +305,8 @@
   line-height: 24px;
 }
 .site-footer {
+  /* Same width and side gutter as the page content (.page-wide: 1128px with 48px padding) */
+  width: calc(100% - 96px);
   max-width: 1032px;
   margin: 48px auto 0;
   padding: 16px 0 32px;
@@ -320,6 +322,7 @@
 .credits-icon { display: inline-flex; vertical-align: -3px; text-decoration: none !important; }
 @media (max-width: 720px) {
   .site-footer {
+    width: auto;
     margin: 32px 16px 0;
     max-width: none;
   }
