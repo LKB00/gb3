@@ -19,10 +19,10 @@ export default function Home() {
       <header className="home-hero">
         <p className="eyebrow">Quick games about AI design</p>
         <h1 className="display display-xl">Can you spot good AI design?</h1>
-        <p className="lead">See two AI screens, like ChatGPT or Copilot. Tap the better one. Try it below.</p>
+        <p className="lead">Two AI screens, like ChatGPT or Copilot. One is better. Tap it below.</p>
         {xp > 0 && (
           <p className="home-me">
-            You’re a <strong>{level.name}</strong> · {xp} XP · {passed.length}/{patterns.length} cards{streak > 0 && ` · 🔥 ${streak}-day streak`} · <Link to="/play/card">Your player card</Link>
+            You’re {/^[aeiou]/i.test(level.name) ? 'an' : 'a'} <strong>{level.name}</strong> · {xp} XP · {passed.length}/{patterns.length} cards{streak > 0 && ` · 🔥 ${streak}-day streak`} · <Link to="/play/card">See your player card</Link>
           </p>
         )}
       </header>

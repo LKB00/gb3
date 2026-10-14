@@ -20,20 +20,20 @@ export default class ErrorBoundary extends Component {
     if (!this.state.failed) return this.props.children;
     return (
       <div className="page crash" role="alert">
-        <h1 className="display">Oops, that page broke</h1>
-        <p className="lead">Sorry! Your progress is safe. Try again, or go back to the start.</p>
+        <h1 className="display">Oops, this page tripped</h1>
+        <p className="lead">That’s on us, not you. Your progress is safe. Try again, or head home.</p>
         <div className="row wrap">
           <button type="button" className="btn btn-primary" onClick={() => window.location.reload()}>Try again</button>
           <a className="btn btn-ghost" href="./#/">Go home</a>
         </div>
         <pre className="small muted crash-detail">{this.state.detail}</pre>
         <p className="small muted crash-note">
-          Still broken after a reload? Saved data on this device may be damaged.{' '}
+          Still broken after you try again? Your saved data may be damaged.{' '}
           <button
             type="button"
             className="link-btn"
             onClick={() => {
-              if (!window.confirm('This clears your XP, cards and streak on this device. Continue?')) return;
+              if (!window.confirm('This wipes your XP, cards and streak on this device for good. Clear it all?')) return;
               try {
                 localStorage.clear();
               } catch {

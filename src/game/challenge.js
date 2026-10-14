@@ -36,6 +36,6 @@ export function useChallenge() {
 
 export function verdict(mine, theirs, from) {
   if (mine > theirs) return { tone: 'good', text: `You beat ${from} by ${mine - theirs}! 🎉` };
-  if (mine === theirs) return { tone: 'ok', text: `A tie with ${from}. Rematch?` };
-  return { tone: 'bad', text: `${from} wins by ${theirs - mine}. Try again?` };
+  if (mine === theirs) return { tone: 'ok', text: `A tie with ${from}! Rematch to break it?` };
+  return { tone: 'bad', text: `${from} wins by ${theirs - mine}, for now. Rematch?` };
 }

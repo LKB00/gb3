@@ -9,7 +9,7 @@ export default function Disagree({ where, detail }) {
   const body = `**Where:** ${where}\n**What the game said:** ${detail || '(fill in)'}\n\n**Why I disagree:**\n\n\n---\nPage: ${window.location.href}`;
   const href = `${REPO}?${new URLSearchParams({ title, body, labels: 'feedback' }).toString()}`;
   return (
-    <a className="disagree" href={href} target="_blank" rel="noreferrer" title="Think this answer is wrong? Tell us on GitHub.">
+    <a className="disagree" href={href} target="_blank" rel="noreferrer" title="Think we got this one wrong? Tell us on GitHub.">
       <MessageSquareWarning size={13} strokeWidth={1.75} aria-hidden /> I disagree
     </a>
   );

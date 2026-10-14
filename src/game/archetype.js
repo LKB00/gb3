@@ -4,9 +4,9 @@ import { categories, patterns } from '../data/patterns';
 // collected the most (stars count), so it changes as you play.
 export const ARCHETYPES = {
   input: { name: 'The Guide', line: 'You help people ask for the right thing.' },
-  output: { name: 'The Storyteller', line: 'You make AI answers clear and easy to use.' },
+  output: { name: 'The Storyteller', line: 'You make AI answers a joy to read and use.' },
   control: { name: 'The Steward', line: 'You keep people in charge, never the AI.' },
-  trust: { name: 'The Trust Keeper', line: 'You make AI honest about what it knows.' },
+  trust: { name: 'The Trust Keeper', line: 'You make AI honest about what it doesn’t know.' },
   feedback: { name: 'The Listener', line: 'You turn mistakes into better AI.' },
   agents: { name: 'The Agent Wrangler', line: 'You let AI act on its own, safely.' },
   voice: { name: 'The Voice Whisperer', line: 'You design AI people can talk to.' },

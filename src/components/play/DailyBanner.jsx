@@ -15,10 +15,10 @@ export default function DailyBanner() {
       <CalendarDays size={22} strokeWidth={1.75} aria-hidden />
       <span className="daily-banner-text">
         <strong>Daily #{dailyLabel(key)}</strong>
-        <span>{today ? `Done today: ${today.filter(Boolean).length}/${today.length}. Share your result.` : '5 rounds, same for everyone today. One try.'}</span>
+        <span>{today ? `You got ${today.filter(Boolean).length}/${today.length} today. A new one lands tomorrow.` : '5 rounds. Same for everyone. One shot!'}</span>
       </span>
       {streak > 0 && <span className="pill-streak"><Flame size={13} strokeWidth={1.75} aria-hidden /> {streak}</span>}
-      <span className="btn btn-primary">{today ? 'See result' : 'Play today’s'} <ArrowRight size={14} strokeWidth={1.75} aria-hidden /></span>
+      <span className="btn btn-primary">{today ? 'See result' : 'Play now'} <ArrowRight size={14} strokeWidth={1.75} aria-hidden /></span>
     </Link>
   );
 }
