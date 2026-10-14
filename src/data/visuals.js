@@ -38,14 +38,14 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'A new AI writing app says hello. Help people know what to ask.',
+      goal: 'A new AI writing app says hello. Show people what to ask.',
       frame: [slot('message'), slot('examples'), slot('click')],
       decisions: [
         {
           id: 'message',
           label: 'What does the welcome say?',
           options: [
-            opt('"Hello! I am an AI."', false, 'People still have no idea what it can do. Say what the AI is for.', [note('Hello! I am an AI.')]),
+            opt('"Hello! I am an AI."', false, 'People still don’t know what the AI is for.', [note('Hello! I am an AI.')]),
             opt('"Write, summarize or brainstorm"', true, 'In four words, people know what it’s for.', [note('Write, summarize or brainstorm. Try one:')]),
           ],
         },
@@ -66,7 +66,7 @@ export const visuals = {
           id: 'click',
           label: 'Tapping an example…',
           options: [
-            opt('Sends it right away', false, 'People can’t tweak it first, so they get an answer they didn’t quite want.', [
+            opt('Sends it right away', false, 'People can’t tweak it first, and get an answer they didn’t want.', [
               user('Write onboarding copy'),
               { type: 'spinner', text: 'Writing…' },
             ]),
@@ -97,15 +97,15 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'Someone asks: “Make a launch post.” That could mean anything. Help the AI get it right.',
+      goal: 'Someone asks: “Make a launch post.” For whom? Help the AI get it right.',
       frame: [user('Make a launch post for the new dashboard.'), slot('first'), slot('answer'), slot('skip')],
       decisions: [
         {
           id: 'first',
           label: 'The AI first…',
           options: [
-            opt('Guesses and writes it all', false, 'One wrong guess, and the person starts from zero. Ask first.', [ai('Big news, everyone! Our dashboard…')]),
-            opt('Asks 5 questions', false, 'It feels like a tax form. People give up before they start.', [
+            opt('Guesses and writes it all', false, 'One wrong guess, and the person starts over.', [ai('Big news, everyone! Our dashboard…')]),
+            opt('Asks 5 questions', false, 'It feels like a tax form. People give up.', [
               ai('Who is the audience? What tone? How long? Which channel? Emoji or not?'),
             ]),
             opt('Asks 1 key question', true, 'One smart question, and the post lands right.', [ai('Quick check: **who is this for?**')]),
@@ -115,8 +115,8 @@ export const visuals = {
           id: 'answer',
           label: 'People answer by…',
           options: [
-            opt('Typing a reply', false, 'Typing is slow, especially with thumbs on a phone.', [ph('Type your answer…')]),
-            opt('Tapping a button', true, 'One tap and done. Nothing is faster.', [chips(['Customers', 'Team', 'Investors'])]),
+            opt('Typing a reply', false, 'Typing is slow, especially on a phone.', [ph('Type your answer…')]),
+            opt('Tapping a button', true, 'One tap. Done.', [chips(['Customers', 'Team', 'Investors'])]),
           ],
         },
         {
@@ -143,7 +143,7 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'An AI in a docs app answers from your files. Help people trust what it reads.',
+      goal: 'An AI in a docs app answers from your files. Show what it reads.',
       frame: [slot('show'), slot('change'), input('Summarize this.'), slot('limit')],
       decisions: [
         {
@@ -151,14 +151,14 @@ export const visuals = {
           label: 'Show which files the AI reads?',
           options: [
             opt('No, the AI decides', false, 'If the AI grabs the wrong file, people never find out.', []),
-            opt('Yes, show the files', true, 'People see at a glance that it’s using the right file.', [chips([':file Q3-report.pdf'])]),
+            opt('Yes, show the files', true, 'People see it’s using the right file.', [chips([':file Q3-report.pdf'])]),
           ],
         },
         {
           id: 'change',
           label: 'Can people change it?',
           options: [
-            opt('No', false, 'If the AI picked the wrong file, people are stuck with it.', []),
+            opt('No', false, 'Wrong file? People are stuck with it.', []),
             opt('Remove or add', true, 'People stay in charge of what the AI reads.', [buttons([':x Remove', ':plus Add file'])]),
           ],
         },
@@ -166,8 +166,8 @@ export const visuals = {
           id: 'limit',
           label: 'The file is too long for the AI…',
           options: [
-            opt('Cut it silently', false, 'The AI reads half the file, and nobody knows. Quiet mistakes follow.', []),
-            opt('Say what was used', true, 'It owns up to what it skipped, so people can check.', [note('Used the first 50 of 80 pages.', { tone: 'warn' })]),
+            opt('Cut it silently', false, 'The AI reads half the file, and nobody knows.', []),
+            opt('Say what was used', true, 'It owns up to what it skipped.', [note('Used the first 50 of 80 pages.', { tone: 'warn' })]),
           ],
         },
       ],
@@ -197,7 +197,7 @@ export const visuals = {
           id: 'how',
           label: 'To change tone or length, people…',
           options: [
-            opt('Type it in the chat box', false, 'People stare at the box, unsure which words will work.', [ph('e.g. "make it formal, under 80 words"')]),
+            opt('Type it in the chat box', false, 'People don’t know what words to type.', [ph('e.g. "make it formal, under 80 words"')]),
             opt('Tap buttons and a slider', true, 'One tap does the typing for them.', [
               chips(['Friendly', 'Formal', 'Short'], { on: 1 }),
               slider('Length', 35, 'Short', 'Long'),
@@ -208,7 +208,7 @@ export const visuals = {
           id: 'count',
           label: 'How many settings?',
           options: [
-            opt('15 up front', false, 'A wall of 15 settings is worse than typing. People freeze.', [
+            opt('15 up front', false, 'A wall of 15 settings. People freeze.', [
               rows([
                 { label: 'Tone', value: 'Formal' },
                 { label: 'Length', value: '80 words' },
@@ -218,7 +218,7 @@ export const visuals = {
                 { label: '+ 10 more…', value: '' },
               ]),
             ]),
-            opt('Show 2–3, hide the rest', true, 'The common ones sit right there. The rest wait quietly.', [buttons([':more More options'])]),
+            opt('Show 2–3, hide the rest', true, 'Common ones up front. The rest wait.', [buttons([':more More options'])]),
           ],
         },
       ],
@@ -252,7 +252,7 @@ export const visuals = {
           options: [
             opt('Nothing', false, 'A still screen looks broken. People tap again, or leave.', [blank('')]),
             opt('A spinner only', false, 'A spinner says “wait”, but not for what or how long. The wait drags.', [spinner('Loading…')]),
-            opt('Live steps', true, 'People watch real progress, so the wait feels shorter.', [
+            opt('Live steps', true, 'Real progress makes the wait feel short.', [
               steps([['Reading 3 notes', 'done'], ['Finding themes', 'done'], ['Writing summary', 'active']]),
             ]),
           ],
@@ -261,7 +261,7 @@ export const visuals = {
           id: 'text',
           label: 'The answer appears…',
           options: [
-            opt('All at the end', false, 'Twenty seconds of nothing. It feels like forever.', [note('The answer will appear when it is finished.')]),
+            opt('All at the end', false, '20 seconds of nothing. Feels like forever.', [note('The answer will appear when it is finished.')]),
             opt('Word by word', true, 'People start reading right away.', [ai('Top themes: (1) People cannot find saved items…', { caret: true })]),
           ],
         },
@@ -303,8 +303,8 @@ export const visuals = {
           id: 'count',
           label: 'How many results?',
           options: [
-            opt('1', false, 'One option feels like “take it or leave it”. Picking is easier than explaining.', [ai('Track every project in one place.')]),
-            opt('3 different', true, 'A few real choices. Easy to compare, easy to pick.', [
+            opt('1', false, 'One option is “take it or leave it”. Picking beats explaining.', [ai('Track every project in one place.')]),
+            opt('3 different', true, 'A few real choices, easy to compare.', [
               variants(['Track every project in one place.', 'Your projects, finally organized.', 'Stop chasing updates.']),
             ]),
             opt('10 similar', false, 'Ten near-copies. People’s eyes glaze over.', [
@@ -317,7 +317,7 @@ export const visuals = {
           label: 'After people pick one…',
           options: [
             opt('Nothing', false, 'A dead end. People can’t build on the one they like.', []),
-            opt('"Use" + "More like this"', true, 'People pick a favorite and make it even better.', [buttons(['!Use B', 'More like B'])]),
+            opt('"Use" + "More like this"', true, 'People grow the one they like.', [buttons(['!Use B', 'More like B'])]),
           ],
         },
       ],
@@ -343,15 +343,15 @@ export const visuals = {
           id: 'regen',
           label: 'When people tap "Try again"…',
           options: [
-            opt('Replace the answer', false, 'If the new one is worse, the old one is gone forever. Ouch.', [buttons([':retry Regenerate'])]),
-            opt('Keep versions ‹ 2/3 ›', true, 'Nothing is lost. People flip back and compare.', [buttons([':left', '2 / 3', ':right', ':retry Retry'])]),
+            opt('Replace the answer', false, 'Worse new answer? The old one is gone forever.', [buttons([':retry Regenerate'])]),
+            opt('Keep versions ‹ 2/3 ›', true, 'Nothing lost. People flip back and compare.', [buttons([':left', '2 / 3', ':right', ':retry Retry'])]),
           ],
         },
         {
           id: 'steer',
           label: 'Can they say what to change?',
           options: [
-            opt('No, random retry', false, 'People roll the dice again and again. Let them say what to change.', []),
+            opt('No, random retry', false, 'People roll the dice again and again.', []),
             opt('Quick hints', true, 'A hint like "shorter" gets closer, faster.', [chips(['Shorter', 'Funnier', 'More formal'])]),
           ],
         },
@@ -383,7 +383,7 @@ export const visuals = {
           id: 'edit',
           label: 'How can people change it?',
           options: [
-            opt('Copy it, or ask again', false, 'People throw away the good 80% to fix 20%. That hurts.', [ai(email)]),
+            opt('Copy it, or ask again', false, 'People lose the good 80% to fix 20%. Ouch.', [ai(email)]),
             opt('Edit text directly', true, 'The draft is theirs. They fix it right in place.', [edit(email)]),
           ],
         },
@@ -391,15 +391,15 @@ export const visuals = {
           id: 'part',
           label: 'To fix just one part…',
           options: [
-            opt('Rewrite everything', false, 'The parts people loved change too. Frustrating.', [buttons([':retry Regenerate all'])]),
-            opt('Rewrite only the selected part', true, 'Only the weak part changes. The rest is safe.', [buttons([':sparkle Rewrite selection'])]),
+            opt('Rewrite everything', false, 'The parts people loved change too.', [buttons([':retry Regenerate all'])]),
+            opt('Rewrite only the selected part', true, 'Only the weak part changes.', [buttons([':sparkle Rewrite selection'])]),
           ],
         },
         {
           id: 'label',
           label: 'Mark it as a draft?',
           options: [
-            opt('No', false, 'People may hit send without reading. Mistakes go out under their name.', []),
+            opt('No', false, 'People may hit send without reading it.', []),
             opt('"AI draft · review"', true, 'A gentle reminder to check before sending.', [note(':sparkle AI draft · review before sending', { tone: 'accent' })]),
           ],
         },
@@ -419,7 +419,7 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'The AI guesses the next words as people type. Keep it helpful, not pushy.',
+      goal: 'The AI guesses the next words as people type. Keep it polite.',
       frame: [slot('style'), slot('accept'), slot('typing')],
       decisions: [
         {
@@ -427,14 +427,14 @@ export const visuals = {
           label: 'The suggestion looks…',
           options: [
             opt('Like typed text', false, 'People can’t tell their words from the AI’s.', [ghost('Thanks for the fe', 'edback, I will update the design today.', { solid: true })]),
-            opt('Light grey', true, 'Clearly a hint. People’s own words stay theirs.', [ghost('Thanks for the fe', 'edback, I will update the design today.')]),
+            opt('Light grey', true, 'Clearly a hint, not their words.', [ghost('Thanks for the fe', 'edback, I will update the design today.')]),
           ],
         },
         {
           id: 'accept',
           label: 'How do people accept it?',
           options: [
-            opt('Automatically', false, 'Words appear that people never chose. Now they must delete them.', [note('Applied automatically')]),
+            opt('Automatically', false, 'Words people never chose. Now they must delete them.', [note('Applied automatically')]),
             opt('A pop-up asks each time', false, 'A pop-up every few seconds breaks the flow.', [modal('Use the AI suggestion?', '', ['Yes', 'No'])]),
             opt('Press Tab', true, 'Easy to take, easy to ignore.', [note('Tab accept · Esc ignore')]),
           ],
@@ -443,7 +443,7 @@ export const visuals = {
           id: 'typing',
           label: 'While a suggestion loads…',
           options: [
-            opt('Typing waits', false, 'People wait to type their own words. That feels broken.', [spinner('Please wait…')]),
+            opt('Typing waits', false, 'Waiting to type your own words feels broken.', [spinner('Please wait…')]),
             opt('Typing never waits', true, 'The AI should wait for people, not the other way round.', []),
           ],
         },
@@ -474,7 +474,7 @@ export const visuals = {
           id: 'stop',
           label: 'While it works',
           options: [
-            opt('No controls', false, 'If it goes wrong, people can only watch. Scary.', [steps([['Renaming 24 layers', 'active']])]),
+            opt('No controls', false, 'If it goes wrong, people can only watch.', [steps([['Renaming 24 layers', 'active']])]),
             opt('Stop button', true, 'People can stop it the moment it goes wrong.', [steps([['Renaming 24 layers', 'active']]), buttons(['-:stop Stop'])]),
           ],
         },
@@ -491,7 +491,7 @@ export const visuals = {
           label: 'Before deleting layers',
           options: [
             opt('Just delete', false, 'Deleted work can’t come back. Always ask first.', [toast('Deleted 12 layers')]),
-            opt('Confirm with details', true, 'People see exactly what goes, before it goes.', [modal('Delete 12 unused layers?', 'They are hidden and not used anywhere.', ['Cancel', '-Delete 12'])]),
+            opt('Confirm with details', true, 'People see what goes, before it goes.', [modal('Delete 12 unused layers?', 'They are hidden and not used anywhere.', ['Cancel', '-Delete 12'])]),
           ],
         },
       ],
@@ -570,17 +570,17 @@ export const visuals = {
           label: 'The headline',
           options: [
             opt('"Knows everything!"', false, 'People believe it blindly, then feel let down. Promise less.', [banner('info', 'Meet Max', 'The AI that knows everything!')]),
-            opt('"Your research assistant"', true, 'A clear, honest role. No big promise to break.', [card('Your research assistant', 'Works with your uploaded notes.')]),
+            opt('"Your research assistant"', true, 'A clear, honest role.', [card('Your research assistant', 'Works with your uploaded notes.')]),
           ],
         },
         {
           id: 'can',
           label: 'Describe what it can do with…',
           options: [
-            opt('A 10-item feature list', false, 'Ten bullets? Eyes slide right past them.', [
+            opt('A 10-item feature list', false, 'Ten bullets? Eyes slide past.', [
               list(['• Summaries', '• Themes', '• Quotes', '• Personas', '• Journeys', '• Charts', '• Tags', '• + 3 more']),
             ]),
-            opt('2 strengths + 1 limit', true, 'Short, and honest about the limit. People trust that.', [list(['✓ Summarize interviews', '✓ Find themes', '✕ Can\'t see Figma files'])]),
+            opt('2 strengths + 1 limit', true, 'Short, and honest about the limit.', [list(['✓ Summarize interviews', '✓ Find themes', '✕ Can\'t see Figma files'])]),
           ],
         },
         {
@@ -622,7 +622,7 @@ export const visuals = {
           id: 'place',
           label: 'Where do sources go?',
           options: [
-            opt('No sources', false, 'Wrong answers look just as true as right ones. People can’t tell.', [ai('Most users cannot find it. It is a top support topic.')]),
+            opt('No sources', false, 'Wrong answers look just as true as right ones.', [ai('Most users cannot find it. It is a top support topic.')]),
             opt('A list at the end', false, 'People can’t tell which source backs which fact.', [
               ai('Most users cannot find it. It is a top support topic.'),
               note('Sources: report.pdf · tickets.csv'),
@@ -634,15 +634,15 @@ export const visuals = {
           id: 'preview',
           label: 'Tapping a source…',
           options: [
-            opt('Opens a new tab', false, 'A new tab feels like work, so most people never check.', [note('Opens report.pdf in a new tab')]),
-            opt('Shows the quote here', true, 'Checking takes one second. No tab hopping.', [card('[1] Q3 research report', '"7 of 10 could not find export."')]),
+            opt('Opens a new tab', false, 'A new tab is work, so most people never check.', [note('Opens report.pdf in a new tab')]),
+            opt('Shows the quote here', true, 'Checking takes one second.', [card('[1] Q3 research report', '"7 of 10 could not find export."')]),
           ],
         },
         {
           id: 'gap',
           label: 'No source for one fact',
           options: [
-            opt('Say nothing', false, 'The fact with no source looks as solid as the rest. People get fooled.', []),
+            opt('Say nothing', false, 'It looks as solid as the rest. People get fooled.', []),
             opt('Say it clearly', true, 'Saying “I have no source” is honest. People trust it more.', [note('No source about export speed, so I left it out.', { tone: 'warn' })]),
           ],
         },
@@ -662,7 +662,7 @@ export const visuals = {
       },
     },
     lab: {
-      goal: 'The AI read an invoice, but it isn’t sure about some parts. Show which ones.',
+      goal: 'The AI read an invoice, but some parts are unsure. Show which.',
       frame: [slot('show'), slot('hint'), slot('filter')],
       decisions: [
         {
@@ -678,7 +678,7 @@ export const visuals = {
           id: 'hint',
           label: 'Say why it is unsure?',
           options: [
-            opt('No', false, 'People sense something’s off, but not what.', []),
+            opt('No', false, 'People don’t know what to check.', []),
             opt('Short hint', true, 'Points to exactly what to check.', [note('Total: blurry digit, may be 46,500', { tone: 'warn' })]),
           ],
         },
@@ -687,7 +687,7 @@ export const visuals = {
           label: 'Help people check',
           options: [
             opt('Nothing', false, 'People must re-check every field. Tiring.', []),
-            opt('"Show only check (2)"', true, 'People check the 2 shaky fields and move on.', [buttons(['Show only "check this" (2)'])]),
+            opt('"Show only check (2)"', true, 'People check only the 2 shaky fields.', [buttons(['Show only "check this" (2)'])]),
           ],
         },
       ],
@@ -729,7 +729,7 @@ export const visuals = {
           id: 'edited',
           label: 'After the person edits it',
           options: [
-            opt('Remove the label', false, 'Readers are misled. Some of it is still AI.', []),
+            opt('Remove the label', false, 'Readers are misled. It’s still partly AI.', []),
             opt('"Written with AI, edited by Asha"', true, 'Tells the whole true story.', [note('Written with AI, edited by Asha')]),
           ],
         },
@@ -770,7 +770,7 @@ export const visuals = {
           label: 'If a reason is wrong',
           options: [
             opt('Nothing to do', false, 'People get the same bad picks again and again.', []),
-            opt('"This is wrong"', true, 'People fix the AI, and the next pick gets better.', [buttons(['This is wrong', 'Show less like this'])]),
+            opt('"This is wrong"', true, 'People teach the AI. Next picks improve.', [buttons(['This is wrong', 'Show less like this'])]),
           ],
         },
       ],
@@ -803,17 +803,17 @@ export const visuals = {
           id: 'notice',
           label: 'When it saves something',
           options: [
-            opt('Save silently', false, 'People feel watched when the AI suddenly “knows” things.', []),
-            opt('Small "Memory updated" note', true, 'A small note now. No creepy surprise later.', [note(':save Memory updated: "Prefers short answers"', { tone: 'accent' })]),
+            opt('Save silently', false, 'People feel watched when the AI “knows” things.', []),
+            opt('Small "Memory updated" note', true, 'No creepy surprise later.', [note(':save Memory updated: "Prefers short answers"', { tone: 'accent' })]),
           ],
         },
         {
           id: 'manage',
           label: 'Where can people see it?',
           options: [
-            opt('Nowhere', false, 'People can’t see it, so they can’t fix it.', []),
-            opt('Deep in Settings', false, 'Hidden in Settings feels like no control at all.', [note('Settings › Advanced › Data › Export')]),
-            opt('A clear list with Delete', true, 'People check it and fix it in seconds.', [
+            opt('Nowhere', false, 'Hidden memory. Zero control.', []),
+            opt('Deep in Settings', false, 'Hidden in Settings feels like no control.', [note('Settings › Advanced › Data › Export')]),
+            opt('A clear list with Delete', true, 'Easy to check and fix.', [
               rows([
                 { label: 'Prefers short answers', value: '', action: 'Delete' },
                 { label: 'Works in Figma', value: '', action: 'Delete' },
@@ -825,7 +825,7 @@ export const visuals = {
           id: 'off',
           label: 'Can people turn memory off?',
           options: [
-            opt('No', false, 'Some chats are private. People need a way to say “forget this”.', []),
+            opt('No', false, 'Some chats are private. People need an off switch.', []),
             opt('Memory switch', true, 'People choose when the AI remembers.', [toggle('Memory', true)]),
           ],
         },
@@ -853,7 +853,7 @@ export const visuals = {
           id: 'ask',
           label: 'How do people give feedback?',
           options: [
-            opt('No way', false, 'Upset people have nowhere to say it. Your team never hears.', []),
+            opt('No way', false, 'Upset people can’t say so. Your team never learns.', []),
             opt('Pop-up survey', false, 'It blocks the task. Most people close it, annoyed.', [modal('Rate your experience (1–10)', '', ['!Submit'])]),
             opt('Thumbs up / down', true, 'One click, right where the answer is.', [buttons([':up', ':down'])]),
           ],
@@ -862,7 +862,7 @@ export const visuals = {
           id: 'reason',
           label: 'After thumbs down',
           options: [
-            opt('Required text box', false, 'A must-type box feels like homework. Most people give up.', [ph('Describe the problem (required)')]),
+            opt('Required text box', false, 'Feels like homework. Most people give up.', [ph('Describe the problem (required)')]),
             opt('Optional quick reasons', true, 'Fast for people, useful for your team.', [chips(['Not accurate', 'Too long', 'Wrong tone'])]),
           ],
         },
@@ -901,9 +901,9 @@ export const visuals = {
           id: 'msg',
           label: 'What does the error say?',
           options: [
-            opt('"Error 413"', false, '“413” means nothing to most people. They feel lost.', [banner('bad', 'Error 413', 'Request failed.')]),
+            opt('"Error 413"', false, 'A code leaves most people lost.', [banner('bad', 'Error 413', 'Request failed.')]),
             opt('"Something went wrong"', false, 'Too vague. People don’t know what to fix.', [banner('bad', 'Something went wrong', '')]),
-            opt('What happened + why', true, 'Plain words, real numbers. People get it at once.', [banner('warn', 'That file is too big', 'Limit is 20 MB, yours is 45 MB.')]),
+            opt('What happened + why', true, 'Plain words, real numbers.', [banner('warn', 'That file is too big', 'Limit is 20 MB, yours is 45 MB.')]),
           ],
         },
         {
@@ -951,7 +951,7 @@ export const visuals = {
           id: 'start',
           label: 'Before it starts',
           options: [
-            opt('Start right away', false, 'If the agent got it wrong, people find out after the damage. Too late.', [steps([['Deleting unused components', 'active']])]),
+            opt('Start right away', false, 'If the agent got it wrong, people find out too late.', [steps([['Deleting unused components', 'active']])]),
             opt('Show a plan, wait', true, 'Mistakes are caught before they cost anything.', [
               check(['Find unused components', 'Rename layers', 'Group colors', 'Ask before deleting']),
               buttons(['!Start']),
@@ -962,7 +962,7 @@ export const visuals = {
           id: 'size',
           label: 'How long is the plan?',
           options: [
-            opt('38 technical steps', false, 'Nobody reads a 38-step plan. People click OK and hope.', [note('Step 1/38: resolve node tree… Step 2/38: …')]),
+            opt('38 technical steps', false, 'Nobody reads 38 steps. People click OK and hope.', [note('Step 1/38: resolve node tree… Step 2/38: …')]),
             opt('4 steps + time', true, 'Short enough to really read.', [note('4 steps · about 5 minutes')]),
           ],
         },
@@ -997,8 +997,8 @@ export const visuals = {
           id: 'ask',
           label: 'Before sending',
           options: [
-            opt('Just send', false, '240 emails can’t be unsent. One mistake reaches everyone.', [toast('Sent to 240 customers')]),
-            opt('Ask "Proceed?"', false, 'People click OK without knowing what they agreed to.', [modal('Proceed?', '', ['!OK'])]),
+            opt('Just send', false, '240 emails can’t be unsent.', [toast('Sent to 240 customers')]),
+            opt('Ask "Proceed?"', false, 'People click OK without really looking.', [modal('Proceed?', '', ['!OK'])]),
             opt('Show who, what, how many', true, 'People see what will happen, then say yes for real.', [
               modal('Send email to 240 customers?', 'Subject: "Price update in October"', ['Cancel', 'Review', '!Send to 240']),
             ]),
@@ -1016,7 +1016,7 @@ export const visuals = {
           id: 'settings',
           label: 'Can people choose when it asks?',
           options: [
-            opt('None', false, 'People can’t set it to how careful they want to be.', []),
+            opt('None', false, 'People can’t choose how careful it is.', []),
             opt('"Ask before sending"', true, 'People choose how much freedom the AI gets.', [toggle('Ask before sending emails', true)]),
           ],
         },
@@ -1054,7 +1054,7 @@ export const visuals = {
           id: 'wait',
           label: 'During the 15 minutes',
           options: [
-            opt('Lock the screen', false, 'People are stuck staring at a locked screen for 15 minutes.', [spinner('Please keep this window open (15 min)')]),
+            opt('Lock the screen', false, 'People are stuck for 15 minutes.', [spinner('Please keep this window open (15 min)')]),
             opt('Run in the background, show status', true, 'People keep working and can check anytime.', [
               rows([{ label: 'Competitor research', value: '60%', tag: 'Running', tone: 'accent' }]),
             ]),
@@ -1073,7 +1073,7 @@ export const visuals = {
           label: 'The help bot is stuck',
           options: [
             opt('"Please rephrase"', false, 'The bot goes in circles. People get angry and leave.', [ai('Sorry, I didn\'t get that. Please rephrase.')]),
-            opt('"Talk to a person"', true, 'A clear way out. People don’t have to explain it all again.', [buttons(['!Talk to a person']), note('Your chat is shared, so you don\'t repeat yourself.')]),
+            opt('"Talk to a person"', true, 'A clear way out, with the chat attached.', [buttons(['!Talk to a person']), note('Your chat is shared, so you don\'t repeat yourself.')]),
           ],
         },
       ],
@@ -1111,8 +1111,8 @@ export const visuals = {
           id: 'when',
           label: 'When is it shown?',
           options: [
-            opt('On every email', false, 'Offers everywhere become noise. People stop seeing them.', [note('Shown on all 214 emails')]),
-            opt('Only on long threads', true, 'It shows up only when it really saves time.', [note('Shown on threads with 10+ replies')]),
+            opt('On every email', false, 'Offers everywhere become noise people ignore.', [note('Shown on all 214 emails')]),
+            opt('Only on long threads', true, 'Shown when it clearly saves time.', [note('Shown on threads with 10+ replies')]),
           ],
         },
         {
@@ -1151,7 +1151,7 @@ export const visuals = {
           label: 'When people select text…',
           options: [
             opt('Nothing happens', false, 'People must copy, paste and explain which part. So much work.', [edit('Plan: 1) Interview 5 users. 2) Run a survey with 200 people. 3) Build a prototype.')]),
-            opt('Show quick actions', true, 'Select, tap, done. The selection is the starting point.', [
+            opt('Show quick actions', true, 'Select, tap, done.', [
               edit('Plan: 1) Interview 5 users. 2) Run a survey with 200 people. 3) Build a prototype.', { sel: '2) Run a survey with 200 people.' }),
               buttons([':sparkle Ask about this', 'Shorten', 'Explain']),
             ]),
@@ -1216,7 +1216,7 @@ export const visuals = {
           id: 'confirm',
           label: 'Before booking',
           options: [
-            opt('Book right away', false, 'No chance to catch a mishearing. The wrong table gets booked.', [toast('Booked for 14 people at 7 pm')]),
+            opt('Book right away', false, 'A mishearing turns into a wrong booking.', [toast('Booked for 14 people at 7 pm')]),
             opt('Quick confirm + edit', true, 'One tap to go, one tap to fix.', [buttons(['!Book it', 'Edit'])]),
           ],
         },
@@ -1363,7 +1363,7 @@ export const visuals = {
           id: 'stop',
           label: 'The stop button',
           options: [
-            opt('Cancel (deletes progress)', false, 'People lose all the work just for steering it. That stings.', [buttons(['-Cancel'])]),
+            opt('Cancel (deletes progress)', false, 'People lose all the work for steering it. Ouch.', [buttons(['-Cancel'])]),
             opt('Pause (keeps progress)', true, 'People can stop without losing anything.', [buttons(['Pause'])]),
           ],
         },
@@ -1419,7 +1419,7 @@ export const visuals = {
           id: 'handoff',
           label: 'When one agent hands off to another…',
           options: [
-            opt('Say what was passed on', true, 'Mistakes sneak in when work changes hands. Showing it lets people check.', [note('Research → Writer: 24 sources, 6 key numbers')]),
+            opt('Say what was passed on', true, 'Mistakes sneak in at handoffs. Showing them lets people check.', [note('Research → Writer: 24 sources, 6 key numbers')]),
             opt('Hand off silently', false, 'If a number is wrong, nobody can tell which agent changed it.', []),
           ],
         },
@@ -1613,8 +1613,8 @@ export const visuals = {
           id: 'barge',
           label: 'When people talk over it',
           options: [
-            opt('It keeps talking', false, 'People are stuck hearing an answer they don’t need.', [note('Please wait until I finish.', { tone: 'warn' })]),
-            opt('It stops and listens', true, 'People cut in for a reason. The AI should stop and listen.', [note('Stopped. Listening…')]),
+            opt('It keeps talking', false, 'People are stuck hearing what they don’t need.', [note('Please wait until I finish.', { tone: 'warn' })]),
+            opt('It stops and listens', true, 'People cut in for a reason. Let them.', [note('Stopped. Listening…')]),
           ],
         },
       ],
@@ -1796,7 +1796,7 @@ export const visuals = {
           id: 'choose',
           label: 'If people want something specific',
           options: [
-            opt('They must know special words', false, 'Only experts know the magic words. Everyone else is stuck.', []),
+            opt('They must know special words', false, 'Only experts know the magic words.', []),
             opt('Simple filters people pick', true, 'People choose. The app does not guess who they mean.', [chips(['Any', 'Woman', 'Man', 'Older', 'Younger'], { on: 0 })]),
           ],
         },

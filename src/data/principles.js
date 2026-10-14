@@ -2,7 +2,7 @@
 // `type` groups them on the Principles page; `source` says where the idea comes from.
 
 export const principleTypes = [
-  { id: 'heuristic', name: 'Usability heuristics', blurb: 'Jakob Nielsen’s 10 rules of thumb from 1994. Designers still lean on them every day.' },
+  { id: 'heuristic', name: 'Usability rules', blurb: 'Jakob Nielsen’s 10 usability rules from 1994. Designers still lean on them every day.' },
   { id: 'law', name: 'Laws of UX', blurb: 'Tested findings about how people see, choose and decide.' },
   { id: 'psychology', name: 'Psychology & trust', blurb: 'How people think, feel and decide who to trust, especially with AI.' },
 ];

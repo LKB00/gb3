@@ -11,7 +11,7 @@ export const hunts = [
     blocks: [
       {
         type: 'banner', tone: 'info', title: 'Meet Max', text: 'The AI that knows everything!',
-        mistake: { text: 'It promises too much, so people trust it blindly. Say what it’s good at, and that it can be wrong.', pattern: 'set-expectations' },
+        mistake: { text: 'Big promise, blind trust. Say what it’s good at, and that it can be wrong.', pattern: 'set-expectations' },
       },
       { type: 'user', text: 'What did users say about the new checkout?' },
       {
@@ -42,7 +42,7 @@ export const hunts = [
       },
       {
         type: 'spinner', text: 'Please keep this tab open (12 min)',
-        mistake: { text: 'People are trapped on this tab for 12 minutes. Run it in the background and show progress.', pattern: 'task-status' },
+        mistake: { text: 'People are stuck here for 12 minutes. Run it in the background.', pattern: 'task-status' },
       },
       { type: 'rows', items: [{ label: 'Layers renamed', value: '24' }, { label: 'Styles created', value: '6' }] },
       {
@@ -95,7 +95,7 @@ export const hunts = [
       { type: 'buttons', items: [':up 12', 'Comment'] },
       {
         type: 'ai', text: 'Since your divorce last year, here are some solo events nearby…',
-        mistake: { text: 'It brings up a private fact the person never knew was saved. Creepy. Let people see and delete memories.', pattern: 'memory-controls' },
+        mistake: { text: 'It brings up a private fact the person never knew was saved. Creepy.', pattern: 'memory-controls' },
       },
       {
         type: 'card', title: 'Recommended: Leadership 101', text: 'Match score: 0.92', tag: 'For you',
@@ -120,7 +120,7 @@ export const hunts = [
       { type: 'chips', items: [':file brand-guide.pdf'], on: null },
       {
         type: 'variants', items: ['Red mug', 'Red mug.', 'A red mug', 'Red mug 2', 'Mug, red', 'Red cup'],
-        mistake: { text: 'Six near-copies. People can’t really choose. Show 3 truly different options.', pattern: 'multiple-variants' },
+        mistake: { text: 'Six near-copies. Show 3 truly different options.', pattern: 'multiple-variants' },
       },
       { type: 'buttons', items: ['!Use A', 'More like A'] },
     ],
@@ -164,11 +164,11 @@ export const hunts = [
       { type: 'user', text: 'Order more of the oat milk I usually get' },
       {
         type: 'voice', state: 'speaking', label: 'Speaking', text: 'I found nine options. Option one, Oatly Barista, one litre, three ninety-nine. Option two…',
-        mistake: { text: 'A long list read aloud. People forget option one by option three. Say a summary, show the list.', pattern: 'mode-switch' },
+        mistake: { text: 'A long list read aloud. Say a short summary and show the list.', pattern: 'mode-switch' },
       },
       {
         type: 'toast', text: 'Ordered 12 × Oat milk 1L for $47.88', action: '',
-        mistake: { text: 'It ordered 12 without reading anything back. Read back the item, amount and price, then wait for a yes.', pattern: 'read-back' },
+        mistake: { text: 'It ordered without reading back item, amount and price. Read it back, wait for a yes.', pattern: 'read-back' },
       },
       { type: 'chips', items: ['Track order', 'Reorder'] },
       {
@@ -199,7 +199,7 @@ export const hunts = [
       { type: 'buttons', items: ['Edit notes', 'Copy'] },
       {
         type: 'note', text: 'Notely remembers everything said in your meetings.',
-        mistake: { text: 'It remembers everything, and people can’t stop it. Show what it keeps, and let people delete it.', pattern: 'memory-controls' },
+        mistake: { text: 'It keeps everything, with no controls. Show what it keeps and let people delete it.', pattern: 'memory-controls' },
       },
     ],
   },
