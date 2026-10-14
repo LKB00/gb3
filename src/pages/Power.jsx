@@ -10,6 +10,7 @@ import { markPlayed, savePower, useGameStats, XP } from '../progress';
 import Breadcrumbs from '../components/Breadcrumbs';
 import CountUp from '../components/CountUp';
 import Disagree from '../components/Disagree';
+import { revealEl } from '../lib/useReveal';
 import Burst, { XpPop } from '../components/Burst';
 import { useTitle } from '../lib/useTitle';
 
@@ -59,10 +60,13 @@ export default function Power() {
   useEffect(() => {
     if (!answered) return;
     nextRef.current?.focus({ preventScroll: true });
-    // Phones: bring the explanation into view (it sits below the five levels).
-    if (window.matchMedia('(max-width: 720px)').matches) {
-      whyRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
+    // Bring the explanation (it sits below the five levels) and the Next button into view, at any width.
+    // On phones Next is pinned to the bottom, so show the explanation; elsewhere Next sits right below it.
+    requestAnimationFrame(() => {
+      const bar = nextRef.current?.closest('.power-nav');
+      const pinned = bar && getComputedStyle(bar).position === 'sticky';
+      revealEl(pinned ? whyRef.current : nextRef.current);
+    });
   }, [answered]);
 
   const next = () => {
@@ -148,7 +152,7 @@ export default function Power() {
           <span className="power-points" key={points}>{points} pts</span>
         </div>
 
-        <div className="power-task" key={t.id}>
+        <div className="power-task" key={`task-${t.id}`}>
           <p className="power-where">{t.detail}</p>
           <p className="power-text">{t.text}</p>
           <div className="power-tags">
@@ -158,7 +162,7 @@ export default function Power() {
         </div>
 
         <p className="label">How much can the AI do alone?</p>
-        <div className="power-opts" key={t.id} role="radiogroup" aria-label="How much can the AI do alone?">
+        <div className="power-opts" key={`opts-${t.id}`} role="radiogroup" aria-label="How much can the AI do alone?">
           {levels.map((l) => {
             let cls = '';
             if (answered) {

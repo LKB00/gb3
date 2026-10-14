@@ -339,7 +339,6 @@
 /* ---- Challenge a friend ---- */
 .challenge-banner {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   gap: 6px;
   margin: 16px 0 0;
@@ -349,10 +348,15 @@
   color: var(--paper);
   font-size: 15px;
 }
-.challenge-banner svg { color: var(--lime); }
+.challenge-banner svg { color: var(--lime); flex: none; }
+/* A friend's name can be one long word (up to 24 letters): let it break instead of widening the page */
+.challenge-banner > span,
+.challenge-result > span { min-width: 0; overflow-wrap: anywhere; }
+.challenge-result svg { flex: none; }
 .speed-intro .challenge-banner { margin: 0; }
 .challenge-result {
   display: inline-flex;
+  max-width: 100%;
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
