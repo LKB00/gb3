@@ -336,7 +336,7 @@ Round trip (export in one browser, restore in another) was verified to give iden
 
 **Sound** (`game/fx.js`): synthesized with the Web Audio API (no audio files). C-major pentatonic so any mix sounds friendly. `fx('name', opts)` plays a sound and a vibration.
 Names: tap, select, nav, toggle, right(streak), wrong, combo(streak), star(n), win, levelup, goal, flip, place, remove, trustUp, trustDown, tick, go, timeup.
-On by default; two separate switches on the Me page; the top-bar speaker toggles both. A global `pointerdown` listener gives every button/link/tab a soft tap, except elements matching `SILENT` (game answers play their own sound). Browsers only allow audio after a first tap.
+On by default; two separate switches on the Me page; the top-bar speaker toggles both. A global `click` listener (never on touch-down, so starting a scroll is silent) gives a soft sound only when a tap really does something: not for disabled items, the current page or tab, an already-selected chip, elements matching `SILENT` (game answers) or `data-fx="off"`, and not when the tap's own handler already played a sound (one sound per tap). Switches (`aria-pressed`) get `toggle`, menus and tabs get `nav`. Browsers only allow audio after a first tap.
 **Haptics**: Android `navigator.vibrate` patterns (`BUZZ`); iPhone (Safari 17.4+) uses a hidden `<input type="checkbox" switch>` label click to get a system tap.
 
 **Motion** (`styles/motion.css`, all inside `@media (prefers-reduced-motion: no-preference)`, so reduced-motion users get none):
