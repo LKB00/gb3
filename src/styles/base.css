@@ -12,6 +12,9 @@ html {
 }
 body {
   margin: 0;
+  /* Installed app on a notched phone held sideways: keep content clear of the notch (index.html sets viewport-fit=cover) */
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
   background: var(--paper);
   color: var(--ink);
   font-family: var(--sans);
