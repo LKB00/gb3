@@ -363,6 +363,8 @@
   gap: 12px;
 }
 .games-more > .game { flex: 1 1 300px; }
+/* Exactly 4 small tiles (Home): two rows of two, not three and one */
+.games-more:has(> :nth-child(4):last-child) > .game { flex-basis: 400px; }
 .game {
   display: flex;
   flex-direction: column;
@@ -382,7 +384,7 @@
 }
 .game:hover { transform: translateY(-3px) rotate(-0.4deg); }
 .game:active { transform: scale(0.98); }
-.game svg { margin-bottom: 12px; }
+.game > svg { margin-bottom: 12px; } /* the tile icon only, not the small one in the meta line */
 .game strong {
   font-family: var(--display);
   font-size: 22px;

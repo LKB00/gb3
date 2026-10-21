@@ -160,7 +160,7 @@ The owner looks at a **private Claude Artifact**. It is one self-contained HTML 
 | Route | Page | Notes |
 |---|---|---|
 | `/` | Home | First visit: hero + a 5-round This or That + Daily banner + game tiles. Returning players (any XP or played day): a compact hello and the Daily banner **above** the game. The score screen offers the Daily (or Speed if the Daily is done), a card to win, and a quiet Play again |
-| `/play` | Play hub | Level card (desktop), Today (a compact strip until the first answer of the day, then a compact card: goal ring, one line, streak; week dots only on wide screens; no button, so the Daily banner is the one main action), Daily banner (no streak chip: the streak shows in the top bar and Today), game tiles (the first 2 in `config/games.js` are big, the rest small), badges (a sideways row on phones) |
+| `/play` | Play hub | Level card (desktop), Today (a compact strip until the first answer of the day, then a compact card: goal ring, one line, streak; week dots only on wide screens; no button, so the Daily banner is the one main action), Daily banner (no streak chip: the streak shows in the top bar and Today), game tiles (the first 2 in `config/games.js` are big, the rest small; Home skips This or That because you play it right there), badges (a sideways row on phones) |
 | `/play/daily` | Daily challenge | See 5.3 |
 | `/play/this-or-that` | This or That | `?mode=hard` for Hard mode; `?rounds=3..10` for a shorter run (default 10), used by the daily-goal buttons |
 | `/play/speed` | Speed round | `?vs=&seed=&from=` for challenge links |
@@ -207,7 +207,7 @@ Shortcuts with Ctrl/Cmd/Alt and held keys are ignored. Streak of 3+ plays the co
 **One try per day**; the first result of the day is saved. Answers are saved as you go (`daily-run`), so a refresh continues the run instead of restarting it. A new day (or another day's link) gets a fresh board. A friend score above 5 in a link is ignored. Daily #1 = **1 Oct 2026**; the displayed number is never below 1 (`dailyLabel`). Result shows a Wordle-style
 grid, share/copy, countdown to the next Daily, and "challenge a friend". Playing a friend's challenge for a past day replays it but does not save it.
 
-**Speed round** (`pages/Speed.jsx`): 60 seconds, 3-2-1 countdown. Classic and hard rounds mixed from a **seeded** deck (`speed:<seed>`). The result shows up to 3 missed tricks as peeks. On phones the two screens sit low, in thumb reach.
+**Speed round** (`pages/Speed.jsx`): 60 seconds, 3-2-1 countdown. Classic and hard rounds mixed from a **seeded** deck (`speed:<seed>`). The result shows up to 3 missed tricks as peeks. On phones the question and the two screens sit low together, in thumb reach (the timer stays on top).
 Right = +1; **3 in a row turns on x2**; wrong = **-1 point (never below 0)** so random tapping does not pay. Last 5 seconds tick. A "quit" button is on screen.
 While playing, the body gets class `focus-mode` (top/bottom bars hidden on phones). Result: points, accuracy, new best, XP, share link.
 

@@ -6,9 +6,10 @@ import { useGameStats, useHuntsDone, usePassed } from '../../progress';
 
 // One colourful tile per game. The list lives in config/games.js.
 // The first two are big ("start here"); the rest are smaller, so the page has a clear first pick.
+// `skip` = game ids to leave out (Home skips This or That: you are already playing it there).
 const BIG = 2;
 
-export default function GameTiles() {
+export default function GameTiles({ skip = [] }) {
   const random = useRandomChallenge();
   const progress = { stats: useGameStats(), passed: usePassed(), huntsDone: useHuntsDone() };
   const tile = (g, big) => {
@@ -33,10 +34,11 @@ export default function GameTiles() {
       <Link key={g.id} to={g.to} className={className}>{inner}</Link>
     );
   };
+  const list = games.filter((g) => !skip.includes(g.id));
   return (
     <div className="games">
-      <div className="games-top">{games.slice(0, BIG).map((g) => tile(g, true))}</div>
-      <div className="games-more">{games.slice(BIG).map((g) => tile(g, false))}</div>
+      <div className="games-top">{list.slice(0, BIG).map((g) => tile(g, true))}</div>
+      <div className="games-more">{list.slice(BIG).map((g) => tile(g, false))}</div>
     </div>
   );
 }

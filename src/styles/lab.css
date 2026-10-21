@@ -326,6 +326,11 @@
   cursor: pointer;
 }
 .hunt-pick-done { margin-left: 4px; white-space: nowrap; }
+/* Small phones: the dropdown gets the room (done screens still show a ✓ in it) */
+@media (max-width: 480px) {
+  .hunt-pick-select { flex: 1 1 auto; }
+  .hunt-pick-done { display: none; }
+}
 .hunt-brief {
   margin: 12px 0 16px;
   color: var(--ink-2);

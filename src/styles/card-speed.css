@@ -311,14 +311,12 @@
   25% { transform: translateX(-6px); }
   75% { transform: translateX(6px); }
 }
-/* Phones: the brief and timer stay on top, the two screens sit low, in thumb reach */
+/* Phones: the timer stays on top; the question and the two screens sit low together, in thumb reach */
 @media (max-width: 720px) {
   /* Fill the screen minus the page's bottom padding, so a tap low down never scrolls the page */
   body.focus-mode .speed { min-height: calc(100vh - 24px); min-height: calc(100dvh - 24px); }
-  .speed-options {
-    margin-top: auto;
-    padding-bottom: env(safe-area-inset-bottom, 0px);
-  }
+  .speed-brief { margin-top: auto; }
+  .speed-options { padding-bottom: env(safe-area-inset-bottom, 0px); }
 }
 @media (prefers-reduced-motion: reduce) {
   .speed-time.is-low, .speed-option, .speed-count span { animation: none; }

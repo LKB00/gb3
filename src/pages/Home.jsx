@@ -86,7 +86,7 @@ export default function Home() {
           <h2>More games</h2>
           <Link to="/play" className="text-link">Your level and badges <ArrowRight size={14} strokeWidth={1.75} aria-hidden /></Link>
         </div>
-        <GameTiles />
+        <GameTiles skip={['this-or-that']} />
       </section>
     </div>
   );

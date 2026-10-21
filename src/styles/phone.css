@@ -289,7 +289,7 @@
   .game { padding: 16px; border-radius: 18px; }
   .game-big { min-height: 0; }
   .game-big strong { font-size: 21px; line-height: 26px; }
-  .game-big svg { margin-bottom: 6px; }
+  .game-big > svg { margin-bottom: 6px; }
   .game-big .game-meta { padding-top: 10px; }
   .game-small { padding: 14px 16px; }
   .game-small strong { font-size: 17px; line-height: 22px; }
