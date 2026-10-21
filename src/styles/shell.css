@@ -336,14 +336,24 @@
 }
 .visits strong { font-family: var(--display); font-size: 18px; font-weight: 800; color: var(--ink); }
 .visits-faces { display: inline-flex; }
-.visits-faces svg {
+.visits-face {
   width: 30px;
   height: 30px;
-  margin-left: -4px;
+  display: grid;
+  place-items: center;
+  margin-left: -6px;
   border-radius: 50%;
   box-shadow: 0 0 0 2px var(--paper);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ink);
 }
-.visits-faces svg:first-child { margin-left: 0; }
+.visits-face:first-child { margin-left: 0; }
+.visits-input { background: var(--p-input); }
+.visits-trust { background: var(--p-trust); }
+.visits-control { background: var(--p-control); }
+.visits-feedback { background: var(--p-feedback); }
 .credits a { color: var(--ink-2); text-decoration: underline; text-underline-offset: 2px; }
 .credits a:hover { color: var(--ink); }
 .credits-icon { display: inline-flex; vertical-align: -3px; margin-left: 6px; text-decoration: none !important; }
