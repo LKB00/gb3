@@ -1,4 +1,4 @@
-import { Sparkles, Square, Undo2 } from 'lucide-react';
+import { Check, Sparkles, Square, Undo2, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
 /* ---------- Editable output ---------- */
@@ -193,6 +193,50 @@ export function StopAndUndo() {
           <button className="btn btn-ghost btn-sm" onClick={undo}><Undo2 size={14} strokeWidth={1.75} aria-hidden /> Undo all</button>
         </div>
       )}
+    </div>
+  );
+}
+
+/* ---------- Preview before apply ---------- */
+
+const changes = [
+  { before: 'utilize', after: 'use' },
+  { before: 'in order to', after: 'to' },
+  { before: 'a large number of', after: 'many' },
+];
+
+export function PreviewChanges() {
+  const [picks, setPicks] = useState(changes.map(() => null)); // null | 'yes' | 'no'
+  const reviewed = picks.filter(Boolean).length;
+  const word = (i) => (picks[i] === 'yes' ? changes[i].after : changes[i].before);
+  const set = (i, val) => setPicks((ps) => ps.map((p, j) => (j === i ? val : p)));
+
+  return (
+    <div className="demo-stack">
+      <div className="row space-between">
+        <span className="small muted">{changes.length} changes · {reviewed} reviewed</span>
+        <div className="row">
+          <button className="btn btn-ghost btn-sm" onClick={() => setPicks(changes.map(() => 'yes'))}>Accept all</button>
+          <button className="btn btn-ghost btn-sm" onClick={() => setPicks(changes.map(() => 'no'))}>Reject all</button>
+        </div>
+      </div>
+      <ul className="dm-io-diff">
+        {changes.map((c, i) => (
+          <li key={c.before} className={picks[i] ? 'dm-io-diff-done' : ''}>
+            <span><del className="dm-io-del">{c.before}</del> → <ins className="dm-io-ins">{c.after}</ins></span>
+            {picks[i] ? (
+              <button className="btn btn-ghost btn-sm" onClick={() => set(i, null)}>{picks[i] === 'yes' ? 'Accepted' : 'Rejected'} · Undo</button>
+            ) : (
+              <span className="row">
+                <button className="icon-btn" onClick={() => set(i, 'yes')} aria-label={`Accept: ${c.after}`}><Check size={16} strokeWidth={1.75} aria-hidden /></button>
+                <button className="icon-btn" onClick={() => set(i, 'no')} aria-label={`Reject: keep ${c.before}`}><X size={16} strokeWidth={1.75} aria-hidden /></button>
+              </span>
+            )}
+          </li>
+        ))}
+      </ul>
+      <p className="bubble-user">We {word(0)} this tool {word(1)} plan {word(2)} tasks.</p>
+      <p className="demo-note">Accept or reject each change. The sentence only changes when you say yes.</p>
     </div>
   );
 }

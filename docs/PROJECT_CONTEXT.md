@@ -4,7 +4,7 @@
 > with the same context: what the site is, what the owner wants, how to work, how to ship, what was decided and why,
 > and what is still open. Keep it up to date (see [Keeping this file current](#14-keeping-this-file-current)).
 >
-> Last updated: **2026-10-21**, after the UI hierarchy pass (one main action on Play, big + small game tiles, Spot the flaw picker, pinned Build screen on phones). Live site: <https://gb3.lokeshbhatia.com/>
+> Last updated: **2026-10-21**, after the "build all" pass (calmer Me and Cards, a demo on every card, new card #21 "Try it safely first", 2 more stories, 3 more flaw screens, 4 more hard pairs). Live site: <https://gb3.lokeshbhatia.com/>
 
 ## Contents
 1. [Snapshot](#1-snapshot) (name and brand: see [section 8b](#8b-brand))
@@ -36,7 +36,7 @@
 | **Stack** | React 18.3, react-router-dom 6 (`HashRouter`), Vite 6 (`base: './'`), lucide-react icons. Plain CSS (no framework). No backend. |
 | **State** | Everything a visitor earns lives in their own browser (`localStorage`). No accounts, no server. |
 | **Deploy** | Push/merge to `main` runs `.github/workflows/deploy.yml` (npm ci, lint, build, publish to Pages). |
-| **Size** | About 170 KB of JavaScript (gzip). About 16,000 lines of source. |
+| **Size** | About 205 KB of JavaScript (gzip). About 16,000 lines of source. |
 | **Languages in code** | JavaScript (JSX). No TypeScript. No unit-test framework. Quality comes from `npm run check`. |
 | **Fonts** | Bricolage Grotesque (headings), Lato (text), Libre Baskerville (user speech in mock screens), loaded from Google Fonts in `index.html`. |
 | **Design language** | Copied from the owner's other projects (warm "sand paper" `#fbfbf7`, charcoal ink `#24282c`, lime accent `#c2ef72`, soft pastels per pattern group, pill buttons, hairline borders). |
@@ -166,17 +166,17 @@ The owner looks at a **private Claude Artifact**. It is one self-contained HTML 
 | `/play/speed` | Speed round | `?vs=&seed=&from=` for challenge links |
 | `/play/power` | How much power? | Autonomy-level game |
 | `/play/build` | Build mode | `?brief=research|travel|writer|car` |
-| `/play/story`, `/play/story/:id` | Stories | ids: `tidy`, `nova`, `sage`, `pilot` |
-| `/play/spot-the-flaw` | Spot the flaw | 10 screens |
+| `/play/story`, `/play/story/:id` | Stories | ids: `tidy`, `nova`, `sage`, `pilot`, `roam`, `quill` |
+| `/play/spot-the-flaw` | Spot the flaw | 13 screens |
 | `/play/card` | Player card | Image made in the browser |
-| `/patterns`, `/patterns/:id` | Cards | 37 patterns; tabs `?view=do|understand|reference` (shown as Play, Why it works, Cheat sheet; default `do`); `?category=` filter; `?show=missing|stars` (To collect / Not 3 stars yet); search also reads id, group, when/avoid/dos/donts, examples, product names and `keywords`. Read places (teardowns, glossary, principles, deep-dive pictures) link to `?view=understand`; games and the grid open Play |
+| `/patterns`, `/patterns/:id` | Cards | 38 patterns, shown in one section per group when All groups is chosen (each card leaves out its group tag; on phones one row per card); tabs `?view=do|understand|reference` (shown as Play, Why it works, Cheat sheet; default `do`); `?category=` filter; `?show=missing|stars` (To collect / Not 3 stars yet); search also reads id, group, when/avoid/dos/donts, examples, product names and `keywords`. Read places (teardowns, glossary, principles, deep-dive pictures) link to `?view=understand`; games and the grid open Play |
 | `/autonomy` | Autonomy ladder | `?level=1..5`; has a level finder |
 | `/teardowns`, `/teardowns/:id` | Teardowns | ChatGPT, Perplexity, GitHub Copilot, Claude Code |
 | `/anti-patterns` | Dark patterns | 8 |
 | `/principles` | Principles | UX laws + Microsoft HAX 18 guidelines; `?focus=` scrolls to one |
 | `/glossary` | Glossary | 22 terms (19 link to their cards via `patterns`) + further reading |
 | `/learn`, `/learn/:id` | Deep dives | 9 short reads |
-| `/me` | Me | In order: a quiet level line, the Today card (the one card with a button), player card, badges, settings (one grouped list: sound, vibration, dark mode), App and backup (one box) |
+| `/me` | Me | In order: a quiet level line (no XP repeat; totals only once above 0), the Today card (the one card with a button), player card, badges, settings (one grouped list: sound, vibration, dark mode), App and backup (one box) |
 | `/practice` | redirects to `/play` | old link |
 | `*` | Not found | A mistyped `/patterns/<x>` offers the closest card and a card search |
 
@@ -200,7 +200,7 @@ The day streak counts days with at least one move. **One free "skip day" per 7 d
 yet, the streak is still kept (you still have time). Streak math is `streakInfo` in `progress.js`.
 
 **This or That** (`components/ThisOrThat.jsx`): 10 rounds. Two versions of the same AI screen; tap the better one. Classic uses one round Card links in games open a **card peek** (`components/PatternPeek.jsx`, `<PeekLink>`), so a run is never lost; the score screen lists the tricks met (misses first).
-per pattern (visuals), Hard uses the 30 "one small detail differs" pairs (`data/subtle.js`). Pins/captions appear after answering. Keys: Left/Right (or A/B), Enter for next.
+per pattern (visuals), Hard uses the 34 "one small detail differs" pairs (`data/subtle.js`). Pins/captions appear after answering. Keys: Left/Right (or A/B), Enter for next.
 Shortcuts with Ctrl/Cmd/Alt and held keys are ignored. Streak of 3+ plays the combo sound.
 
 **Daily** (`pages/Daily.jsx`): 5 rounds: easy, easy, hard, easy, hard. Same for everyone on the same date (seeded with `ai-patterns:<YYYY-MM-DD>`; the seed text keeps the old name on purpose, because changing it would change every day's rounds).
@@ -214,9 +214,9 @@ While playing, the body gets class `focus-mode` (top/bottom bars hidden on phone
 **Fix it** (`components/Lab.jsx`, one per pattern, reached from the card's Play tab): step by step, one decision at a time with instant feedback; 3 stars = no mistakes, The end screen's primary is **Next missing card** (else Next card for 3 stars) via `nextTarget()` in `game/useRandomChallenge.js`. The Play tab stays mounted (hidden) so switching tabs keeps your step. End screen order: stars, the won card, the next step, then "Play again" beside its reason, then "Your picks" as a quiet list.
 2 = one mistake, 1 = more. Finishing flips a **collectible card** (`FlipCard`) with a glow and star chimes. "Reveal the answer (no card)" exists for people who give up.
 
-**Spot the flaw** (`components/Hunt.jsx`): a realistic AI screen with hidden mistakes; tap what is wrong, tap fine parts to be told they are fine. Each of the 10 screens gives 30 XP once. Screens are picked with a small picker (back, a dropdown with ✓ for done, next) above the screen; on desktop the score and notes sit in a sand card beside it.
+**Spot the flaw** (`components/Hunt.jsx`): a realistic AI screen with hidden mistakes; tap what is wrong, tap fine parts to be told they are fine. Each of the 13 screens gives 30 XP once. Screens are picked with a small picker (back, a dropdown with ✓ for done, next) above the screen; on desktop the score and notes sit in a sand card beside it.
 
-**Stories** (`pages/Story.jsx`, `data/story.js`): 4 branching stories. Each scene = setup + a screen + a question + choices. Each choice changes **trust (0 to 100)**, The picker marks one story "Start here" / "Up next"; the how-to line shows on scene 1 only; on phones the trust meter is a slim line; the end puts Next story and Play again right under the ending.
+**Stories** (`pages/Story.jsx`, `data/story.js`): 6 branching stories. Each scene = setup + a screen + a question + choices. Each choice changes **trust (0 to 100)**, The picker marks one story "Start here" / "Up next"; the how-to line shows on scene 1 only; on phones the trust meter is a slim line; the end puts Next story and Play again right under the ending.
 shows a reaction and may change the path (`next`). The final trust picks one of 4 endings (`endings[].min`). Best trust per story is saved.
 `tidy` = file-cleanup agent (Priya), `nova` = kitchen voice assistant, `sage` = bank help bot, `pilot` = coding agent.
 
@@ -286,7 +286,7 @@ src/
 - Every cross reference (pattern ids, scene names, ...) is verified by `npm run validate`.
 
 ### 6.4 Styles (`src/styles/index.css` imports, in this order, and order matters)
-`tokens` (colours, fonts, dark mode) > `base` > `shell` (top bar, page, tabs, crash screen) > `controls` (buttons, chips, tags) > `mock` (fake screens) > `demos` > `lab` > `pattern` > `explore` > `home` > `game-core` (XP pill, confetti, This or That, tiles) > `play` > `daily-story` > `card-speed` > `build` > `phone` (<= 720px rules; keep near the end) > `autonomy` > `motion` (always last).
+`tokens` (colours, fonts, dark mode) > `base` > `shell` (top bar, page, tabs, crash screen) > `controls` (buttons, chips, tags) > `mock` (fake screens) > `demos` > `lab` > `pattern` > `explore` > `demos-io`, `demos-trust`, `demos-agents`, `demos-voice`, `demos-sandbox` (one per demo group) > `home` > `game-core` (XP pill, confetti, This or That, tiles) > `play` > `daily-story` > `card-speed` > `build` > `phone` (<= 720px rules; keep near the end) > `autonomy` > `motion` (always last).
 - Dark mode: `:root[data-theme='dark']` and `prefers-color-scheme: dark`. Colours are tokens (`--paper`, `--ink`, `--lime`, `--p-<group>` pastels, `--positive`, `--negative`).
 - Newer areas keep their own phone rules inside their file (see `autonomy.css`).
 - Generic motion rules use `:where()` (zero weight) so a component's own animation wins.
@@ -374,10 +374,10 @@ The same early script also applies the saved dark/light choice before the first 
 
 | Content | Count | File | Add by |
 |---|---|---|---|
-| Patterns | 37 (Input 6, Output 3, Control 4, Trust 8, Feedback 2, Agents 9, Voice & vision 5) | `data/patterns.js` + `data/visuals.js` + `data/examples.js` + `data/principles.js` (`patternPrinciples`) | add all four entries; a `demo` is optional (`src/demos/`, registered in `demos/index.js`) |
-| Hard pairs | 30 | `data/subtle.js` | `pair(...)` entry |
-| Spot-the-flaw screens | 10 | `data/hunts.js` | blocks with `mistake: { text, pattern }` |
-| Stories | 4 | `data/story.js` | scenes + endings; export in `stories` |
+| Patterns | 38 (Input 6, Output 3, Control 4, Trust 8, Feedback 2, Agents 10, Voice & vision 5) | `data/patterns.js` + `data/visuals.js` + `data/examples.js` + `data/principles.js` (`patternPrinciples`) | add all four entries plus a `demo` (every card has one: `src/demos/`, registered in `demos/index.js`) |
+| Hard pairs | 34 | `data/subtle.js` | `pair(...)` entry |
+| Spot-the-flaw screens | 13 | `data/hunts.js` | blocks with `mistake: { text, pattern }` |
+| Stories | 6 | `data/story.js` | scenes + endings; export in `stories` |
 | Build briefs | 4 | `data/builds.js` | pieces with `need/nice/trap` |
 | Power tasks | 21 | `data/autonomy.js` `tasks` | `task(id, text, detail, level, tags, why)`; keep >= 2 per level |
 | Teardowns | 4 | `data/teardowns.js` | journey stages with pattern ids |
@@ -433,6 +433,7 @@ Things the repo does **not** have: unit tests, visual regression, a real-device 
 | #25 | Revert logo to **simple lime circle** (owner preference), keep product name **Good Bot, Bad Bot** |
 | (Oct 21) | UI hierarchy pass (owner: "check hierarchy"): one main action on Play, streak shown once, big + small game tiles, Spot the flaw picker, pinned Build screen on phones, Me badges as a row, lime ring on won cards, story icons, "+N more" on Principles (2 columns on desktop), Speed start centred on phones, sound hint over the top bar |
 | (Oct 21) | Game list (owner: "same issue" on Play): 7 big colour tiles in 3 shapes → two calm lists, Quick games and Deeper games, one row style, colour only in the icon, no zero stats; Home drops its double heading |
+| (Oct 21) | "Build all" pass: Me hides zero totals and the repeated XP, the Today card is one goal + one button with a quiet streak/week footer; Cards shows one section per group and one readable row per card on phones; the Fix it step bar is progress only on phones (no repeated question); "Skip it when" on Why it works; live demos for all 38 cards; new card `sandbox-preview` (Try it safely first, Agents, #21, so later card numbers moved up by 1; progress is by id); stories `roam` + `quill`; 3 flaw screens; 4 hard pairs (the Daily deck shuffle changes because `subtle` grew) |
 
 ### Decisions worth remembering
 - **Name: Good Bot, Bad Bot** (chosen by the owner from a short list). It matches the main game (pick the better screen). Renamed from "AI Patterns", which was clear but easy to forget.
@@ -470,10 +471,8 @@ Things the repo does **not** have: unit tests, visual regression, a real-device 
 ## 13. Open ideas (backlog)
 
 From the research on aiuxplayground.com (not built yet):
-1. **Sandbox Preview pattern**: a new pattern card ("try it safely before it's real"), close to "Preview before apply" but about actions (send, delete, pay).
-2. **"Try it" mini demos on every pattern page** (bad vs good, clickable) instead of only 15 demos.
-3. **"When NOT to use it" line** on each pattern card (the data already has `avoid[]`; surface it more).
-4. **A "Preview the result first" piece** in Build mode (travel and car briefs) and a matching trap.
+(Done Oct 21: the "Try it safely first" card `sandbox-preview`, a live demo on every card, and a "Skip it when" line on Why it works.)
+1. **A "Preview the result first" piece** in Build mode (travel and car briefs) and a matching trap.
 
 Other options:
 - Look at the GoatCounter numbers to see what people play.

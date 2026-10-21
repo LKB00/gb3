@@ -252,4 +252,79 @@ export const hunts = [
       },
     ],
   },
+  {
+    id: 'inbox-agent',
+    title: 'AI inbox helper',
+    app: 'Sorta · inbox AI',
+    brief: 'An AI sorts your email and answers it for you.',
+    blocks: [
+      {
+        type: 'toggle', label: 'Auto-reply to all email', on: true,
+        mistake: { text: 'One switch lets it answer everyone. Start with drafts, and let people choose per kind of email.', pattern: 'autonomy-dial' },
+      },
+      { type: 'rows', items: [{ label: 'Sorted today', value: '86 emails' }, { label: 'Newsletters', value: '31' }] },
+      {
+        type: 'card', title: 'Dr. Rao’s clinic', text: 'Your test results are ready.', tag: 'Moved to Spam',
+        mistake: { text: 'A doctor’s email went to Spam with no doubt shown. Flag the unsure ones for a check.', pattern: 'confidence-signals' },
+      },
+      {
+        type: 'toast', text: 'Replied to 14 emails for you', action: '',
+        mistake: { text: '14 replies went out, and you can’t see them. Keep a list of what it sent.', pattern: 'action-log' },
+      },
+      {
+        type: 'note', text: 'Connected: Gmail, Calendar, Drive, Contacts, Bank',
+        mistake: { text: 'Five apps, even the bank, for an email job. Ask only for what the task needs.', pattern: 'connected-apps' },
+      },
+      { type: 'buttons', items: ['!Open inbox'] },
+    ],
+  },
+  {
+    id: 'homework-helper',
+    title: 'Homework helper',
+    app: 'Brainy · study AI',
+    brief: 'A study app where kids ask an AI for homework help.',
+    blocks: [
+      {
+        type: 'banner', tone: 'info', title: 'Always right!', text: 'Brainy never makes mistakes.',
+        mistake: { text: 'No AI is always right. Say it can make mistakes, and that big answers need a check.', pattern: 'set-expectations' },
+      },
+      { type: 'user', text: 'Why did the Roman Empire fall?' },
+      {
+        type: 'ai', text: 'It fell in 476 because of one bad emperor.',
+        mistake: { text: 'One neat reason, and no source. Show where facts come from, so kids can check.', pattern: 'citations' },
+      },
+      { type: 'chips', items: ['Explain it simpler', 'Quiz me'] },
+      {
+        type: 'ai', text: 'Last month you said you were scared of your science test. Still nervous?',
+        mistake: { text: 'It brings up an old worry out of nowhere. Show what it remembers, and let kids delete it.', pattern: 'memory-controls' },
+      },
+      {
+        type: 'modal', title: 'Out of questions!', text: 'Ask a grown-up to upgrade.', buttons: ['!Upgrade'],
+        mistake: { text: 'The limit shows up only when it runs out. Show how many questions are left.', pattern: 'cost-estimate' },
+      },
+    ],
+  },
+  {
+    id: 'hiring-helper',
+    title: 'AI hiring helper',
+    app: 'Hirely · hiring AI',
+    brief: 'A recruiter uses AI to sort 300 job applications.',
+    blocks: [
+      { type: 'user', text: 'Find the best 10 people for the designer job.' },
+      {
+        type: 'rows', items: [{ label: 'Asha K', value: 'Rejected' }, { label: 'Ben T', value: 'Shortlisted' }],
+        mistake: { text: 'Yes or no, with no reason. Say why in plain words, so a person can check.', pattern: 'explain-why' },
+      },
+      {
+        type: 'card', title: 'Top 10 picks', text: 'All 10 went to the same 2 colleges.', tag: 'Shortlist',
+        mistake: { text: 'Every pick looks the same. Check results for bias before people trust them.', pattern: 'bias-check' },
+      },
+      {
+        type: 'toast', text: 'Rejection emails sent to 290 people', action: '',
+        mistake: { text: '290 people got a “no” with no human check. Ask before sending.', pattern: 'action-approval' },
+      },
+      { type: 'buttons', items: ['View CV', 'Add note'] },
+      { type: 'note', text: 'Hirely can get things wrong. A person makes the final call.' },
+    ],
+  },
 ];

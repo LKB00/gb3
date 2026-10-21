@@ -169,10 +169,10 @@ export function ProgressLine() {
   );
 }
 
-// Today: goal ring, streak, freeze and the last 7 days.
-// `go` = show the "Play N quick rounds" button while the goal is open (off where another one is shown).
-// `compact` = one short line of text (the Play page); the full rules stay on Me.
-export function TodayCard({ go = true, compact = false }) {
+// Today (Me page): the goal ring, one line and one button on top,
+// then a quiet footer with the day streak, the skip day and the last 7 days.
+// `go` = show the "Play N quick rounds" button while the goal is open.
+export function TodayCard({ go = true }) {
   const { streak, frozen, freezeReady, todayMoves, days } = useStreak();
   const pct = Math.min(1, todayMoves / DAILY_GOAL);
   const left = DAILY_GOAL - todayMoves;
@@ -187,7 +187,7 @@ export function TodayCard({ go = true, compact = false }) {
     return { k, label: WEEK[d.getDay()], played: (days[k] || 0) > 0, frozen: frozen.includes(k), today: i === 6 };
   });
   return (
-    <div className={'today-card' + (compact ? ' is-compact' : '')}>
+    <div className="today-card">
       <div className="today-goal">
         <svg width="64" height="64" viewBox="0 0 64 64" aria-hidden>
           <circle cx="32" cy="32" r={r} className="ring-bg" />
@@ -196,35 +196,38 @@ export function TodayCard({ go = true, compact = false }) {
         <span className="today-goal-num">{Math.min(todayMoves, DAILY_GOAL)}<small>/{DAILY_GOAL}</small></span>
       </div>
       <div className="today-text">
-        <p className="label">Today</p>
-        <p className="today-title">{pct >= 1 ? 'Daily goal done. Nice!' : `${DAILY_GOAL - todayMoves} more ${DAILY_GOAL - todayMoves === 1 ? 'answer' : 'answers'} to hit today’s goal`}</p>
-        {saved && <p className="today-saved"><Snowflake size={13} strokeWidth={2} aria-hidden /> {saved}</p>}
-        <p className="small muted">
-          Every answer in every game counts.{saved || compact ? ' ' : ' Miss a day? A skip day saves your day streak. '}
-          {freezeReady ? (
-            <span className="freeze"><Snowflake size={12} strokeWidth={2} aria-hidden /> 1 skip day ready</span>
-          ) : (
-            <span className="freeze is-used"><Snowflake size={12} strokeWidth={2} aria-hidden /> Skip day used. You get 1 a week.</span>
-          )}
-        </p>
+        <p className="today-title">{pct >= 1 ? 'Daily goal done. Nice!' : `${left} more ${left === 1 ? 'answer' : 'answers'} to hit today’s goal`}</p>
+        {saved ? (
+          <p className="today-saved"><Snowflake size={13} strokeWidth={2} aria-hidden /> {saved}</p>
+        ) : (
+          <p className="small muted">Every answer in every game counts.</p>
+        )}
         {go && left > 0 && (
           <Link to={`/play/this-or-that?rounds=${rounds}`} className="btn btn-primary today-go">
             Play {rounds} quick rounds <ArrowRight size={14} strokeWidth={1.75} aria-hidden />
           </Link>
         )}
       </div>
-      <div className="today-streak">
-        <span className={'today-flame' + (todayMoves > 0 ? ' is-lit' : '')}><Flame size={20} strokeWidth={2} aria-hidden /> {streak}</span>
-        <span className="small muted">day streak</span>
+      <div className="today-foot">
+        <span className={'today-flame' + (todayMoves > 0 ? ' is-lit' : '')}>
+          <Flame size={16} strokeWidth={2} aria-hidden /> <strong>{streak}</strong> day streak
+        </span>
+        <ol className="week" aria-label="Last 7 days">
+          {last7.map((d) => (
+            <li key={d.k} className={(d.played ? 'is-played' : d.frozen ? 'is-frozen' : '') + (d.today ? ' is-today' : '')} title={d.k}>
+              <span className="week-dot">{d.played ? <Flame size={10} strokeWidth={2} aria-hidden /> : d.frozen ? <Snowflake size={10} strokeWidth={2} aria-hidden /> : null}</span>
+              <span className="week-day">{d.label}</span>
+            </li>
+          ))}
+        </ol>
+        {freezeReady ? (
+          <span className="freeze small" title="Miss a day and your skip day keeps your streak. You get 1 a week.">
+            <Snowflake size={12} strokeWidth={2} aria-hidden /> 1 skip day ready: miss a day, keep your streak
+          </span>
+        ) : (
+          <span className="freeze is-used small"><Snowflake size={12} strokeWidth={2} aria-hidden /> Skip day used. You get 1 a week.</span>
+        )}
       </div>
-      <ol className="week" aria-label="Last 7 days">
-        {last7.map((d) => (
-          <li key={d.k} className={(d.played ? 'is-played' : d.frozen ? 'is-frozen' : '') + (d.today ? ' is-today' : '')} title={d.k}>
-            <span className="week-dot">{d.played ? <Flame size={12} strokeWidth={2} aria-hidden /> : d.frozen ? <Snowflake size={12} strokeWidth={2} aria-hidden /> : null}</span>
-            <span className="week-day">{d.label}</span>
-          </li>
-        ))}
-      </ol>
     </div>
   );
 }

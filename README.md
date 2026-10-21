@@ -6,13 +6,13 @@ A playground for AI interaction design. Not a course: quick games, instant wins,
 
 - **Daily challenge** (`/play/daily`): 5 rounds, the same for everyone each day (3 classic + 2 hard), one try. Wordle-style share grid (copy, X, LinkedIn), days-in-a-row streak, countdown to the next Daily.
 - **Agent on duty** (`/play/story`): a short branching story. You design Tidy, a file-cleanup agent; each choice moves Priya's trust meter, and trust decides one of 4 endings.
-- **This or That** (`/play/this-or-that`, and a 5-round version right on Home): two versions of the same AI screen, tap the better one. Score, streak, keyboard ← / →. **Hard mode** (`?mode=hard`): 30 near-identical pairs where only one detail differs.
+- **This or That** (`/play/this-or-that`, and a 5-round version right on Home): two versions of the same AI screen, tap the better one. Score, streak, keyboard ← / →. **Hard mode** (`?mode=hard`): 34 near-identical pairs where only one detail differs.
 - **Fix it** (the Play tab on each card): build an AI feature one decision at a time with instant feedback. Win the card with 1–3 stars.
 - **Spot the flaw** (`/play/spot-the-flaw`): realistic AI screens with hidden mistakes. Tap what is wrong.
-- **Cards** (`/patterns`): 37 pattern cards in 7 groups (Input, Output, Control, Trust, Feedback, Agents, Voice & vision). Each has Play, Why it works and Cheat sheet tabs.
+- **Cards** (`/patterns`): 38 pattern cards in 7 groups (Input, Output, Control, Trust, Feedback, Agents, Voice & vision). Each has Play, Why it works and Cheat sheet tabs. Every card has a small live demo ("Try it yourself") and a "Skip it when" line on Why it works. All cards shows them in one section per group; on phones each card is one readable row.
 - **How much power?**: pick how much an AI should do on its own (suggest → act alone) for 8 real tasks.
 - **Build mode** (`/play/build`): a blank AI screen and a box of pieces. Tap or drag the right pieces on, leave the traps out, then check. 4 briefs (research answer, travel agent, long writing task, voice in a car), 1–3 stars each.
-- **Stories** (`/play/story`): 4 branching stories with a trust meter and 4 endings each: a file-cleanup agent (Priya), a kitchen voice assistant (Arjun), a bank help bot (Meera) and a coding agent (Kabir).
+- **Stories** (`/play/story`): 6 branching stories with a trust meter and 4 endings each: a file-cleanup agent (Priya), a kitchen voice assistant (Arjun), a bank help bot (Meera), a coding agent (Kabir), a trip-booking AI (Fatima) and a writing helper (Zara).
 - **Challenge a friend**: after the Daily or a Speed round, copy a link. Your friend plays the exact same rounds (seeded) and sees your score to beat. Everything is in the link, no server.
 - **Speed round** (`/play/speed`): 60 seconds of quick "which is better?" picks (classic + hard mixed). 3 in a row = ×2 points; a wrong tap costs 1 point, so random tapping doesn't pay. 3-2-1 countdown, ticking last 5 seconds, copyable score.
 - **Card flip**: winning a Fix it challenge flips your new pattern card over with a glow.
@@ -81,7 +81,7 @@ scripts/smoke.mjs  the browser check used by `npm run check`
 | I want to… | Change this |
 |---|---|
 | Fix a typo or change any text | Search for the words in `src/data/` (content) or `src/pages/` (page titles) |
-| Add a pattern | `src/data/patterns.js` (text) + `src/data/visuals.js` (compare screens + Fix it steps). A demo in `src/demos/` is optional |
+| Add a pattern | `src/data/patterns.js` (text) + `src/data/visuals.js` (compare screens + Fix it steps). + a demo in `src/demos/` (every card has one; register it in `src/demos/index.js`) |
 | Add a story / Build brief / flaw screen / hard pair | `data/story.js` / `data/builds.js` / `data/hunts.js` / `data/subtle.js` |
 | Add a task to How much power? | `data/autonomy.js` → `tasks` |
 | Add a game | page in `src/pages/`, route in `App.jsx`, tile in `config/games.js` (steps are in that file) |
@@ -121,7 +121,7 @@ Live at **https://gb3.lokeshbhatia.com/** (the repo's own address, lkb00.github.
 | Speed round | Pace and pressure for players who already know the basics; the wrong-tap cost keeps it about skill, not luck. |
 | Sounds and haptics everywhere | Every tap gets a small physical response, and wins feel bigger. On by default for fun, with a clear one-time Turn off and separate switches. |
 | Build mode | Designing from a blank screen is the closest thing to real work; traps teach what to leave out. |
-| Four stories | Different products (agent, voice, support, coding) show the same trust ideas in new places. |
+| Six stories | Different products (agent, voice, support, coding, travel, writing) show the same trust ideas in new places. |
 | Challenge links | The fastest way for one player to bring the next one, with no accounts or server. |
 | Installable app + backup code | Feels like a real app on a phone, and progress isn't trapped in one browser. |
 | Phone: bottom tabs, back button, pinned actions | One-handed use: the main places and the next action sit where the thumb is. Games fit on one screen, so nothing needs scrolling mid-round. |

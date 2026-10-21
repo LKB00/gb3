@@ -1,0 +1,92 @@
+/* Small agent demos (src/demos/AgentDemos.jsx): plan, approval, status, log, cost, handoff, screen. */
+.dm-ag-grow {
+  flex: 1;
+  min-width: 0;
+}
+.steps.dm-ag-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 8px 0 0;
+}
+.dm-ag-steps .step-dot {
+  flex-shrink: 0;
+}
+.dm-ag-x {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+}
+.dm-ag-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border: var(--hair) solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+}
+.dm-ag-live {
+  border: 2px solid var(--caution);
+  padding: 11px;
+}
+.dm-ag-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.dm-ag-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 13px;
+}
+.dm-ag-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: var(--hair) solid var(--divider);
+}
+.dm-ag-list li:last-child {
+  border-bottom: none;
+}
+.dm-ag-time {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ink-3);
+}
+.dm-ag-off {
+  color: var(--ink-3);
+  text-decoration: line-through;
+}
+.dm-ag-pill {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 8px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.dm-ag-run {
+  background: var(--sand-dark);
+  color: var(--ink);
+}
+.dm-ag-need {
+  background: var(--attention-soft);
+  color: var(--attention);
+}
+.dm-ag-done {
+  background: var(--positive-soft);
+  color: var(--positive);
+}
+.dm-ag-warn {
+  font-size: 13px;
+  color: var(--attention);
+}

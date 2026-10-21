@@ -4,7 +4,7 @@
 // moment where you decide what the screen does. Choices move Priya's trust
 // up or down, and one early choice changes the path of the story.
 
-import { user, ai, note, buttons, steps, spinner, banner, modal, rows, toast, list, voice, card, diff } from '../mock/blocks.js';
+import { user, ai, note, buttons, steps, spinner, banner, modal, rows, toast, list, voice, card, diff, chips, variants, ph } from '../mock/blocks.js';
 
 const tidy = {
   id: 'tidy',
@@ -500,7 +500,231 @@ const pilot = {
   ],
 };
 
-export const stories = [tidy, nova, sage, pilot];
+// ---------------------------------------------------------------
+const roam = {
+  id: 'roam',
+  title: 'Family trip',
+  person: 'Fatima',
+  role: 'Mum planning a family holiday',
+  agent: 'Roam, an AI that books trips',
+  teaser: 'Fatima lets an AI book the family beach trip. Five people, one budget, no room for surprises.',
+  color: 'feedback',
+  app: 'Roam · trip planner',
+  start: 'ask',
+  trustStart: 50,
+  scenes: {
+    ask: {
+      title: 'Where to?',
+      setup: 'Fatima wants a beach trip for five: two kids, her husband, and her mum, who uses a wheelchair. She opens Roam after dinner.',
+      screen: [user('Plan a beach trip for my family in December.')],
+      question: 'What does Roam do first?',
+      choices: [
+        { label: 'Book the cheapest beach package right away', trust: -25, pattern: 'plan-first', ui: [toast('Booked: Goa package · 5 people · ₹62,000')],
+          reaction: 'Booked? Already? Fatima reads the small print: 4th floor, no lift. Her mum can’t climb stairs.', next: 'oops' },
+        { label: 'Ask two quick questions that really matter', trust: 15, pattern: 'clarifying-questions', ui: [ai('Two quick things: which dates, and does anyone need extra care?'), chips(['20–24 Dec', 'Step-free rooms'])],
+          reaction: '“Step-free, yes! My mum uses a wheelchair.” Roam asked the one thing that mattered.' },
+        { label: 'Show a trip form with 25 questions', trust: -10, pattern: 'clarifying-questions', ui: [note('Trip form · 25 questions · about 10 min')],
+          reaction: 'Fatima reaches question 9. Then the kids start fighting, and she closes the tab.' },
+      ],
+      next: 'options',
+    },
+    oops: {
+      title: 'No lift',
+      setup: 'Roam booked a hotel with no lift. Fatima’s mum can’t get to the room. Fatima is upset.',
+      screen: [user('My mum uses a wheelchair! Cancel this NOW.')],
+      question: 'What does Roam do?',
+      choices: [
+        { label: 'Say sorry, and offer a free cancel in one tap', trust: 15, pattern: 'stop-and-undo', ui: [ai('Sorry, I should have asked first. You can cancel for free until 6 pm today.'), buttons(['Find a step-free room', '!Cancel for free'])],
+          reaction: 'Cancelled in one tap, no fee. Fatima breathes out.' },
+        { label: '“Bookings are final. Please call the hotel.”', trust: -15, pattern: 'graceful-errors', ui: [banner('bad', 'Booking is final', 'Please contact the hotel.')],
+          reaction: 'Fatima spends 40 minutes on hold with a hotel in another state.' },
+        { label: 'Cancel it, and keep the ₹4,000 fee quiet', trust: -20, pattern: 'action-log', ui: [toast('Booking cancelled')],
+          reaction: 'A week later, a ₹4,000 fee shows up on her card. Nobody told her.' },
+      ],
+      next: 'options',
+    },
+    options: {
+      title: 'Pick a trip',
+      setup: 'Roam found trips that fit. Fatima wants to choose with her husband tonight, on the sofa.',
+      screen: [note('Trips that fit your dates and budget')],
+      question: 'How does Roam show the trips?',
+      choices: [
+        { label: 'One trip, called “the best one”', trust: -5, pattern: 'multiple-variants', ui: [card('Best trip for you', 'Goa · 4 nights · ₹74,000')],
+          reaction: '“Best how?” Her husband wanted Kerala. Roam never showed it.' },
+        { label: '3 different trips, each with a name and a price', trust: 15, pattern: 'multiple-variants', ui: [variants(['Goa · ₹74k', 'Kerala · ₹69k', 'Pondy · ₹58k'])],
+          reaction: 'They pick Kerala in five minutes. Mum has always wanted a boat ride.' },
+        { label: '40 trips, sorted by a “match score”', trust: -10, pattern: 'explain-why', ui: [rows([{ label: 'Trip 1', value: 'Match 0.94' }, { label: 'Trip 2', value: 'Match 0.93' }])],
+          reaction: '0.94 or 0.93? Nobody knows what that means. They give up and go to bed.' },
+      ],
+      next: 'pay',
+    },
+    pay: {
+      title: 'The real price',
+      setup: 'Fatima is ready to book Kerala. The first price said ₹69,000. Taxes and seat fees add a bit more.',
+      screen: [rows([{ label: 'Trip', value: 'Kerala · 4 nights' }, { label: 'People', value: '5' }])],
+      question: 'What does Roam show before she pays?',
+      choices: [
+        { label: 'Show ₹69,000, and add the fees after she pays', trust: -20, pattern: 'cost-estimate', ui: [toast('Paid ₹71,400')],
+          reaction: '“I said yes to ₹69,000!” Fatima feels tricked. She isn’t wrong.' },
+        { label: 'The full total, line by line, then a clear Pay button', trust: 15, pattern: 'cost-estimate', ui: [rows([{ label: 'Flights', value: '₹38,400' }, { label: 'Hotel', value: '₹27,900' }, { label: 'Taxes and fees', value: '₹5,100' }]), buttons(['!Pay ₹71,400'])],
+          reaction: '₹2,400 more than she thought. But no surprises later. Fatima pays, calm.' },
+        { label: 'Pay on its own. She already said yes to Kerala.', trust: -15, pattern: 'action-approval', ui: [toast('Booked and paid · ₹71,400')],
+          reaction: 'Fatima wanted to check the dates with her mum first. Too late.' },
+      ],
+      next: 'change',
+    },
+    change: {
+      title: 'Plans change',
+      setup: 'Two weeks later, the airline moves the flight. It now lands at 11 pm. Fatima is at work.',
+      screen: [banner('warn', 'Flight changed', 'Kochi flight now lands at 11:05 pm')],
+      question: 'What does Roam do?',
+      choices: [
+        { label: 'Quietly move everyone to a 6 am flight', trust: -20, pattern: 'action-approval', ui: [toast('Rebooked 5 people · 6:00 am flight')],
+          reaction: 'Five people, one alarm at 3 am. Grandma is not impressed.' },
+        { label: 'Tell her, and offer a better flight to pick', trust: 15, pattern: 'action-approval', ui: [ai('Your flight now lands at 11 pm. Want the 4 pm one instead? Same price.'), buttons(['Keep it', '!Switch to 4 pm'])],
+          reaction: 'One tap between meetings. Problem solved before lunch.' },
+        { label: 'Say nothing. It’s the airline’s problem.', trust: -15, pattern: 'task-status', ui: [note('Trip status: Booked')],
+          reaction: 'They find out at the airport. With six suitcases and two tired kids.' },
+      ],
+      next: 'remember',
+    },
+    remember: {
+      title: 'Next year',
+      setup: 'The family is home, sunburnt and happy. Roam offers to remember things for next time.',
+      screen: [ai('Great trip? I can remember what worked for next year.')],
+      question: 'What does Roam keep?',
+      choices: [
+        { label: 'Everything, quietly: card, passports, Mum’s health', trust: -15, pattern: 'memory-controls', ui: [note('Memory is on.')],
+          reaction: 'Next month, Roam’s ads talk about wheelchairs. Fatima feels watched.' },
+        { label: 'A short list she can see, edit and delete', trust: 15, pattern: 'memory-controls', ui: [list(['• Step-free rooms', '• Kids: 7 and 10', '• Budget around ₹70k']), buttons(['Edit', '!Save'])],
+          reaction: 'She deletes one line and keeps the rest. Next year will be easy.' },
+        { label: 'Nothing at all, ever', trust: -5, pattern: 'memory-controls', ui: [ai('I don’t remember past trips.')],
+          reaction: 'Next year, Fatima types “wheelchair” again. And again.' },
+      ],
+      next: null,
+    },
+  },
+  endings: [
+    { min: 85, title: 'Booked again for next year', text: 'The kids beg for another trip. Fatima opens Roam first, not ten tabs.', tone: 'good' },
+    { min: 50, title: 'Useful, but double-checked', text: 'Fatima lets Roam search, then books everything herself. Just in case.', tone: 'ok' },
+    { min: 25, title: 'Back to ten browser tabs', text: 'Next year, Fatima plans the trip the old way. Slow, but safe.', tone: 'warn' },
+    { min: 0, title: 'Warned the whole family', text: 'Fatima tells 40 relatives in the family chat: “Never let an AI book your holiday.”', tone: 'bad' },
+  ],
+};
+
+// ---------------------------------------------------------------
+const quill = {
+  id: 'quill',
+  title: 'Cover letter',
+  person: 'Zara',
+  role: 'Nurse, applying for her first design job',
+  agent: 'Quill, an AI writing helper',
+  teaser: 'Zara’s first cover letter is due tonight. An AI helps her write it. But does it sound like her?',
+  color: 'output',
+  app: 'Quill · writing helper',
+  start: 'blank',
+  trustStart: 50,
+  scenes: {
+    blank: {
+      title: 'The blank page',
+      setup: 'Zara is a nurse who wants to become a designer. Her first cover letter is due tonight. The page is blank. So is her mind.',
+      screen: [ph('Write anything…')],
+      question: 'What does Quill show on the empty page?',
+      choices: [
+        { label: '“Ask me anything!”', trust: -5, pattern: 'prompt-starters', ui: [note('Ask me anything!')],
+          reaction: 'Anything? Zara stares at the screen. Then she makes tea instead.' },
+        { label: 'A few starters made for her job hunt', trust: 15, pattern: 'prompt-starters', ui: [chips([':pen Draft a cover letter from my CV', ':file Match my CV to a job ad'])],
+          reaction: 'Zara taps the first one. Ten seconds later, she has a start.' },
+        { label: 'A pop-up for a 20-minute writing video', trust: -10, pattern: 'contextual-nudge', ui: [modal('New! Cover letter masterclass', '20-minute video', ['Later', '!Watch now'])],
+          reaction: 'Zara closes it fast. The page is still blank, and now she’s annoyed.' },
+      ],
+      next: 'draft',
+    },
+    draft: {
+      title: 'First draft',
+      setup: 'Quill reads Zara’s CV and the job ad. The first draft is ready.',
+      screen: [user('Write a cover letter for the junior designer job at Brightly.')],
+      question: 'How does Quill hand over the draft?',
+      choices: [
+        { label: 'One fixed letter: copy it, or start over', trust: -10, pattern: 'editable-output', ui: [card('Cover letter', 'Dear Hiring Manager, I am writing to apply…'), buttons(['Copy', ':retry Start over'])],
+          reaction: 'One line is wrong. To fix it, Zara has to throw away the whole letter.' },
+        { label: 'A draft she can change right on the page', trust: 15, pattern: 'editable-output', ui: [card('Cover letter · draft 1', 'Dear Brightly team, for six years I helped scared patients feel calm…'), buttons([':edit Edit', 'Copy'])],
+          reaction: 'Zara changes two words and smiles. Now it sounds like her.' },
+        { label: 'Send it to Brightly for her, to save time', trust: -25, pattern: 'action-approval', ui: [toast('Cover letter sent to Brightly')],
+          reaction: 'Zara hadn’t even read it. Her heart drops to her shoes.', next: 'sent' },
+      ],
+      next: 'facts',
+    },
+    sent: {
+      title: 'Already sent',
+      setup: 'Quill sent the letter without asking. It says Zara has “5 years of design experience”. She has none.',
+      screen: [user('You SENT it?! I’m not a designer yet!')],
+      question: 'What does Quill do now?',
+      choices: [
+        { label: 'Own it, show what was sent, and draft a fix', trust: 15, pattern: 'action-log', ui: [ai('I sent it at 9:14 pm. That was wrong, and line 2 isn’t true.'), buttons(['See what was sent', '!Draft a correction'])],
+          reaction: 'A short, honest note goes out. The recruiter replies: “Thanks for being honest.”' },
+        { label: '“Sent emails can’t be changed.”', trust: -10, pattern: 'graceful-errors', ui: [banner('bad', 'Can’t undo', 'Email already sent.')],
+          reaction: 'Zara writes the fix herself, with shaky hands.' },
+        { label: '“Great letter! Good luck!”', trust: -15, pattern: 'graceful-errors', ui: [ai('Great letter! Good luck! 🍀')],
+          reaction: 'Zara stares at the screen. Is it even listening?' },
+      ],
+      next: 'facts',
+    },
+    facts: {
+      title: 'A fact to check',
+      setup: 'Quill adds a line about Brightly’s team size. It found the number on an old page.',
+      screen: [card('Cover letter · paragraph 2', 'I’d love to join your team of 200 designers…')],
+      question: 'How does Quill handle the fact?',
+      choices: [
+        { label: 'Keep it. It sounds nice.', trust: -15, pattern: 'citations', ui: [ai('Added a line about your 200 designers.')],
+          reaction: 'Brightly has 80 designers. The recruiter notices. Ouch.' },
+        { label: 'Link the source, and say it may be old', trust: 15, pattern: 'citations', ui: [ai('Brightly has 200 designers [1]. That page is old, so please check.'), note(':file [1] Brightly “About us” page · 2022')],
+          reaction: 'Zara checks. It’s 80 now. Fixed before anyone saw it.' },
+        { label: 'Cut every fact about Brightly, to be safe', trust: -5, pattern: 'citations', ui: [note('Removed 3 lines about Brightly')],
+          reaction: 'Safe, but flat. The letter could be for any company now.' },
+      ],
+      next: 'tone',
+    },
+    tone: {
+      title: 'Sounds like a robot',
+      setup: 'Zara reads paragraph 3. It sounds like a robot. She taps thumbs down.',
+      screen: [ai('I am a passionate, results-driven team player.'), buttons([':up', ':down'])],
+      question: 'What happens after the thumbs down?',
+      choices: [
+        { label: '“Thanks for your feedback!” and nothing else', trust: -5, pattern: 'feedback-loop', ui: [toast('Thanks for your feedback!')],
+          reaction: 'Paragraph 3 still sounds like a robot. Zara sighs.' },
+        { label: 'Ask what’s wrong in one tap, then fix that part', trust: 15, pattern: 'feedback-loop', ui: [chips(['Too stiff', 'Too long', 'Not true'])],
+          reaction: 'She taps “Too stiff”. The new line sounds like a real person. Like her.' },
+        { label: 'Rewrite the whole letter from scratch', trust: -10, pattern: 'reply-to-part', ui: [spinner('Rewriting your whole letter…')],
+          reaction: 'Her favourite opening line is gone. She only hated one paragraph!' },
+      ],
+      next: 'final',
+    },
+    final: {
+      title: 'Last check',
+      setup: 'It’s 11 pm. The letter is almost ready. Quill checks it one last time.',
+      screen: [note('Final check · 6 fixes found')],
+      question: 'How does Quill show its fixes?',
+      choices: [
+        { label: 'Make all 6 fixes quietly, then say “Perfect!”', trust: -10, pattern: 'preview-changes', ui: [note('Perfect! ✨')],
+          reaction: 'One “fix” changed Brightly to Brightley. Zara spots it after she sends.' },
+        { label: 'Show each fix, before and after, to keep or skip', trust: 15, pattern: 'preview-changes', ui: [diff([['team player', 'calm under pressure'], ['excited to', 'ready to']]), buttons(['Skip', '!Keep fixes'])],
+          reaction: 'Zara keeps four and skips two. She hits send at 11:04, proud.' },
+        { label: 'Underline 40 tiny issues in red', trust: -5, pattern: 'inline-suggestions', ui: [note('40 suggestions · tone, commas, word choice', { tone: 'warn' })],
+          reaction: 'Red everywhere. Zara feels like she’s back in school.' },
+      ],
+      next: null,
+    },
+  },
+  endings: [
+    { min: 85, title: 'Got the interview', text: 'Two weeks later, Brightly calls. Zara screams into a pillow, then says yes.', tone: 'good' },
+    { min: 50, title: 'Helpful, with a red pen', text: 'Zara keeps Quill for first drafts, but checks every line herself.', tone: 'ok' },
+    { min: 25, title: 'Back to a blank page', text: 'Zara writes the next letter alone. It takes her all weekend.', tone: 'warn' },
+    { min: 0, title: 'Deleted after one night', text: 'Zara deletes Quill and tells her friends: “It told lies in my name.”', tone: 'bad' },
+  ],
+};
+
+export const stories = [tidy, nova, sage, pilot, roam, quill];
 export const getStory = (id) => stories.find((s) => s.id === id);
 // Kept for older imports.
 export const story = tidy;

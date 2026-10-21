@@ -86,6 +86,11 @@ export const realExamples = {
     { product: 'ChatGPT agent', company: 'OpenAI', what: 'Asks you to confirm before important actions like buying or sending.' },
     { product: 'Claude Code', company: 'Anthropic', what: 'Asks permission before running commands or editing files, unless you allow them.' },
   ],
+  'sandbox-preview': [
+    { product: 'Terraform', company: 'HashiCorp', what: '“terraform plan” shows exactly what it will create, change or delete. Nothing happens until you run apply.' },
+    { product: 'Stripe test mode', company: 'Stripe', what: 'Test mode lets you try payments with test cards. No real money moves.' },
+    { product: 'Mailchimp', company: 'Intuit', what: 'Lets you send a test email and preview it before sending a campaign to your list.' },
+  ],
   'task-status': [
     { product: 'ChatGPT deep research', company: 'OpenAI', what: 'Works for several minutes in the background, so you can come back to the report.' },
     { product: 'Fin', company: 'Intercom', what: 'An AI support agent that hands the chat to a human when it cannot help.' },

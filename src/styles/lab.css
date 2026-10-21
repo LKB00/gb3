@@ -105,12 +105,10 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+/* Phones: the step bar is just progress. The current step's name is the question right below it, so it isn't shown twice. */
 @media (max-width: 560px) {
-  .lab-step:not(.is-current) .lab-step-label {
+  .lab-step-label {
     display: none;
-  }
-  .lab-step.is-current {
-    flex: 3 1 0;
   }
 }
 .lab-preview {

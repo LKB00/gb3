@@ -1,4 +1,4 @@
-import { Check, Play, RotateCcw, Square } from 'lucide-react';
+import { Check, ChevronLeft, ChevronRight, Play, RotateCcw, Square } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTypewriter } from './useTypewriter';
 
@@ -101,6 +101,50 @@ export function MultipleVariants() {
         </button>
         {picked && <span className="demo-ok"><Check size={14} strokeWidth={1.75} aria-hidden /> Using option {picked}: “{set[picked].text}”</span>}
       </div>
+    </div>
+  );
+}
+
+/* ---------- Versions & retry ---------- */
+
+const retries = {
+  '': ['Good coffee, good mornings.', 'Your daily cup of calm.', 'Brewed slow, served warm.'],
+  Shorter: ['Pure bean joy.', 'Sip. Smile. Repeat.', 'Warm cups.'],
+  Funnier: ['Espresso yourself.', 'We’ve bean waiting for you.', 'Deja brew, every day.'],
+};
+
+export function RegenerateHistory() {
+  const [versions, setVersions] = useState([{ text: 'Fresh beans, warm hearts.', hint: '' }]);
+  const [idx, setIdx] = useState(0);
+
+  const retry = (hint) => {
+    const used = versions.filter((v) => v.hint === hint).length;
+    const pool = retries[hint];
+    setVersions((vs) => [...vs, { text: pool[used % pool.length], hint }]);
+    setIdx(versions.length);
+  };
+
+  const v = versions[idx];
+
+  return (
+    <div className="demo-stack">
+      <div className="bubble bubble-user">Tagline for a coffee shop</div>
+      <div className="bubble bubble-ai">
+        <strong>{v.text}</strong>
+        {v.hint && <span className="demo-muted"> · asked: {v.hint.toLowerCase()}</span>}
+      </div>
+      <div className="row">
+        <button className="icon-btn dm-io-nav" onClick={() => setIdx(idx - 1)} disabled={idx === 0} aria-label="Older version"><ChevronLeft size={16} strokeWidth={1.75} aria-hidden /></button>
+        <span className="small" aria-live="polite">{idx + 1} / {versions.length}</span>
+        <button className="icon-btn dm-io-nav" onClick={() => setIdx(idx + 1)} disabled={idx === versions.length - 1} aria-label="Newer version"><ChevronRight size={16} strokeWidth={1.75} aria-hidden /></button>
+        <button className="btn btn-ghost btn-sm" onClick={() => retry('')}><RotateCcw size={14} strokeWidth={1.75} aria-hidden /> Retry</button>
+      </div>
+      <div className="chips">
+        {['Shorter', 'Funnier'].map((h) => (
+          <button key={h} className="chip" onClick={() => retry(h)}>{h}</button>
+        ))}
+      </div>
+      <p className="demo-note">Tap Retry or Funnier a few times, then flip back with the arrows. Nothing gets lost.</p>
     </div>
   );
 }

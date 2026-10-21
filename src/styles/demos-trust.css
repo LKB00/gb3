@@ -1,0 +1,61 @@
+/* Extra classes for the trust demos (src/demos/TrustDemos.jsx). */
+.dm-tr-list {
+  display: flex;
+  flex-direction: column;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.dm-tr-list li {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 36px;
+  padding: 4px 0;
+  border-bottom: var(--hair) solid var(--divider);
+}
+.dm-tr-list li:last-child {
+  border-bottom: none;
+}
+.dm-tr-list svg {
+  flex: none;
+  color: var(--ink-2);
+}
+.dm-tr-grow {
+  flex: 1 1 140px;
+  min-width: 0;
+}
+.dm-tr-off {
+  color: var(--ink-3);
+  text-decoration: line-through;
+}
+.dm-tr-panel {
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: var(--sand);
+}
+.dm-tr-panel .label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.dm-tr-tiles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.dm-tr-tile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 10px;
+  background: var(--sand);
+}
+.dm-tr-tile .avatar {
+  flex: none;
+}
+.dm-tr-start {
+  align-self: flex-start;
+}

@@ -94,6 +94,9 @@ export default function Patterns() {
     return { text: near.length ? `No cards match “${query}”. Maybe one of these?` : `No cards match “${query}”. Try another word.`, action: 'Show all cards', near };
   };
   const e = list.length ? null : empty();
+  const card = (p) => (
+    <PatternCard key={p.id} pattern={p} number={patterns.indexOf(p) + 1} passed={passed.includes(p.id)} stars={stars[p.id] || (passed.includes(p.id) ? 1 : 0)} />
+  );
   const clearFilters = () => setParams(e?.keep && query ? { q: query } : {}, { replace: true });
 
   return (
@@ -146,9 +149,25 @@ export default function Patterns() {
       </div>
 
       {list.length ? (
-        <div className="card-grid">
-          {list.map((p) => <PatternCard key={p.id} pattern={p} number={patterns.indexOf(p) + 1} passed={passed.includes(p.id)} stars={stars[p.id] || (passed.includes(p.id) ? 1 : 0)} />)}
-        </div>
+        category === 'all' ? (
+          // All groups: one short section per group, so all the cards read as 7 small sets.
+          categories.map((c) => {
+            const inGroup = list.filter((p) => p.category === c.id);
+            if (!inGroup.length) return null;
+            const all = patterns.filter((p) => p.category === c.id);
+            const got = all.filter((p) => passed.includes(p.id)).length;
+            return (
+              <section key={c.id} className="cards-group" aria-labelledby={`cg-${c.id}`}>
+                <h2 id={`cg-${c.id}`} className="cards-group-title">
+                  {c.name} <span className="cards-group-sub">{got} of {all.length}</span>
+                </h2>
+                <div className="card-grid">{inGroup.map(card)}</div>
+              </section>
+            );
+          })
+        ) : (
+          <div className="card-grid">{list.map(card)}</div>
+        )
       ) : (
         <div className="empty">
           <p>{e.text}</p>

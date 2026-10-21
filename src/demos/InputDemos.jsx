@@ -1,4 +1,4 @@
-import { ClipboardList, FileText, Palette, PenLine, RotateCcw } from 'lucide-react';
+import { ClipboardList, FileText, Palette, PenLine, Plus, Quote, RotateCcw, Sparkles, X } from 'lucide-react';
 import { useState } from 'react';
 import { useTypewriter } from './useTypewriter';
 
@@ -90,6 +90,156 @@ export function ClarifyingQuestion() {
       {step === 'answer' && !tw.running && (
         <button className="btn btn-ghost" onClick={() => { setStep('ask'); setChoice(null); }}><RotateCcw size={14} strokeWidth={1.75} aria-hidden /> Pick another answer</button>
       )}
+    </div>
+  );
+}
+
+/* ---------- Visible context ---------- */
+
+const files = {
+  'Q3-report.pdf': 'Sales grew 12% in Q3.',
+  'Q2-report-OLD.pdf': 'Sales fell 3% in Q2.',
+  'Team-notes.doc': 'The team wants one more designer.',
+};
+
+export function VisibleContext() {
+  const [using, setUsing] = useState(['Q3-report.pdf', 'Q2-report-OLD.pdf']);
+  const [answer, setAnswer] = useState('');
+  const spare = Object.keys(files).filter((f) => !using.includes(f));
+
+  const ask = () =>
+    setAnswer(using.length ? `From ${using.join(' + ')}: ${using.map((f) => files[f]).join(' ')}` : 'I can’t see any files yet. Add one so I know what “this” is.');
+
+  return (
+    <div className="demo-stack">
+      {answer && <div className="bubble bubble-ai">{answer}</div>}
+      <div className="chips" aria-label="Files the AI can see">
+        {using.map((f) => (
+          <span key={f} className="dm-io-tag">
+            <FileText size={14} strokeWidth={1.75} aria-hidden /> {f}
+            <button onClick={() => setUsing((u) => u.filter((x) => x !== f))} aria-label={`Remove ${f}`}>
+              <X size={14} strokeWidth={1.75} aria-hidden />
+            </button>
+          </span>
+        ))}
+        {spare.map((f) => (
+          <button key={f} className="chip dm-io-add-chip" onClick={() => setUsing((u) => [...u, f])}>
+            <Plus size={14} strokeWidth={1.75} aria-hidden /> {f}
+          </button>
+        ))}
+      </div>
+      <div className="composer">
+        <input value="Summarize this." readOnly aria-label="Prompt" />
+        <button className="btn btn-primary" onClick={ask}>Ask</button>
+      </div>
+      <p className="demo-note">Tap Ask. Then remove the OLD file and ask again. The answer follows the tags.</p>
+    </div>
+  );
+}
+
+/* ---------- Structured controls ---------- */
+
+const replies = {
+  Friendly: [
+    'Hi Sam! Friday works. See you then!',
+    'Hi Sam, thanks for the update! Friday works great for me. See you then!',
+    'Hi Sam, thanks so much for the update! Friday works great for me. I’ll bring the new mockups so we can look at them together. See you then!',
+  ],
+  Formal: [
+    'Dear Sam, Friday suits me. Regards.',
+    'Dear Sam, thank you for the update. Friday suits me well. Kind regards.',
+    'Dear Sam, thank you for the update. Friday suits me well. I will bring the latest mockups for us to review together. Kind regards.',
+  ],
+};
+const lengths = ['Short', 'Medium', 'Long'];
+
+export function StructuredControls() {
+  const [tone, setTone] = useState('Friendly');
+  const [len, setLen] = useState(1);
+
+  return (
+    <div className="demo-stack">
+      <div className="bubble bubble-ai">{replies[tone][len]}</div>
+      <div className="row">
+        <span className="label">Tone</span>
+        <div className="chips">
+          {Object.keys(replies).map((t) => (
+            <button key={t} className={'chip' + (tone === t ? ' chip-on' : '')} aria-pressed={tone === t} onClick={() => setTone(t)}>{t}</button>
+          ))}
+        </div>
+      </div>
+      <label className="row dm-io-range">
+        <span className="label">Length</span>
+        <input type="range" min={0} max={2} step={1} value={len} onChange={(e) => setLen(Number(e.target.value))} aria-valuetext={lengths[len]} />
+        <span className="small">{lengths[len]}</span>
+      </label>
+      <p className="demo-note">Tap a tone or slide the length. No magic words needed.</p>
+    </div>
+  );
+}
+
+/* ---------- Contextual nudge ---------- */
+
+const thread = ['Ana: Can we move launch to Nov 4?', 'Ben: Fine by me. Who owns pricing?', 'Ana: I’ll take pricing. Dark mode still open.'];
+
+export function ContextualNudge() {
+  const [state, setState] = useState('offer'); // offer | summary | closed
+
+  return (
+    <div className="demo-stack">
+      <strong>Re: Q3 roadmap (14 replies)</strong>
+      <ul className="dm-io-thread">
+        {thread.map((m) => <li key={m}>{m}</li>)}
+        <li className="demo-muted">+ 11 more replies</li>
+      </ul>
+      {state === 'offer' && (
+        <div className="chips">
+          <button className="chip" onClick={() => setState('summary')}><Sparkles size={14} strokeWidth={1.75} aria-hidden /> Summarize this thread</button>
+          <button className="chip" onClick={() => setState('closed')} aria-label="No thanks, hide this idea"><X size={14} strokeWidth={1.75} aria-hidden /></button>
+        </div>
+      )}
+      {state === 'summary' && <div className="bubble bubble-ai">3 things: launch moves to Nov 4. Ana owns pricing. Dark mode is still open.</div>}
+      {state === 'closed' && <p className="demo-muted">Got it. No more ideas on this thread.</p>}
+      <p className="demo-note">The idea shows up only on long threads. Try it, or close it for good.</p>
+    </div>
+  );
+}
+
+/* ---------- Reply to a part ---------- */
+
+const plan = [
+  { text: 'Interview 5 users about how they plan their week.', short: 'Interview 5 users.', why: '5 talks find most big problems fast, and cost little.' },
+  { text: 'Run an online survey with 200 people to check the ideas.', short: 'Survey 200 people.', why: 'The survey checks if what 5 people said is true for many.' },
+  { text: 'Build a clickable prototype and test it with the same users.', short: 'Test a prototype.', why: 'People can try the idea before anyone builds it for real.' },
+];
+
+export function ReplyToPart() {
+  const [parts, setParts] = useState(plan.map((p) => p.text));
+  const [sel, setSel] = useState(null);
+  const [reply, setReply] = useState('');
+
+  const shorten = () => { setParts((ps) => ps.map((p, i) => (i === sel ? plan[i].short : p))); setReply(''); };
+
+  return (
+    <div className="demo-stack">
+      <div className="bubble bubble-ai">
+        {parts.map((p, i) => (
+          <button key={i} className={'dm-io-part' + (sel === i ? ' dm-io-part-on' : '')} aria-pressed={sel === i} onClick={() => { setSel(i); setReply(''); }}>
+            {i + 1}) {p}
+          </button>
+        ))}
+      </div>
+      {sel !== null && (
+        <>
+          <p className="dm-io-quote"><Quote size={14} strokeWidth={1.75} aria-hidden /> {parts[sel]}</p>
+          <div className="row">
+            <button className="btn btn-ghost btn-sm" onClick={() => setReply(plan[sel].why)}><Sparkles size={14} strokeWidth={1.75} aria-hidden /> Explain</button>
+            <button className="btn btn-ghost btn-sm" onClick={shorten} disabled={parts[sel] === plan[sel].short}>Shorten</button>
+          </div>
+        </>
+      )}
+      {reply && <div className="bubble bubble-ai">{reply}</div>}
+      <p className="demo-note">Tap one step, then Explain or Shorten. Only that part changes.</p>
     </div>
   );
 }

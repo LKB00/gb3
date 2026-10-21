@@ -261,6 +261,39 @@ export const subtle = [
     { type: 'toggle', label: 'Let the agent handle my email', on: true, pin: 'All or nothing' },
     rows([{ label: 'Sort and label', value: 'Auto' }, { label: 'Draft replies', value: 'Ask me' }, { label: 'Send', value: 'Never' }], { pin: 'Choose how much it does' })
   ),
+  pair(
+    'stream-words',
+    'streaming-response',
+    'The AI is writing a long answer.',
+    [user('How do vaccines work?')],
+    { type: 'spinner', text: 'Thinking… 0:25', pin: 'Nothing to read yet' },
+    ai('Vaccines teach your body to spot a germ early, so', { caret: true, pin: 'Words show up as they come' })
+  ),
+  pair(
+    'saw-photo',
+    'show-understanding',
+    'You show the AI a photo of your fridge.',
+    [{ type: 'image', height: 70 }, user('What can I cook tonight?')],
+    ai('Here are 3 dinner ideas!', { pin: 'What did it see?' }),
+    ai('I see eggs, spinach and feta. Here are 3 dinner ideas!', { pin: 'Says what it saw first' })
+  ),
+  pair(
+    'keep-versions',
+    'regenerate-history',
+    'You asked the AI for a new tagline.',
+    [user('A tagline for our bakery'), ai('Warm bread, warmer mornings.')],
+    buttons([':retry Regenerate'], { pin: 'The old one is lost' }),
+    buttons([':left', '2 of 2', ':right', ':retry Regenerate'], { pin: 'Flip back to older ones' })
+  ),
+  pair(
+    'reply-part',
+    'reply-to-part',
+    'You want to change one day of a trip plan.',
+    [ai('Your 3 days in Rome:'), note('Day 1: Colosseum and Forum')],
+    note('Day 2: Vatican, Sistine Chapel, St Peter’s', { pin: 'Can only reply to it all' }),
+    note('Day 2: Vatican, Sistine Chapel, St Peter’s · Reply', { pin: 'Reply to just this day' }),
+    [ph('Ask anything…')]
+  ),
 ];
 
 export const getSubtle = (id) => subtle.find((s) => s.id === id);

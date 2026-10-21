@@ -1024,6 +1024,69 @@ export const visuals = {
     },
   },
 
+  'sandbox-preview': {
+    compare: {
+      bad: {
+        caption: 'Yes or no, with no idea what happens',
+        blocks: [
+          modal('Send welcome email to 40 members?', 'This can’t be undone.', ['Cancel', '!Send'], { pin: 'Can’t see what people get' }),
+          toast('Sent. 3 people got “Hi ,”', '', { pin: 'Found out too late' }),
+        ],
+      },
+      good: {
+        caption: 'A practice run shows the real result',
+        blocks: [
+          banner('info', 'Practice run', 'Nothing sent yet.', { pin: 'Safe, and clearly labelled' }),
+          rows(
+            [
+              { label: 'Asha Rao', value: 'Hi Asha,', tag: 'OK', tone: 'ok' },
+              { label: 'Ben Ito', value: 'Hi Ben,', tag: 'OK', tone: 'ok' },
+              { label: '3 people', value: 'Hi ,', tag: 'No name', tone: 'warn' },
+            ],
+            { pin: 'Odd bit flagged before it counts' }
+          ),
+          buttons(['Fix and rerun', '!Send 40 for real']),
+        ],
+      },
+    },
+    lab: {
+      goal: 'An AI agent will email 40 new members. Emails can’t be unsent. Let people see the result first.',
+      frame: [slot('run'), slot('show'), slot('finish')],
+      decisions: [
+        {
+          id: 'run',
+          label: 'Before sending',
+          options: [
+            opt('Just send', false, '40 emails can’t be unsent. Any mistake goes out to everyone.', [toast('Sent to 40 members')]),
+            opt('Ask "Send to 40?"', false, 'A yes or no can’t show that 3 people get “Hi ,”.', [modal('Send to 40 members?', '', ['Cancel', '!Send'])]),
+            opt('Do a practice run first', true, 'It builds every email for real, but sends none. Safe to check.', [banner('info', 'Practice run', 'Nothing sent yet.')]),
+          ],
+        },
+        {
+          id: 'show',
+          label: 'The practice run shows…',
+          options: [
+            opt('"Looks fine ✓"', false, 'A thumbs up hides the odd bits. People can’t check a summary.', [note('All 40 emails look fine ✓')]),
+            opt('Each email, odd ones flagged', true, 'People see who gets what, and the problem jumps out.', [
+              rows([
+                { label: 'Asha Rao', value: 'Hi Asha,', tag: 'OK', tone: 'ok' },
+                { label: '3 people', value: 'Hi ,', tag: 'No name', tone: 'warn' },
+              ]),
+            ]),
+          ],
+        },
+        {
+          id: 'finish',
+          label: 'Then people can…',
+          options: [
+            opt('Only press Send', false, 'The run found a problem, but there is no way to fix it.', [buttons(['!Send'])]),
+            opt('Fix it, or send for real', true, 'One clear tap makes it real. Or fix it and try again, still safe.', [buttons(['Fix and rerun', '!Send 40 for real'])]),
+          ],
+        },
+      ],
+    },
+  },
+
   'task-status': {
     compare: {
       bad: {

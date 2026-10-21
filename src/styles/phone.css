@@ -279,12 +279,24 @@
   .build-piece { min-height: 48px; }
 
   /* Lists and cards */
-  .card-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-  .pattern-card .thumb { height: 96px; padding: 8px 10px 0; }
-  .pattern-card .thumb .m-frame { width: 200%; transform: scale(0.5); }
-  .pattern-card-body { padding: 10px 12px 12px; gap: 6px; }
-  .pattern-card-body h3 { font-size: 14px; line-height: 19px; }
-  .pattern-card-body p { display: none; }
+  /* Cards: one readable row each (small picture, name, one line on what it does) instead of tiny tiles */
+  .card-grid { grid-template-columns: 1fr; gap: 8px; }
+  .cards-group { margin-top: 24px; }
+  .pattern-card { display: grid; grid-template-columns: 84px 1fr; }
+  .pattern-card .thumb { height: auto; min-height: 84px; padding: 8px 0 0 8px; contain: size; } /* the scaled picture must not stretch the row */
+  .pattern-card .thumb .m-frame { width: 300%; transform: scale(0.34); }
+  .pattern-card .card-no { display: none; }
+  .pattern-card-body { padding: 12px 14px; gap: 4px; justify-content: center; }
+  .pattern-card-meta { top: 13px; right: 14px; }
+  .pattern-card-body h3 { font-size: 15px; line-height: 20px; }
+  .pattern-card-body p {
+    font-size: 13px;
+    line-height: 18px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
   .daily-banner { padding: 14px 16px; }
   .daily-banner .btn { width: 100%; }
 }

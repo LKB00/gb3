@@ -251,6 +251,7 @@ export const patterns = [
     dos: ['Show context as tags by the input', 'Let people add or remove context', 'Say when something was too big and got cut'],
     donts: ['Use hidden context people can’t see', 'Quietly use an old or wrong file'],
     examples: ['Coding assistants showing open files', 'Design tools: “Using 3 selected frames”'],
+    demo: 'VisibleContext',
   },
   {
     id: 'structured-controls',
@@ -266,6 +267,7 @@ export const patterns = [
     dos: ['Pick the 2 or 3 most common changes', 'Show the current setting clearly', 'Keep a free text box for everything else'],
     donts: ['Show 15 settings up front', 'Hide what each control does'],
     examples: ['Writing tools with tone and length menus', 'Image tools with style and size presets'],
+    demo: 'StructuredControls',
   },
   {
     id: 'regenerate-history',
@@ -280,6 +282,7 @@ export const patterns = [
     dos: ['Show which version this is: 2 / 3', 'Offer quick hints for the retry, like shorter or funnier', 'Keep edits with each version'],
     donts: ['Overwrite the old answer', 'Hide earlier versions in a menu'],
     examples: ['Chat assistants with ‹ 2/3 › arrows', 'Image tools with a history strip'],
+    demo: 'RegenerateHistory',
   },
   {
     id: 'preview-changes',
@@ -294,6 +297,7 @@ export const patterns = [
     dos: ['Highlight what was removed and added', 'Let people accept or reject each change', 'Show a count, like “12 changes”'],
     donts: ['Apply everything without a word', 'Show only the result, with no “before”'],
     examples: ['Code assistants showing diffs', 'Docs with “suggested edits” mode'],
+    demo: 'PreviewChanges',
   },
   {
     id: 'set-expectations',
@@ -309,6 +313,7 @@ export const patterns = [
     dos: ['Name 2 or 3 strengths, with examples', 'Say the most important limit', 'Keep a small “can make mistakes” note in view'],
     donts: ['Over-promise: “Knows everything!”', 'Bury the limits in the fine print'],
     examples: ['“I can’t see your files” notes', 'Beta labels on new AI features'],
+    demo: 'SetExpectations',
   },
   {
     id: 'explain-why',
@@ -323,6 +328,7 @@ export const patterns = [
     dos: ['Give 2 or 3 short, real reasons', 'Tie reasons to the person’s own data', 'Let people say “That’s not right”'],
     donts: ['Show model jargon like scores and weights', 'Make up nice-sounding reasons that aren’t the real ones'],
     examples: ['“Because you watched X”', 'Spam filters saying why a mail was flagged'],
+    demo: 'ExplainWhy',
   },
   {
     id: 'memory-controls',
@@ -339,6 +345,7 @@ export const patterns = [
     dos: ['Show a small “Memory updated” note', 'Keep one place to see and delete memories', 'Offer a private chat that isn’t remembered'],
     donts: ['Save sensitive things without saying so', 'Make delete hard to find'],
     examples: ['“Manage memory” pages in chat assistants', 'Temporary chats that are not remembered'],
+    demo: 'MemoryControls',
   },
   {
     id: 'plan-first',
@@ -354,6 +361,7 @@ export const patterns = [
     dos: ['Keep the plan short: 3 to 7 steps', 'Let people edit, add or remove steps', 'Show how long it takes or what it costs'],
     donts: ['Start before showing the plan', 'Show a 40-step technical plan'],
     examples: ['Research agents confirming the scope', 'Coding agents proposing a plan before editing'],
+    demo: 'PlanFirst',
   },
   {
     id: 'action-approval',
@@ -369,6 +377,24 @@ export const patterns = [
     dos: ['Show exactly what will happen: who, what, how many', 'Make Cancel as easy as Approve', 'Let people set how much freedom the AI has'],
     donts: ['Ask about everything, until people stop reading', 'Ask vague questions like “Proceed?”'],
     examples: ['Agents asking before sending an email', 'Shopping agents confirming the total before paying'],
+    demo: 'ActionApproval',
+  },
+  {
+    id: 'sandbox-preview',
+    title: 'Try it safely first',
+    category: 'agents',
+    keywords: ['dry run', 'sandbox', 'test mode', 'practice run', 'simulation', 'rehearsal', 'what if', 'agent'],
+    summary: 'Before a big action, the AI does a practice run and shows what would really happen.',
+    problem:
+      'Some AI actions can’t be taken back: emails sent, files deleted, money paid. A plain “Are you sure?” doesn’t show the real result, so mistakes slip through.',
+    solution:
+      'Run the action in a safe practice mode first. Show the real outcome: who gets what, what gets deleted, what money moves. Flag anything odd. Then one clear tap makes it real, or people fix it and run again.',
+    when: ['Actions that are hard to undo: send, delete, pay, post', 'One action that touches many people, files or records'],
+    avoid: ['Small, easy-to-undo steps. A practice run there is just a wait'],
+    dos: ['Show the real result, not a summary: names, files, amounts', 'Point out anything odd before people decide', 'Label it clearly: “Practice run. Nothing sent yet”'],
+    donts: ['Let practice mode touch real data', 'Make the real run different from the practice run'],
+    examples: ['Email tools that send a test first', 'Cloud tools that show a plan before applying it'],
+    demo: 'SandboxPreview',
   },
   {
     id: 'task-status',
@@ -385,6 +411,7 @@ export const patterns = [
     dos: ['Show status: running, needs you, done', 'Let people leave and come back', 'Hand off to a human with the full chat'],
     donts: ['Lock the screen until it’s finished', 'Trap people in a bot loop with no human'],
     examples: ['Agents that notify when a report is ready', 'Support chats with “Talk to a person”'],
+    demo: 'TaskStatus',
   },
   {
     id: 'contextual-nudge',
@@ -401,6 +428,7 @@ export const patterns = [
     dos: ['Tie the idea to what the person is doing', 'Keep it small and easy to close', 'Back off after a “no”'],
     donts: ['Show a pop-up on every page', 'Hide the only way to turn ideas off'],
     examples: [],
+    demo: 'ContextualNudge',
   },
   {
     id: 'reply-to-part',
@@ -417,6 +445,7 @@ export const patterns = [
     dos: ['Show the quoted part above the input', 'Offer quick actions like Explain or Shorten', 'Leave the rest of the answer alone'],
     donts: ['Make people copy and paste text back in', 'Rewrite the whole answer for a small question'],
     examples: [],
+    demo: 'ReplyToPart',
   },
   {
     id: 'show-understanding',
@@ -433,6 +462,7 @@ export const patterns = [
     dos: ['Show the words or areas it picked up, live', 'Make the wrong part easy to fix', 'Show clearly when it is listening or reading'],
     donts: ['Act on a guess without showing it', 'Hide what it picked out of the image'],
     examples: [],
+    demo: 'ShowUnderstanding',
   },
   {
     id: 'autonomy-dial',
@@ -466,6 +496,7 @@ export const patterns = [
     dos: ['Write each line so anyone can read it', 'Link each step to what it changed', 'Offer save points to go back to'],
     donts: ['Show only raw technical logs', 'Make actions impossible to reverse'],
     examples: [],
+    demo: 'ActionLog',
   },
   {
     id: 'interrupt-redirect',
@@ -499,6 +530,7 @@ export const patterns = [
     dos: ['Show the estimate next to the Start button', 'Offer a cheaper draft option', 'Warn before a limit is reached'],
     donts: ['Reveal the cost only after the task', 'Hide usage on a billing page'],
     examples: [],
+    demo: 'CostEstimate',
   },
   {
     id: 'agent-handoff',
@@ -515,6 +547,7 @@ export const patterns = [
     dos: ['Name each helper by its job, not a code name', 'Show hand-offs as they happen', 'Let people open one helper’s work to check it'],
     donts: ['Show one “AI is working” for a 10-helper job', 'Let helpers pass the blame: “The research helper said so”'],
     examples: [],
+    demo: 'AgentHandoff',
   },
   {
     id: 'screen-control',
@@ -531,6 +564,7 @@ export const patterns = [
     dos: ['Ask once per site, and say what it will do there', 'Show a border or banner while the AI is in control', 'Hand control back for passwords and payments'],
     donts: ['Ask for access to “everything” up front', 'Work in a hidden window nobody can watch', 'Type passwords for people'],
     examples: [],
+    demo: 'ScreenControl',
   },
   {
     id: 'connected-apps',
@@ -547,6 +581,7 @@ export const patterns = [
     dos: ['Say “can read” or “can act” in plain words', 'Show the app used next to each answer', 'Disconnect in one tap'],
     donts: ['Bury connections deep in settings', 'Ask to make changes when reading is enough'],
     examples: [],
+    demo: 'ConnectedApps',
   },
   {
     id: 'voice-turn-taking',
@@ -580,6 +615,7 @@ export const patterns = [
     dos: ['Repeat only the details that matter', 'Accept natural answers like “yes” or “change the time”', 'Show the same details on screen, if there is one'],
     donts: ['Read back everything, every time', 'Act on unclear speech without asking'],
     examples: [],
+    demo: 'ReadBack',
   },
   {
     id: 'point-to-edit',
@@ -596,6 +632,7 @@ export const patterns = [
     dos: ['Show the selected area clearly', 'Edit only the selected area', 'Offer a few versions of the edit'],
     donts: ['Make people describe places in words', 'Change parts nobody selected'],
     examples: [],
+    demo: 'PointToEdit',
   },
   {
     id: 'mode-switch',
@@ -612,6 +649,7 @@ export const patterns = [
     dos: ['Say the headline, show the details', 'Keep spoken lists to 2 or 3 items', 'Let people switch between voice and touch'],
     donts: ['Read out long lists', 'Force voice when a tap is faster'],
     examples: [],
+    demo: 'ModeSwitch',
   },
   {
     id: 'bias-check',
@@ -628,6 +666,7 @@ export const patterns = [
     dos: ['Show variety when the prompt doesn’t say who', 'Offer a one-tap “Report unfair result”', 'Test with many kinds of people before launch'],
     donts: ['Assume the default is neutral', 'Hide how people can report harm'],
     examples: [],
+    demo: 'BiasCheck',
   },
 ];
 
