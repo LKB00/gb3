@@ -5,6 +5,7 @@ import { builds } from './data/builds';
 import { stories } from './data/story';
 import { dayKey } from './lib/dates';
 import { CHANGE, readJSON, writeJSON, useStored } from './lib/storage';
+import { trackStart } from './game/track';
 
 export { dayKey };
 
@@ -289,6 +290,7 @@ export function markPlayed() {
   const k = dayKey();
   const before = all[k] || 0;
   writeJSON('days', { ...all, [k]: before + 1 });
+  trackStart(); // every game calls this on each answer, so the first one marks "Game started"
   if (before + 1 === DAILY_GOAL) window.dispatchEvent(new Event('goal-reached'));
 }
 export const useDays = () => useCleaned('days', cleanDays);

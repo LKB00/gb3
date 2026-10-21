@@ -6,6 +6,7 @@ import { markHuntDone, markPlayed, readHuntRun, saveRun, useHuntsDone, XP } from
 import { PeekLink } from './PatternPeek';
 import Burst, { XpPop } from './Burst';
 import { fx } from '../game/fx';
+import { track } from '../game/track';
 import { revealEl } from '../lib/useReveal';
 
 // Spot the flaw: tap the parts of the screen that are wrong.
@@ -30,8 +31,14 @@ export default function Hunt({ scenario, onOver, children }) {
   }, [onOver, done, revealed]);
 
   // Finding every mistake yourself (without revealing) completes the screen.
+  // Counted as a finished game only when the last find happens now, not when a finished screen is opened again.
+  const doneAtOpen = useRef(done);
   useEffect(() => {
     if (done && !revealed) markHuntDone(scenario.id);
+    if (done && !revealed && !doneAtOpen.current) {
+      doneAtOpen.current = true;
+      track('Game finished', { game: 'spot-the-flaw' });
+    }
   }, [done, revealed, scenario.id]);
   const shown = revealed ? [...found, ...mistakes.filter((i) => !found.includes(i))] : found;
   // On a phone the list sits below the screen: show the newest mistake's note after each find.

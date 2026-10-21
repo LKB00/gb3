@@ -46,6 +46,8 @@ const savedRoutes = ['/', '/me', '/play', '/play/daily', '/play/card', '/play/sp
 
 for (const [name, viewport] of [['desktop', { width: 1280, height: 860 }], ['phone', { width: 320, height: 640 }]]) {
   const ctx = await browser.newContext({ viewport, serviceWorkers: 'block', isMobile: name === 'phone', hasTouch: name === 'phone' });
+  // The live visit counter is GoatCounter's, not ours: answer it here so the test never depends on the network.
+  await ctx.route('**/counter/TOTAL.json', (r) => r.fulfill({ contentType: 'application/json', headers: { 'access-control-allow-origin': '*' }, body: '{"count":"1,234"}' }));
   const page = await ctx.newPage();
   let where = '';
   page.on('pageerror', (e) => problems.push(`${name} ${where}: ${e.message}`));

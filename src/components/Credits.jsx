@@ -1,4 +1,5 @@
 import { creator } from '../config/creator';
+import VisitCount from './VisitCount';
 
 // LinkedIn logo (Lucide has no brand icons), drawn to match the 16px line icons.
 function LinkedInIcon() {
@@ -9,9 +10,12 @@ function LinkedInIcon() {
   );
 }
 
+// The visit count sits above the credit line, like a quiet guest book.
 export default function Credits() {
   return (
-    <p className="credits">
+    <>
+      <VisitCount />
+      <p className="credits">
       Designed and developed by{' '}
       <a href={creator.portfolio} target="_blank" rel="noopener noreferrer">{creator.name}</a>
       {creator.linkedin && (
@@ -22,6 +26,7 @@ export default function Credits() {
           </a>
         </>
       )}
-    </p>
+      </p>
+    </>
   );
 }
