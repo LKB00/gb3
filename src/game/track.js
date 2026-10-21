@@ -43,3 +43,33 @@ export function track(event, props) {
     /* ignore */
   }
 }
+
+// Which game a page is, from its #/ route, for "Game started".
+// Names match the games' own "Game finished" names where they can (build and story finishes add the brief/story id).
+function gameFromRoute(hash) {
+  const [path, query = ''] = hash.replace(/^#/, '').split('?');
+  const parts = path.split('/').filter(Boolean);
+  if (!parts.length) return 'this-or-that-classic'; // the quick game on Home
+  if (parts[0] === 'patterns') return 'fix-it';
+  if (parts[0] !== 'play' || !parts[1]) return null;
+  if (parts[1] === 'this-or-that') return new URLSearchParams(query).get('mode') === 'hard' ? 'this-or-that-hard' : 'this-or-that-classic';
+  return parts[1]; // daily, speed, power, build, story, spot-the-flaw
+}
+
+// The first answer in a game, once per game per visit: "Game started: speed".
+// Next to "Game finished" it shows how many people who start a game also finish it.
+const started = new Set();
+export function trackStart() {
+  if (!CODE || typeof window === 'undefined') return;
+  const game = gameFromRoute(window.location.hash);
+  if (!game || started.has(game)) return;
+  started.add(game);
+  try {
+    const seen = JSON.parse(sessionStorage.getItem('gb3-started') || '[]');
+    if (Array.isArray(seen) && seen.includes(game)) return;
+    sessionStorage.setItem('gb3-started', JSON.stringify([...(Array.isArray(seen) ? seen : []), game]));
+  } catch {
+    /* no storage: the Set above still counts it once per page load */
+  }
+  track('Game started', { game });
+}

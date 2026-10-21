@@ -32,7 +32,7 @@ A playground for AI interaction design. Not a course: quick games, instant wins,
 
 On, using [GoatCounter](https://www.goatcounter.com) (free, no cookies, no personal data). The numbers are at https://lkb.goatcounter.com (log in as the owner).
 
-- Counts every `#/` page view and "Game finished" events.
+- Counts every `#/` page view, plus two events per game: "Game started: <game>" (the first answer, once per game per visit) and "Game finished: <game>" (every game, Spot the flaw included). Compare them to see how many people who start a game finish it.
 - The site code `lkb` is set in `src/game/track.js`. To use another site, set the repo variable `VITE_GOATCOUNTER_CODE` (Settings → Secrets and variables → Actions → Variables) and deploy again.
 - GoatCounter ignores localhost, so local tests and `npm run dev` are not counted.
 
