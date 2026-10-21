@@ -285,26 +285,17 @@
   .pattern-card-body { padding: 10px 12px 12px; gap: 6px; }
   .pattern-card-body h3 { font-size: 14px; line-height: 19px; }
   .pattern-card-body p { display: none; }
-  .games, .games-top, .games-more { gap: 10px; }
-  .game { padding: 16px; border-radius: 18px; }
-  .game-big { min-height: 0; }
-  .game-big strong { font-size: 21px; line-height: 26px; }
-  .game-big svg { margin-bottom: 6px; }
-  .game-big .game-meta { padding-top: 10px; }
-  .game-small { padding: 14px 16px; }
-  .game-small strong { font-size: 17px; line-height: 22px; }
-  .game-small .game-meta { padding-top: 4px; }
   .daily-banner { padding: 14px 16px; }
   .daily-banner .btn { width: 100%; }
 }
 
 /* Touch screens: no hover lifts, a quick press feedback instead */
 @media (hover: none) {
-  .game:hover, .tot-option:not(:disabled):hover, a.pattern-card:hover, .story-pick:hover,
+  .tot-option:not(:disabled):hover, a.pattern-card:hover, .story-pick:hover,
   .story-choice:not(:disabled):hover, .build-piece:hover, .daily-banner:hover, .badge a:hover, .pc-card:hover {
     transform: none;
   }
-  .game:active, .story-pick:active, a.pattern-card:active, .daily-banner:active, .me-row:active,
+  .story-pick:active, a.pattern-card:active, .daily-banner:active, .me-row:active,
   .story-choice:not(:disabled):active, .build-piece:active, .lab-opt:active, .tot-option:not(:disabled):active {
     transform: scale(0.98);
   }

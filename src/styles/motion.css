@@ -39,18 +39,18 @@
   .sp-reveal .bottomnav { animation: intro-up 0.55s var(--ease-out) 0.1s backwards; }
 
   /* ---- Lists and grids: children arrive one after another ---- */
-  :where(.games-top, .games-more, .badges, .play-grid, .index-list, .story-picks, .ladder, .tools, .card-grid, .power-opts, .daily-grid) > * {
+  :where(.gl-list, .badges, .play-grid, .index-list, .story-picks, .ladder, .tools, .card-grid, .power-opts, .daily-grid) > * {
     animation: rise 0.5s var(--ease-out) backwards;
     animation-delay: calc(var(--i, 0) * 55ms + 60ms);
   }
-  :where(.games-top, .games-more, .badges, .play-grid, .index-list, .story-picks, .ladder, .tools, .card-grid, .power-opts, .daily-grid) > :nth-child(2) { --i: 1; }
-  :where(.games-top, .games-more, .badges, .play-grid, .index-list, .story-picks, .ladder, .tools, .card-grid, .power-opts, .daily-grid) > :nth-child(3) { --i: 2; }
-  :where(.games-top, .games-more, .badges, .play-grid, .index-list, .story-picks, .ladder, .tools, .card-grid, .power-opts, .daily-grid) > :nth-child(4) { --i: 3; }
-  :where(.games-top, .games-more, .badges, .play-grid, .index-list, .story-picks, .ladder, .tools, .card-grid, .power-opts, .daily-grid) > :nth-child(5) { --i: 4; }
-  :where(.games-top, .games-more, .badges, .play-grid, .index-list, .story-picks, .ladder, .tools, .card-grid, .power-opts, .daily-grid) > :nth-child(6) { --i: 5; }
-  :where(.games-top, .games-more, .badges, .play-grid, .index-list, .story-picks, .ladder, .tools, .card-grid, .power-opts, .daily-grid) > :nth-child(7) { --i: 6; }
-  :where(.games-top, .games-more, .badges, .play-grid, .index-list, .story-picks, .ladder, .tools, .card-grid, .power-opts, .daily-grid) > :nth-child(8) { --i: 7; }
-  :where(.games-top, .games-more, .badges, .play-grid, .index-list, .story-picks, .ladder, .tools, .card-grid, .power-opts, .daily-grid) > :nth-child(n + 9) { --i: 8; }
+  :where(.gl-list, .badges, .play-grid, .index-list, .story-picks, .ladder, .tools, .card-grid, .power-opts, .daily-grid) > :nth-child(2) { --i: 1; }
+  :where(.gl-list, .badges, .play-grid, .index-list, .story-picks, .ladder, .tools, .card-grid, .power-opts, .daily-grid) > :nth-child(3) { --i: 2; }
+  :where(.gl-list, .badges, .play-grid, .index-list, .story-picks, .ladder, .tools, .card-grid, .power-opts, .daily-grid) > :nth-child(4) { --i: 3; }
+  :where(.gl-list, .badges, .play-grid, .index-list, .story-picks, .ladder, .tools, .card-grid, .power-opts, .daily-grid) > :nth-child(5) { --i: 4; }
+  :where(.gl-list, .badges, .play-grid, .index-list, .story-picks, .ladder, .tools, .card-grid, .power-opts, .daily-grid) > :nth-child(6) { --i: 5; }
+  :where(.gl-list, .badges, .play-grid, .index-list, .story-picks, .ladder, .tools, .card-grid, .power-opts, .daily-grid) > :nth-child(7) { --i: 6; }
+  :where(.gl-list, .badges, .play-grid, .index-list, .story-picks, .ladder, .tools, .card-grid, .power-opts, .daily-grid) > :nth-child(8) { --i: 7; }
+  :where(.gl-list, .badges, .play-grid, .index-list, .story-picks, .ladder, .tools, .card-grid, .power-opts, .daily-grid) > :nth-child(n + 9) { --i: 8; }
 
   /* ---- Game steps: a new question or scene slides in ---- */
   .story-panel, .story-screen, .lab-q-step, .lab-options { animation: scene-in 0.42s var(--ease-out) backwards; }
@@ -76,13 +76,15 @@
   .chip:active, .icon-btn:active, .finder-opt:active { transform: scale(0.95); }
   .btn-primary:active:not(:disabled) { transform: scale(0.96); }
   .bottomnav-tab.is-on .bottomnav-icon { animation: nav-pop 0.42s var(--ease-spring); }
-  .game { transition: transform 0.2s var(--ease-spring), box-shadow 0.25s; }
+  .gl-row { transition: background-color 0.15s; }
+  .gl-row:active .gl-icon { transform: scale(0.94); }
+  .gl-icon { transition: transform 0.18s var(--ease-spring); }
 
   /* Hover effects only where there is a real mouse */
   @media (hover: hover) {
     .btn-primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(36, 40, 44, 0.16); }
     .btn-primary:active:not(:disabled) { transform: scale(0.96); box-shadow: none; }
-    .game:hover { box-shadow: 0 12px 28px rgba(36, 40, 44, 0.12); }
+    .gl-row:hover .gl-icon { transform: translateY(-1px) rotate(-3deg); }
     .chip:hover:not(.chip-on), .finder-opt:hover:not(.is-on) { transform: translateY(-1px); }
   }
 

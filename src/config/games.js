@@ -6,7 +6,7 @@ import { stories } from '../data/story';
 import { storyBests } from '../progress';
 
 // Every game on the Play page, in the order shown. The tiles are drawn from
-// this list (components/play/GameTiles.jsx). The first two get big tiles.
+// this list (components/play/GameTiles.jsx), in two groups: quick games and deeper games.
 //
 // Add a game in 3 steps:
 //   1. Make the page in src/pages/ (copy Power.jsx as a starting point).
@@ -15,9 +15,10 @@ import { storyBests } from '../progress';
 //
 //   to     the page it opens (or random: true to open a random pattern challenge)
 //   tone   tile colour class (game-a … game-g in styles/game-core.css + autonomy.css)
+//   group  'quick' (1-2 minutes) or 'deep' (about 5 minutes): the two lists on the Play page
 //   isNew  shows a small "New" pill
-//   meta   the small line at the bottom: (progress) => [Icon, text]
-//          progress = { stats, passed, huntsDone }
+//   meta   your progress in this game: (progress) => [Icon, text, played]
+//          progress = { stats, passed, huntsDone }; the line only shows once played is true
 export const games = [
   {
     id: 'this-or-that',
@@ -26,7 +27,8 @@ export const games = [
     blurb: 'Two AI screens. Tap the better one. Try Hard mode if you dare.',
     icon: Shuffle,
     tone: 'game-a',
-    meta: ({ stats }) => [Flame, `Best streak: ${stats.bestStreak || 0} in a row`],
+    group: 'quick',
+    meta: ({ stats }) => [Flame, `Best streak: ${stats.bestStreak || 0} in a row`, (stats.bestStreak || 0) > 0],
   },
   {
     id: 'fix-it',
@@ -35,7 +37,8 @@ export const games = [
     blurb: 'Get one AI feature right, one choice at a time. Win its card.',
     icon: Puzzle,
     tone: 'game-b',
-    meta: ({ passed }) => [Star, `${passed.length}/${patterns.length} cards`],
+    group: 'deep',
+    meta: ({ passed }) => [Star, `${passed.length}/${patterns.length} cards`, passed.length > 0],
   },
   {
     id: 'speed',
@@ -44,7 +47,8 @@ export const games = [
     blurb: '60 seconds. Tap the better AI screen, fast. Get 3 in a row for double points.',
     icon: Timer,
     tone: 'game-e',
-    meta: ({ stats }) => [Zap, `Best: ${stats.speedBest || 0} points`],
+    group: 'quick',
+    meta: ({ stats }) => [Zap, `Best: ${stats.speedBest || 0} points`, (stats.speedBest || 0) > 0],
   },
   {
     id: 'power',
@@ -54,7 +58,8 @@ export const games = [
     icon: Gauge,
     tone: 'game-g',
     isNew: true,
-    meta: ({ stats }) => [Star, `Best: ${stats.powerBest || 0}/16`],
+    group: 'quick',
+    meta: ({ stats }) => [Star, `Best: ${stats.powerBest || 0}/16`, (stats.powerBest || 0) > 0],
   },
   {
     id: 'build',
@@ -63,7 +68,8 @@ export const games = [
     blurb: 'Build an AI screen from parts. Pick the good ones, dodge the traps.',
     icon: Hammer,
     tone: 'game-f',
-    meta: ({ stats }) => [Star, `${Object.keys(stats.builds || {}).length}/${builds.length} built`],
+    group: 'deep',
+    meta: ({ stats }) => [Star, `${Object.keys(stats.builds || {}).length}/${builds.length} built`, Object.keys(stats.builds || {}).length > 0],
   },
   {
     id: 'stories',
@@ -72,7 +78,8 @@ export const games = [
     blurb: `${stories.length} short stories. You make the AI’s choices. Can you keep people’s trust?`,
     icon: BookOpenText,
     tone: 'game-d',
-    meta: ({ stats }) => [Star, `${Object.keys(storyBests(stats)).length}/${stories.length} played`],
+    group: 'deep',
+    meta: ({ stats }) => [Star, `${Object.keys(storyBests(stats)).length}/${stories.length} played`, Object.keys(storyBests(stats)).length > 0],
   },
   {
     id: 'spot-the-flaw',
@@ -81,6 +88,7 @@ export const games = [
     blurb: 'Real-looking AI screens with hidden mistakes. Can you find them all?',
     icon: ScanSearch,
     tone: 'game-c',
-    meta: ({ huntsDone }) => [Check, `${huntsDone.length}/${hunts.length} screens done`],
+    group: 'deep',
+    meta: ({ huntsDone }) => [Check, `${huntsDone.length}/${hunts.length} screens done`, huntsDone.length > 0],
   },
 ];
