@@ -26,7 +26,7 @@ export default function DailyBanner() {
     );
   }
 
-  const got = `You got ${today.filter(Boolean).length}/${today.length} today.`;
+  const got = `You got ${today.filter(Boolean).length}/${today.length}.`;
   const left = DAILY_GOAL - todayMoves;
   const rounds = goalRounds(left);
   return (
@@ -34,18 +34,18 @@ export default function DailyBanner() {
       <CalendarDays size={22} strokeWidth={1.75} aria-hidden />
       <span className="daily-banner-text">
         <strong>Daily #{dailyLabel(key)}</strong>
-        <span>{left > 0 ? `${got} ${left} more ${left === 1 ? 'answer' : 'answers'} to hit today’s goal.` : `${got} Goal done · New Daily tomorrow.`}</span>
+        <span>{left > 0 ? `${got} ${left} more ${left === 1 ? 'answer' : 'answers'} for today’s goal.` : `${got} Goal done. New Daily tomorrow.`}</span>
       </span>
       <span className="daily-banner-actions">
         {left > 0 ? (
           <>
             <Link to={`/play/this-or-that?rounds=${rounds}`} className="btn btn-primary">
-              Hit your goal: {rounds} quick rounds <ArrowRight size={14} strokeWidth={1.75} aria-hidden />
+              Play {rounds} quick rounds <ArrowRight size={14} strokeWidth={1.75} aria-hidden />
             </Link>
             <Link to="/play/daily" className="daily-banner-link">See result</Link>
           </>
         ) : (
-          <Link to="/play/daily" className="btn btn-primary">See result <ArrowRight size={14} strokeWidth={1.75} aria-hidden /></Link>
+          <Link to="/play/daily" className="daily-banner-link">See result</Link>
         )}
       </span>
     </div>

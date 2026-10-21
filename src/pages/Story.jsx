@@ -56,25 +56,32 @@ function TrustMeter({ trust, delta, person }) {
 // What each story's AI is about, shown on its picker card (a letter looked like an answer "A").
 const STORY_ICONS = { tidy: FolderOpen, nova: ChefHat, sage: Landmark, pilot: CodeXml };
 
-// Story picker: one card per story, with your best trust.
+// Story picker: one card per story, with your best trust. One card is marked as the place to start:
+// the first story without its best ending yet, so the page has one clear "play this".
 function StoryPicker() {
   useTitle('Stories');
   const stats = useGameStats();
   const best = storyBests(stats);
+  const fresh = !stories.some((st) => best[st.id] != null);
+  const up = stories.find((st) => (best[st.id] ?? -1) < st.endings[0].min);
   return (
     <div className="page page-wide">
       <Breadcrumbs items={[{ label: 'Play', to: '/play' }, { label: 'Stories' }]} />
       <header className="page-head page-head-tight">
         <h1 className="display">Stories</h1>
-        <p className="lead">Pick a story and design the AI in it. Every choice wins or loses a person’s trust. Their trust at the end picks 1 of 4 endings.</p>
+        <p className="lead">Design the AI in a short story. Every choice wins or loses a person’s trust, and their trust picks the ending.</p>
       </header>
       <div className="story-picks">
         {stories.map((st) => {
           const Icon = STORY_ICONS[st.id] || Smile;
+          const isUp = st === up;
           return (
-            <Link key={st.id} to={`/play/story/${st.id}`} className="story-pick" style={{ background: `var(--p-${st.color})` }}>
-              <span className="story-avatar story-icon" aria-hidden><Icon size={18} strokeWidth={1.75} /></span>
-              <strong>{st.title}</strong>
+            <Link key={st.id} to={`/play/story/${st.id}`} className={'story-pick' + (isUp ? ' is-up' : '')} style={{ background: `var(--p-${st.color})` }}>
+              <span className="story-pick-top">
+                <span className="story-avatar story-icon" aria-hidden><Icon size={18} strokeWidth={1.75} /></span>
+                <strong>{st.title}</strong>
+                {isUp && <span className="story-pick-flag">{fresh ? 'Start here' : 'Up next'}</span>}
+              </span>
               <span>{st.teaser}</span>
               <span className="game-meta">
                 {st.person} · {st.role}
@@ -177,7 +184,17 @@ function Story({ story }) {
           <h1 className="display">{ending.title}{gain > 0 && <XpPop amount={gain} />}</h1>
           <p className="lead">{ending.text}</p>
           {ending !== story.endings[0] && <p className="small">The best ending needs trust {story.endings[0].min}. Play again and swap the choices that lost trust.</p>}
-          <p className="label">Your choices</p>
+          {/* The next step comes right after the ending; the recap of choices is below it, for reading. */}
+          <div className="row wrap center">
+            <Link to={`/play/story/${after.id}`} className="btn btn-primary btn-lg">
+              Next story: {after.title} <ArrowRight size={15} strokeWidth={1.75} aria-hidden />
+            </Link>
+            <button type="button" className="btn btn-ghost btn-lg" onClick={restart}>
+              <RotateCcw size={15} strokeWidth={1.75} aria-hidden /> Play again
+            </button>
+          </div>
+          {storyBests(stats)[story.id] != null && <p className="small muted">Your best so far: trust {Math.max(storyBests(stats)[story.id], trust)}/100</p>}
+          <p className="label story-recap-title">Your choices</p>
           <ol className="story-recap">
             {history.map((h, n) => {
               const sc = story.scenes[h.scene];
@@ -194,16 +211,7 @@ function Story({ story }) {
               );
             })}
           </ol>
-          <div className="row wrap center">
-            <Link to={`/play/story/${after.id}`} className="btn btn-primary btn-lg">
-              Next story: {after.title} <ArrowRight size={15} strokeWidth={1.75} aria-hidden />
-            </Link>
-            <button type="button" className="btn btn-ghost btn-lg" onClick={restart}>
-              <RotateCcw size={15} strokeWidth={1.75} aria-hidden /> Play again
-            </button>
-            <Link to="/play" className="btn btn-ghost btn-lg">More games</Link>
-          </div>
-          {storyBests(stats)[story.id] != null && <p className="small muted">Your best so far: trust {Math.max(storyBests(stats)[story.id], trust)}/100</p>}
+          <Link to="/play" className="text-link">More games <ArrowRight size={14} strokeWidth={1.75} aria-hidden /></Link>
         </div>
       </div>
     );
@@ -216,7 +224,8 @@ function Story({ story }) {
         <div>
           <p className="label">Scene {sceneNo} · {scene.title}</p>
           <h1 className="display">{story.title}</h1>
-          <p className="small muted">You design {story.agent}. Pick what it does. Keep {story.person} on your side.</p>
+          {/* The how-to line is needed once; after scene 1 the question and trust meter say it all. */}
+          {history.length === 0 && <p className="small muted story-how">You design {story.agent}. Pick what it does. Keep {story.person} on your side.</p>}
         </div>
         <TrustMeter trust={trust} delta={choice ? lastDelta : null} person={story.person} />
       </header>

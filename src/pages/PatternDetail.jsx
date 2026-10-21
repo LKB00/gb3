@@ -10,7 +10,8 @@ import { nextTarget } from '../game/useRandomChallenge';
 import DemoFrame from '../components/DemoFrame';
 import Compare from '../components/Compare';
 import Lab from '../components/Lab';
-import RealExamples from '../components/RealExamples';
+import RealExamples, { teardownFor } from '../components/RealExamples';
+import { realExamples } from '../data/examples';
 import PrincipleList from '../components/PrincipleList';
 import Breadcrumbs from '../components/Breadcrumbs';
 import { showActiveTab } from '../components/LibraryTabs';
@@ -30,8 +31,10 @@ const VIEWS = [
 ];
 
 // Where to go from a card: real products that use it, and cards from the same group.
-function MoreLinks({ p, passed }) {
-  const seen = teardowns.filter((t) => t.journey.some((s) => s.patterns.includes(p.id)));
+// On "Why it works" the real-product cards already link their teardowns, so those are not listed twice.
+function MoreLinks({ p, passed, view }) {
+  const linked = view === 'understand' ? (realExamples[p.id] || []).map((e) => teardownFor(e.product)?.id) : [];
+  const seen = teardowns.filter((t) => t.journey.some((s) => s.patterns.includes(p.id)) && !linked.includes(t.id));
   const group = patterns.filter((x) => x.category === p.category);
   const at = group.indexOf(p);
   const related = [...group.slice(at + 1), ...group.slice(0, at)].slice(0, 3);
@@ -190,22 +193,6 @@ export default function PatternDetail() {
 
       {view === 'reference' && (
         <div className="view">
-          <Section title="Rules of thumb">
-            <div className="rules">
-              <div>
-                <p className="label">Do</p>
-                <ul className="rule-list rule-do">
-                  {p.dos.map((d) => <li key={d}><Check {...ICON} />{d}</li>)}
-                </ul>
-              </div>
-              <div>
-                <p className="label">Don’t</p>
-                <ul className="rule-list rule-dont">
-                  {p.donts.map((d) => <li key={d}><X {...ICON} />{d}</li>)}
-                </ul>
-              </div>
-            </div>
-          </Section>
           <Section title="The short version">
             <dl className="details">
               <dt>What to do</dt>
@@ -224,10 +211,26 @@ export default function PatternDetail() {
               )}
             </dl>
           </Section>
+          <Section title="Rules of thumb">
+            <div className="rules">
+              <div>
+                <p className="label">Do</p>
+                <ul className="rule-list rule-do">
+                  {p.dos.map((d) => <li key={d}><Check {...ICON} />{d}</li>)}
+                </ul>
+              </div>
+              <div>
+                <p className="label">Don’t</p>
+                <ul className="rule-list rule-dont">
+                  {p.donts.map((d) => <li key={d}><X {...ICON} />{d}</li>)}
+                </ul>
+              </div>
+            </div>
+          </Section>
         </div>
       )}
 
-      {view !== 'do' && <MoreLinks p={p} passed={passed} />}
+      {view !== 'do' && <MoreLinks p={p} passed={passed} view={view} />}
 
       <nav className="pager" aria-label="More cards">
         {prev ? (

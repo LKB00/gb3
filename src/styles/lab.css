@@ -245,20 +245,29 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
 }
+/* The recap is a quiet list (hairlines), not a stack of cards: the card and the next step lead. */
 .lab-summary li {
   display: flex;
   gap: 12px;
-  padding: 12px 16px;
-  border-radius: 12px;
-  background: var(--card);
+  padding: 10px 0;
+  border-top: var(--hair) solid var(--divider);
   font-size: 14px;
   line-height: 20px;
 }
 .lab-summary li > span:last-child {
   display: flex;
   flex-direction: column;
+}
+.lab-sum-title { margin-top: 8px; }
+.lab-again {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--ink-3);
 }
 .lab-sum-icon {
   flex: none;
@@ -397,21 +406,18 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
   width: 100%;
 }
+/* Notes are a quiet list (hairlines); the coloured number matches the marker on the screen. */
 .hunt-list li {
   display: flex;
   gap: 12px;
-  padding: 12px 12px;
-  border-radius: 10px;
-  background: var(--negative-soft);
+  padding: 10px 0;
+  border-top: var(--hair) solid var(--divider);
   font-size: 14px;
   line-height: 21px;
 }
-.hunt-list li.hunt-item-missed {
-  background: var(--attention-soft);
-}
+.hunt-list li:first-child { border-top: none; padding-top: 0; }
 .hunt-list p {
   margin-bottom: 4px;
 }
@@ -441,6 +447,18 @@
   text-decoration-thickness: var(--hair);
   text-underline-offset: 3px;
 }
+/* "Skip to the next screen": a quiet text button, so the screen stays the one thing to look at. */
+.hunt-skip .link-like {
+  padding: 4px 0;
+  border: none;
+  background: none;
+  color: var(--ink-2);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.hunt-skip .link-like:hover { color: var(--ink); }
 .lab-groups {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -479,4 +497,8 @@
   .lab .lab-preview > .label { display: none; }
   .lab .lab-preview .m-frame { zoom: 0.8; }
   .lab.lab-finished .lab-preview .m-frame { zoom: 0.9; }
+}
+/* Phones and tablets, card won: the win and its next step come first; your finished screen follows. */
+@media (max-width: 899px) {
+  .lab.lab-finished { grid-template-areas: 'head' 'panel' 'preview'; }
 }

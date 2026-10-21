@@ -4,7 +4,7 @@ import { realExamples } from '../data/examples';
 import { teardowns } from '../data/teardowns';
 
 // A product with a teardown page: "ChatGPT deep research" → the ChatGPT teardown.
-const teardownFor = (product) => teardowns.find((t) => product === t.product || product.startsWith(t.product + ' '));
+export const teardownFor = (product) => teardowns.find((t) => product === t.product || product.startsWith(t.product + ' '));
 
 // "Seen in real products" cards for one pattern. Products we took apart link to their teardown.
 export default function RealExamples({ id }) {

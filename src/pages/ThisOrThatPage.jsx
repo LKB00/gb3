@@ -27,7 +27,8 @@ export default function ThisOrThatPage() {
           <Shuffle size={15} strokeWidth={1.75} aria-hidden /> Classic
         </button>
         <button role="tab" aria-selected={mode === 'hard'} className="tab" onClick={() => setParams({ mode: 'hard', ...keep }, { replace: true })}>
-          <Eye size={15} strokeWidth={1.75} aria-hidden /> Hard <span className="tab-count">spot the 1 difference</span>
+          {/* The hint helps pick the mode. Once Hard is on, each round's tag says it, so it isn't repeated here. */}
+          <Eye size={15} strokeWidth={1.75} aria-hidden /> Hard {mode !== 'hard' && <span className="tab-count">spot the 1 difference</span>}
         </button>
       </div>
       <div className="view">

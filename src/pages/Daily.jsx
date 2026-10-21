@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { CalendarDays, Copy, Eye, Flame, Shuffle, Swords, Target } from 'lucide-react';
+import { CalendarDays, Copy, Eye, Shuffle, Swords, Target } from 'lucide-react';
 import { challengeLink, dailyDareText, useChallenge, useDare, verdict } from '../game/challenge';
 import { dailyDeck, dailyLabel, dailyNumber, goalRounds } from '../game/decks';
 import { dayKey } from '../lib/dates';
@@ -82,7 +82,6 @@ function Result({ num, day, results, streak, fresh, challenge, replay, goalDone 
   return (
     <div className="tot tot-over daily-result">
       {fresh && score >= 4 && <Burst count={26} />}
-      <p className="label">Daily #{num}</p>
       <p className="tot-big"><CountUp value={score} /><span>/{results.length}</span>{fresh && score > 0 && <XpPop amount={score * XP.daily} />}</p>
       <div className="daily-grid" aria-label={`${score} of ${results.length} right`}>
         {results.map((r, i) => <span key={i} className={r ? 'is-right' : 'is-wrong'} />)}
@@ -97,10 +96,6 @@ function Result({ num, day, results, streak, fresh, challenge, replay, goalDone 
         </p>
       )}
       {replay && <p className="small muted">A past Daily, just for fun. Your streak and today’s score stay safe.</p>}
-      <div className="tot-stats">
-        {streak > 0 && <span className="pill-streak"><Flame size={14} strokeWidth={1.75} aria-hidden /> {streak}-day streak</span>}
-        <span><CalendarDays size={14} strokeWidth={1.75} aria-hidden /> New Daily in {left}</span>
-      </div>
       <GoalStep />
       <div className="daily-share">
         {dare.askName && (
@@ -131,6 +126,7 @@ function Result({ num, day, results, streak, fresh, challenge, replay, goalDone 
           </div>
         </details>
       </div>
+      <p className="daily-countdown small muted"><CalendarDays size={14} strokeWidth={1.75} aria-hidden /> New Daily in {left}</p>
       <div className="daily-more">
         <span className="muted small">Play more:</span>
         <Link to="/play/this-or-that?mode=hard" className="text-link"><Eye size={14} strokeWidth={1.75} aria-hidden /> This or That: Hard</Link>
@@ -166,7 +162,7 @@ export default function Daily() {
         <p className="lead">
           {today && !replay
             ? 'Done for today! Here’s how you did.'
-            : `Tap the better AI screen, 5 times. ${replay ? 'Everyone got the same rounds that day.' : 'Everyone gets the same rounds today. You get one shot.'} Rounds 3 and 5 are extra tricky.`}
+            : `${replay ? 'The same 5 rounds everyone got that day.' : 'The same 5 rounds for everyone today. One shot!'} Rounds 3 and 5 are extra tricky.`}
         </p>
       </header>
       {challenge && !today && (

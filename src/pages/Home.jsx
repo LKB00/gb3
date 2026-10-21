@@ -16,7 +16,7 @@ export default function Home() {
   useTitle(null);
   const passed = usePassed();
   const { xp, level } = useXP();
-  const { streak, days } = useStreak();
+  const { days } = useStreak();
   const daily = useDaily();
   // Decided once per visit, so the first answer of a new player doesn't reshuffle the page mid-game.
   const [back] = useState(() => xp > 0 || Object.keys(days).length > 0);
@@ -43,9 +43,10 @@ export default function Home() {
     );
   };
 
-  const me = xp > 0 && (
+  // A quiet hello for returning players. XP and the day streak are already in the top bar, so they aren't repeated.
+  const me = (
     <p className="home-me">
-      You’re {/^[aeiou]/i.test(level.name) ? 'an' : 'a'} <strong>{level.name}</strong> · {xp} XP · {passed.length}/{patterns.length} cards{streak > 0 && ` · 🔥 ${streak}-day streak`} · <Link to="/play/card">See your player card</Link>
+      You’re {/^[aeiou]/i.test(level.name) ? 'an' : 'a'} <strong>{level.name}</strong> · {passed.length}/{patterns.length} cards · <Link to="/play/card">See your player card</Link>
     </p>
   );
 
@@ -61,7 +62,6 @@ export default function Home() {
           <p className="eyebrow">Quick games about AI design</p>
           <h1 className="display display-xl">Can you spot good AI design?</h1>
           <p className="lead">Two AI screens, like ChatGPT or Copilot. One is better. Tap it below.</p>
-          {me}
         </header>
       )}
 
@@ -71,12 +71,13 @@ export default function Home() {
         </section>
       )}
 
+      {back && !dailyDone && <p className="home-or">Or warm up with a quick round</p>}
       <section className="home-game" aria-label="This or That, quick round">
         <ThisOrThat rounds={5} next={next} />
       </section>
 
       {!back && (
-        <section className="block">
+        <section className={'block' + (dailyDone ? '' : ' home-daily-after')}>
           <DailyBanner />
         </section>
       )}
