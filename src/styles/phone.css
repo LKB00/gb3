@@ -294,7 +294,6 @@
   .game-small { padding: 14px 16px; }
   .game-small strong { font-size: 17px; line-height: 22px; }
   .game-small .game-meta { padding-top: 4px; }
-  .level-stats { grid-template-columns: 1fr 1fr; }
   .daily-banner { padding: 14px 16px; }
   .daily-banner .btn { width: 100%; }
 }

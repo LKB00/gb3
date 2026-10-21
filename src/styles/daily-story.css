@@ -497,4 +497,3 @@
   .today-card { grid-template-columns: auto 1fr; }
   .today-streak { grid-column: 1 / -1; flex-direction: row; gap: 8px; justify-content: flex-start; }
 }
-.level-card-link { color: var(--ink); font-weight: 700; }
