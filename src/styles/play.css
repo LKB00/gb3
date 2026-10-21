@@ -155,6 +155,7 @@ a.pattern-card:hover { transform: translateY(-3px); }
   font-weight: 800;
   color: var(--ink-3);
 }
+.pattern-card.is-collected { border-color: transparent; box-shadow: 0 0 0 2px var(--lime); }
 .pattern-card.is-locked .thumb { filter: grayscale(0.9); opacity: 0.55; }
 .pattern-card.is-locked h3 { color: var(--ink-2); }
 .card-lock {
@@ -187,7 +188,6 @@ a.pattern-card:hover { transform: translateY(-3px); }
 .lab-stars svg { animation: pop 0.45s ease both; }
 .lab-stars span { margin-left: 6px; }
 .hunt-win { position: relative; }
-.page-head + .hunt-tabs { margin-top: 24px; }
 
 /* ---- Today strip: before the first answer of the day (Play page) ---- */
 .today-strip {
@@ -231,6 +231,24 @@ a.pattern-card:hover { transform: translateY(-3px); }
 }
 :root[data-theme='dark'] .today-text .today-saved { color: #8cc0e0; }
 .today-text .today-go { margin-top: 10px; }
+
+/* Compact Today card (Play page): ring, one line, streak and the week in one row on wide screens */
+.today-card.is-compact { padding: 14px 18px; gap: 10px 16px; }
+.today-card.is-compact .today-goal { width: 52px; height: 52px; }
+.today-card.is-compact .today-goal svg { width: 52px; height: 52px; }
+.today-card.is-compact .today-goal-num { font-size: 15px; }
+.today-card.is-compact .today-title { font-size: 16px; line-height: 22px; }
+@media (min-width: 900px) {
+  .today-card.is-compact { grid-template-columns: auto 1fr auto auto; }
+  .today-card.is-compact .week { grid-column: auto; margin: 0; grid-template-columns: repeat(7, 30px); }
+}
+/* Narrow screens: no week dots here (Me shows them); the streak sits on the right */
+@media (max-width: 899px) {
+  .today-card.is-compact { grid-template-columns: auto 1fr auto; }
+  .today-card.is-compact .week { display: none; }
+  .today-card.is-compact .today-streak { grid-column: auto; flex-direction: column; gap: 0; }
+  .today-card.is-compact .today-flame { font-size: 22px; }
+}
 
 /* ---- Badges as one row (Play page): scrolls sideways on phones ---- */
 @media (max-width: 720px) {

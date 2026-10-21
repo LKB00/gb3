@@ -67,6 +67,12 @@
   flex-direction: column;
   gap: 8px;
 }
+/* Wide screens: rule cards in two columns, using the full page width (less scrolling) */
+@media (min-width: 900px) {
+  .page-lib-read > .block.pr-block { max-width: none; } /* beats .page-lib-read > :not(.lib-head) in home.css */
+  .pr-block .section-head { max-width: 712px; }
+  .pr-index { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: start; }
+}
 .pr-entry {
   display: flex;
   flex-direction: column;
@@ -91,6 +97,8 @@
   padding: 0 8px;
   font-size: 12px;
 }
+.chip-more { background: transparent; border-style: dashed; color: var(--ink-3); font-weight: 700; }
+.chip-more:hover { color: var(--ink); }
 
 /* ---------- Autonomy demo ---------- */
 .autonomy {

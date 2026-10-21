@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Angry, ArrowRight, Frown, Meh, RotateCcw, Smile } from 'lucide-react';
+import { Angry, ArrowRight, ChefHat, CodeXml, FolderOpen, Frown, Landmark, Meh, RotateCcw, Smile } from 'lucide-react';
 import { getStory, stories } from '../data/story';
 import { getPattern } from '../data/patterns';
 import { clearRun, markPlayed, readStoryRun, saveRun, saveStoryBest, storyBests, useGameStats } from '../progress';
@@ -53,6 +53,9 @@ function TrustMeter({ trust, delta, person }) {
   );
 }
 
+// What each story's AI is about, shown on its picker card (a letter looked like an answer "A").
+const STORY_ICONS = { tidy: FolderOpen, nova: ChefHat, sage: Landmark, pilot: CodeXml };
+
 // Story picker: one card per story, with your best trust.
 function StoryPicker() {
   useTitle('Stories');
@@ -66,17 +69,20 @@ function StoryPicker() {
         <p className="lead">Pick a story and design the AI in it. Every choice wins or loses a person’s trust. Their trust at the end picks 1 of 4 endings.</p>
       </header>
       <div className="story-picks">
-        {stories.map((st) => (
-          <Link key={st.id} to={`/play/story/${st.id}`} className="story-pick" style={{ background: `var(--p-${st.color})` }}>
-            <span className="story-avatar" aria-hidden>{st.person[0]}</span>
-            <strong>{st.title}</strong>
-            <span>{st.teaser}</span>
-            <span className="game-meta">
-              {st.person} · {st.role}
-              {best[st.id] != null && <> · best trust: {best[st.id]}/100</>}
-            </span>
-          </Link>
-        ))}
+        {stories.map((st) => {
+          const Icon = STORY_ICONS[st.id] || Smile;
+          return (
+            <Link key={st.id} to={`/play/story/${st.id}`} className="story-pick" style={{ background: `var(--p-${st.color})` }}>
+              <span className="story-avatar story-icon" aria-hidden><Icon size={18} strokeWidth={1.75} /></span>
+              <strong>{st.title}</strong>
+              <span>{st.teaser}</span>
+              <span className="game-meta">
+                {st.person} · {st.role}
+                {best[st.id] != null && <> · best trust: {best[st.id]}/100</>}
+              </span>
+            </Link>
+          );
+        })}
       </div>
     </div>
   );

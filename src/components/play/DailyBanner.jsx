@@ -1,17 +1,17 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, CalendarDays, Flame } from 'lucide-react';
+import { ArrowRight, CalendarDays } from 'lucide-react';
 import { DAILY_GOAL, useDaily, useStreak } from '../../progress';
 import { dailyLabel, goalRounds } from '../../game/decks';
 import { dayKey } from '../../lib/dates';
 
-// The Daily challenge, as a wide banner: today's status and the day streak (same as the top bar flame).
+// The Daily challenge, as a wide banner: today's status and one clear button.
+// The day streak is not repeated here (it is in the top bar and the Today card).
 // Once the Daily is done, it points at the daily goal instead of a result you already saw.
 export default function DailyBanner() {
   const daily = useDaily();
-  const { streak, todayMoves } = useStreak();
+  const { todayMoves } = useStreak();
   const key = dayKey();
   const today = daily[key];
-  const flame = streak > 0 && <span className="pill-streak"><Flame size={13} strokeWidth={1.75} aria-hidden /> {streak}-day streak</span>;
 
   if (!today) {
     return (
@@ -21,7 +21,6 @@ export default function DailyBanner() {
           <strong>Daily #{dailyLabel(key)}</strong>
           <span>5 rounds. Same for everyone. One shot!</span>
         </span>
-        {flame}
         <span className="btn btn-primary">Play now <ArrowRight size={14} strokeWidth={1.75} aria-hidden /></span>
       </Link>
     );
@@ -37,7 +36,6 @@ export default function DailyBanner() {
         <strong>Daily #{dailyLabel(key)}</strong>
         <span>{left > 0 ? `${got} ${left} more ${left === 1 ? 'answer' : 'answers'} to hit today’s goal.` : `${got} Goal done · New Daily tomorrow.`}</span>
       </span>
-      {flame}
       <span className="daily-banner-actions">
         {left > 0 ? (
           <>

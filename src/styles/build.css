@@ -10,11 +10,48 @@
   align-items: start;
 }
 @media (min-width: 900px) {
-  .build { grid-template-columns: 1fr 1fr; padding: 28px; column-gap: 32px; }
-  .build-result { grid-column: 1 / -1; }
+  .build {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: 'job side' 'box side' 'result result';
+    grid-template-rows: auto 1fr auto;
+    padding: 28px;
+    column-gap: 32px;
+    row-gap: 20px;
+  }
+  .build-job { grid-area: job; }
+  .build-box { grid-area: box; }
+  .build-side { grid-area: side; position: sticky; top: 80px; }
+  .build-result { grid-area: result; }
 }
-.build-box, .build-screen { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
-.build-box-label { margin-top: 12px; }
+.build-job, .build-box, .build-side, .build-screen { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.build-side { gap: 12px; }
+
+/* Phones: job, then the screen pinned under the top bar (short, scrolls to the newest piece),
+   then the pieces, then the buttons pinned above the bottom bar. */
+@media (max-width: 899px) {
+  .build { row-gap: 16px; }
+  .build-side { display: contents; }
+  .build-job { order: -2; }
+  .build-screen { order: -1; }
+}
+@media (max-width: 720px) {
+  .build-screen {
+    position: sticky;
+    top: calc(52px + env(safe-area-inset-top, 0px));
+    z-index: 4;
+    max-height: 34vh;
+    max-height: 34dvh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    margin: 0 -16px;
+    padding: 8px 16px 12px;
+    background: var(--sand);
+    box-shadow: 0 8px 16px -12px rgba(36, 40, 44, 0.35);
+  }
+  .build-screen { z-index: 6; } /* above the pinned buttons when they meet */
+  /* After "Check my screen" the screen lets go, so the result has room to read */
+  .build.has-result .build-screen { position: static; max-height: none; overflow: visible; box-shadow: none; }
+}
 .build-pieces {
   list-style: none;
   margin: 0;
@@ -110,6 +147,7 @@
 .story-pick strong { font-family: var(--display); font-size: 22px; line-height: 28px; font-weight: 800; }
 .story-pick > span:not(.story-avatar):not(.game-meta) { color: var(--ink-2); }
 .story-pick .story-avatar { background: var(--card); }
+.story-pick .story-icon { width: 40px; height: 40px; border-radius: 12px; }
 .story-pick .game-meta { padding-top: 10px; }
 .disagree {
   display: inline-flex;

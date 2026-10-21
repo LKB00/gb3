@@ -206,7 +206,7 @@ export default function Speed() {
           <button type="button" className="btn btn-primary btn-lg" data-fx="off" /* the countdown ticks instead */ onClick={() => start(!!challenge)}>
             <Zap size={15} strokeWidth={2} aria-hidden /> {challenge ? 'Accept challenge' : 'Start the clock'}
           </button>
-          <p className="small muted">Your best: {stats.speedBest || 0} points · Keyboard: ← / →</p>
+          <p className="small muted">Your best: {stats.speedBest || 0} points<span className="keys-hint"> · Keyboard: ← / →</span></p>
         </div>
       )}
 

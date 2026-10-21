@@ -5,7 +5,7 @@ import DailyBanner from '../components/play/DailyBanner';
 import GameTiles from '../components/play/GameTiles';
 import Badges from '../components/play/Badges';
 import { TodayCard, TodayStrip } from '../components/Today';
-import { dayKey, useDaily, useStreak } from '../progress';
+import { useStreak } from '../progress';
 import { useTitle } from '../lib/useTitle';
 
 // The Play hub: level, today's goal, the Daily, then every game.
@@ -14,7 +14,6 @@ import { useTitle } from '../lib/useTitle';
 export default function Play() {
   useTitle('Play');
   const { todayMoves } = useStreak();
-  const daily = useDaily();
   return (
     <div className="page page-wide">
       <header className="page-head page-head-tight">
@@ -23,8 +22,8 @@ export default function Play() {
       </header>
       <div className="play-grid">
         <LevelCard />
-        {/* The Daily banner offers the same "quick rounds" once the Daily is done. */}
-        {todayMoves > 0 ? <TodayCard go={!daily[dayKey()]} /> : <TodayStrip />}
+        {/* One main button at a time: the Daily, or (once it is done) the Daily banner's "quick rounds". */}
+        {todayMoves > 0 ? <TodayCard go={false} compact /> : <TodayStrip />}
         <DailyBanner />
         <GameTiles />
       </div>

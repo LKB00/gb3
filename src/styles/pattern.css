@@ -347,17 +347,11 @@
   font-weight: 700;
 }
 
-/* Phones: on the Play view, get the first question above the bottom bar */
+/* Phones: on the Play view, get the first question well above the bottom bar.
+   The summary is hidden here (never cut in half): the Fix it job says what to do,
+   and the full summary is on "Why it works". */
 @media (max-width: 720px) {
-  .pattern-page.is-view-do .page-head .lead {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
-    line-clamp: 1;
-    overflow: hidden;
-    font-size: 14px;
-    line-height: 20px;
-  }
+  .pattern-page.is-view-do .page-head .lead { display: none; }
   .pattern-page .view-tabs { margin-top: 16px; }
   .pattern-page .view { margin-top: 16px; }
   .pager-target { font-size: 12px; }

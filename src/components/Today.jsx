@@ -156,7 +156,8 @@ export function TodayStrip() {
 
 // Today: goal ring, streak, freeze and the last 7 days.
 // `go` = show the "Play N quick rounds" button while the goal is open (off where another one is shown).
-export function TodayCard({ go = true }) {
+// `compact` = one short line of text (the Play page); the full rules stay on Me.
+export function TodayCard({ go = true, compact = false }) {
   const { streak, frozen, freezeReady, todayMoves, days } = useStreak();
   const pct = Math.min(1, todayMoves / DAILY_GOAL);
   const left = DAILY_GOAL - todayMoves;
@@ -171,7 +172,7 @@ export function TodayCard({ go = true }) {
     return { k, label: WEEK[d.getDay()], played: (days[k] || 0) > 0, frozen: frozen.includes(k), today: i === 6 };
   });
   return (
-    <div className="today-card">
+    <div className={'today-card' + (compact ? ' is-compact' : '')}>
       <div className="today-goal">
         <svg width="64" height="64" viewBox="0 0 64 64" aria-hidden>
           <circle cx="32" cy="32" r={r} className="ring-bg" />
@@ -184,7 +185,7 @@ export function TodayCard({ go = true }) {
         <p className="today-title">{pct >= 1 ? 'Daily goal done. Nice!' : `${DAILY_GOAL - todayMoves} more ${DAILY_GOAL - todayMoves === 1 ? 'answer' : 'answers'} to hit today’s goal`}</p>
         {saved && <p className="today-saved"><Snowflake size={13} strokeWidth={2} aria-hidden /> {saved}</p>}
         <p className="small muted">
-          Every answer in every game counts.{saved ? ' ' : ' Miss a day? A skip day saves your day streak. '}
+          Every answer in every game counts.{saved || compact ? ' ' : ' Miss a day? A skip day saves your day streak. '}
           {freezeReady ? (
             <span className="freeze"><Snowflake size={12} strokeWidth={2} aria-hidden /> 1 skip day ready</span>
           ) : (
