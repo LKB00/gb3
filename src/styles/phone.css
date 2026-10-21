@@ -51,9 +51,6 @@
 }
 .me-row > span:nth-child(2) { flex: 1; display: flex; flex-direction: column; }
 .me-row strong { font-size: 15px; }
-.me-credits { margin-top: 48px; font-size: 12px; line-height: 18px; color: var(--ink-3); }
-/* Phones have no footer, so the Me page shows the credits; on bigger screens the footer already does. */
-@media (min-width: 721px) { .me-credits { display: none; } }
 .speed-quit {
   flex: none;
   width: 32px;
@@ -141,7 +138,6 @@
   .bottomnav-tab.is-on .bottomnav-icon { background: var(--lime); color: #24282c; }
   .bottomnav-tab:active .bottomnav-icon { transform: scale(0.92); }
   .main { padding-bottom: calc(var(--bottomnav-h) + env(safe-area-inset-bottom, 0px)); }
-  .site-footer { display: none; }
   .crumbs { display: none; }
   .goal-toast { bottom: calc(var(--bottomnav-h) + 16px + env(safe-area-inset-bottom, 0px)); }
   /* Tab rows scroll sideways on phones: fade the right edge so the next tab peeks out */

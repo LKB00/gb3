@@ -259,7 +259,7 @@ src/
   progress.js              ALL saved progress, XP/levels, streaks, backup (the one place that touches game saves)
   data/                    all content as plain JS (see section 9)
   config/nav.js            menus and Explore tabs (one source for TopBar, BottomNav, LibraryTabs)
-  config/creator.js        creator name, portfolio link and LinkedIn link (shown by components/Credits.jsx in the footer and on Me)
+  config/creator.js        creator name, portfolio link and LinkedIn link (shown by components/Credits.jsx in the footer on every page, phones too)
   config/games.js          the game tiles (one entry per game)
   pages/                   one file per route
   components/              shared UI; components/play/ = Play hub parts
@@ -434,7 +434,7 @@ Things the repo does **not** have: unit tests, visual regression, a real-device 
 | (Oct 21) | UI hierarchy pass (owner: "check hierarchy"): one main action on Play, streak shown once, big + small game tiles, Spot the flaw picker, pinned Build screen on phones, Me badges as a row, lime ring on won cards, story icons, "+N more" on Principles (2 columns on desktop), Speed start centred on phones, sound hint over the top bar |
 | (Oct 21) | Game list (owner: "same issue" on Play): 7 big colour tiles in 3 shapes → two calm lists, Quick games and Deeper games, one row style, colour only in the icon, no zero stats; Home drops its double heading |
 | (Oct 21) | "Build all" pass: Me hides zero totals and the repeated XP, the Today card is one goal + one button with a quiet streak/week footer; Cards shows one section per group and one readable row per card on phones; the Fix it step bar is progress only on phones (no repeated question); "Skip it when" on Why it works; live demos for all 38 cards; new card `sandbox-preview` (Try it safely first, Agents, #21, so later card numbers moved up by 1; progress is by id); stories `roam` + `quill`; 3 flaw screens; 4 hard pairs (the Daily deck shuffle changes because `subtle` grew) |
-| (Oct 21) | Stats: "Game started" event (first answer per game per visit) and Spot the flaw now sends "Game finished"; installed iPhone app gets `viewport-fit=cover` so the bottom bar clears the home line; public "N visits" line with letter avatars (P, A, M, K: the story characters) above the credits (owner asked for one like their other site) |
+| (Oct 21) | Stats: "Game started" event (first answer per game per visit) and Spot the flaw now sends "Game finished"; installed iPhone app gets `viewport-fit=cover` so the bottom bar clears the home line; public "N visits" line with letter avatars (P, A, M, K: the story characters) above the credits (owner asked for one like their other site); the footer (visit count + credits) now shows on every page on phones too (owner) |
 
 ### Decisions worth remembering
 - **Name: Good Bot, Bad Bot** (chosen by the owner from a short list). It matches the main game (pick the better screen). Renamed from "AI Patterns", which was clear but easy to forget.

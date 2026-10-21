@@ -149,6 +149,3 @@
   .home-or { margin-top: 20px; }
 }
 .home-more-link { margin: 20px 0 0; }
-/* Visit count at the end of Home: phones only (bigger screens show it in the footer) */
-.home-visits { margin-top: 40px; }
-@media (min-width: 721px) { .home-visits { display: none; } }
