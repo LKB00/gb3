@@ -316,9 +316,8 @@
   /* Same width and side gutter as the page content (.page-wide: 1128px with 48px padding) */
   width: calc(100% - 96px);
   max-width: 1032px;
-  margin: 48px auto 0;
-  padding: 16px 0 32px;
-  border-top: var(--hair) solid var(--divider);
+  margin: 72px auto 0;
+  padding: 0 0 32px; /* no line on top: space alone sets it apart from the page */
   font-size: 12px;
   line-height: 18px;
   color: var(--ink-3);
@@ -360,7 +359,7 @@
 @media (max-width: 720px) {
   .site-footer {
     width: auto;
-    margin: 32px 16px 0;
+    margin: 56px 16px 0;
     max-width: none;
   }
 }

@@ -7,7 +7,6 @@ import AppAndBackup from '../components/play/AppAndBackup';
 import Badges from '../components/play/Badges';
 import LevelCard from '../components/play/LevelCard';
 import { useTitle } from '../lib/useTitle';
-import Credits from '../components/Credits';
 
 // "Me": your level, today, badges, settings and backup in one place.
 // Order: who you are (a quiet level line), today's goal (the one card with a button), then details.
@@ -63,7 +62,6 @@ export default function Me() {
         <AppAndBackup />
       </section>
 
-      <div className="me-credits"><Credits /></div>
     </div>
   );
 }

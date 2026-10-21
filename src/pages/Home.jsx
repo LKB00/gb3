@@ -8,7 +8,6 @@ import { dayKey } from '../lib/dates';
 import ThisOrThat from '../components/ThisOrThat';
 import DailyBanner from '../components/play/DailyBanner';
 import GameTiles from '../components/play/GameTiles';
-import VisitCount from '../components/VisitCount';
 import { useTitle } from '../lib/useTitle';
 
 // Home = play in one second. The first game starts right here, no reading needed.
@@ -89,8 +88,6 @@ export default function Home() {
           <Link to="/me" className="text-link">Your level and badges <ArrowRight size={14} strokeWidth={1.75} aria-hidden /></Link>
         </p>
       </section>
-      {/* Phones have no footer, so the visit count closes the page here. */}
-      <VisitCount className="home-visits" />
     </div>
   );
 }

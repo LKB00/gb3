@@ -1,4 +1,4 @@
-// Who made the site. Used by components/Credits.jsx (footer and Me page).
+// Who made the site. Used by components/Credits.jsx (the footer on every page).
 export const creator = {
   name: 'Lokesh Bhatia',
   portfolio: 'https://lokeshbhatia.com',
