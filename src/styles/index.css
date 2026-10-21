@@ -11,6 +11,11 @@
 @import './lab.css';
 @import './pattern.css';
 @import './explore.css';
+@import './demos-io.css';
+@import './demos-trust.css';
+@import './demos-agents.css';
+@import './demos-voice.css';
+@import './demos-sandbox.css';
 @import './home.css';
 @import './game-core.css';
 @import './play.css';

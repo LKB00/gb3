@@ -408,9 +408,9 @@
 }
 .today-card {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto 1fr;
   align-items: center;
-  gap: 12px 20px;
+  gap: 12px 18px;
   padding: 20px;
   border-radius: 20px;
   background: var(--sand);
@@ -449,41 +449,45 @@
   white-space: nowrap;
 }
 .freeze.is-used { color: var(--ink-3); }
-.today-streak {
+/* Footer: streak, the last 7 days and the skip day, all small and quiet */
+.today-foot {
+  grid-column: 1 / -1;
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   align-items: center;
+  gap: 10px 16px;
+  padding-top: 14px;
+  border-top: var(--hair) solid var(--divider);
 }
 .today-flame {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  font-family: var(--display);
-  font-size: 28px;
-  font-weight: 800;
-  color: var(--ink-3);
+  gap: 5px;
+  font-size: 14px;
+  color: var(--ink-2);
 }
-.today-flame.is-lit { color: var(--attention); }
+.today-flame strong { font-family: var(--display); font-size: 16px; color: var(--ink); }
+.today-flame svg { color: var(--ink-3); }
+.today-flame.is-lit svg { color: var(--attention); }
 .week {
-  grid-column: 1 / -1;
   list-style: none;
-  margin: 4px 0 0;
+  margin: 0;
   padding: 0;
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  display: flex;
   gap: 6px;
 }
 .week li {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  font-size: 11px;
+  gap: 2px;
+  font-size: 10px;
+  line-height: 12px;
   color: var(--ink-3);
 }
 .week-dot {
-  width: 30px;
-  height: 30px;
+  width: 20px;
+  height: 20px;
   display: grid;
   place-items: center;
   border-radius: 50%;
@@ -492,8 +496,5 @@
 .week .is-played .week-dot { background: var(--attention-soft); color: var(--attention); }
 .week .is-frozen .week-dot { background: #e4f0f8; color: #4f8fb8; }
 .week .is-today .week-day { color: var(--ink); font-weight: 700; }
-.week .is-today .week-dot { box-shadow: 0 0 0 2px var(--ink-3); }
-@media (max-width: 560px) {
-  .today-card { grid-template-columns: auto 1fr; }
-  .today-streak { grid-column: 1 / -1; flex-direction: row; gap: 8px; justify-content: flex-start; }
-}
+.week .is-today .week-dot { box-shadow: 0 0 0 1.5px var(--ink-3); }
+.today-foot .freeze { flex-basis: 100%; white-space: normal; }

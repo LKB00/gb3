@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Angry, ArrowRight, ChefHat, CodeXml, FolderOpen, Frown, Landmark, Meh, RotateCcw, Smile } from 'lucide-react';
+import { Angry, ArrowRight, ChefHat, CodeXml, FolderOpen, Frown, Landmark, Meh, PenLine, Plane, RotateCcw, Smile } from 'lucide-react';
 import { getStory, stories } from '../data/story';
 import { getPattern } from '../data/patterns';
 import { clearRun, markPlayed, readStoryRun, saveRun, saveStoryBest, storyBests, useGameStats } from '../progress';
@@ -54,7 +54,7 @@ function TrustMeter({ trust, delta, person }) {
 }
 
 // What each story's AI is about, shown on its picker card (a letter looked like an answer "A").
-const STORY_ICONS = { tidy: FolderOpen, nova: ChefHat, sage: Landmark, pilot: CodeXml };
+const STORY_ICONS = { tidy: FolderOpen, nova: ChefHat, sage: Landmark, pilot: CodeXml, roam: Plane, quill: PenLine };
 
 // Story picker: one card per story, with your best trust. One card is marked as the place to start:
 // the first story without its best ending yet, so the page has one clear "play this".

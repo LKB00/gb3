@@ -1,0 +1,58 @@
+/* "Try it safely first" demo (src/demos/SandboxDemo.jsx): the practice-run list. */
+
+.dm-sb-run {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+.dm-sb-list {
+  align-self: stretch;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 13px;
+  line-height: 20px;
+}
+.dm-sb-list li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  padding: 8px 0;
+  border-bottom: var(--hair) solid var(--divider);
+}
+.dm-sb-list li.dm-sb-odd {
+  margin: 0 -8px;
+  padding: 8px;
+  border-radius: 8px;
+  background: var(--caution-soft);
+}
+.dm-sb-who {
+  flex: 1 1 140px;
+  min-width: 0;
+  color: var(--ink);
+  font-weight: 700;
+}
+.dm-sb-says {
+  color: var(--ink-2);
+  font-family: var(--mono);
+  font-size: 12px;
+}
+.dm-sb-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.dm-sb-tag-ok {
+  color: var(--positive);
+}
+.dm-sb-tag-warn {
+  color: var(--ink);
+}
+.dm-sb-list li.dm-sb-more {
+  border-bottom: none;
+  color: var(--ink-3);
+}

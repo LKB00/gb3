@@ -168,6 +168,11 @@ export default function PatternDetail() {
           <Section title="The winning design" sub="The same moment, designed two ways.">
             <Compare data={v.compare} />
           </Section>
+          {/* Knowing when NOT to use a pattern matters as much as knowing it. */}
+          <div className="skip-when">
+            <p className="label">Skip it when</p>
+            <ul>{p.avoid.map((w) => <li key={w}>{w}</li>)}</ul>
+          </div>
           {p.demo && (
             <Section title="Try it yourself" sub="A tiny version that really works. Tap around.">
               <DemoFrame name={p.demo} />

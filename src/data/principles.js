@@ -142,6 +142,11 @@ export const patternPrinciples = {
     ['habituation', 'Asking only when it matters keeps people reading the question.'],
     ['control', 'Cancel is as easy as Approve.'],
   ],
+  'sandbox-preview': [
+    ['error-prevention', 'Mistakes show up in the practice run, before they reach anyone.'],
+    ['automation-bias', 'Seeing the real result stops people from trusting the AI blindly.'],
+    ['control', 'People make it real with one tap, or fix it and run again.'],
+  ],
   'task-status': [
     ['visibility', 'A clear status shows what is running, done or waiting.'],
     ['control', 'People can leave, come back, or ask for a person.'],
@@ -247,7 +252,7 @@ export const haxGuidelines = [
   { n: 13, phase: 'Over time', name: 'Learn from user behavior', plain: 'Get better from how each person uses it.', patterns: ['feedback-loop', 'memory-controls'] },
   { n: 14, phase: 'Over time', name: 'Update and adapt cautiously', plain: 'Change slowly, so the product never feels like a stranger.', patterns: ['autonomy-dial', 'preview-changes'] },
   { n: 15, phase: 'Over time', name: 'Encourage granular feedback', plain: 'Let people say exactly what they liked or didn’t.', patterns: ['feedback-loop'] },
-  { n: 16, phase: 'Over time', name: 'Convey the consequences of user actions', plain: 'Show what will happen before the person acts.', patterns: ['action-approval', 'cost-estimate', 'preview-changes', 'read-back'] },
+  { n: 16, phase: 'Over time', name: 'Convey the consequences of user actions', plain: 'Show what will happen before the person acts.', patterns: ['action-approval', 'cost-estimate', 'preview-changes', 'read-back', 'sandbox-preview'] },
   { n: 17, phase: 'Over time', name: 'Provide global controls', plain: 'Give people settings that change how the AI behaves everywhere.', patterns: ['memory-controls', 'autonomy-dial'] },
   { n: 18, phase: 'Over time', name: 'Notify users about changes', plain: 'Tell people when the AI changes or learns something new.', patterns: ['memory-controls', 'task-status'] },
 ];

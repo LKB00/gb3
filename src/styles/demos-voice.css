@@ -1,0 +1,129 @@
+/* Voice demos (src/demos/VoiceDemos.jsx): show-understanding, read-back, point-to-edit, mode-switch. */
+.dm-vo-start {
+  align-self: flex-start;
+  max-width: 100%;
+  height: auto;
+  min-height: 36px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  white-space: normal;
+  text-align: left;
+}
+.dm-vo-orb {
+  border-radius: 16px;
+  max-width: 100%;
+}
+
+/* The word in a transcript that can be fixed */
+.dm-vo-word {
+  padding: 0 6px;
+  border: var(--hair) solid var(--line);
+  border-radius: 6px;
+  background: var(--card);
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+.dm-vo-word:disabled {
+  cursor: default;
+}
+.dm-vo-unsure {
+  border-color: var(--caution);
+  background: var(--caution-soft);
+  text-decoration: underline wavy var(--caution);
+  text-underline-offset: 4px;
+}
+
+/* Read-back details on screen */
+.dm-vo-card {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 12px 16px;
+  border: var(--hair) solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+}
+.dm-vo-big {
+  font-size: 22px;
+  line-height: 28px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* Point-to-edit photo */
+.dm-vo-photo {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  padding: 16px 12px;
+  border-radius: 12px;
+  background: var(--sand);
+  min-height: 96px;
+}
+.dm-vo-thing {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 64px;
+  border: 2px dashed transparent;
+  border-radius: 9999px;
+  background: transparent;
+  color: var(--ink-2);
+  cursor: pointer;
+}
+.dm-vo-thing:hover {
+  background: var(--sand-dark);
+}
+.dm-vo-thing.dm-vo-picked {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+.dm-vo-tag {
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0 6px;
+  border-radius: 9999px;
+  background: var(--ink);
+  color: var(--on-ink);
+  font-size: 10px;
+  line-height: 16px;
+  white-space: nowrap;
+}
+
+/* Mode-switch flight list */
+.dm-vo-list {
+  display: flex;
+  flex-direction: column;
+  border: var(--hair) solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.dm-vo-flight {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  padding: 8px 16px;
+  border: 0;
+  border-top: var(--hair) solid var(--divider);
+  background: var(--card);
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.dm-vo-flight:first-child {
+  border-top: 0;
+}
+.dm-vo-flight:hover {
+  background: var(--sand);
+}
+.dm-vo-flight.dm-vo-picked {
+  background: var(--ink);
+  color: var(--on-ink);
+}

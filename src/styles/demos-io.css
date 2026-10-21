@@ -1,0 +1,125 @@
+/* Extra classes for the input, output and control demos (src/demos). */
+
+/* Visible context: a removable file tag */
+.dm-io-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 28px;
+  max-width: 100%;
+  padding: 0 4px 0 12px;
+  border-radius: 9999px;
+  background: var(--sand-dark);
+  color: var(--ink);
+  font-size: 12px;
+}
+.dm-io-tag button {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink-2);
+  cursor: pointer;
+}
+.dm-io-tag button:hover {
+  background: var(--card);
+  color: var(--ink);
+}
+.dm-io-add-chip {
+  border-style: dashed;
+  color: var(--ink-2);
+}
+
+/* Structured controls: length slider */
+.dm-io-range input {
+  flex: 1;
+  min-width: 120px;
+  max-width: 240px;
+  accent-color: var(--ink);
+}
+
+/* Contextual nudge: quiet thread lines */
+.dm-io-thread {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 12px;
+  border-left: 2px solid var(--divider);
+  font-size: 13px;
+  line-height: 22px;
+}
+
+/* Reply to a part: tappable lines + quote */
+.dm-io-part {
+  display: block;
+  width: calc(100% + 16px);
+  padding: 4px 8px;
+  margin: 0 -8px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.dm-io-part:hover {
+  background: var(--sand);
+}
+.dm-io-part-on,
+.dm-io-part-on:hover {
+  background: var(--caution-soft);
+  color: var(--ink);
+}
+.dm-io-quote {
+  display: flex;
+  gap: 8px;
+  padding-left: 12px;
+  border-left: 2px solid var(--caution);
+  color: var(--ink-2);
+  font-size: 13px;
+}
+.dm-io-quote svg {
+  flex: none;
+  margin-top: 4px;
+}
+
+/* Preview before apply: diff rows */
+.dm-io-diff {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.dm-io-diff li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: var(--hair) solid var(--divider);
+}
+.dm-io-diff-done > span:first-child {
+  opacity: 0.55;
+}
+.dm-io-del {
+  padding: 0 4px;
+  border-radius: 4px;
+  background: var(--negative-soft);
+  color: var(--negative);
+}
+.dm-io-ins {
+  padding: 0 4px;
+  border-radius: 4px;
+  background: var(--positive-soft);
+  color: var(--positive);
+  text-decoration: none;
+}
+
+/* Versions & retry: arrows that can't go further */
+.dm-io-nav:disabled {
+  cursor: default;
+  opacity: 0.4;
+}

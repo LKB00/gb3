@@ -95,7 +95,7 @@ export default function Lab({ id, lab, title, next }) {
   return (
     <div className={'lab' + (finished ? ' lab-finished' : '')}>
       <header className="lab-head">
-        <p className="label">Fix it · your job</p>
+        <p className="label">Your job</p>
         <p className="lab-goal">{lab.goal}</p>
         <ol className="lab-steps" aria-label="Steps">
           {decisions.map((x, n) => {
@@ -104,7 +104,7 @@ export default function Lab({ id, lab, title, next }) {
             const canGo = !finished && n <= reached;
             return (
               <li key={x.id} className={'lab-step' + (current ? ' is-current' : '') + (done ? ' is-done' : '')}>
-                <button type="button" disabled={!canGo} onClick={() => goTo(n)} aria-current={current ? 'step' : undefined}>
+                <button type="button" disabled={!canGo} onClick={() => goTo(n)} aria-current={current ? 'step' : undefined} title={x.label}>
                   <span className="lab-step-dot">{done && !current ? <Check size={11} strokeWidth={2.5} aria-hidden /> : n + 1}</span>
                   <span className="lab-step-label">{x.label}</span>
                 </button>
