@@ -17,4 +17,5 @@ Short rules:
 - Copy to clipboard only through `src/lib/clipboard.js` (it has fallbacks).
 - Write UI text in plain, easy English. Keep it playful, not like a course.
   Follow **[docs/VOICE.md](docs/VOICE.md)** for every string: clear first, then warm, with feeling and a spark.
+  Its "Visual hierarchy" section has the 6 layout rules every screen follows (one focus, no repeats, fewer boxes).
 - Update `docs/PROJECT_CONTEXT.md` in the same PR when behaviour, rules or counts change.
