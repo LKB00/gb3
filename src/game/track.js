@@ -1,7 +1,7 @@
 // Privacy-friendly visitor stats with GoatCounter (free, no cookies, no personal data).
 // Stats are at https://lkb.goatcounter.com. The site code is not secret; set VITE_GOATCOUNTER_CODE at build time to use another one.
 // GoatCounter ignores localhost, so local tests and `npm run dev` are not counted. See README → "Visitor stats".
-const CODE = import.meta.env.VITE_GOATCOUNTER_CODE || 'lkb';
+export const CODE = import.meta.env.VITE_GOATCOUNTER_CODE || 'lkb';
 
 let latest = '';
 let last = '';
