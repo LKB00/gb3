@@ -5,7 +5,7 @@ import { visuals } from '../data/visuals';
 import MockFrame, { MockBlock } from '../mock/Mock';
 
 // A collectible pattern card: number, picture of the better design, stars won.
-// Not collected yet = soft and grey, with a hint to play it.
+// Collected = a lime ring and its stars. Not collected yet = soft and grey, with a small lock.
 export default function PatternCard({ pattern, number, passed, stars = 0 }) {
   const good = visuals[pattern.id].compare.good;
   return (
@@ -24,7 +24,7 @@ export default function PatternCard({ pattern, number, passed, stars = 0 }) {
               {[1, 2, 3].map((n) => <Star key={n} size={13} strokeWidth={1.75} className={n <= stars ? 'is-on' : ''} aria-hidden />)}
             </span>
           ) : (
-            <span className="card-lock"><Lock size={12} strokeWidth={1.75} aria-hidden /> Play to collect</span>
+            <span className="card-lock" role="img" aria-label="Not collected yet" title="Play it to collect it"><Lock size={13} strokeWidth={1.75} aria-hidden /></span>
           )}
         </div>
         <h3 aria-level="2">{pattern.title}</h3>

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { haxGuidelines, haxPhases, principleTypes, principles, patternsUsing } from '../data/principles';
 import { getPattern } from '../data/patterns';
@@ -6,6 +6,26 @@ import { useTitle } from '../lib/useTitle';
 import LibraryTabs from '../components/LibraryTabs';
 
 // Card links open "Why it works" (?view=understand): this is a place to read, not to play.
+// Long lists show the first few and a "+N more" button, so the rules stay louder than the links.
+const SHOW = 4;
+function CardLinks({ ids }) {
+  const [all, setAll] = useState(false);
+  const fold = !all && ids.length > SHOW + 1; // never hide just one
+  const shown = fold ? ids.slice(0, SHOW) : ids;
+  return (
+    <>
+      {shown.map((pid) => (
+        <Link key={pid} to={`/patterns/${pid}?view=understand`} className="chip chip-sm">{getPattern(pid).title}</Link>
+      ))}
+      {fold && (
+        <button type="button" className="chip chip-sm chip-more" onClick={() => setAll(true)} aria-label={`Show ${ids.length - SHOW} more cards`}>
+          +{ids.length - SHOW} more
+        </button>
+      )}
+    </>
+  );
+}
+
 export default function Principles() {
   useTitle('Principles');
   const [params] = useSearchParams();
@@ -29,7 +49,7 @@ export default function Principles() {
       </header>
 
       {principleTypes.map((t) => (
-        <section key={t.id} className="block">
+        <section key={t.id} className="block pr-block">
           <div className="section-head">
             <h2>{t.name}</h2>
             <p className="section-sub">{t.blurb}</p>
@@ -41,9 +61,7 @@ export default function Principles() {
                 <p>{p.def}</p>
                 <div className="row">
                   <span className="label">Used in</span>
-                  {patternsUsing(p.id).map((pid) => (
-                    <Link key={pid} to={`/patterns/${pid}?view=understand`} className="chip chip-sm">{getPattern(pid).title}</Link>
-                  ))}
+                  <CardLinks ids={patternsUsing(p.id)} />
                 </div>
               </li>
             ))}
@@ -71,9 +89,7 @@ export default function Principles() {
                   </span>
                   <span className="hax-links">
                     {g.patterns.length ? (
-                      g.patterns.map((pid) => (
-                        <Link key={pid} to={`/patterns/${pid}?view=understand`} className="chip chip-sm">{getPattern(pid).title}</Link>
-                      ))
+                      <CardLinks ids={g.patterns} />
                     ) : (
                       <span className="footnote">No card for this one yet. Test your AI with lots of different people.</span>
                     )}

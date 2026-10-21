@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { AlertTriangle, ArrowRight, Check, CircleDashed, Hammer, Plus, RotateCcw, Star, X } from 'lucide-react';
 import { builds, getBuild } from '../data/builds';
@@ -39,6 +39,12 @@ function Builder({ build, nextJob, onNextJob }) {
   const [gain, setGain] = useState(0);
   const [over, setOver] = useState(false);
   const resultRef = useReveal(result);
+  // Phones: the pinned screen is short, so scroll it to the newest piece.
+  const screenRef = useRef(null);
+  useEffect(() => {
+    const el = screenRef.current;
+    if (el && el.scrollHeight > el.clientHeight) el.scrollTo({ top: el.scrollHeight });
+  }, [placed.length]);
   const runKey = 'build:' + build.id;
   useEffect(() => {
     if (placed.length) saveRun(runKey, { order: pieces.map((p) => p.id), placed, checked: !!result });
@@ -74,11 +80,13 @@ function Builder({ build, nextJob, onNextJob }) {
   const shipped = result?.stars === 3;
 
   return (
-    <div className="build">
-      <div className="build-box">
+    <div className={'build' + (result ? ' has-result' : '')}>
+      <div className="build-job">
         <p className="label">Your job</p>
         <p className="lab-goal">{build.brief}</p>
-        <p className="label build-box-label">Pieces · tap to add, tap again to remove</p>
+      </div>
+      <div className="build-box">
+        <p className="label">Pieces · tap to add, tap again to remove</p>
         <ul className="build-pieces">
           {pieces.map((p) => {
             const on = placed.includes(p.id);
@@ -101,42 +109,46 @@ function Builder({ build, nextJob, onNextJob }) {
         </ul>
       </div>
 
-      <div className="build-screen">
-        <p className="label">Your screen · {placed.length} piece{placed.length === 1 ? '' : 's'}</p>
-        <div
-          className={'build-drop' + (over ? ' is-over' : '')}
-          onDragOver={(e) => {
-            e.preventDefault();
-            setOver(true);
-          }}
-          onDragLeave={() => setOver(false)}
-          onDrop={(e) => {
-            e.preventDefault();
-            setOver(false);
-            const id = e.dataTransfer.getData('text/plain');
-            if (build.pieces.some((p) => p.id === id)) add(id);
-          }}
-        >
-          <MockFrame title={build.app}>
-            {build.base.map((b, i) => <MockBlock key={i} b={b} />)}
-            {placed.map((id) => {
-              const p = build.pieces.find((x) => x.id === id);
-              const state = result ? (p.kind === 'trap' ? 'bad' : 'good') : undefined;
-              return (
-                <div key={id} className="build-placed">
-                  <MockBlock b={p.block} state={state} />
-                  {!result && (
-                    <button type="button" className="build-remove" onClick={() => remove(id)} aria-label={`Remove ${p.label}`}>
-                      <X size={12} strokeWidth={2.25} aria-hidden />
-                    </button>
-                  )}
-                </div>
-              );
-            })}
-            {placed.length === 0 && <div className="m-slot-empty m-slot-focus">Nothing here yet. Tap a piece to add it.</div>}
-          </MockFrame>
+      {/* On phones this wrapper melts away: the screen sticks to the top while you tap pieces,
+          and the buttons stick to the bottom. */}
+      <div className="build-side">
+        <div className="build-screen" ref={screenRef}>
+          <p className="label">Your screen · {placed.length} piece{placed.length === 1 ? '' : 's'}</p>
+          <div
+            className={'build-drop' + (over ? ' is-over' : '')}
+            onDragOver={(e) => {
+              e.preventDefault();
+              setOver(true);
+            }}
+            onDragLeave={() => setOver(false)}
+            onDrop={(e) => {
+              e.preventDefault();
+              setOver(false);
+              const id = e.dataTransfer.getData('text/plain');
+              if (build.pieces.some((p) => p.id === id)) add(id);
+            }}
+          >
+            <MockFrame title={build.app}>
+              {build.base.map((b, i) => <MockBlock key={i} b={b} />)}
+              {placed.map((id) => {
+                const p = build.pieces.find((x) => x.id === id);
+                const state = result ? (p.kind === 'trap' ? 'bad' : 'good') : undefined;
+                return (
+                  <div key={id} className="build-placed">
+                    <MockBlock b={p.block} state={state} />
+                    {!result && (
+                      <button type="button" className="build-remove" onClick={() => remove(id)} aria-label={`Remove ${p.label}`}>
+                        <X size={12} strokeWidth={2.25} aria-hidden />
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
+              {placed.length === 0 && <div className="m-slot-empty m-slot-focus">Nothing here yet. Tap a piece to add it.</div>}
+            </MockFrame>
+          </div>
         </div>
-        <div className="lab-nav">
+        <div className="lab-nav build-actions">
           {shipped ? (
             nextJob ? (
               <button type="button" className="btn btn-primary" onClick={() => onNextJob(nextJob.id)}>

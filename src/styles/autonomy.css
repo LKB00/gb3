@@ -227,12 +227,12 @@
 
 /* New game tile */
 .game-g { background: var(--p-voice); position: relative; }
-.games .game-wide { grid-column: 1 / -1; }
 .game-new {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  padding: 3px 10px;
+  display: inline-block;
+  margin-left: 8px;
+  vertical-align: 3px;
+  padding: 2px 8px;
+  line-height: 16px;
   border-radius: 999px;
   background: var(--ink);
   color: var(--paper) !important;

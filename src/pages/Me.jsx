@@ -33,7 +33,7 @@ export default function Me() {
 
       <section className="block">
         <h2>Badges</h2>
-        <Badges />
+        <Badges row />
       </section>
 
       <section className="block">

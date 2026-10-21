@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Check } from 'lucide-react';
+import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { hunts } from '../data/hunts';
 import { games } from '../config/games';
 import { clearRun, readHuntRun, readRun, saveRun, useHuntsDone } from '../progress';
@@ -67,16 +67,29 @@ export default function SpotTheFlaw() {
       <Breadcrumbs items={[{ label: 'Play', to: '/play' }, { label: 'Spot the flaw' }]} />
       <header className="page-head page-head-tight">
         <h1 className="display">Spot the flaw</h1>
-        <p className="lead">{scenario.brief}</p>
+        <p className="lead">Each AI screen hides a few mistakes. Tap every one you spot.</p>
       </header>
-      <div className="chips hunt-tabs" role="tablist" aria-label="Screens">
-        {hunts.map((h, i) => (
-          <button key={h.id} role="tab" aria-selected={i === idx} className={'chip' + (i === idx ? ' chip-on' : '')} onClick={() => go(i)}>
-            {huntsDone.includes(h.id) && <Check size={12} strokeWidth={2.5} aria-label="Done" />}
-            {h.title}
-          </button>
-        ))}
+      {/* A small picker instead of 10 chips, so the screen itself comes first. */}
+      <div className="hunt-pick">
+        <button type="button" className="icon-btn" onClick={() => go(idx - 1)} disabled={idx === 0} aria-label="Previous screen">
+          <ChevronLeft size={18} strokeWidth={1.75} aria-hidden />
+        </button>
+        <label className="hunt-pick-select">
+          <span className="sr-only">Pick a screen</span>
+          <select value={idx} onChange={(e) => go(Number(e.target.value))}>
+            {hunts.map((h, i) => (
+              <option key={h.id} value={i}>
+                {i + 1}. {h.title}{huntsDone.includes(h.id) ? ' ✓' : ''}
+              </option>
+            ))}
+          </select>
+        </label>
+        <button type="button" className="icon-btn" onClick={() => go(idx + 1)} disabled={last} aria-label="Next screen">
+          <ChevronRight size={18} strokeWidth={1.75} aria-hidden />
+        </button>
+        <span className="hunt-pick-done small muted">{huntsDone.length}/{hunts.length} done</span>
       </div>
+      <p className="hunt-brief">{scenario.brief}</p>
       <div className="view">
         <Hunt key={scenario.id} scenario={scenario} onOver={setOver}>
           {over && (

@@ -345,17 +345,24 @@
 .tot-tricks .peek-link { min-height: 28px; overflow-wrap: anywhere; text-align: left; }
 
 /* ---- Game tiles ---- */
+/* Two big tiles first ("start here"), then smaller ones, so there is one clear first pick. */
 .games {
   display: grid;
   gap: 12px;
 }
+.games-top {
+  display: grid;
+  gap: 12px;
+}
 @media (min-width: 640px) {
-  .games { grid-template-columns: repeat(2, 1fr); }
+  .games-top { grid-template-columns: repeat(2, 1fr); }
 }
-@media (min-width: 1040px) {
-  .games { grid-template-columns: repeat(6, 1fr); }
-  .games .game { grid-column: span 2; }
+.games-more {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
 }
+.games-more > .game { flex: 1 1 300px; }
 .game {
   display: flex;
   flex-direction: column;
@@ -392,6 +399,24 @@
   font-size: 12px;
   font-weight: 700;
 }
+/* Big tile: room to breathe */
+.game-big { padding: 24px; min-height: 196px; }
+.game-big strong { font-size: 26px; line-height: 32px; }
+/* Small tile: icon on the left, text on the right */
+.game-small {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 14px;
+  row-gap: 2px;
+  align-content: start;
+  padding: 16px 18px;
+  border-radius: 18px;
+}
+.game-small > * { grid-column: 2; }
+.game-small > svg { grid-column: 1; grid-row: 1 / span 3; margin: 2px 0 0; }
+.game-small strong { font-size: 18px; line-height: 24px; }
+.game-small > span:not(.game-meta) { font-size: 13px; line-height: 19px; }
+.game-small .game-meta { padding-top: 6px; }
 .game-a { background: var(--p-output); }
 .game-b { background: var(--p-control); }
 .game-c { background: var(--p-trust); }

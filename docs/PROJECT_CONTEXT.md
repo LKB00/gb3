@@ -4,7 +4,7 @@
 > with the same context: what the site is, what the owner wants, how to work, how to ship, what was decided and why,
 > and what is still open. Keep it up to date (see [Keeping this file current](#14-keeping-this-file-current)).
 >
-> Last updated: **2026-10-13**, after the plain-English copy pass on every game. Live site: <https://gb3.lokeshbhatia.com/>
+> Last updated: **2026-10-21**, after the UI hierarchy pass (one main action on Play, big + small game tiles, Spot the flaw picker, pinned Build screen on phones). Live site: <https://gb3.lokeshbhatia.com/>
 
 ## Contents
 1. [Snapshot](#1-snapshot) (name and brand: see [section 8b](#8b-brand))
@@ -160,7 +160,7 @@ The owner looks at a **private Claude Artifact**. It is one self-contained HTML 
 | Route | Page | Notes |
 |---|---|---|
 | `/` | Home | First visit: hero + a 5-round This or That + Daily banner + game tiles. Returning players (any XP or played day): a compact hello and the Daily banner **above** the game. The score screen offers the Daily (or Speed if the Daily is done), a card to win, and a quiet Play again |
-| `/play` | Play hub | Level card, Today (a compact strip until the first answer of the day, then the full card with goal, streak and a "Play N quick rounds" button), Daily banner, game tiles, badges (a sideways row on phones) |
+| `/play` | Play hub | Level card (desktop), Today (a compact strip until the first answer of the day, then a compact card: goal ring, one line, streak; week dots only on wide screens; no button, so the Daily banner is the one main action), Daily banner (no streak chip: the streak shows in the top bar and Today), game tiles (the first 2 in `config/games.js` are big, the rest small), badges (a sideways row on phones) |
 | `/play/daily` | Daily challenge | See 5.3 |
 | `/play/this-or-that` | This or That | `?mode=hard` for Hard mode; `?rounds=3..10` for a shorter run (default 10), used by the daily-goal buttons |
 | `/play/speed` | Speed round | `?vs=&seed=&from=` for challenge links |
@@ -214,13 +214,13 @@ While playing, the body gets class `focus-mode` (top/bottom bars hidden on phone
 **Fix it** (`components/Lab.jsx`, one per pattern, reached from the card's Play tab): step by step, one decision at a time with instant feedback; 3 stars = no mistakes, The end screen's primary is **Next missing card** (else Next card for 3 stars) via `nextTarget()` in `game/useRandomChallenge.js`. The Play tab stays mounted (hidden) so switching tabs keeps your step.
 2 = one mistake, 1 = more. Finishing flips a **collectible card** (`FlipCard`) with a glow and star chimes. "Reveal the answer (no card)" exists for people who give up.
 
-**Spot the flaw** (`components/Hunt.jsx`): a realistic AI screen with hidden mistakes; tap what is wrong, tap fine parts to be told they are fine. Each of the 10 screens gives 30 XP once.
+**Spot the flaw** (`components/Hunt.jsx`): a realistic AI screen with hidden mistakes; tap what is wrong, tap fine parts to be told they are fine. Each of the 10 screens gives 30 XP once. Screens are picked with a small picker (back, a dropdown with ✓ for done, next) above the screen; on desktop the score and notes sit in a sand card beside it.
 
 **Stories** (`pages/Story.jsx`, `data/story.js`): 4 branching stories. Each scene = setup + a screen + a question + choices. Each choice changes **trust (0 to 100)**,
 shows a reaction and may change the path (`next`). The final trust picks one of 4 endings (`endings[].min`). Best trust per story is saved.
 `tidy` = file-cleanup agent (Priya), `nova` = kitchen voice assistant, `sage` = bank help bot, `pilot` = coding agent.
 
-**Build mode** (`pages/Build.jsx`, `data/builds.js`): a brief and a box of pieces. Tap or drag pieces onto a blank AI screen. Each piece is `need`, `nice` or `trap`.
+**Build mode** (`pages/Build.jsx`, `data/builds.js`): a brief and a box of pieces. Tap or drag pieces onto a blank AI screen. Each piece is `need`, `nice` or `trap`. On phones the order is job, screen, pieces, buttons: the screen is pinned under the top bar (short, scrolls to the newest piece) and lets go after "Check my screen".
 Stars: **3** = all needs and no traps; **2** = (missing + traps) <= 2; else **1**. Pieces explain their pattern after "Check my screen".
 
 **How much power?** (`pages/Power.jsx`, `data/autonomy.js`): 8 tasks dealt from 21 (one for each of the 5 levels first, then random). Pick the autonomy level
@@ -430,6 +430,7 @@ Things the repo does **not** have: unit tests, visual regression, a real-device 
 | #23 | Added this context file |
 | #24 | Rename to **Good Bot, Bad Bot**: new two-bot logo, icons, share image, name everywhere, `npm run brand` |
 | #25 | Revert logo to **simple lime circle** (owner preference), keep product name **Good Bot, Bad Bot** |
+| (Oct 21) | UI hierarchy pass (owner: "check hierarchy"): one main action on Play, streak shown once, big + small game tiles, Spot the flaw picker, pinned Build screen on phones, Me badges as a row, lime ring on won cards, story icons, "+N more" on Principles (2 columns on desktop), Speed start centred on phones, sound hint over the top bar |
 
 ### Decisions worth remembering
 - **Name: Good Bot, Bad Bot** (chosen by the owner from a short list). It matches the main game (pick the better screen). Renamed from "AI Patterns", which was clear but easy to forget.
@@ -443,6 +444,7 @@ Things the repo does **not** have: unit tests, visual regression, a real-device 
 - **Data cleaned on read**, not only on write, because storage can be changed by hand or by old versions.
 - **`:where()` for generic motion rules** so component animations are not overridden by the last-loaded file.
 - **`:not(.is-good):not(.is-bad)`** is used on `.tot-option` entrance animation so the answer states keep their own animations.
+- **One main action per screen** (Oct 2026 hierarchy pass): Play shows one primary button above the games (the Daily banner); the streak shows once per area; only the first 2 game tiles are big.
 - **Pastel CSS tokens per group** (`--p-input` etc.) colour tiles, badges, tags and the ladder steps; `--p-voice` lives in `explore.css`.
 - Past bugs worth not repeating: media query placed before its base rule (overridden); step state named `now` but the styled name is `active`; autofocus on Next scrolled the page (use `focus({ preventScroll: true })`); Enter double-advancing when a button had focus.
 
