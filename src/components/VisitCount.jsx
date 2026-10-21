@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { CODE } from '../game/track';
 
-// "717 visits" with three little faces, from GoatCounter's public counter for the whole site.
+// "717 visits" with a few letter avatars, from GoatCounter's public counter for the whole site.
 // The counter only answers when "Allow using the visitor counter" is on in GoatCounter's settings;
 // until then (or offline) this shows nothing. The answer (or "no number") is kept for 10 minutes per visit,
 // so pages don't ask again on every tap.
@@ -23,6 +23,14 @@ function cached() {
     return null;
   }
 }
+
+// Letter avatars for the people in the stories (Priya, Arjun, Meera, Kabir), in the soft group colours.
+const PEOPLE = [
+  ['P', 'input'],
+  ['A', 'trust'],
+  ['M', 'control'],
+  ['K', 'feedback'],
+];
 
 export default function VisitCount({ className = '' }) {
   const [n, setN] = useState(cached);
@@ -46,9 +54,9 @@ export default function VisitCount({ className = '' }) {
   return (
     <p className={'visits ' + className}>
       <span className="visits-faces" aria-hidden>
-        <span>🙂</span>
-        <span>😎</span>
-        <span>🤖</span>
+        {PEOPLE.map(([letter, tone]) => (
+          <span key={letter} className={`visits-face visits-${tone}`}>{letter}</span>
+        ))}
       </span>
       <strong>{n.toLocaleString('en-US')}</strong> visits
     </p>
