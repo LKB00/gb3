@@ -336,21 +336,14 @@
 }
 .visits strong { font-family: var(--display); font-size: 18px; font-weight: 800; color: var(--ink); }
 .visits-faces { display: inline-flex; }
-.visits-faces span {
-  width: 26px;
-  height: 26px;
-  display: grid;
-  place-items: center;
-  margin-left: -7px;
+.visits-faces svg {
+  width: 30px;
+  height: 30px;
+  margin-left: -4px;
   border-radius: 50%;
-  border: 2px solid var(--paper);
-  background: var(--sand);
-  font-size: 14px;
-  line-height: 1;
+  box-shadow: 0 0 0 2px var(--paper);
 }
-.visits-faces span:first-child { margin-left: 0; background: var(--p-input); }
-.visits-faces span:nth-child(2) { background: var(--p-trust); }
-.visits-faces span:nth-child(3) { background: var(--p-agents); }
+.visits-faces svg:first-child { margin-left: 0; }
 .credits a { color: var(--ink-2); text-decoration: underline; text-underline-offset: 2px; }
 .credits a:hover { color: var(--ink); }
 .credits-icon { display: inline-flex; vertical-align: -3px; margin-left: 6px; text-decoration: none !important; }
