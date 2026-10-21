@@ -132,8 +132,19 @@
 }
 .home-daily { margin-top: 16px; }
 .home-daily + .home-game { margin-top: 20px; }
+/* Returning players: the Daily is the one "start here"; the quick game below is clearly the second pick */
+.home-or {
+  margin-top: 24px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink-2);
+}
+.home-or + .home-game { margin-top: 8px; }
+/* New players: once the score screen offers the Daily as its main button, the banner below would repeat it */
+.home-game:has(.tot-over) + .home-daily-after { display: none; }
 @media (max-width: 720px) {
   .home-back-title { font-size: 20px; line-height: 26px; }
   .home-daily { margin-top: 12px; }
   .home-daily + .home-game { margin-top: 16px; }
+  .home-or { margin-top: 20px; }
 }

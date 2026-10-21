@@ -145,10 +145,31 @@
 }
 .story-pick:hover { transform: translateY(-3px); }
 .story-pick strong { font-family: var(--display); font-size: 22px; line-height: 28px; font-weight: 800; }
-.story-pick > span:not(.story-avatar):not(.game-meta) { color: var(--ink-2); }
+/* Icon and title share one row, so each card is shorter and more fit on a phone */
+.story-pick-top { display: flex; align-items: center; gap: 12px; width: 100%; }
+/* The one story to play next: a ring and a small flag, so the page has one clear start */
+.story-pick.is-up { box-shadow: inset 0 0 0 2px var(--ink); }
+.story-pick-flag {
+  margin-left: auto;
+  padding: 2px 10px;
+  border-radius: 9999px;
+  background: var(--ink);
+  color: var(--on-ink) !important;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 20px;
+  white-space: nowrap;
+}
+.story-pick > span:not(.story-avatar):not(.game-meta):not(.story-pick-top) { color: var(--ink-2); }
 .story-pick .story-avatar { background: var(--card); }
 .story-pick .story-icon { width: 40px; height: 40px; border-radius: 12px; }
-.story-pick .game-meta { padding-top: 10px; }
+.story-pick .game-meta { padding-top: 6px; }
+@media (max-width: 720px) {
+  .story-picks { margin-top: 16px; gap: 10px; }
+  .story-picks .story-pick { padding: 16px; gap: 4px; }
+  .story-pick strong { font-size: 19px; line-height: 24px; }
+  .story-pick .story-icon { width: 36px; height: 36px; }
+}
 .disagree {
   display: inline-flex;
   align-items: center;
@@ -162,3 +183,24 @@
 .disagree:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
 .lab-why .disagree { align-self: flex-start; margin-top: 2px; }
 .page-head + .tabs { margin-top: 24px; }
+
+/* "Start over" is rare and wipes the screen, so it is a quiet text button, not a second big button. */
+.build-reset {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  padding: 8px 4px;
+  border: none;
+  background: none;
+  color: var(--ink-3);
+  font: inherit;
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.build-reset:hover { color: var(--ink); }
+@media (min-width: 900px) {
+  .build-actions .build-reset { margin-left: 4px; }
+}

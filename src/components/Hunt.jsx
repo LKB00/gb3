@@ -1,4 +1,4 @@
-import { ArrowRight, Check, MousePointerClick } from 'lucide-react';
+import { ArrowRight, Check } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import MockFrame, { MockBlock } from '../mock/Mock';
 import { getPattern } from '../data/patterns';
@@ -85,12 +85,11 @@ export default function Hunt({ scenario, onOver, children }) {
           {mistakes.map((_, i) => (
             <span key={i} className={'hunt-dot' + (i < found.length ? ' hunt-dot-on' : '')} />
           ))}
+          {/* The page lead says what to do; this line is the score, so no second how-to line here. */}
           <strong>{found.length} of {mistakes.length} mistakes found</strong>
         </div>
 
-        {shown.length === 0 && (
-          <p className="demo-muted hunt-hint"><MousePointerClick size={14} strokeWidth={1.75} aria-hidden /> {mistakes.length} mistakes are hiding here. Tap each one you spot.</p>
-        )}
+        {revealed && <p className="demo-muted hunt-hint">No worries. Here they all are. Find them yourself next time for XP.</p>}
 
         <ol className="hunt-list" ref={listRef}>
           {shown.map((i, n) => {
@@ -118,7 +117,6 @@ export default function Hunt({ scenario, onOver, children }) {
         {!done && !revealed && (
           <button className="btn btn-ghost btn-sm" onClick={() => setRevealed(true)}>Show me the answers</button>
         )}
-        {revealed && <p className="demo-muted hunt-hint">No worries. Here they all are. Find them yourself next time for XP.</p>}
         {children}
       </div>
     </div>

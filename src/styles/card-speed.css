@@ -223,6 +223,25 @@
   background: var(--p-input);
   text-align: center;
 }
+/* The rules as three quiet chips under the one-line lead */
+.speed-rules {
+  list-style: none;
+  margin: -4px 0 4px;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+.speed-rules li {
+  padding: 4px 12px;
+  border-radius: 9999px;
+  background: var(--card);
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--ink-2);
+}
+.speed-rules strong { color: var(--ink); }
 .speed-count {
   min-height: 320px;
   justify-content: center;
@@ -333,25 +352,59 @@
 }
 .tot-big .xp-pop { letter-spacing: normal; font-weight: 700; }
 
-/* ---- App install + backup ---- */
+/* ---- Me page: a quiet level line, then one card (today), then grouped lists ---- */
+.me-level {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+  padding: 4px 4px 16px;
+  border-bottom: var(--hair) solid var(--divider);
+}
+.me-level .level-badge { width: 40px; height: 40px; font-size: 20px; border-radius: 12px; }
+/* The totals: one line of facts, not four tiles */
+.me-facts {
+  list-style: none;
+  margin: 2px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 20px;
+  font-size: 14px;
+  color: var(--ink-2);
+}
+.me-facts strong { color: var(--ink); }
+/* Several rows in one box with hairlines between them, instead of one box per row */
+.me-group {
+  display: flex;
+  flex-direction: column;
+  border-radius: 18px;
+  background: var(--sand);
+  overflow: hidden;
+}
+.me-group .me-row { border-radius: 0; background: none; }
+.me-group .me-row + .me-row { box-shadow: inset 0 var(--hair) 0 var(--divider); }
+
+/* ---- App install + backup (Me page): one box, two parts ---- */
 .tools {
   display: grid;
-  gap: 12px;
-}
-@media (min-width: 900px) {
-  .tools { grid-template-columns: 1fr 1fr; align-items: start; }
+  border-radius: 18px;
+  background: var(--sand);
 }
 .tool {
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: 8px 12px;
-  padding: 20px;
-  border-radius: 20px;
-  background: var(--sand);
+  gap: 8px 14px;
+  padding: 16px 18px;
+}
+.tool + .tool { border-top: var(--hair) solid var(--divider); }
+@media (min-width: 900px) {
+  .tools { grid-template-columns: 1fr 1fr; align-items: stretch; }
+  .tool + .tool { border-top: 0; border-left: var(--hair) solid var(--divider); }
 }
 .tool > svg { margin-top: 2px; }
 .tool > :nth-child(n + 3) { grid-column: 1 / -1; }
-.tool strong { font-family: var(--display); font-size: 17px; }
+.tool strong { font-size: 15px; }
 .tool-restore { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
 .tool-restore textarea {
   width: 100%;
@@ -372,11 +425,13 @@
   margin: 16px 0 0;
   padding: 12px 16px;
   border-radius: 14px;
-  background: var(--ink);
-  color: var(--paper);
+  /* Light, not dark: the dark look belongs to the one primary button on the screen */
+  background: var(--card);
+  box-shadow: inset 0 0 0 var(--hair) var(--line);
+  color: var(--ink);
   font-size: 15px;
 }
-.challenge-banner svg { color: var(--lime); flex: none; }
+.challenge-banner svg { color: var(--ink-2); flex: none; }
 /* A friend's name can be one long word (up to 24 letters): let it break instead of widening the page */
 .challenge-banner > span,
 .challenge-result > span { min-width: 0; overflow-wrap: anywhere; }
@@ -411,7 +466,13 @@
 }
 .dare-name::placeholder { color: var(--ink-3); }
 .dare-name:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+/* Tricks missed come after the buttons: a detail, not the next step */
 .speed-missed {
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: var(--hair) solid var(--divider);
+  width: 100%;
+  max-width: 520px;
   display: flex;
   flex-direction: column;
   align-items: center;

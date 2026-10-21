@@ -109,9 +109,9 @@ export default function SpotTheFlaw() {
           )}
         </Hunt>
         {!over && !last && (
-          <div className="actions">
-            <button className="btn btn-ghost" onClick={next}>
-              Skip to the next screen <ArrowRight size={15} strokeWidth={1.75} aria-hidden />
+          <div className="actions hunt-skip">
+            <button type="button" className="text-link link-like" onClick={next}>
+              Skip to the next screen <ArrowRight size={14} strokeWidth={1.75} aria-hidden />
             </button>
           </div>
         )}

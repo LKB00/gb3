@@ -157,6 +157,7 @@ export default function Autonomy() {
       </section>
 
       <section className="block ladder-block">
+        <h2 className="ladder-rules-head">Three rules of thumb</h2>
         <ul className="ladder-rules">
           <li><strong>Start low, earn more.</strong> Begin at Draft or Confirm. Move up as people trust it and mistakes get rare.</li>
           <li><strong>One product, many levels.</strong> Sorting email can run alone while sending email still asks first.</li>

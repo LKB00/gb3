@@ -197,7 +197,13 @@ export default function Speed() {
         <div className="speed-intro">
           <Timer size={36} strokeWidth={1.5} aria-hidden />
           <h1 className="display">Speed round</h1>
-          <p className="lead">60 seconds. Tap the better AI screen, fast. Right&nbsp;=&nbsp;+1, wrong&nbsp;=&nbsp;−1. Get 3 in a row for double points.</p>
+          <p className="lead">Tap the better AI screen, fast.</p>
+          {/* The rules as three quick facts, so they read at a glance */}
+          <ul className="speed-rules">
+            <li><strong>60</strong> seconds</li>
+            <li><strong>+1</strong> right, <strong>−1</strong> wrong</li>
+            <li><strong>3 in a row</strong> = double points</li>
+          </ul>
           {challenge && (
             <p className="challenge-banner">
               <Swords size={16} strokeWidth={1.75} aria-hidden /> <span><strong>{challenge.from}</strong> scored <strong>{challenge.score}</strong>. Same screens, same order. Beat it!</span>
@@ -261,16 +267,6 @@ export default function Speed() {
           <div className="tot-stats">
             {result.record && points > 0 ? <span className="pill-new">New best!</span> : <span>Your best: {stats.speedBest || 0} points</span>}
           </div>
-          {missed.length > 0 && (
-            <div className="speed-missed">
-              <p className="small muted">Tricks you missed. Tap one for a quick look:</p>
-              <ul>
-                {missed.slice(-3).map((id) => (
-                  <li key={id}><PeekLink id={id}>{getPattern(id)?.title || id}</PeekLink></li>
-                ))}
-              </ul>
-            </div>
-          )}
           <div className="speed-dare">
             {dare.askName && (
               <input
@@ -293,6 +289,16 @@ export default function Speed() {
             </div>
             <Link to="/play/this-or-that" className="text-link">Play with no timer</Link>
           </div>
+          {missed.length > 0 && (
+            <div className="speed-missed">
+              <p className="small muted">Tricks you missed. Tap one for a quick look:</p>
+              <ul>
+                {missed.slice(-3).map((id) => (
+                  <li key={id}><PeekLink id={id}>{getPattern(id)?.title || id}</PeekLink></li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       )}
     </div>

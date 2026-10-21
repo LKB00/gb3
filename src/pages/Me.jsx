@@ -10,6 +10,7 @@ import { useTitle } from '../lib/useTitle';
 import Credits from '../components/Credits';
 
 // "Me": your level, today, badges, settings and backup in one place.
+// Order: who you are (a quiet level line), today's goal (the one card with a button), then details.
 // On phones it's a bottom tab; on desktop the XP pill opens it.
 export default function Me() {
   useTitle('Me');
@@ -38,7 +39,7 @@ export default function Me() {
 
       <section className="block">
         <h2>Settings</h2>
-        <div className="me-stack">
+        <div className="me-group">
           <button type="button" className="me-row" onClick={toggleSound} aria-pressed={sound}>
             {sound ? <Volume2 size={20} strokeWidth={1.75} aria-hidden /> : <VolumeX size={20} strokeWidth={1.75} aria-hidden />}
             <span><strong>Sound effects</strong><span className="small muted">Little sounds for taps, answers and wins</span></span>
@@ -58,7 +59,7 @@ export default function Me() {
       </section>
 
       <section className="block">
-        <h2>Your progress</h2>
+        <h2>App and backup</h2>
         <AppAndBackup />
       </section>
 

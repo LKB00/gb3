@@ -97,7 +97,6 @@ export default function Lab({ id, lab, title, next }) {
       <header className="lab-head">
         <p className="label">Fix it · your job</p>
         <p className="lab-goal">{lab.goal}</p>
-        {!finished && <p className="lab-hint">Pick the best option at each step. No wrong picks, all 3 stars.</p>}
         <ol className="lab-steps" aria-label="Steps">
           {decisions.map((x, n) => {
             const done = finished || (choice[x.id] === best(x) && n !== step);
@@ -162,7 +161,7 @@ export default function Lab({ id, lab, title, next }) {
               })}
             </div>
 
-            {!pickedOpt && <p className="lab-hint">Tap an option. You’ll see it on the screen, and if it works.</p>}
+            {!pickedOpt && <p className="lab-hint">Tap an option to see it on your screen. No misses wins all 3 stars.</p>}
 
             {pickedOpt && (
               <div ref={whyRef} className={'lab-why ' + (pickedOpt.ok ? 'lab-why-good' : 'lab-why-bad')}>
@@ -206,9 +205,19 @@ export default function Lab({ id, lab, title, next }) {
                 <span>{mistakes === 0 ? 'Flawless. Not a single miss.' : mistakes === 1 ? 'Just 1 miss. So close to perfect!' : `${mistakes} misses, and you still cracked it.`}</span>
               </p>
             )}
-            {!skipped && stars < 3 && <p className="lab-hint">Every miss taught you a trick. Play again for all 3 stars.</p>}
             {!skipped && <FlipCard id={id} stars={stars} />}
-            {skipped && <p className="lab-hint">No card this time. Play again to win it.</p>}
+            {/* The one next step, right under the win (pinned near the thumb on phones). */}
+            <div className="lab-nav lab-end" ref={endRef}>
+              {next}
+            </div>
+            {/* Replay sits with its reason, quieter than the next step. */}
+            <p className="lab-again">
+              {skipped ? <span>No card this time.</span> : stars < 3 ? <span>Every miss taught you a trick.</span> : null}
+              <button type="button" className="btn btn-ghost btn-sm" onClick={restart}>
+                <RotateCcw size={13} strokeWidth={1.75} aria-hidden /> {skipped ? 'Play again to win it' : stars < 3 ? 'Play again for 3 stars' : 'Play again'}
+              </button>
+            </p>
+            <p className="label lab-sum-title">{skipped ? 'The best picks' : 'Your picks'}</p>
             <ul className="lab-summary">
               {decisions.map((x) => {
                 const fixed = !skipped && (tried[x.id] || [])[0] !== best(x);
@@ -226,12 +235,6 @@ export default function Lab({ id, lab, title, next }) {
                 );
               })}
             </ul>
-            <div className="lab-nav lab-end" ref={endRef}>
-              {next}
-              <button type="button" className="btn btn-ghost" onClick={restart}>
-                <RotateCcw size={14} strokeWidth={1.75} aria-hidden /> Play again
-              </button>
-            </div>
           </>
         )}
       </div>

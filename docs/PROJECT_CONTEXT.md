@@ -160,7 +160,7 @@ The owner looks at a **private Claude Artifact**. It is one self-contained HTML 
 | Route | Page | Notes |
 |---|---|---|
 | `/` | Home | First visit: hero + a 5-round This or That + Daily banner + game tiles. Returning players (any XP or played day): a compact hello and the Daily banner **above** the game. The score screen offers the Daily (or Speed if the Daily is done), a card to win, and a quiet Play again |
-| `/play` | Play hub | Level card (desktop), Today (a compact strip until the first answer of the day, then a compact card: goal ring, one line, streak; week dots only on wide screens; no button, so the Daily banner is the one main action), Daily banner (no streak chip: the streak shows in the top bar and Today), game tiles (the first 2 in `config/games.js` are big, the rest small), badges (a sideways row on phones) |
+| `/play` | Play hub | In order of what matters: the Daily banner (the one big "start here"), one quiet progress line (level + XP bar, today's goal, day streak, "Your progress" → Me), then the game tiles and badges (a sideways row on phones). The full level card and Today card live on Me |
 | `/play/daily` | Daily challenge | See 5.3 |
 | `/play/this-or-that` | This or That | `?mode=hard` for Hard mode; `?rounds=3..10` for a shorter run (default 10), used by the daily-goal buttons |
 | `/play/speed` | Speed round | `?vs=&seed=&from=` for challenge links |
@@ -176,7 +176,7 @@ The owner looks at a **private Claude Artifact**. It is one self-contained HTML 
 | `/principles` | Principles | UX laws + Microsoft HAX 18 guidelines; `?focus=` scrolls to one |
 | `/glossary` | Glossary | 22 terms (19 link to their cards via `patterns`) + further reading |
 | `/learn`, `/learn/:id` | Deep dives | 9 short reads |
-| `/me` | Me | Level, today, badges, settings (sound, vibration, dark mode), backup |
+| `/me` | Me | In order: a quiet level line, the Today card (the one card with a button), player card, badges, settings (one grouped list: sound, vibration, dark mode), App and backup (one box) |
 | `/practice` | redirects to `/play` | old link |
 | `*` | Not found | A mistyped `/patterns/<x>` offers the closest card and a card search |
 
@@ -207,16 +207,16 @@ Shortcuts with Ctrl/Cmd/Alt and held keys are ignored. Streak of 3+ plays the co
 **One try per day**; the first result of the day is saved. Answers are saved as you go (`daily-run`), so a refresh continues the run instead of restarting it. A new day (or another day's link) gets a fresh board. A friend score above 5 in a link is ignored. Daily #1 = **1 Oct 2026**; the displayed number is never below 1 (`dailyLabel`). Result shows a Wordle-style
 grid, share/copy, countdown to the next Daily, and "challenge a friend". Playing a friend's challenge for a past day replays it but does not save it.
 
-**Speed round** (`pages/Speed.jsx`): 60 seconds, 3-2-1 countdown. Classic and hard rounds mixed from a **seeded** deck (`speed:<seed>`). The result shows up to 3 missed tricks as peeks. On phones the two screens sit low, in thumb reach.
+**Speed round** (`pages/Speed.jsx`): 60 seconds, 3-2-1 countdown. Classic and hard rounds mixed from a **seeded** deck (`speed:<seed>`). The result shows up to 3 missed tricks as peeks. On phones the two screens sit low, in thumb reach. Intro: one-line lead plus 3 rule chips; result: buttons right after the score, missed tricks below.
 Right = +1; **3 in a row turns on x2**; wrong = **-1 point (never below 0)** so random tapping does not pay. Last 5 seconds tick. A "quit" button is on screen.
 While playing, the body gets class `focus-mode` (top/bottom bars hidden on phones). Result: points, accuracy, new best, XP, share link.
 
-**Fix it** (`components/Lab.jsx`, one per pattern, reached from the card's Play tab): step by step, one decision at a time with instant feedback; 3 stars = no mistakes, The end screen's primary is **Next missing card** (else Next card for 3 stars) via `nextTarget()` in `game/useRandomChallenge.js`. The Play tab stays mounted (hidden) so switching tabs keeps your step.
+**Fix it** (`components/Lab.jsx`, one per pattern, reached from the card's Play tab): step by step, one decision at a time with instant feedback; 3 stars = no mistakes, The end screen's primary is **Next missing card** (else Next card for 3 stars) via `nextTarget()` in `game/useRandomChallenge.js`. The Play tab stays mounted (hidden) so switching tabs keeps your step. End screen order: stars, the won card, the next step, then "Play again" beside its reason, then "Your picks" as a quiet list.
 2 = one mistake, 1 = more. Finishing flips a **collectible card** (`FlipCard`) with a glow and star chimes. "Reveal the answer (no card)" exists for people who give up.
 
 **Spot the flaw** (`components/Hunt.jsx`): a realistic AI screen with hidden mistakes; tap what is wrong, tap fine parts to be told they are fine. Each of the 10 screens gives 30 XP once. Screens are picked with a small picker (back, a dropdown with ✓ for done, next) above the screen; on desktop the score and notes sit in a sand card beside it.
 
-**Stories** (`pages/Story.jsx`, `data/story.js`): 4 branching stories. Each scene = setup + a screen + a question + choices. Each choice changes **trust (0 to 100)**,
+**Stories** (`pages/Story.jsx`, `data/story.js`): 4 branching stories. Each scene = setup + a screen + a question + choices. Each choice changes **trust (0 to 100)**, The picker marks one story "Start here" / "Up next"; the how-to line shows on scene 1 only; on phones the trust meter is a slim line; the end puts Next story and Play again right under the ending.
 shows a reaction and may change the path (`next`). The final trust picks one of 4 endings (`endings[].min`). Best trust per story is saved.
 `tidy` = file-cleanup agent (Priya), `nova` = kitchen voice assistant, `sage` = bank help bot, `pilot` = coding agent.
 
@@ -293,6 +293,7 @@ src/
 
 ### 6.5 Important patterns in the code
 - **Feedback stays in view on phones**: `lib/useReveal.js` (`useReveal(key)` returns a ref; `revealEl(el)`) scrolls just enough to show answer feedback that landed below the fold or behind the bottom tab bar / sticky "Next" bars. Used by Fix it (`.lab-why`), Stories (`.story-outcome`), Build (`.build-result`) and Spot the flaw (newest found note). It never moves the page when the feedback is already visible.
+- **Visual hierarchy**: the 6 layout rules (one focus, order by importance, no repeats, fewer boxes, details on demand, phone first) are in [docs/VOICE.md](VOICE.md#visual-hierarchy-how-a-screen-is-laid-out). Every screen was checked against them in Oct 2026.
 - **Voice and copy guide**: [docs/VOICE.md](VOICE.md) is the rulebook for every string on the site (who is talking, feelings per moment, one word per thing, words to avoid, checklist).
 - **Copy style for games** (Oct 2026 pass): every game answers "What is this? What do I do? How do I win? What just happened?" on screen, in short easy sentences. Same words everywhere: "XP", "streak" / "in a row" (answers), "day streak" (days played), "round", "card", "stars", "trust". Daily says rounds 3 and 5 are hard. Note: a pattern's `lab.goal` (visuals.js) is also the brief line in This or That, Daily and Speed, so write goals that work in both places.
 - **One storage layer**: `lib/storage.js` (`readJSON`, `writeJSON`, `useStored`). Every write dispatches the `progress-change` event, so all hooks update together. Hooks also listen to the browser `storage` event, so other open tabs update. When storage is blocked, writes are kept in memory for the visit. The theme is one shared value (`theme-change` event); sound and vibration switches also keep an in-memory fallback.

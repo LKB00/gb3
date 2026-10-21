@@ -121,19 +121,10 @@ export default function Power() {
           <p className="tot-verdict">
             {stars === 3 ? 'Great instincts! You know when the AI should ask first.' : stars === 2 ? 'Nice! Only a few were one step off.' : 'Tricky one! Next time, follow the clues: money, undo, how often.'}
           </p>
-          <p className="label">Best level for each task</p>
-          <ul className="power-recap">
-            {hand.map((x, k) => (
-              <li key={x.id} className={log[k] === 2 ? 'is-good' : log[k] === 1 ? 'is-close' : 'is-bad'}>
-                {log[k] === 2 ? <Check size={14} strokeWidth={2.25} aria-hidden /> : log[k] === 1 ? <Gauge size={14} strokeWidth={2} aria-hidden /> : <X size={14} strokeWidth={2.25} aria-hidden />}
-                <span>{x.text}</span>
-                <strong>{getLevel(x.level).name}</strong>
-              </li>
-            ))}
-          </ul>
           <div className="tot-stats">
             {result.record && points > 0 ? <span className="pill-new">New best!</span> : <span>Your best: {stats.powerBest || 0}/{MAX}</span>}
           </div>
+          {/* The next step sits right under the score; the task-by-task answers are below, for reading. */}
           <div className="row wrap center">
             {NEXT_GAME && (
               <Link to={NEXT_GAME.to} className="btn btn-primary btn-lg">
@@ -143,8 +134,18 @@ export default function Power() {
             <button type="button" className={'btn btn-lg ' + (NEXT_GAME ? 'btn-ghost' : 'btn-primary')} onClick={again}>
               <RotateCcw size={15} strokeWidth={1.75} aria-hidden /> Play again
             </button>
-            <Link to="/autonomy" className="btn btn-ghost btn-lg">See the 5 levels</Link>
           </div>
+          <p className="label power-recap-title">Best level for each task</p>
+          <ul className="power-recap">
+            {hand.map((x, k) => (
+              <li key={x.id} className={log[k] === 2 ? 'is-good' : log[k] === 1 ? 'is-close' : 'is-bad'}>
+                {log[k] === 2 ? <Check size={14} strokeWidth={2.25} aria-hidden /> : log[k] === 1 ? <Gauge size={14} strokeWidth={2} aria-hidden /> : <X size={14} strokeWidth={2.25} aria-hidden />}
+                <span>{x.text}</span>
+                <strong>{getLevel(x.level).name}</strong>
+              </li>
+            ))}
+          </ul>
+          <Link to="/autonomy" className="text-link">See the 5 levels <ArrowRight size={14} strokeWidth={1.75} aria-hidden /></Link>
         </div>
       </div>
     );
@@ -156,8 +157,8 @@ export default function Power() {
       <Breadcrumbs items={[{ label: 'Play', to: '/play' }, { label: 'How much power?' }]} />
       <header className="page-head page-head-tight">
         <h1 className="display">How much power?</h1>
-        <p className="lead">An AI helper gets a task. How much should it do without asking you? Pick a level: 1 = it only gives ideas, 5 = it does it all alone.</p>
-        <p className="small muted">Exact level = 2 points. One step off = 1 point. 8 tasks.</p>
+        <p className="lead">An AI helper gets a task. Pick how much it should do without asking you.</p>
+        <p className="small muted">8 tasks. Exact level = 2 points, one step off = 1 point.</p>
       </header>
 
       <div className="power">

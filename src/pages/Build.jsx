@@ -165,8 +165,8 @@ function Builder({ build, nextJob, onNextJob }) {
             </button>
           )}
           {placed.length > 0 && (
-            <button type="button" className="btn btn-ghost" onClick={reset}>
-              <RotateCcw size={14} strokeWidth={1.75} aria-hidden /> Start over
+            <button type="button" className="build-reset" onClick={reset}>
+              <RotateCcw size={13} strokeWidth={1.75} aria-hidden /> Start over
             </button>
           )}
         </div>
@@ -182,18 +182,19 @@ function Builder({ build, nextJob, onNextJob }) {
             <h3>{result.stars === 3 ? 'Ship it! People will trust this one.' : result.stars === 2 ? 'So close! Fix 1 or 2 things.' : 'Not ready yet. Let’s fix it.'}{gain > 0 && <XpPop amount={gain} />}</h3>
           </div>
           <p className="small muted">{result.stars === 3 ? 'Every must-have piece, and not one trap. Clean.' : 'For 3 stars, add every must-have and drop every trap. Then check again.'}</p>
+          {/* What to fix comes first (traps, then missing pieces), then what already works. */}
           <ul className="build-notes">
-            {result.have.map((p) => (
-              <li key={p.id} className="is-good"><Check size={14} strokeWidth={2.25} aria-hidden /><span><strong>{p.label}.</strong> {p.why} <PeekLink id={p.pattern}>{getPattern(p.pattern).title}</PeekLink></span></li>
-            ))}
-            {result.nice.map((p) => (
-              <li key={p.id} className="is-good"><Plus size={14} strokeWidth={2.25} aria-hidden /><span><strong>Bonus: {p.label}.</strong> {p.why}</span></li>
-            ))}
             {result.traps.map((p) => (
               <li key={p.id} className="is-bad"><AlertTriangle size={14} strokeWidth={2} aria-hidden /><span><strong>Trap: {p.label}.</strong> {p.why} <PeekLink id={p.pattern}>{getPattern(p.pattern).title}</PeekLink></span></li>
             ))}
             {result.missing.map((p) => (
               <li key={p.id} className="is-missing"><CircleDashed size={14} strokeWidth={2} aria-hidden /><span><strong>Missing: a piece for “{getPattern(p.pattern).title}”.</strong> Look for it in the pieces.</span></li>
+            ))}
+            {result.have.map((p) => (
+              <li key={p.id} className="is-good"><Check size={14} strokeWidth={2.25} aria-hidden /><span><strong>{p.label}.</strong> {p.why} <PeekLink id={p.pattern}>{getPattern(p.pattern).title}</PeekLink></span></li>
+            ))}
+            {result.nice.map((p) => (
+              <li key={p.id} className="is-good"><Plus size={14} strokeWidth={2.25} aria-hidden /><span><strong>Bonus: {p.label}.</strong> {p.why}</span></li>
             ))}
           </ul>
           <Disagree where={`Build mode · ${build.title}`} detail={`Pieces: ${placed.join(', ')}`} />
@@ -223,7 +224,7 @@ export default function Build() {
       <Breadcrumbs items={[{ label: 'Play', to: '/play' }, { label: 'Build mode' }]} />
       <header className="page-head page-head-tight">
         <h1 className="display">Build mode</h1>
-        <p className="lead">Build an AI screen people can trust. Tap the pieces it needs. Skip the traps. Then tap “Check my screen” for up to 3 stars.</p>
+        <p className="lead">Build an AI screen people can trust. Add the pieces it needs, skip the traps, then check it.</p>
       </header>
       <div className="tabs tot-modes" role="tablist" aria-label="Briefs">
         {builds.map((b) => (

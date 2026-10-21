@@ -66,9 +66,7 @@ export default function Lesson() {
               {lesson.patterns.filter((pid) => passed.includes(pid)).length} of {lesson.patterns.length} collected. About a minute each.
             </p>
           </div>
-          <span className="meter" aria-hidden>
-            <span style={{ width: `${(lesson.patterns.filter((pid) => passed.includes(pid)).length / lesson.patterns.length) * 100}%` }} />
-          </span>
+          {/* The count above and a tick on each row say it once each: no extra bar, no "Collected" on every row */}
           <ul className="index-list">
             {lesson.patterns.map((pid) => (
               <li key={pid}>
@@ -79,7 +77,7 @@ export default function Lesson() {
                     <Circle size={16} strokeWidth={1.5} className="index-check-off" aria-label="Not done yet" />
                   )}
                   <span className="index-title">{getPattern(pid).title}</span>
-                  <span className="index-sum">{passed.includes(pid) ? 'Collected' : 'Play to collect'}</span>
+                  <span className="index-sum">{passed.includes(pid) ? '' : 'Play to collect'}</span>
                   <ArrowRight size={16} strokeWidth={1.75} className="index-chev" aria-hidden />
                 </Link>
               </li>

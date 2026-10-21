@@ -38,18 +38,27 @@ export default function Principles() {
     return () => clearTimeout(t);
   }, [focus]);
 
+  // HashRouter owns the # in the address, so scroll by hand instead of following the link.
+  const jump = (e, id) => {
+    e.preventDefault();
+    document.getElementById(id)?.scrollIntoView({ block: 'start' });
+  };
+
   return (
     <div className="page page-wide page-lib-read">
       <LibraryTabs />
       <header className="page-head">
         <h1 className="display">Why the patterns work</h1>
-        <p className="lead">
-          Every pattern leans on how people think and feel. Here are the rules behind them, plus Microsoft’s 18 guidelines for AI. Each one links to the cards that use it.
-        </p>
+        <p className="lead">Every pattern leans on how people think and feel. Here are the rules behind them, each linked to its cards.</p>
+        {/* A quiet map of the page: four long sections, one tap to each */}
+        <nav className="pr-jump" aria-label="On this page">
+          {principleTypes.map((t) => <a key={t.id} href={`#pr-type-${t.id}`} onClick={(e) => jump(e, `pr-type-${t.id}`)}>{t.name}</a>)}
+          <a href="#hax" onClick={(e) => jump(e, 'hax')}>Microsoft’s 18</a>
+        </nav>
       </header>
 
       {principleTypes.map((t) => (
-        <section key={t.id} className="block pr-block">
+        <section key={t.id} id={`pr-type-${t.id}`} className="block pr-block">
           <div className="section-head">
             <h2>{t.name}</h2>
             <p className="section-sub">{t.blurb}</p>

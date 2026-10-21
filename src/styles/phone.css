@@ -294,7 +294,6 @@
   .game-small { padding: 14px 16px; }
   .game-small strong { font-size: 17px; line-height: 22px; }
   .game-small .game-meta { padding-top: 4px; }
-  .level-stats { grid-template-columns: 1fr 1fr; }
   .daily-banner { padding: 14px 16px; }
   .daily-banner .btn { width: 100%; }
 }
@@ -338,10 +337,6 @@
   }
   .filters .chips::-webkit-scrollbar { height: 0; }
   .filters .chip { flex: none; }
-}
-@media (max-width: 720px) {
-  /* On phones, level and badges live on the Me tab; Play is just games */
-  .play-grid > .level-card { display: none; }
 }
 .levelup-toast { bottom: auto; top: calc(72px + env(safe-area-inset-top, 0px)); animation-name: toast-down; }
 @keyframes toast-down { from { transform: translate(-50%, -20px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }

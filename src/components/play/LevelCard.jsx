@@ -1,11 +1,11 @@
-import { Link } from 'react-router-dom';
 import { Zap } from 'lucide-react';
 import CountUp from '../CountUp';
 import { patterns } from '../../data/patterns';
 import { hunts } from '../../data/hunts';
 import { useGameStats, useHuntsDone, usePassed, useXP } from '../../progress';
 
-// Level, XP bar and a few totals. On Play (desktop) and on Me.
+// Level, XP bar and a few totals, at the top of the Me page.
+// No box and no stat tiles: the Today card below is the one thing to act on, so this stays quiet.
 export default function LevelCard() {
   const { xp, level, levelNum, nextLevel, toNext, starTotal } = useXP();
   const passed = usePassed();
@@ -14,7 +14,7 @@ export default function LevelCard() {
   const floor = level.xp;
   const pct = nextLevel ? ((xp - floor) / (nextLevel.xp - floor)) * 100 : 100;
   return (
-    <div className="level-card">
+    <div className="me-level">
       <div className="level-top">
         <span className="level-badge">{levelNum}</span>
         <div>
@@ -24,13 +24,11 @@ export default function LevelCard() {
         <p className="level-xp"><Zap size={16} strokeWidth={2} aria-hidden /> <CountUp value={xp} /> XP</p>
       </div>
       <span className="meter meter-xp" aria-hidden><span style={{ width: `${pct}%` }} /></span>
-      <p className="small muted">
-        {nextLevel ? `${toNext} XP until ${nextLevel.name}` : 'Top level. You’re a Legend!'} · <Link to="/play/card" className="level-card-link">Your player card</Link>
-      </p>
-      <ul className="level-stats">
+      <p className="small muted">{nextLevel ? `${toNext} XP until ${nextLevel.name}` : 'Top level. You’re a Legend!'}</p>
+      <ul className="me-facts">
         <li><strong>{passed.length}/{patterns.length}</strong> cards</li>
         <li><strong>{starTotal}</strong> stars</li>
-        <li><strong>{huntsDone.length}/{hunts.length}</strong> flaw screens done</li>
+        <li><strong>{huntsDone.length}/{hunts.length}</strong> flaw screens</li>
         <li><strong>{stats.bestStreak || 0}</strong> best streak</li>
       </ul>
     </div>

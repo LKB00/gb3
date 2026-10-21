@@ -65,22 +65,20 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
 }
 /* Wide screens: rule cards in two columns, using the full page width (less scrolling) */
 @media (min-width: 900px) {
   .page-lib-read > .block.pr-block { max-width: none; } /* beats .page-lib-read > :not(.lib-head) in home.css */
   .pr-block .section-head { max-width: 712px; }
-  .pr-index { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: start; }
+  .pr-index { display: grid; grid-template-columns: 1fr 1fr; gap: 0 40px; align-items: stretch; }
 }
+/* Rules sit on hairlines, not in 37 boxes: the page reads like one list */
 .pr-entry {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 16px;
-  border-radius: 12px;
-  background: var(--card);
-  border: var(--hair) solid var(--line);
+  padding: 16px 0;
+  border-top: var(--hair) solid var(--divider);
   scroll-margin-top: 96px;
 }
 .pr-entry p {
@@ -89,9 +87,23 @@
   color: var(--ink-2);
 }
 .pr-entry-focus {
+  margin: 0 -12px;
+  padding: 16px 12px;
+  border-radius: 12px;
   background: var(--sand);
-  border-color: var(--sand);
+  border-color: transparent;
 }
+.pr-entry h3 { font-size: 16px; line-height: 22px; }
+.pr-jump {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 20px;
+  margin-top: 4px;
+  font-size: 14px;
+  line-height: 22px;
+}
+.pr-jump a { color: var(--ink-2); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
+.pr-jump a:hover { color: var(--ink); text-decoration-color: currentColor; }
 .chip-sm {
   height: 24px;
   padding: 0 8px;
@@ -321,8 +333,9 @@
 .gloss-design {
   color: var(--ink-2);
 }
-.gloss-design .label {
-  margin-right: 4px;
+.gloss-design strong {
+  font-weight: 700;
+  color: var(--ink);
 }
 /* The cards that put the word into practice */
 .gloss-cards {
@@ -331,9 +344,6 @@
   align-items: center;
   gap: 6px;
   margin-top: 4px;
-}
-.gloss-cards .label {
-  margin-right: 2px;
 }
 @media (max-width: 560px) {
   .gloss-row {
@@ -571,3 +581,111 @@
 .td-better svg {
   color: var(--attention);
 }
+
+/* ---------- Cards grid toolbar ----------
+   One row of tools (search + a quiet "show" switch), then the group chips.
+   The collected count sits in the bar above, so the switch shows no repeat numbers. */
+.cards-filters { gap: 12px; margin-top: 24px; }
+.cards-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.show-seg {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 9999px;
+  background: var(--sand);
+}
+.show-seg button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 12px;
+  border: none;
+  border-radius: 9999px;
+  background: transparent;
+  color: var(--ink-2);
+  font: inherit;
+  font-size: 13px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.show-seg button:hover { color: var(--ink); }
+.show-seg button.is-on {
+  background: var(--card);
+  color: var(--ink);
+  font-weight: 700;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+.show-seg-n {
+  min-width: 18px;
+  padding: 0 5px;
+  border-radius: 9999px;
+  background: var(--sand-dark);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+}
+/* Group chips: lighter than the switch, so the two filters never look the same */
+.cards-groups .chip:not(.chip-on) { border-color: transparent; background: transparent; color: var(--ink-2); }
+.cards-groups .chip:not(.chip-on):hover { background: var(--sand); color: var(--ink); }
+@media (max-width: 720px) {
+  .cards-filters { margin-top: 20px; gap: 10px; }
+  .cards-tools .search { max-width: none; }
+  .show-seg { width: 100%; }
+  .show-seg button { flex: 1 1 auto; justify-content: center; padding: 0 8px; }
+}
+
+/* ---------- Explore header on phones ----------
+   The 3 x 2 tab grid (phone.css) used six filled buttons, louder than the page title.
+   Keep the grid, but only the lit tab is filled; the rest are plain text. */
+@media (max-width: 720px) {
+  .lib-head { margin-bottom: 24px; }
+  .lib-head .lib-tabs { gap: 2px 6px; }
+  .lib-head .lib-tabs .tab { height: 32px; background: transparent; color: var(--ink-2); font-weight: 400; }
+  .lib-head .lib-tabs .tab.active { background: var(--sand-dark); color: var(--ink); font-weight: 700; }
+}
+
+/* Teardown: the full pattern list is one tap away (each step already shows its own) */
+.td-end { display: flex; flex-direction: column; gap: 16px; }
+.td-all summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.td-all[open] summary { margin-bottom: 8px; }
+/* Phones: the letter mark repeats the app name right next to it, and pushed the name onto a second line */
+@media (max-width: 720px) {
+  .index-row .td-mark { display: none; }
+}
+
+/* Dark patterns, one column: the name and what it is come first, then the picture, then why and the fix.
+   (Picture first made each item start with an unnamed screen.) */
+@media (max-width: 879px) {
+  .anti-item { gap: 12px; }
+  .anti-body { display: contents; }
+  .anti-body > :first-child { order: 1; }
+  .anti-body > p { order: 2; }
+  .anti-screen { order: 3; margin: 4px 0; }
+  .anti-dl { order: 4; }
+}
+
+/* Deep dives: each group gets a real (small) heading, and the groups sit closer together */
+.learn-group-head { font-size: 18px; line-height: 24px; }
+.page-lib-read > .learn-group + .learn-group { margin-top: 40px; }
+@media (max-width: 720px) {
+  .page-lib-read > .learn-group + .learn-group { margin-top: 32px; }
+}
+
+/* Not found: the quiet way home sits beside the buttons */
+.actions .nf-home { align-self: center; min-height: 36px; padding: 0 8px; }

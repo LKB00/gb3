@@ -1,19 +1,16 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
-import LevelCard from '../components/play/LevelCard';
 import DailyBanner from '../components/play/DailyBanner';
 import GameTiles from '../components/play/GameTiles';
 import Badges from '../components/play/Badges';
-import { TodayCard, TodayStrip } from '../components/Today';
-import { useStreak } from '../progress';
+import { ProgressLine } from '../components/Today';
 import { useTitle } from '../lib/useTitle';
 
-// The Play hub: level, today's goal, the Daily, then every game.
-// Before the first answer of the day, Today is one small strip so the games are above the fold.
+// The Play hub, in order of what matters: today's Daily (the one big "start here"),
+// one quiet line of progress, then every game. Detailed stats live on the Me page.
 // To add a game, see src/config/games.js.
 export default function Play() {
   useTitle('Play');
-  const { todayMoves } = useStreak();
   return (
     <div className="page page-wide">
       <header className="page-head page-head-tight">
@@ -21,10 +18,8 @@ export default function Play() {
         <p className="lead">Pick a game, any game. Win XP, collect cards and level up.</p>
       </header>
       <div className="play-grid">
-        <LevelCard />
-        {/* One main button at a time: the Daily, or (once it is done) the Daily banner's "quick rounds". */}
-        {todayMoves > 0 ? <TodayCard go={false} compact /> : <TodayStrip />}
         <DailyBanner />
+        <ProgressLine />
         <GameTiles />
       </div>
       <section className="block play-badges">

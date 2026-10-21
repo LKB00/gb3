@@ -117,14 +117,13 @@
   gap: 10px;
   width: 100%;
   max-width: 440px;
-  padding: 14px 16px;
-  border-radius: 16px;
-  background: var(--card);
-  box-shadow: inset 0 0 0 var(--hair) var(--line);
+  margin-top: 4px;
 }
 .daily-next p { display: inline-flex; align-items: center; gap: 6px; font-size: 15px; line-height: 22px; }
 .daily-next svg { flex: none; color: var(--ink-2); }
 .daily-next.is-done svg { color: var(--positive); }
+/* "New Daily in…" is a detail: a quiet line near the bottom, above the other games */
+.daily-countdown { display: inline-flex; align-items: center; gap: 6px; margin-top: 4px; }
 .daily-share {
   display: flex;
   flex-direction: column;
@@ -326,27 +325,40 @@
 .story-end-warn > svg { color: var(--attention); }
 .story-end-bad { background: var(--negative-soft); }
 .story-end-bad > svg { color: var(--negative); }
+.story-recap-title { margin-top: 16px; }
+/* The recap is for reading after the next step: a quiet list with hairlines, not a stack of cards. */
 .story-recap {
   list-style: none;
   width: 100%;
-  margin: 12px 0;
+  margin: 0 0 8px;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
   text-align: left;
 }
 .story-recap li {
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  padding: 12px 14px;
-  border-radius: 12px;
-  background: var(--card);
+  padding: 10px 2px;
+  border-top: var(--hair) solid var(--divider);
 }
 .story-recap li > span:last-child { display: flex; flex-direction: column; font-size: 14px; line-height: 20px; }
 .story-recap-scene { font-size: 12px; color: var(--ink-3); }
 .story-recap-pattern, .story-recap .peek-link { align-self: flex-start; font-size: 12px; color: var(--ink-2); text-align: left; }
+/* Phones: the scene question and its choices come up sooner. The trust meter is one slim line,
+   not a card, and the title is smaller (it names the story; the question is the main thing). */
+@media (max-width: 720px) {
+  .story-head .display { font-size: 26px; line-height: 30px; }
+  .story-head .story-how { margin-top: 2px; }
+  .story-head .trust { padding: 0; background: none; border-radius: 0; gap: 10px; }
+  .story-head .trust > svg { width: 20px; height: 20px; }
+  .story-head .trust-body { gap: 4px; }
+  .story-head .trust-top strong { font-size: 17px; }
+  .story-head + .story { margin-top: 12px; }
+  .story .story-screen .m-frame { zoom: 0.9; }
+  .story-end .story-recap li { padding: 10px 0; }
+}
 .tot-big .xp-pop {
   font-size: 12px;
   line-height: 18px;
@@ -485,4 +497,3 @@
   .today-card { grid-template-columns: auto 1fr; }
   .today-streak { grid-column: 1 / -1; flex-direction: row; gap: 8px; justify-content: flex-start; }
 }
-.level-card-link { color: var(--ink); font-weight: 700; }

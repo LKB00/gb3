@@ -54,3 +54,13 @@ not "a teacher" and not "a brand". The friend is on the player's side, always.
 - Is it the same word we use for this thing everywhere else?
 - Is there a spark (a vivid word, a wink) and is it still clear?
 - Does it fit on a phone (390 px wide) without ugly wrapping?
+
+## Visual hierarchy (how a screen is laid out)
+Words and layout work together. Every screen follows these rules (from the Oct 2026 hierarchy pass):
+1. **One focus per screen.** One main thing and one main button clearly win; everything else is visibly quieter.
+2. **Order by importance:** what to do now, then feedback or progress, then details.
+3. **No repeats.** Don't show a number or label again if it is already on screen or in the top bar (XP, day streak).
+4. **Fewer boxes.** Not everything needs a card. Use quiet lines, hairlines and space. Never stack several same-weight cards.
+5. **Details on demand.** Rare things go lower or behind a disclosure ("More ways to share", "All 14 patterns in one list").
+6. **Phone first.** At 390x844 the main action is visible without scrolling and never hides behind the bottom bar.
+Example: the Play page shows the Daily (the one "start here"), then one quiet progress line, then the games; the full stats live on Me.
