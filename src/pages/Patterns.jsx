@@ -110,32 +110,38 @@ export default function Patterns() {
         </div>
       </header>
 
-      <div className="filters">
-        <label className="search">
-          <Search size={15} strokeWidth={1.75} aria-hidden />
-          <input
-            type="search"
-            id="pattern-search"
-            placeholder="Search cards, like “approval”"
-            value={query}
-            onChange={(ev) => update('q', ev.target.value)}
-            aria-label="Search cards"
-          />
-        </label>
-        <div className="chips" role="group" aria-label="Filter by group">
-          {[{ id: 'all', name: 'All' }, ...categories].map((c) => (
+      {/* One quiet toolbar: find a card, then narrow it down. The collected count lives in the bar above, so no repeats here. */}
+      <div className="filters cards-filters">
+        <div className="cards-tools">
+          <label className="search">
+            <Search size={15} strokeWidth={1.75} aria-hidden />
+            <input
+              type="search"
+              id="pattern-search"
+              placeholder="Search cards, like “approval”"
+              value={query}
+              onChange={(ev) => update('q', ev.target.value)}
+              aria-label="Search cards"
+            />
+          </label>
+          <div className="show-seg" role="group" aria-label="Filter by progress">
+            <button type="button" className={!show ? 'is-on' : ''} aria-pressed={!show} onClick={() => update('show', null)}>
+              All cards
+            </button>
+            <button type="button" className={show === 'missing' ? 'is-on' : ''} aria-pressed={show === 'missing'} onClick={() => update('show', show === 'missing' ? null : 'missing')} aria-label={`To collect (${missingCount})`}>
+              To collect
+            </button>
+            <button type="button" className={show === 'stars' ? 'is-on' : ''} aria-pressed={show === 'stars'} onClick={() => update('show', show === 'stars' ? null : 'stars')} aria-label={`Not 3 stars yet (${starsCount})`}>
+              Not 3 stars yet{starsCount > 0 && <span className="show-seg-n">{starsCount}</span>}
+            </button>
+          </div>
+        </div>
+        <div className="chips cards-groups" role="group" aria-label="Filter by group">
+          {[{ id: 'all', name: 'All groups' }, ...categories].map((c) => (
             <button key={c.id} className={'chip' + (category === c.id ? ' chip-on' : '')} aria-pressed={category === c.id} onClick={() => update('category', c.id)}>
               {c.name}
             </button>
           ))}
-        </div>
-        <div className="chips chips-progress" role="group" aria-label="Filter by progress">
-          <button className={'chip' + (show === 'missing' ? ' chip-on' : '')} aria-pressed={show === 'missing'} onClick={() => update('show', show === 'missing' ? null : 'missing')}>
-            To collect ({missingCount})
-          </button>
-          <button className={'chip' + (show === 'stars' ? ' chip-on' : '')} aria-pressed={show === 'stars'} onClick={() => update('show', show === 'stars' ? null : 'stars')}>
-            Not 3 stars yet ({starsCount})
-          </button>
         </div>
       </div>
 

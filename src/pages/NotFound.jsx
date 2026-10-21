@@ -63,8 +63,15 @@ export default function NotFound() {
               <Search size={16} strokeWidth={2} aria-hidden /> Search cards for “{q}”
             </Link>
           )}
-          <Link to="/" className={'btn ' + (q ? 'btn-ghost' : 'btn-primary')}>Back to home</Link>
-          {!q && <Link to="/patterns" className="btn btn-ghost">See all cards</Link>}
+          {/* One loud way forward. With a card to suggest, home is a quiet text link, not a third button. */}
+          {q ? (
+            <Link to="/" className="text-link nf-home">Back to home</Link>
+          ) : (
+            <>
+              <Link to="/" className="btn btn-primary">Back to home</Link>
+              <Link to="/patterns" className="btn btn-ghost">See all cards</Link>
+            </>
+          )}
         </div>
       </header>
     </div>

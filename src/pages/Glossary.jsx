@@ -17,7 +17,7 @@ export default function Glossary() {
       <LibraryTabs />
       <header className="page-head">
         <h1 className="display">AI words, in plain English</h1>
-        <p className="lead">The words you’ll hear when building AI features. Each one in plain English, with why designers care.</p>
+        <p className="lead">The words you’ll hear when building AI features, and why designers care.</p>
       </header>
 
       <div className="filters">
@@ -33,10 +33,10 @@ export default function Glossary() {
             <dt>{g.term}</dt>
             <dd>
               <p>{g.def}</p>
-              <p className="gloss-design"><span className="label">Why it matters</span> {g.design}</p>
+              <p className="gloss-design"><strong>Why it matters:</strong> {g.design}</p>
               {g.patterns?.length > 0 && (
                 <div className="gloss-cards">
-                  <span className="label">See it on a card</span>
+                  <span className="sr-only">See it on a card:</span>
                   {/* A read place, so the card opens on "Why it works" (Play is one tab away) */}
                   {g.patterns.map((pid) => (
                     <Link key={pid} to={`/patterns/${pid}?view=understand`} className={`tag tag-${getPattern(pid).category}`}>{getPattern(pid).title}</Link>

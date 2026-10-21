@@ -15,14 +15,14 @@ export function showActiveTab(row) {
 }
 
 // One header for every Explore page, so the deeper material feels like one place.
-// On phones the tabs sit in a 3 x 2 grid (phone.css), so none hide off the edge.
+// No "Explore" label: the top bar (and the phone bottom bar) already light up Explore.
+// On phones the tabs sit in a 3 x 2 grid (phone.css), quiet text with one lit tab (explore.css).
 export default function LibraryTabs() {
   const { pathname } = useLocation();
   const row = useRef(null);
   useLayoutEffect(() => showActiveTab(row.current), [pathname]);
   return (
     <div className="lib-head">
-      <p className="label">Explore</p>
       <nav className="tabs lib-tabs" aria-label="Explore sections" ref={row}>
         {EXPLORE_TABS.map((t) => (
           <NavLink key={t.to} to={t.to} className="tab" aria-label={t.short ? t.label : undefined}>

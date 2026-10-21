@@ -20,8 +20,8 @@ export default function Learn() {
       </header>
 
       {levels.map((level) => (
-        <section key={level} className="block">
-          <p className="label">{LEVEL_LABEL[level]}</p>
+        <section key={level} className="block learn-group">
+          <h2 className="learn-group-head">{LEVEL_LABEL[level]}</h2>
           <ul className="index-list">
             {lessons.filter((l) => l.level === level).map((l) => (
               <li key={l.id}>

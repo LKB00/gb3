@@ -107,11 +107,14 @@ export function TeardownDetail() {
         </ul>
       </section>
 
-      <section className="block">
-        <h2>Patterns spotted ({used.length})</h2>
-        <div className="row wrap">
-          {used.map((pid) => <Link key={pid} to={`/patterns/${pid}?view=understand`} className="chip">{getPattern(pid).title}</Link>)}
-        </div>
+      {/* Every pattern is already tagged on its step above, so the full list waits behind one tap. */}
+      <section className="block td-end">
+        <details className="td-all">
+          <summary>All {used.length} patterns in one list</summary>
+          <div className="row wrap">
+            {used.map((pid) => <Link key={pid} to={`/patterns/${pid}?view=understand`} className="chip">{getPattern(pid).title}</Link>)}
+          </div>
+        </details>
         <p className="footnote">{NOTE}</p>
       </section>
     </article>
