@@ -189,32 +189,6 @@ a.pattern-card:hover { transform: translateY(-3px); }
 .lab-stars span { margin-left: 6px; }
 .hunt-win { position: relative; }
 
-/* ---- Today strip: before the first answer of the day (Play page) ---- */
-.today-strip {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  border-radius: 16px;
-  background: var(--sand);
-}
-.today-strip-goal {
-  flex: none;
-  width: 44px;
-  height: 44px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  box-shadow: inset 0 0 0 4px var(--sand-dark);
-  font-family: var(--display);
-  font-size: 14px;
-  font-weight: 800;
-}
-.today-strip-goal small { font-size: 10px; color: var(--ink-3); }
-.today-strip-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; line-height: 20px; }
-.today-strip-text strong { font-family: var(--display); font-size: 16px; }
-.today-strip .today-flame { flex: none; font-size: 20px; }
-
 /* Today card extras: the skip-day note and the quick-rounds button */
 .today-text .today-saved {
   display: flex;
@@ -270,4 +244,44 @@ a.pattern-card:hover { transform: translateY(-3px); }
   .badges-row .badge a { height: 100%; padding: 12px 8px; }
   .badges-row .badge-icon { width: 40px; height: 40px; font-size: 12px; }
   .badges-row .badge-sub { font-size: 11px; line-height: 15px; }
+}
+
+/* ---- Progress line (Play page): level, XP, today's goal and streak in one quiet row ---- */
+.progress-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+  padding: 4px 4px 8px;
+  border-bottom: var(--hair) solid var(--divider);
+}
+.pl-level { display: flex; align-items: center; gap: 12px; flex: 1 1 260px; min-width: 0; }
+.pl-badge {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--ink);
+  color: var(--lime);
+  font-family: var(--display);
+  font-weight: 800;
+}
+.pl-level-text { flex: 0 1 auto; min-width: 0; display: grid; grid-template-columns: auto minmax(80px, 160px); align-items: center; gap: 2px 12px; }
+.pl-level-text strong { font-family: var(--display); font-size: 16px; line-height: 22px; }
+.pl-level-text .small { grid-column: 1 / -1; }
+.pl-bar { height: 6px; border-radius: 3px; background: var(--sand-dark); overflow: hidden; }
+.pl-bar > span { display: block; height: 100%; border-radius: inherit; background: var(--lime); }
+.pl-facts { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.pl-fact { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: var(--ink-2); }
+.pl-fact strong { color: var(--ink); }
+.pl-streak svg { color: var(--attention); }
+.pl-more { display: inline-flex; align-items: center; gap: 4px; font-size: 14px; font-weight: 700; color: var(--ink); text-decoration: none; }
+.pl-more:hover { text-decoration: underline; }
+.pl-saved { flex-basis: 100%; margin: 0; display: flex; align-items: center; gap: 6px; color: var(--ink-2); }
+@media (max-width: 720px) {
+  .progress-line { gap: 10px; }
+  .pl-facts { width: 100%; justify-content: space-between; gap: 12px; }
 }

@@ -137,19 +137,34 @@ function skipNote(streak, frozen) {
   return `You missed ${day}. Your skip day kept your ${streak}-day streak.`;
 }
 
-// Before the first answer of the day (Play page): one small line instead of the whole card,
-// so the games sit above the fold. The full card comes back once you play.
-export function TodayStrip() {
+// Play page: all progress in one quiet line (level + XP bar, today's goal, day streak),
+// so the Daily and the games are what the eye lands on. The full cards live on Me.
+export function ProgressLine() {
+  const { level, levelNum, nextLevel, toNext, xp } = useXP();
   const { streak, frozen, todayMoves } = useStreak();
+  const pct = nextLevel ? Math.round(((xp - level.xp) / (nextLevel.xp - level.xp)) * 100) : 100;
+  const done = Math.min(todayMoves, DAILY_GOAL);
   const saved = skipNote(streak, frozen);
   return (
-    <div className="today-strip">
-      <span className="today-strip-goal" aria-hidden>{Math.min(todayMoves, DAILY_GOAL)}<small>/{DAILY_GOAL}</small></span>
-      <span className="today-strip-text">
-        <strong>Today’s goal: {DAILY_GOAL} answers</strong>
-        <span className="small muted">{saved || (streak > 0 ? `Play today to keep your ${streak}-day streak.` : 'Any game counts. Start a day streak!')}</span>
-      </span>
-      <span className="today-flame" aria-label={`${streak}-day streak`}><Flame size={18} strokeWidth={2} aria-hidden /> {streak}</span>
+    <div className="progress-line">
+      <div className="pl-level">
+        <span className="pl-badge" aria-hidden>{levelNum}</span>
+        <span className="pl-level-text">
+          <strong>{level.name}</strong>
+          <span className="pl-bar" aria-hidden><span style={{ width: `${pct}%` }} /></span>
+          <span className="small muted">{nextLevel ? `${toNext} XP to ${nextLevel.name}` : 'Top level!'}</span>
+        </span>
+      </div>
+      <div className="pl-facts">
+        <span className="pl-fact" title="Today's goal">
+          <Target size={16} strokeWidth={2} aria-hidden /> <strong>{done}/{DAILY_GOAL}</strong> today
+        </span>
+        <span className="pl-fact pl-streak" title="Day streak">
+          <Flame size={16} strokeWidth={2} aria-hidden /> <strong>{streak}</strong> {streak === 1 ? 'day' : 'days'}
+        </span>
+        <Link to="/me" className="pl-more">Your progress <ArrowRight size={14} strokeWidth={1.75} aria-hidden /></Link>
+      </div>
+      {saved && <p className="pl-saved small"><Snowflake size={13} strokeWidth={2} aria-hidden /> {saved}</p>}
     </div>
   );
 }

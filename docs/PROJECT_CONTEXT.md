@@ -160,7 +160,7 @@ The owner looks at a **private Claude Artifact**. It is one self-contained HTML 
 | Route | Page | Notes |
 |---|---|---|
 | `/` | Home | First visit: hero + a 5-round This or That + Daily banner + game tiles. Returning players (any XP or played day): a compact hello and the Daily banner **above** the game. The score screen offers the Daily (or Speed if the Daily is done), a card to win, and a quiet Play again |
-| `/play` | Play hub | Level card (desktop), Today (a compact strip until the first answer of the day, then a compact card: goal ring, one line, streak; week dots only on wide screens; no button, so the Daily banner is the one main action), Daily banner (no streak chip: the streak shows in the top bar and Today), game tiles (the first 2 in `config/games.js` are big, the rest small), badges (a sideways row on phones) |
+| `/play` | Play hub | In order of what matters: the Daily banner (the one big "start here"), one quiet progress line (level + XP bar, today's goal, day streak, "Your progress" → Me), then the game tiles and badges (a sideways row on phones). The full level card and Today card live on Me |
 | `/play/daily` | Daily challenge | See 5.3 |
 | `/play/this-or-that` | This or That | `?mode=hard` for Hard mode; `?rounds=3..10` for a shorter run (default 10), used by the daily-goal buttons |
 | `/play/speed` | Speed round | `?vs=&seed=&from=` for challenge links |
