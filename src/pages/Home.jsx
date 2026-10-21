@@ -82,12 +82,11 @@ export default function Home() {
         </section>
       )}
 
-      <section className="block">
-        <div className="row space-between">
-          <h2>More games</h2>
-          <Link to="/play" className="text-link">Your level and badges <ArrowRight size={14} strokeWidth={1.75} aria-hidden /></Link>
-        </div>
+      <section className="block" aria-label="More games">
         <GameTiles />
+        <p className="home-more-link">
+          <Link to="/me" className="text-link">Your level and badges <ArrowRight size={14} strokeWidth={1.75} aria-hidden /></Link>
+        </p>
       </section>
     </div>
   );

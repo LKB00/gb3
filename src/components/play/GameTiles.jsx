@@ -1,42 +1,60 @@
 import { Link } from 'react-router-dom';
-import { Check } from 'lucide-react';
+import { Check, ChevronRight } from 'lucide-react';
 import { games } from '../../config/games';
 import { useRandomChallenge } from '../../game/useRandomChallenge';
 import { useGameStats, useHuntsDone, usePassed } from '../../progress';
 
-// One colourful tile per game. The list lives in config/games.js.
-// The first two are big ("start here"); the rest are smaller, so the page has a clear first pick.
-const BIG = 2;
+// The games, as two calm lists: quick games (1-2 minutes) and deeper games (about 5 minutes).
+// One row style for every game: a coloured icon, the name, one line, and your progress
+// only once you have played it (no "0/37" noise for a new player). The list lives in config/games.js.
+const GROUPS = [
+  { id: 'quick', title: 'Quick games', sub: '1-2 minutes' },
+  { id: 'deep', title: 'Deeper games', sub: 'About 5 minutes' },
+];
 
 export default function GameTiles() {
   const random = useRandomChallenge();
   const progress = { stats: useGameStats(), passed: usePassed(), huntsDone: useHuntsDone() };
-  const tile = (g, big) => {
-    const [MetaIcon, metaText] = g.meta(progress);
-    const className = `game ${g.tone} ${big ? 'game-big' : 'game-small'}`;
+  const row = (g) => {
+    const [MetaIcon, metaText, played] = g.meta(progress);
     const inner = (
       <>
-        <g.icon size={big ? 22 : 20} strokeWidth={1.75} aria-hidden />
-        <strong>
-          {g.title}
-          {g.isNew && <span className="game-new">New</span>}
-        </strong>
-        <span>{g.blurb}</span>
-        <span className="game-meta">
-          <MetaIcon size={13} strokeWidth={MetaIcon === Check ? 2 : 1.75} aria-hidden /> {metaText}
+        <span className={`gl-icon ${g.tone}`} aria-hidden><g.icon size={20} strokeWidth={1.75} /></span>
+        <span className="gl-text">
+          <strong>
+            {g.title}
+            {g.isNew && <span className="game-new">New</span>}
+          </strong>
+          <span className="gl-blurb">{g.blurb}</span>
+          {played && (
+            <span className="game-meta">
+              <MetaIcon size={13} strokeWidth={MetaIcon === Check ? 2 : 1.75} aria-hidden /> {metaText}
+            </span>
+          )}
         </span>
+        <ChevronRight className="gl-go" size={18} strokeWidth={1.75} aria-hidden />
       </>
     );
-    return g.random ? (
-      <button key={g.id} type="button" onClick={random} className={className}>{inner}</button>
-    ) : (
-      <Link key={g.id} to={g.to} className={className}>{inner}</Link>
+    return (
+      <li key={g.id}>
+        {g.random ? (
+          <button type="button" onClick={random} className="gl-row">{inner}</button>
+        ) : (
+          <Link to={g.to} className="gl-row">{inner}</Link>
+        )}
+      </li>
     );
   };
   return (
     <div className="games">
-      <div className="games-top">{games.slice(0, BIG).map((g) => tile(g, true))}</div>
-      <div className="games-more">{games.slice(BIG).map((g) => tile(g, false))}</div>
+      {GROUPS.map((grp) => (
+        <section key={grp.id} className="gl-group" aria-labelledby={`gl-${grp.id}`}>
+          <h2 id={`gl-${grp.id}`} className="gl-title">
+            {grp.title} <span className="gl-sub">{grp.sub}</span>
+          </h2>
+          <ul className="gl-list">{games.filter((g) => g.group === grp.id).map(row)}</ul>
+        </section>
+      ))}
     </div>
   );
 }

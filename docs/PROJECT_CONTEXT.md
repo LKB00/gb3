@@ -160,7 +160,7 @@ The owner looks at a **private Claude Artifact**. It is one self-contained HTML 
 | Route | Page | Notes |
 |---|---|---|
 | `/` | Home | First visit: hero + a 5-round This or That + Daily banner + game tiles. Returning players (any XP or played day): a compact hello and the Daily banner **above** the game. The score screen offers the Daily (or Speed if the Daily is done), a card to win, and a quiet Play again |
-| `/play` | Play hub | In order of what matters: the Daily banner (the one big "start here"), one quiet progress line (level + XP bar, today's goal, day streak, "Your progress" → Me), then the game tiles and badges (a sideways row on phones). The full level card and Today card live on Me |
+| `/play` | Play hub | In order of what matters: the Daily banner (the one big "start here"), one quiet progress line (level + XP bar, today's goal, day streak, "Your progress" → Me), then the games as two calm lists ("Quick games · 1-2 minutes" and "Deeper games · about 5 minutes"; same row style for every game, colour only in the small icon, progress shown only once you've played) and badges (a sideways row on phones). The full level card and Today card live on Me |
 | `/play/daily` | Daily challenge | See 5.3 |
 | `/play/this-or-that` | This or That | `?mode=hard` for Hard mode; `?rounds=3..10` for a shorter run (default 10), used by the daily-goal buttons |
 | `/play/speed` | Speed round | `?vs=&seed=&from=` for challenge links |
@@ -303,7 +303,7 @@ src/
 - **Seeded randomness**: `lib/random.js` `seeded(key)` (mulberry32) so the Daily and challenge links give everyone the same rounds.
 - **Clipboard** only through `lib/clipboard.js` `copyText()` (clipboard API, then `execCommand`, then a prompt box).
 - **Error screen**: `components/ErrorBoundary.jsx` wraps the whole app and each page; offers Try again, Go home and (with a confirm) Clear saved data.
-- **Games registry**: `config/games.js` defines the tiles (title, text, icon, tone class, meta line). To add a game: page in `pages/`, route in `App.jsx`, entry in `games.js`.
+- **Games registry**: `config/games.js` defines the game list (title, text, icon, tone class for the icon colour, `group: 'quick'|'deep'`, and `meta` returning `[Icon, text, played]`; the progress line shows only when `played`). To add a game: page in `pages/`, route in `App.jsx`, entry in `games.js`.
 - **Count-up numbers**: `<CountUp value={n} />` or `useCountUp(n)`.
 - **Service worker** (`public/sw.js`, cache `good-bot-bad-bot-v2`; bump it when brand files or the app shell must refresh for installed apps): pages network-first, built files and fonts cache-first. Registered only in production.
 
@@ -432,6 +432,7 @@ Things the repo does **not** have: unit tests, visual regression, a real-device 
 | #24 | Rename to **Good Bot, Bad Bot**: new two-bot logo, icons, share image, name everywhere, `npm run brand` |
 | #25 | Revert logo to **simple lime circle** (owner preference), keep product name **Good Bot, Bad Bot** |
 | (Oct 21) | UI hierarchy pass (owner: "check hierarchy"): one main action on Play, streak shown once, big + small game tiles, Spot the flaw picker, pinned Build screen on phones, Me badges as a row, lime ring on won cards, story icons, "+N more" on Principles (2 columns on desktop), Speed start centred on phones, sound hint over the top bar |
+| (Oct 21) | Game list (owner: "same issue" on Play): 7 big colour tiles in 3 shapes → two calm lists, Quick games and Deeper games, one row style, colour only in the icon, no zero stats; Home drops its double heading |
 
 ### Decisions worth remembering
 - **Name: Good Bot, Bad Bot** (chosen by the owner from a short list). It matches the main game (pick the better screen). Renamed from "AI Patterns", which was clear but easy to forget.
@@ -445,7 +446,7 @@ Things the repo does **not** have: unit tests, visual regression, a real-device 
 - **Data cleaned on read**, not only on write, because storage can be changed by hand or by old versions.
 - **`:where()` for generic motion rules** so component animations are not overridden by the last-loaded file.
 - **`:not(.is-good):not(.is-bad)`** is used on `.tot-option` entrance animation so the answer states keep their own animations.
-- **One main action per screen** (Oct 2026 hierarchy pass): Play shows one primary button above the games (the Daily banner); the streak shows once per area; only the first 2 game tiles are big.
+- **One main action per screen** (Oct 2026 hierarchy pass): Play shows one primary button above the games (the Daily banner); the streak shows once per area; the games are two calm lists of same-style rows (no big colour blocks, no zero stats).
 - **Pastel CSS tokens per group** (`--p-input` etc.) colour tiles, badges, tags and the ladder steps; `--p-voice` lives in `explore.css`.
 - Past bugs worth not repeating: media query placed before its base rule (overridden); step state named `now` but the styled name is `active`; autofocus on Next scrolled the page (use `focus({ preventScroll: true })`); Enter double-advancing when a button had focus.
 
