@@ -34,7 +34,7 @@ const starsFor = (pts) => (pts >= 14 ? 3 : pts >= 10 ? 2 : 1);
 // The game after this one on the Play page (skipping tiles without a page of their own).
 const NEXT_GAME = (() => {
   const k = games.findIndex((g) => g.id === 'power');
-  return [...games.slice(k + 1), ...games.slice(0, k)].find((g) => g.to);
+  return [...games.slice(k + 1), ...games.slice(0, k)].find((g) => g.to && !g.show); // skip rows that can be hidden, like an empty "Your misses"
 })();
 
 export default function Power() {

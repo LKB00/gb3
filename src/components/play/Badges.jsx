@@ -1,16 +1,19 @@
 import { Link } from 'react-router-dom';
-import { Check } from 'lucide-react';
+import { Check, Crown } from 'lucide-react';
 import { categories, patterns } from '../../data/patterns';
-import { usePassed, useStars } from '../../progress';
+import { useGameStats, usePassed, useStars } from '../../progress';
+import { bossBeaten } from '../../game/decks';
 import { isMissing, needsStars } from '../../game/useRandomChallenge';
 
 // One badge per pattern group: collect every card to win it, all 3 stars for gold.
 // Each badge opens the card that moves it forward: the first one to collect,
 // then the first one under 3 stars. A gold badge opens its group.
+// A small crown next to the name once that group's boss is beaten (Boss rounds).
 // `row` = one compact row that scrolls sideways on phones (the Play page).
 export default function Badges({ row = false }) {
   const passed = usePassed();
   const stars = useStars();
+  const boss = useGameStats().boss || {};
   return (
     <ul className={'badges' + (row ? ' badges-row' : '')}>
       {categories.map((c) => {
@@ -30,7 +33,10 @@ export default function Badges({ row = false }) {
           <li key={c.id} className={'badge' + (won ? ' is-won' : '') + (gold ? ' is-gold' : '')}>
             <Link to={to}>
               <span className={`badge-icon badge-${c.id}`} aria-hidden>{won ? <Check size={18} strokeWidth={2.25} /> : `${got}/${list.length}`}</span>
-              <span className="badge-name">{c.name}</span>
+              <span className="badge-name">
+                {c.name}
+                {bossBeaten(c.id, boss[c.id]) && <Crown className="boss-crown" size={13} strokeWidth={2} role="img" aria-label="Boss beaten" />}
+              </span>
               <span className="badge-sub">{sub}</span>
             </Link>
           </li>

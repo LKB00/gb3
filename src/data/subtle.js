@@ -4,7 +4,7 @@
 //   bad / good: the changed block, with a short pin shown after answering.
 
 // pair(id, pattern, brief, before[], bad, good, after[])
-import { user, ai, note, buttons, chips, ph, toast, banner, modal, rows, steps, card } from '../mock/blocks.js';
+import { user, ai, note, buttons, chips, ph, toast, banner, modal, rows, steps, card, ghost, voice } from '../mock/blocks.js';
 
 const pair = (id, pattern, brief, before, bad, good, after = []) => ({
   id,
@@ -293,6 +293,55 @@ export const subtle = [
     note('Day 2: Vatican, Sistine Chapel, St Peter’s', { pin: 'Can only reply to it all' }),
     note('Day 2: Vatican, Sistine Chapel, St Peter’s · Reply', { pin: 'Reply to just this day' }),
     [ph('Ask anything…')]
+  ),
+  pair(
+    'practice-run',
+    'sandbox-preview',
+    'An agent will raise every price in your online shop.',
+    [user('Raise all prices by 5%')],
+    buttons(['!Update live shop'], { pin: 'Goes straight to the real shop' }),
+    buttons(['Practice run first', '!Update live shop'], { pin: 'See the result before it’s real' })
+  ),
+  pair(
+    'circle-spot',
+    'point-to-edit',
+    'You want to remove one car from a street photo.',
+    [],
+    { type: 'image', height: 70, pin: 'Which car?' },
+    { type: 'image', height: 70, sel: [58, 35, 30, 45], selLabel: 'This car', pin: 'Point at the exact spot' },
+    [user('Remove the car')]
+  ),
+  pair(
+    'one-question',
+    'clarifying-questions',
+    'You ask the AI to plan a birthday party.',
+    [user('Plan a party for my son')],
+    ai('Here’s a plan for 50 guests in a hotel ballroom!', { pin: 'Guesses the big stuff' }),
+    ai('Fun! How many kids are coming?', { pin: 'Asks the one thing it needs' })
+  ),
+  pair(
+    'grey-hint',
+    'inline-suggestions',
+    'An email app offers to finish your sentence.',
+    [note('New email to Maya')],
+    ghost('Thanks for the update, ', 'I’ll send the files by Friday.', { solid: true, pin: 'Looks like you typed it' }),
+    ghost('Thanks for the update, ', 'I’ll send the files by Friday.', { pin: 'A grey hint you can keep or skip' })
+  ),
+  pair(
+    'change-list',
+    'action-log',
+    'An agent tidied your calendar overnight.',
+    [note('Good morning! Your week is ready.')],
+    toast('Done. 23 changes made', null, { pin: 'What did it change?' }),
+    toast('Done. 23 changes made', 'See each one', { pin: 'Every change, in a list you can check' })
+  ),
+  pair(
+    'say-less',
+    'mode-switch',
+    'You ask a smart display for cafés nearby.',
+    [voice('listening', 'You', 'Find a café near me')],
+    voice('speaking', 'Assistant', 'Café one, Bean There, 400 metres, 4.5 stars. Café two, Brew Lab, 600 metres…', { pin: 'Reads a long list out loud' }),
+    voice('speaking', 'Assistant', 'I found 6. The closest is Bean There. The rest are on the screen.', { pin: 'Says the top pick, shows the rest' })
   ),
 ];
 

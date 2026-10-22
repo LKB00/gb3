@@ -11,8 +11,8 @@ import { stories } from '../src/data/story.js';
 import { builds } from '../src/data/builds.js';
 
 const routes = [
-  '/', '/me', '/play', '/play/this-or-that', '/play/this-or-that?mode=hard', '/play/spot-the-flaw', '/play/daily',
-  '/play/story', '/play/card', '/play/speed', '/play/build', '/play/power', '/patterns', '/principles',
+  '/', '/me', '/play', '/play/this-or-that', '/play/this-or-that?mode=hard', '/play/this-or-that?mode=misses', '/play/spot-the-flaw', '/play/daily',
+  '/play/story', '/play/card', '/play/speed', '/play/build', '/play/power', '/play/boss', '/play/boss/trust', '/play/boss/feedback', '/play/boss/not-a-group', '/patterns', '/principles',
   '/anti-patterns', '/glossary', '/teardowns', '/learn', '/autonomy', '/does-not-exist',
   ...patterns.flatMap((p) => [`/patterns/${p.id}`, `/patterns/${p.id}?view=understand`, `/patterns/${p.id}?view=reference`]),
   ...teardowns.map((t) => `/teardowns/${t.id}`),
@@ -25,6 +25,7 @@ const routes = [
 const taps = [
   ['/play/this-or-that', '.tot-option'],
   ['/play/power', '.power-opt'],
+  ['/play/boss/trust', '.tot-option'],
   ['/play/build', '.build-piece'],
   ['/play/story/tidy', '.story-choice'],
   ['/play/spot-the-flaw', '.mb-click'],
@@ -39,10 +40,10 @@ const problems = [];
 
 // Saved data that is the wrong shape must never break the site.
 const brokenSaves = {
-  'labs-passed': '123', 'hunts-done': '{}', 'lab-stars': '[1,2]', 'game-stats': '{"bestStreak":"x","builds":5,"speedBest":-1}',
+  'labs-passed': '123', 'hunts-done': '{}', 'lab-stars': '[1,2]', 'game-stats': '{"bestStreak":"x","builds":5,"speedBest":-1,"boss":{"trust":"x","nope":9,"input":99}}',
   daily: '{"2026-10-01":"yes"}', days: '[]', 'player-name': '{"a":1}',
 };
-const savedRoutes = ['/', '/me', '/play', '/play/daily', '/play/card', '/play/speed', '/play/power', '/play/story', '/patterns', '/patterns/citations'];
+const savedRoutes = ['/', '/me', '/play', '/play/daily', '/play/card', '/play/speed', '/play/power', '/play/story', '/play/boss', '/patterns', '/patterns/citations'];
 
 for (const [name, viewport] of [['desktop', { width: 1280, height: 860 }], ['phone', { width: 320, height: 640 }]]) {
   const ctx = await browser.newContext({ viewport, serviceWorkers: 'block', isMobile: name === 'phone', hasTouch: name === 'phone' });

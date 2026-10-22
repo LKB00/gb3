@@ -327,4 +327,77 @@ export const hunts = [
       { type: 'note', text: 'Hirely can get things wrong. A person makes the final call.' },
     ],
   },
+  {
+    id: 'fitness-coach',
+    title: 'AI fitness coach',
+    app: 'Pace · fitness AI',
+    brief: 'A phone app where an AI coach plans your workouts and meals.',
+    blocks: [
+      {
+        type: 'note', text: 'Pace is your doctor in your pocket.',
+        mistake: { text: 'An app is not a doctor. Say what it helps with, and when to see a real one.', pattern: 'set-expectations' },
+      },
+      { type: 'user', text: 'Make me a workout plan.' },
+      {
+        type: 'ai', text: 'Here’s your plan: 6 days a week, 90-minute runs.',
+        mistake: { text: 'It guessed how fit you are. Ask one quick question first.', pattern: 'clarifying-questions' },
+      },
+      { type: 'steps', items: [{ label: 'Easy run · km 3 of 5', state: 'active' }] },
+      {
+        type: 'modal', title: 'Go Pro now!', text: 'Unlock meal plans for $9.99 a month.', buttons: ['Later', '!Upgrade'],
+        mistake: { text: 'An ad pops up in the middle of a run. Offer help when it fits, not mid-workout.', pattern: 'contextual-nudge' },
+      },
+      { type: 'image', height: 70 },
+      {
+        type: 'ai', text: 'That meal is 640 calories.',
+        mistake: { text: 'It doesn’t say what it saw. Name the foods first, so people can fix a wrong guess.', pattern: 'show-understanding' },
+      },
+    ],
+  },
+  {
+    id: 'trip-planner',
+    title: 'AI trip planner',
+    app: 'Wander · travel AI',
+    brief: 'A travel app where an AI plans and books whole trips.',
+    blocks: [
+      { type: 'user', text: 'Plan 4 days in Tokyo in April' },
+      {
+        type: 'spinner', text: 'Planning your trip… 1:40',
+        mistake: { text: 'Nothing to read for almost 2 minutes. Show each day as soon as it’s written.', pattern: 'streaming-response' },
+      },
+      { type: 'card', title: 'Day 1: Asakusa and Ueno', text: 'Temples in the morning, the park after lunch.' },
+      {
+        type: 'buttons', items: [':retry Redo the whole plan'],
+        mistake: { text: 'To change one day, people must redo all 4. Let them reply to just that day.', pattern: 'reply-to-part' },
+      },
+      {
+        type: 'note', text: 'Passing your trip to another agent…',
+        mistake: { text: 'Which agent, doing what? Name each helper and its job, so people know who has their trip.', pattern: 'agent-handoff' },
+      },
+      { type: 'rows', items: [{ label: 'Hotel', value: 'Shinjuku Inn · 4 nights' }, { label: 'Total', value: '$1,240' }] },
+    ],
+  },
+  {
+    id: 'money-helper',
+    title: 'AI money helper',
+    app: 'Penny · money AI',
+    brief: 'A banking app where an AI tracks spending and moves savings.',
+    blocks: [
+      { type: 'rows', items: [{ label: 'Food', value: '$420' }, { label: 'Phone', value: '$96' }] },
+      { type: 'user', text: 'Why is this so high?' },
+      {
+        type: 'ai', text: 'It went up because of new fees.',
+        mistake: { text: 'Which bill? It doesn’t show what it’s looking at. Add a chip like “May phone bill”.', pattern: 'visible-context' },
+      },
+      {
+        type: 'card', title: 'Your May budget', text: 'Made by Penny. To change it, start over.', tag: 'Locked',
+        mistake: { text: 'One wrong number means starting over. Let people edit the budget in place.', pattern: 'editable-output' },
+      },
+      {
+        type: 'modal', title: 'Turn on new savings rules?', text: 'Money moves from all 3 accounts right away.', buttons: ['Cancel', '!Turn on'],
+        mistake: { text: 'Real money moves with no practice run. Show first what would move, and from where.', pattern: 'sandbox-preview' },
+      },
+      { type: 'note', text: 'Penny can sort things wrong. Tap any item to fix it.' },
+    ],
+  },
 ];

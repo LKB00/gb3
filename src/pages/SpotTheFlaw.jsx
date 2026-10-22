@@ -12,7 +12,7 @@ import { revealEl } from '../lib/useReveal';
 // The game after this one on the Play page (skipping tiles without a page of their own).
 const NEXT_GAME = (() => {
   const k = games.findIndex((g) => g.id === 'spot-the-flaw');
-  return [...games.slice(k + 1), ...games.slice(0, k)].find((g) => g.to);
+  return [...games.slice(k + 1), ...games.slice(0, k)].find((g) => g.to && !g.show); // skip rows that can be hidden, like an empty "Your misses"
 })();
 
 // A finished screen starts fresh next time you open it (its XP is already saved).

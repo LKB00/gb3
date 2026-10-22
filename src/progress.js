@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
-import { patterns } from './data/patterns';
 import { hunts } from './data/hunts';
 import { builds } from './data/builds';
 import { stories } from './data/story';
+import { categories, patterns } from './data/patterns';
+import { subtle } from './data/subtle';
+import { achievements } from './data/achievements';
 import { dayKey } from './lib/dates';
 import { CHANGE, readJSON, writeJSON, useStored } from './lib/storage';
 import { trackStart } from './game/track';
@@ -14,7 +16,9 @@ export { dayKey };
 //   labs-passed  ['citations', …]        cards collected (Fix it)
 //   hunts-done   ['chat', …]             Spot the flaw screens finished
 //   lab-stars    { citations: 3, … }     best stars per card
-//   game-stats   { bestStreak, speedBest, powerBest, builds: {id: stars}, stories: {id: trust} }
+//   game-stats   { bestStreak, speedBest, powerBest, bestDayStreak, builds: {id: stars}, stories: {id: trust}, boss: {group: right answers} }
+//   misses       ['c:citations', 'h:practice-run', …]   This or That rounds you got wrong (the "Your misses" deck)
+//   achievements { 'perfect-daily': 'YYYY-MM-DD', … }   achievements earned, with the day
 //   daily        { 'YYYY-MM-DD': [true, false, …] }   Daily challenge results
 //   days         { 'YYYY-MM-DD': moves }              day streak and daily goal
 // Adding a new game score: add a saveBest('myBest') line and a line in xpParts().
@@ -33,6 +37,10 @@ const KNOWN = {
   'hunts-done': new Set(hunts.map((h) => h.id)),
   builds: new Set(builds.map((b) => b.id)),
   stories: new Set(stories.map((s) => s.id)),
+  // Round keys from game/decks.js: 'c:' + pattern id (classic) or 'h:' + hard pair id.
+  misses: new Set([...patterns.map((p) => `c:${p.id}`), ...subtle.map((x) => `h:${x.id}`)]),
+  boss: new Set(categories.map((c) => c.id)),
+  achievements: new Set(achievements.map((a) => a.id)),
 };
 const isDay = (k) => /^\d{4}-\d{2}-\d{2}$/.test(k);
 const cleanList = (l, key) => [...new Set(l.filter((x) => typeof x === 'string' && (!KNOWN[key] || KNOWN[key].has(x))))];
@@ -46,14 +54,17 @@ const dailyDayOk = (k) => {
   return isDay(k) && k >= FIRST_DAILY && k <= dayKey(tomorrow);
 };
 const cleanDaily = (o) => cleanMap(o, (v) => (Array.isArray(v) ? v.slice(0, DAILY_LEN).map(Boolean) : null), dailyDayOk);
+const cleanAchievements = (o) => cleanMap(o, (v) => (typeof v === 'string' && isDay(v) ? v : null), (k) => KNOWN.achievements.has(k));
 const cleanDays = (o) => cleanMap(o, (v) => Math.round(num(v, 0, 100000)), isDay);
 function cleanStats(s) {
   const out = {
     bestStreak: Math.round(num(s.bestStreak, 0, 999)),
     speedBest: Math.round(num(s.speedBest, 0, 999)),
     powerBest: Math.round(num(s.powerBest, 0, 16)),
+    bestDayStreak: Math.round(num(s.bestDayStreak, 0, 100000)),
     builds: cleanMap(s.builds && typeof s.builds === 'object' && !Array.isArray(s.builds) ? s.builds : {}, (v) => Math.round(num(v, 1, 3)) || null, (k) => KNOWN.builds.has(k)),
     stories: cleanMap(s.stories && typeof s.stories === 'object' && !Array.isArray(s.stories) ? s.stories : {}, (v) => Math.round(num(v, 0, 100)), (k) => KNOWN.stories.has(k)),
+    boss: cleanMap(s.boss && typeof s.boss === 'object' && !Array.isArray(s.boss) ? s.boss : {}, (v) => Math.round(num(v, 0, BOSS_ROUNDS)), (k) => KNOWN.boss.has(k)),
   };
   // Older saves kept the first story's best here.
   if (s.storyBest != null && Number.isFinite(Number(s.storyBest))) out.storyBest = Math.round(num(s.storyBest, 0, 100));
@@ -118,7 +129,45 @@ export const LEVELS = [
   { xp: 1000, name: 'AI UX pro' },
   { xp: 1300, name: 'Legend' },
 ];
-export const XP = { star: 10, hunt: 30, streak: 5, daily: 10, speed: 2, power: 2 };
+export const XP = { star: 10, hunt: 30, streak: 5, daily: 10, speed: 2, power: 2, boss: 5 };
+
+// ---- Your misses: This or That rounds you got wrong, until you get them right ----
+export const useMisses = () => useList('misses');
+export const readMisses = () => read('misses');
+export const addMiss = (key) => add('misses', key);
+export function clearMiss(key) {
+  const list = read('misses');
+  if (!list.includes(key)) return;
+  writeJSON('misses', list.filter((k) => k !== key));
+  if (list.length === 1) window.dispatchEvent(new CustomEvent('gb3-event', { detail: { type: 'misses-cleared' } }));
+}
+
+// ---- Boss rounds: one hard final per group; you beat it with BOSS_WIN of BOSS_ROUNDS right ----
+export const BOSS_ROUNDS = 8;
+export const BOSS_WIN = 7;
+export const saveBoss = (group, right) => saveBestIn('boss', group, right);
+export const saveDayStreak = (n) => saveBest('bestDayStreak', n);
+
+// ---- Achievements: { id: day earned }. The list and the rules live in data/achievements.js ----
+export const useAchievements = () => useCleaned('achievements', cleanAchievements);
+export const readAchievements = () => cleanAchievements(readObj('achievements'));
+export function unlockAchievement(id) {
+  const all = readAchievements();
+  if (all[id] || !KNOWN.achievements.has(id)) return false;
+  writeJSON('achievements', { ...all, [id]: dayKey() });
+  return true;
+}
+// Everything the achievement rules can look at, read fresh from storage.
+export function readProgress() {
+  return {
+    passed: read('labs-passed'),
+    hunts: read('hunts-done'),
+    stars: cleanStars(readObj('lab-stars')),
+    stats: readStats(),
+    daily: cleanDaily(readObj('daily')),
+    days: cleanDays(readObj('days')),
+  };
+}
 
 // Build mode: best stars per brief, in game-stats.builds = { briefId: 1–3 }.
 export const saveBuild = (id, stars) => saveBestIn('builds', id, stars);
@@ -265,6 +314,7 @@ export function xpParts({ stars, hunts, stats, passed, daily }) {
       builds: sum(stats.builds || {}, (st) => st * XP.star),
       speed: (stats.speedBest || 0) * XP.speed,
       power: (stats.powerBest || 0) * XP.power,
+      boss: sum(stats.boss || {}, (n) => n * XP.boss),
     },
   };
 }
@@ -291,6 +341,7 @@ export function markPlayed() {
   const before = all[k] || 0;
   writeJSON('days', { ...all, [k]: before + 1 });
   trackStart(); // every game calls this on each answer, so the first one marks "Game started"
+  window.dispatchEvent(new CustomEvent('gb3-event', { detail: { type: 'answer', hour: new Date().getHours() } }));
   if (before + 1 === DAILY_GOAL) window.dispatchEvent(new Event('goal-reached'));
 }
 export const useDays = () => useCleaned('days', cleanDays);
@@ -360,8 +411,8 @@ export function useStreak() {
 // ---- Backup code: move progress to another browser, no account needed ----
 // The code is "AIP1." + base64 of the saved progress. Restoring MERGES with what
 // is already here (keeps the best of both), so it can never lose progress.
-const LISTS = ['labs-passed', 'hunts-done'];
-const OBJECTS = ['lab-stars', 'game-stats', 'daily', 'days'];
+const LISTS = ['labs-passed', 'hunts-done', 'misses'];
+const OBJECTS = ['lab-stars', 'game-stats', 'daily', 'days', 'achievements'];
 
 export function exportProgress() {
   const data = {};
@@ -370,6 +421,7 @@ export function exportProgress() {
   data['game-stats'] = readStats();
   data.daily = cleanDaily(readObj('daily'));
   data.days = cleanDays(readObj('days'));
+  data.achievements = readAchievements();
   try {
     data.name = localStorage.getItem('player-name') || '';
   } catch {
@@ -430,7 +482,7 @@ export function importProgress(code) {
       if (!Array.isArray(data[k])) continue;
       localStorage.setItem(k, JSON.stringify(cleanList([...read(k), ...data[k]], k)));
     }
-    const CLEAN = { 'lab-stars': cleanStars, 'game-stats': cleanStats, daily: cleanDaily, days: cleanDays };
+    const CLEAN = { 'lab-stars': cleanStars, 'game-stats': cleanStats, daily: cleanDaily, days: cleanDays, achievements: cleanAchievements };
     for (const k of OBJECTS) {
       if (!plain(data[k])) continue;
       const here = CLEAN[k](readObj(k));

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, CalendarDays, Zap } from 'lucide-react';
 import { getPattern, patterns } from '../data/patterns';
@@ -9,6 +9,7 @@ import ThisOrThat from '../components/ThisOrThat';
 import DailyBanner from '../components/play/DailyBanner';
 import GameTiles from '../components/play/GameTiles';
 import { useTitle } from '../lib/useTitle';
+import { buddy } from '../game/buddy';
 
 // Home = play in one second. The first game starts right here, no reading needed.
 // Returning players get a short hello and today's Daily first.
@@ -18,6 +19,22 @@ export default function Home() {
   const { xp, level } = useXP();
   const { days } = useStreak();
   const daily = useDaily();
+  // Back after 2+ days away: the bot buddy says hi, once per visit.
+  useEffect(() => {
+    const today = dayKey();
+    const before = Object.keys(days).filter((k) => k < today && days[k] > 0).sort().pop();
+    if (!before || (new Date(today) - new Date(before)) / 86400000 < 2) return;
+    try {
+      if (sessionStorage.getItem('gb3-welcomed')) return;
+      sessionStorage.setItem('gb3-welcomed', '1');
+    } catch {
+      /* no storage: still fine to say hi */
+    }
+    const t = setTimeout(() => buddy('welcome'), 1200);
+    return () => clearTimeout(t);
+    // Once, when Home opens.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   // Decided once per visit, so the first answer of a new player doesn't reshuffle the page mid-game.
   const [back] = useState(() => xp > 0 || Object.keys(days).length > 0);
   const dailyDone = !!daily[dayKey()];

@@ -724,7 +724,119 @@ const quill = {
   ],
 };
 
-export const stories = [tidy, nova, sage, pilot, roam, quill];
+// ---------------------------------------------------------------
+const owl = {
+  id: 'owl',
+  title: 'Study buddy',
+  person: 'Ishaan',
+  role: 'Student, 13, maths test on Friday',
+  agent: 'Owl, an AI study helper',
+  teaser: 'Ishaan’s maths test is on Friday. An AI could teach him. Or just hand him the answers.',
+  color: 'input',
+  app: 'Owl · study helper',
+  start: 'hello',
+  trustStart: 50,
+  scenes: {
+    hello: {
+      title: 'Monday night',
+      setup: 'Ishaan has a maths test on Friday. He opens Owl after dinner, already a bit tired.',
+      screen: [ph('Ask Owl anything…')],
+      question: 'What does Owl show on the empty screen?',
+      choices: [
+        { label: 'A big “How can I help?” and nothing else', trust: -5, pattern: 'prompt-starters', ui: [note('How can I help?')],
+          reaction: 'Ishaan types “idk”. Then he opens a game instead.' },
+        { label: 'A few starters made for his week', trust: 15, pattern: 'prompt-starters', ui: [chips([':pen Help with tonight’s homework', ':check Quiz me for Friday’s test'])],
+          reaction: 'He taps “homework”. Easy. No need to think about what to type.' },
+        { label: 'A 15-question quiz about how he likes to learn', trust: -10, pattern: 'clarifying-questions', ui: [note('Question 1 of 15: Do you learn best with pictures?'), buttons(['Skip', '!Next'])],
+          reaction: 'By question 6, Ishaan is lying on the floor. The homework is still not done.' },
+      ],
+      next: 'stuck',
+    },
+    stuck: {
+      title: 'Stuck on Q4',
+      setup: 'Question 4 says 3x + 5 = 20. Ishaan has stared at it for ten minutes.',
+      screen: [user('Just tell me the answer to Q4.')],
+      question: 'How much does Owl do?',
+      choices: [
+        { label: 'Solve all 10 questions, ready to copy', trust: -25, pattern: 'autonomy-dial', ui: [list(['Q1: x = 4', 'Q2: x = 7', 'Q3: x = 2', 'Q4: x = 5', '…and 6 more'])],
+          reaction: 'Done in 30 seconds! Ishaan copies it all and goes to bed happy. For now.', next: 'copied' },
+        { label: 'Let him pick: a hint, one step, or the answer', trust: 15, pattern: 'autonomy-dial', ui: [ai('Want a small push or the full answer? You pick.'), buttons(['!Give me a hint', 'Show one step', 'Show the answer'])],
+          reaction: 'He taps the hint: “Take 5 away from both sides.” Oh! He finds x = 5 on his own.' },
+        { label: '“I can’t do your homework for you.”', trust: -10, pattern: 'graceful-errors', ui: [ai('I can’t do your homework for you.')],
+          reaction: 'No answer, no help, no next step. Ishaan texts a friend for the answers instead.' },
+      ],
+      next: 'slip',
+    },
+    copied: {
+      title: 'Show your working',
+      setup: 'Next day, the teacher asks Ishaan to solve Q4 on the board. He can’t. Back home, he opens Owl, red in the face.',
+      screen: [user('I had to explain Q4 in class. I couldn’t. Everyone saw.')],
+      question: 'What does Owl do now?',
+      choices: [
+        { label: 'Say sorry, then show Q4 in steps he can tap', trust: 15, pattern: 'reply-to-part', ui: [ai('Sorry. I gave you answers, not help. Let’s fix that.'), list(['Step 1: 3x + 5 = 20', 'Step 2: 3x = 15', 'Step 3: x = 5']), buttons(['!I don’t get step 2'])],
+          reaction: 'He taps step 2. Owl explains it with sweets: take 5 from both sides. It clicks.' },
+        { label: 'Write fake working that looks like his', trust: -20, pattern: 'ai-disclosure', ui: [card('Q4 · working', '3x = 15, so x = 5. Written in messy, kid-style steps.')],
+          reaction: 'The teacher finds the same “messy” working in three other books. Now there’s a meeting with his parents.' },
+        { label: '“Tip: try to understand things before you copy them.”', trust: -10, pattern: 'graceful-errors', ui: [note('Tip: try to understand things before you copy them.')],
+          reaction: 'A tip? From the AI that handed him the answers? Ishaan closes the app.' },
+      ],
+      next: 'slip',
+    },
+    slip: {
+      title: 'Owl gets it wrong',
+      setup: 'Ishaan tries Q7: 2x − 4 = 10. Owl’s hint says x = 3. Ishaan checks it. 2 × 3 − 4 is 2, not 10.',
+      screen: [ai('Hint: x = 3'), user('That doesn’t work?? I checked it.')],
+      question: 'What does Owl say?',
+      choices: [
+        { label: 'Admit the slip, fix it, and thank him', trust: 15, pattern: 'graceful-errors', ui: [ai('You’re right. I forgot to add the 4 back. It’s x = 7. Great catch!')],
+          reaction: 'Ishaan grins. He just caught an AI making a mistake. Now he checks every answer.' },
+        { label: 'Insist that x = 3 is right', trust: -20, pattern: 'graceful-errors', ui: [ai('x = 3 is correct. Please check your working.')],
+          reaction: 'Ishaan rubs out his right answer and writes 3. On Friday, it’s marked wrong.' },
+        { label: '“Sorry for the confusion.” Nothing more.', trust: -5, pattern: 'graceful-errors', ui: [ai('Sorry for the confusion.')],
+          reaction: 'Sorry, okay. But what is the answer? He still doesn’t know.' },
+      ],
+      next: 'unsure',
+    },
+    unsure: {
+      title: 'cm or m?',
+      setup: 'Q9 is about a garden. Ishaan asks if his teacher wants the answer in cm or in m. The sheet doesn’t say.',
+      screen: [user('Does Mrs Rao want cm or m?')],
+      question: 'What does Owl say?',
+      choices: [
+        { label: '“Teachers always want cm.”', trust: -15, pattern: 'confidence-signals', ui: [ai('Teachers always want cm.')],
+          reaction: 'Mrs Rao wanted m. Ishaan loses three marks in one go.' },
+        { label: 'Say it can’t know, give its best guess, and how to check', trust: 15, pattern: 'confidence-signals', ui: [ai('I can’t know what Mrs Rao wants. Last week’s sheet used m, so that’s my best guess. Ask her to be sure.')],
+          reaction: 'He asks Mrs Rao in class. It’s m. One honest “not sure” saved three marks.' },
+        { label: 'Give both, with no comment', trust: -5, pattern: 'confidence-signals', ui: [ai('Answer: 1,200 cm or 12 m.')],
+          reaction: 'Which one should he write? He writes both. Mrs Rao is not amused.' },
+      ],
+      next: 'quiz',
+    },
+    quiz: {
+      title: 'The night before',
+      setup: 'It’s Thursday night. The test is tomorrow. Ishaan asks Owl to quiz him.',
+      screen: [user('Quiz me for tomorrow!')],
+      question: 'How does Owl pick the questions?',
+      choices: [
+        { label: '50 random questions from the whole year', trust: -10, pattern: 'explain-why', ui: [note('Question 1 of 50 · Fractions')],
+          reaction: 'Fractions? That was in June. At question 20, Ishaan falls asleep on his book.' },
+        { label: 'His weak spots from this week, with why each one is there', trust: 15, pattern: 'explain-why', ui: [list(['• 3 like Q7: you mixed up + and −', '• 2 like Q9: cm or m']), buttons(['!Start the quiz'])],
+          reaction: 'Five questions. He gets all five. He goes to bed early, and calm.' },
+        { label: 'Skip the quiz: “You’re 100% ready!”', trust: -10, pattern: 'confidence-signals', ui: [ai('You’re 100% ready! 🎉')],
+          reaction: 'It feels great at 9 pm. It feels very different in the exam hall.' },
+      ],
+      next: null,
+    },
+  },
+  endings: [
+    { min: 85, title: 'Top marks', text: 'Ishaan gets 18 out of 20. He tells Owl first, then runs to tell his mum.', tone: 'good' },
+    { min: 50, title: 'Passed, with one eye open', text: 'Ishaan passes. He keeps Owl for hints, but checks every answer twice.', tone: 'ok' },
+    { min: 25, title: 'Back to the textbook', text: 'Ishaan deletes Owl and studies from his book. Slower, but no surprises.', tone: 'warn' },
+    { min: 0, title: 'Banned at school', text: 'Mrs Rao tells the whole class: “No more Owl.” Everyone knows why.', tone: 'bad' },
+  ],
+};
+
+export const stories = [tidy, nova, sage, pilot, roam, quill, owl];
 export const getStory = (id) => stories.find((s) => s.id === id);
 // Kept for older imports.
 export const story = tidy;
