@@ -4,6 +4,7 @@ import DailyBanner from '../components/play/DailyBanner';
 import GameTiles from '../components/play/GameTiles';
 import Badges from '../components/play/Badges';
 import { ProgressLine } from '../components/Today';
+import { ThemeWeekLine, WeakSpot } from '../components/play/WeekLine';
 import { useTitle } from '../lib/useTitle';
 
 // The Play hub, in order of what matters: today's Daily (the one big "start here"),
@@ -19,7 +20,11 @@ export default function Play() {
       </header>
       <div className="play-grid">
         <DailyBanner />
-        <ProgressLine />
+        <div>
+          <ProgressLine />
+          <ThemeWeekLine />
+          <WeakSpot />
+        </div>
         <GameTiles />
       </div>
       <section className="block play-badges">

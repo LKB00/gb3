@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { Lock, Sparkles, Trophy } from 'lucide-react';
 import { achievements } from '../data/achievements';
+import { THEME_GOAL, themeOfWeek } from '../game/themeWeek';
 import { stories } from '../data/story';
-import { readAchievements, readProgress, saveDayStreak, storyBests, streakInfo, unlockAchievement, useAchievements } from '../progress';
+import { readAchievements, readProgress, saveDayStreak, storyBests, streakInfo, unlockAchievement, useAchievements, useGameStats } from '../progress';
 import { CHANGE, writeJSON } from '../lib/storage';
 import { fx } from '../game/fx';
 import { bossBeaten } from '../game/decks';
@@ -62,13 +63,20 @@ export function AchievementToast() {
       const done = readAchievements();
       earn(achievements.filter((a) => !done[a.id] && a.event?.(e.detail || {})));
     };
+    // Other wins can use the same toast: dispatch 'gb3-toast' with { id, name, text } (e.g. a theme week done).
+    const onToast = (e) => {
+      const { id, name, text } = e.detail || {};
+      if (id && name) setQueue((q) => [...q, { id, name, reward: text, how: '' }]);
+    };
     window.addEventListener(CHANGE, check);
     window.addEventListener('storage', check);
     window.addEventListener('gb3-event', onEvent);
+    window.addEventListener('gb3-toast', onToast);
     return () => {
       window.removeEventListener(CHANGE, check);
       window.removeEventListener('storage', check);
       window.removeEventListener('gb3-event', onEvent);
+      window.removeEventListener('gb3-toast', onToast);
     };
   }, []);
 
@@ -95,6 +103,9 @@ export function AchievementToast() {
 // Me page: every achievement. Earned ones first; secret ones stay a mystery until earned.
 export function AchievementList() {
   const earned = useAchievements();
+  const weeks = Object.entries(useGameStats().themeWeeks || {})
+    .filter(([, n]) => n >= THEME_GOAL)
+    .sort(([a], [b]) => (a < b ? 1 : -1));
   const got = achievements.filter((a) => earned[a.id]);
   const left = achievements.filter((a) => !earned[a.id]);
   return (
@@ -117,6 +128,14 @@ export function AchievementList() {
           );
         })}
       </ul>
+      {weeks.length > 0 && (
+        <>
+          <p className="label week-badges-title">Theme weeks won</p>
+          <div className="week-badges">
+            {weeks.map(([k]) => <span key={k} className="chip" title={k}>{themeOfWeek(k).name} week</span>)}
+          </div>
+        </>
+      )}
     </>
   );
 }

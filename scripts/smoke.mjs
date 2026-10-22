@@ -41,7 +41,7 @@ const problems = [];
 // Saved data that is the wrong shape must never break the site.
 const brokenSaves = {
   'labs-passed': '123', 'hunts-done': '{}', 'lab-stars': '[1,2]', 'game-stats': '{"bestStreak":"x","builds":5,"speedBest":-1,"boss":{"trust":"x","nope":9,"input":99}}',
-  daily: '{"2026-10-01":"yes"}', days: '[]', 'player-name': '{"a":1}',
+  daily: '{"2026-10-01":"yes"}', days: '[]', 'player-name': '{"a":1}', 'daily-goal': '{"n":"7"}',
 };
 const savedRoutes = ['/', '/me', '/play', '/play/daily', '/play/card', '/play/speed', '/play/power', '/play/story', '/play/boss', '/patterns', '/patterns/citations'];
 

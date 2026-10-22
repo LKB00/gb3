@@ -6,7 +6,9 @@ import { seeded, shuffle } from '../lib/random';
 import { challengeLink, speedDareText, useChallenge, useDare, verdict } from '../game/challenge';
 import { fx } from '../game/fx';
 import { track } from '../game/track';
-import { addMiss, clearMiss, markPlayed, saveSpeed, useGameStats, XP } from '../progress';
+import { addMiss, clearMiss, markPlayed, saveSpeed, saveSpeedWeek, useGameStats, XP } from '../progress';
+import { weekKey } from '../lib/dates';
+import { countThemeAnswer } from '../game/themeWeek';
 import MockFrame, { MockBlock } from '../mock/Mock';
 import Breadcrumbs from '../components/Breadcrumbs';
 import CountUp from '../components/CountUp';
@@ -129,6 +131,7 @@ export default function Speed() {
         const final = pointsRef.current;
         setResult({ record: final > best, gain: Math.max(0, final - best) * XP.speed });
         saveSpeed(final);
+        saveSpeedWeek(weekKey(), final);
         track('Game finished', { game: 'speed', score: final });
         fx(final > best && final > 0 ? 'win' : 'timeup');
         setPhase('over');
@@ -137,6 +140,12 @@ export default function Speed() {
     return () => clearInterval(t);
   }, [phase, stats.speedBest]);
 
+  // "Beat your last week": your best Speed score in the week before this one.
+  const lastWeek = (() => {
+    const d = new Date();
+    d.setDate(d.getDate() - 7);
+    return stats.speedWeeks?.[weekKey(d)] || 0;
+  })();
   const round = deck[i % deck.length];
   const sides = round.goodFirst ? ['good', 'bad'] : ['bad', 'good'];
 
@@ -145,8 +154,10 @@ export default function Speed() {
       if (phase !== 'play' || flash) return;
       const ok = (n === 0) === round.goodFirst;
       markPlayed();
-      if (ok) clearMiss(round.key);
-      else addMiss(round.key);
+      if (ok) {
+        clearMiss(round.key);
+        countThemeAnswer(round);
+      } else addMiss(round.key);
       if (!ok) fx('wrong');
       else if (combo + 1 >= 3) fx('combo', { streak: combo + 1 });
       else fx('right', { streak: combo });
@@ -170,7 +181,7 @@ export default function Speed() {
         setI((x) => x + 1);
       }, ok ? 320 : 650);
     },
-    [phase, flash, round.goodFirst, round.key, round.pattern, combo]
+    [phase, flash, round, combo]
   );
 
   useEffect(() => {
@@ -214,7 +225,10 @@ export default function Speed() {
           <button type="button" className="btn btn-primary btn-lg" data-fx="off" /* the countdown ticks instead */ onClick={() => start(!!challenge)}>
             <Zap size={15} strokeWidth={2} aria-hidden /> {challenge ? 'Accept challenge' : 'Start the clock'}
           </button>
-          <p className="small muted">Your best: {stats.speedBest || 0} points<span className="keys-hint"> · Keyboard: ← / →</span></p>
+          <p className="small muted">
+            {lastWeek > 0 ? `Last week’s best: ${lastWeek} points. Beat it?` : `Your best: ${stats.speedBest || 0} points`}
+            <span className="keys-hint"> · Keyboard: ← / →</span>
+          </p>
         </div>
       )}
 
@@ -268,6 +282,7 @@ export default function Speed() {
           )}
           <div className="tot-stats">
             {result.record && points > 0 ? <span className="pill-new">New best!</span> : <span>Your best: {stats.speedBest || 0} points</span>}
+            {lastWeek > 0 && <span>{points > lastWeek ? `You beat last week’s ${lastWeek}!` : `Last week’s best: ${lastWeek}`}</span>}
           </div>
           <div className="speed-dare">
             {dare.askName && (

@@ -76,3 +76,27 @@
 }
 /* One message at a time: the buddy steps aside while a toast (goal, level up, achievement) is showing. */
 body:has(.goal-toast:not(.sound-hint)) .buddy { display: none; }
+
+/* ---- Golden round (This or That): a warm gold tag and a gold edge on both screens ---- */
+.tag-golden { background: #f5c84b; color: #3a2e12; }
+.tot.is-golden .tot-option:not(.is-good):not(.is-bad) { box-shadow: 0 0 0 2px #f5c84b; }
+
+/* ---- Theme week and weak-spot lines on Play: one quiet line each ---- */
+.week-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  margin: 12px 0 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--ink-2);
+}
+.week-line strong { color: var(--ink); }
+.week-line .meter { flex: 0 0 80px; height: 6px; }
+.week-line .meter span { background: var(--lime); }
+.week-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.week-badges-title { margin-top: 20px; }
+
+/* ---- Daily result: tomorrow's teaser, a quiet line under the countdown ---- */
+.daily-teaser { max-width: 46ch; margin: 6px auto 0; text-align: center; color: var(--ink-2); }
