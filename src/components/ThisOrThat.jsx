@@ -1,16 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Check, Eye, Flame, RotateCcw, Trophy, X } from 'lucide-react';
+import { ArrowRight, Check, Eye, Flame, RotateCcw, Sparkles, Trophy, X } from 'lucide-react';
 import { getCategory, getPattern } from '../data/patterns';
 import { makeDeck } from '../game/decks';
 import { missesDeck } from '../game/missesDeck';
 import MockFrame, { MockBlock } from '../mock/Mock';
-import { addMiss, clearMiss, markPlayed, saveStreak, useGameStats, useMisses, XP } from '../progress';
-import Burst from './Burst';
+import { addGolden, addMiss, clearMiss, markPlayed, saveStreak, useGameStats, useMisses, XP } from '../progress';
+import Burst, { XpPop } from './Burst';
 import { fx } from '../game/fx';
 import CountUp from './CountUp';
 import { track } from '../game/track';
 import { buddy } from '../game/buddy';
+import { countThemeAnswer, leanDeck } from '../game/themeWeek';
 import Disagree from './Disagree';
 import { PeekLink } from './PatternPeek';
 
@@ -32,7 +33,10 @@ const YES = ['Nailed it!', 'Sharp eye!', 'That’s the one!', 'Yes!'];
 const NO = ['So close. The green one wins.', 'Easy to miss. The green one wins.', 'Not quite. The green one wins.'];
 
 // Every wrong answer goes into "Your misses"; a right answer takes that round out again.
-const buildDeck = (mode, n) => (mode === 'misses' ? missesDeck(n) : makeDeck(mode, n));
+// A fresh run leans to this week's theme group, and about 1 round in 20 is golden (worth XP.golden if you get it right).
+const GOLDEN = 1 / 20;
+const buildDeck = (mode, n) =>
+  (mode === 'misses' ? missesDeck(n) : leanDeck(makeDeck(mode, n), mode)).map((r) => ({ ...r, golden: Math.random() < GOLDEN }));
 
 // `start` resumes a run (answers already given, e.g. a Daily after a refresh); `onAnswer` gets every answer so far.
 export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedDeck, onDone, start, onAnswer, next: nextStep, game }) {
@@ -75,8 +79,11 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
       setPick(n);
       markPlayed();
       const ok = (n === 0) === round.goodFirst;
-      if (ok) clearMiss(round.key);
-      else addMiss(round.key);
+      if (ok) {
+        clearMiss(round.key);
+        countThemeAnswer(round);
+        if (round.golden) addGolden();
+      } else addMiss(round.key);
       if (!ok) fx('wrong');
       else if (streak + 1 >= 3) fx('combo', { streak: streak + 1 });
       else fx('right', { streak });
@@ -93,7 +100,7 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
         setStreak(0);
       }
     },
-    [pick, over, round.goodFirst, round.key, streak, results, onAnswer]
+    [pick, over, round, streak, results, onAnswer]
   );
 
   const next = useCallback(() => {
@@ -196,7 +203,7 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
   }
 
   return (
-    <div className="tot">
+    <div className={'tot' + (round.golden ? ' is-golden' : '')}>
       <div className="tot-bar">
         <span className="tot-round">
           {deck.map((_, n) => (
@@ -213,6 +220,7 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
         <div className="row">
           <span className={`tag tag-${p.category}`}>{getCategory(p.category).name}</span>
           {round.hard && <span className="tag tag-hard"><Eye size={11} strokeWidth={2} aria-hidden /> Hard · find the 1 small difference</span>}
+          {round.golden && <span className="tag tag-golden"><Sparkles size={11} strokeWidth={2} aria-hidden /> Golden round · +{XP.golden} XP</span>}
         </div>
         <h3 aria-level="2">Tap the better AI screen</h3>
         <p>{round.brief}</p>
@@ -240,7 +248,8 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
                   <MockBlock key={k} b={b} pin={answered ? b.pin : undefined} state={answered && b.pin ? side : undefined} />
                 ))}
               </MockFrame>
-              {mine && right && <Burst />}
+              {mine && right && <Burst count={round.golden ? 30 : undefined} />}
+              {mine && right && round.golden && <XpPop amount={XP.golden} />}
             </button>
           );
         })}

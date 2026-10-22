@@ -1,4 +1,4 @@
-import { BookOpenText, Check, Crown, Flame, Gauge, Hammer, Puzzle, RotateCcw, ScanSearch, Shuffle, Star, Swords, Timer, Zap } from 'lucide-react';
+import { BookOpenText, CalendarDays, Check, Crown, HelpCircle, Flame, Gauge, Hammer, Puzzle, RotateCcw, ScanSearch, Shuffle, Star, Swords, Timer, Zap } from 'lucide-react';
 import { patterns } from '../data/patterns';
 import { hunts } from '../data/hunts';
 import { builds } from '../data/builds';
@@ -6,6 +6,8 @@ import { stories } from '../data/story';
 import { categories } from '../data/patterns';
 import { storyBests } from '../progress';
 import { bossBeaten } from '../game/decks';
+import { weeklyTeaser } from '../data/weekly';
+import { weekKey } from '../lib/dates';
 
 // Every game on the Play page, in the order shown. The tiles are drawn from
 // this list (components/play/GameTiles.jsx), in two groups: quick games and deeper games.
@@ -20,7 +22,7 @@ import { bossBeaten } from '../game/decks';
 //   group  'quick' (1-2 minutes) or 'deep' (about 5 minutes): the two lists on the Play page
 //   isNew  shows a small "New" pill
 //   meta   your progress in this game: (progress) => [Icon, text, played]
-//          progress = { stats, passed, huntsDone, misses }; the line only shows once played is true
+//          progress = { stats, passed, huntsDone, misses, weeklyDone, achievements, mystery }; the line only shows once played is true
 //   show   optional: (progress) => false hides the row (e.g. "Your misses" with nothing in it)
 export const games = [
   {
@@ -43,6 +45,21 @@ export const games = [
     tone: 'game-a',
     group: 'quick',
     meta: ({ stats }) => [Flame, `Best streak: ${stats.bestStreak || 0} in a row`, (stats.bestStreak || 0) > 0],
+  },
+  {
+    id: 'weekly',
+    to: '/play/weekly',
+    title: 'Screen of the week',
+    // A getter, so the teaser follows the week even if the tab stays open past Monday.
+    get blurb() {
+      const t = weeklyTeaser();
+      const kind = t.type.charAt(0).toLowerCase() + t.type.slice(1); // "Meeting notes AI" → "meeting notes AI"
+      return `This week: ${/^[aeiou]/.test(kind) ? 'an' : 'a'} ${kind}. ${t.line}. A new screen every Monday.`;
+    },
+    icon: CalendarDays,
+    tone: 'game-e',
+    group: 'quick',
+    meta: ({ weeklyDone }) => [Check, 'Done this week. See you Monday!', !!weeklyDone[weekKey()]],
   },
   {
     id: 'fix-it',
@@ -117,5 +134,15 @@ export const games = [
       const beaten = Object.entries(stats.boss || {}).filter(([g, n]) => bossBeaten(g, n)).length;
       return [Crown, `${beaten}/${categories.length} bosses beaten`, Object.keys(stats.boss || {}).length > 0];
     },
+  },
+  {
+    id: 'mystery',
+    to: '/play/mystery',
+    title: 'Mystery card',
+    blurb: 'A secret bonus card. Play 7 days in a row to turn it over.',
+    icon: HelpCircle,
+    tone: 'game-b',
+    group: 'deep',
+    meta: ({ achievements, mystery }) => [mystery.won ? Star : Check, mystery.won ? 'Won!' : 'Unlocked. Go play it!', !!achievements['streak-7']],
   },
 ];

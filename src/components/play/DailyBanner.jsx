@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, CalendarDays } from 'lucide-react';
-import { DAILY_GOAL, useDaily, useStreak } from '../../progress';
+import { useDaily, useDailyGoal, useStreak } from '../../progress';
 import { dailyLabel, goalRounds } from '../../game/decks';
 import { dayKey } from '../../lib/dates';
 
@@ -10,6 +10,7 @@ import { dayKey } from '../../lib/dates';
 export default function DailyBanner() {
   const daily = useDaily();
   const { todayMoves } = useStreak();
+  const goal = useDailyGoal();
   const key = dayKey();
   const today = daily[key];
 
@@ -27,7 +28,7 @@ export default function DailyBanner() {
   }
 
   const got = `You got ${today.filter(Boolean).length}/${today.length}.`;
-  const left = DAILY_GOAL - todayMoves;
+  const left = goal - todayMoves;
   const rounds = goalRounds(left);
   return (
     <div className="daily-banner is-done">

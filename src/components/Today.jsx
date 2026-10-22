@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Flame, Snowflake, Target, TrendingUp, Volume2 } from 'lucide-react';
-import { DAILY_GOAL, dayKey, useStreak, useXP } from '../progress';
+import { dayKey, useDailyGoal, useStreak, useXP } from '../progress';
 import { goalRounds } from '../game/decks';
 import Burst from './Burst';
 import { fx, turnAllOff } from '../game/fx';
@@ -142,8 +142,9 @@ function skipNote(streak, frozen) {
 export function ProgressLine() {
   const { level, levelNum, nextLevel, toNext, xp } = useXP();
   const { streak, frozen, todayMoves } = useStreak();
+  const goal = useDailyGoal();
   const pct = nextLevel ? Math.round(((xp - level.xp) / (nextLevel.xp - level.xp)) * 100) : 100;
-  const done = Math.min(todayMoves, DAILY_GOAL);
+  const done = Math.min(todayMoves, goal);
   const saved = skipNote(streak, frozen);
   return (
     <div className="progress-line">
@@ -157,7 +158,7 @@ export function ProgressLine() {
       </div>
       <div className="pl-facts">
         <span className="pl-fact" title="Today's goal">
-          <Target size={16} strokeWidth={2} aria-hidden /> <strong>{done}/{DAILY_GOAL}</strong> today
+          <Target size={16} strokeWidth={2} aria-hidden /> <strong>{done}/{goal}</strong> today
         </span>
         <span className="pl-fact pl-streak" title="Day streak">
           <Flame size={16} strokeWidth={2} aria-hidden /> <strong>{streak}</strong> {streak === 1 ? 'day' : 'days'}
@@ -174,8 +175,9 @@ export function ProgressLine() {
 // `go` = show the "Play N quick rounds" button while the goal is open.
 export function TodayCard({ go = true }) {
   const { streak, frozen, freezeReady, todayMoves, days } = useStreak();
-  const pct = Math.min(1, todayMoves / DAILY_GOAL);
-  const left = DAILY_GOAL - todayMoves;
+  const goal = useDailyGoal();
+  const pct = Math.min(1, todayMoves / goal);
+  const left = goal - todayMoves;
   const rounds = goalRounds(left);
   const saved = skipNote(streak, frozen);
   const r = 26;
@@ -193,7 +195,7 @@ export function TodayCard({ go = true }) {
           <circle cx="32" cy="32" r={r} className="ring-bg" />
           <circle cx="32" cy="32" r={r} className="ring-fg ring-goal" strokeDasharray={c} strokeDashoffset={c * (1 - pct)} />
         </svg>
-        <span className="today-goal-num">{Math.min(todayMoves, DAILY_GOAL)}<small>/{DAILY_GOAL}</small></span>
+        <span className="today-goal-num">{Math.min(todayMoves, goal)}<small>/{goal}</small></span>
       </div>
       <div className="today-text">
         <p className="today-title">{pct >= 1 ? 'Daily goal done. Nice!' : `${left} more ${left === 1 ? 'answer' : 'answers'} to hit today’s goal`}</p>

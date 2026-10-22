@@ -4,7 +4,7 @@
 > with the same context: what the site is, what the owner wants, how to work, how to ship, what was decided and why,
 > and what is still open. Keep it up to date (see [Keeping this file current](#14-keeping-this-file-current)).
 >
-> Last updated: **2026-10-22**, after the engagement pass (Your misses deck, boss rounds, 16 achievements, bot buddy, streak colours for the player card) and more content (7 stories, 5 briefs, 16 flaw screens, 40 hard pairs).
+> Last updated: **2026-10-22**, after the habit pass (13 ideas: teaser, Monday recap, calendar reminder, daily goal choice, golden rounds, theme weeks, beat last week, Continue, first 5 minutes, weak spot, Screen of the week, growing designer type, Mystery card), on top of the engagement pass (misses, bosses, achievements, bot buddy, streak colours).
 
 ## Contents
 1. [Snapshot](#1-snapshot) (name and brand: see [section 8b](#8b-brand))
@@ -223,6 +223,22 @@ While playing, the body gets class `focus-mode` (top/bottom bars hidden on phone
 **Achievements** (`data/achievements.js`, `components/Achievements.jsx`): 16, listed on Me (earned first; secret ones show "Secret" until earned). Rules are `test(p)` on saved progress (checked on every save) or `event(e)` on a moment (`gb3-event`: `{ type: 'answer', hour }` from `markPlayed`, `{ type: 'misses-cleared' }` from `clearMiss`). Saved as `achievements: { id: day }`. A toast (goal-toast style, trophy) pops per new one, queued; the first check for a player who has no `achievements` key yet unlocks quietly. `streak-3/7/30` (best day streak, `game-stats.bestDayStreak`) unlock the Lime, Ocean and Gold player card colours (`game/cardThemes.js`, choice saved as `card-theme: { id }`).
 
 **Bot buddy** (`game/buddy.js`, `components/Buddy.jsx`, lines in `data/buddy.js`): the app icon with a speech bubble, bottom left (above the bottom bar on phones). `buddy(moment)` for streak3/5/10 and lost (This or That), trap and win (Build, boss), welcome (Home after 2+ days away, once per visit). At most one line per 20 s, never while a toast shows (the sound hint is fine, it's at the top); switch on Me (`buddy: { off }`).
+
+**Habit pass (Oct 22)**, where each piece lives:
+- *Games in progress* survive closing the app: localStorage `run:<key>` = `{ v, at }`, expire after 3 days, old sessionStorage runs move over on first read. Keys: `story:<id>`, `build:<id>`, `power`, `hunt:<id>`, `spot`; today's Daily is `daily-run` = `{ day, r, at }`. `lastRun()` (progress.js) feeds Home's one-line **Continue** (`components/play/HomeExtras.jsx`; skipped for today's Daily, the banner below says it; x hides it for the visit).
+- *First 5 minutes*: a 3-step list on Home for brand-new players (play a round, win a card, see your level), `first-steps` = `{ on, hidden, me }`; Me calls `markMeSeen()`.
+- *Monday recap*: last week's answers, days, Dailies (perfect ones), achievements and best day on Home until "Got it" (`recap-seen` = `{ week }`, `weekRecap()` in progress.js). Never with the first-steps list.
+- *Daily goal choice*: Me → Settings, 5/10/20 (`daily-goal` = `{ n }`, `useDailyGoal()`); everything that shows the goal reads it; `DAILY_GOAL` stays the default.
+- *Calendar reminder*: Me → Settings, a time + "Add to my calendar" downloads `gb3-reminder.ics` (daily repeating, floating local time, alert at start; `lib/reminder.js`). Nothing saved.
+- *Tomorrow's teaser*: under the Daily countdown, the group tomorrow's Daily opens with (never the brief, it can give the answer away).
+- *Golden rounds*: about 1 in 20 fresh This or That rounds (not Daily/boss); right = `XP.golden` 10 (`game-stats.golden`).
+- *Theme weeks* (`game/themeWeek.js`): one group per ISO week (`weekKey()` in lib/dates.js), same for everyone; fresh Classic/Hard runs mix in 3 of its rounds (`leanDeck`); right answers in it count in `game-stats.themeWeeks[week]`; 10 = the week's badge (toast via `gb3-toast`, listed on Me under Achievements). Line on Play (`components/play/WeekLine.jsx`).
+- *Weak spot*: line on Play when one group has 2+ entries in Your misses, linking its boss.
+- *Beat your last week*: Speed start/end screens show last week's best (`game-stats.speedWeeks[week]`).
+- *Designer type grows* (`game/designerType.js`): Rising X (1+ card in the best group) → The X (half, at least 2) → Master X (all at 3 stars); a hint on /play/card says what's next; Me's player card row shows the type.
+- *Screen of the week* (`/play/weekly`, `data/weekly.js`, 8 everyday products, no brands): rotates every Monday from 2026-W43; finishing saves `weekly` = `{ week: id }` (not hunts-done), 30 XP per week. Hunt takes optional `onDone`, `doneBefore`, `game`.
+- *Mystery card* (`/play/mystery`, `data/mystery.js`): "Short answer first", face down until achievement `streak-7`; own compare + 3-step Fix it; win saves `mystery` = `{ won, stars }` (no XP, not one of the 38). Lab takes optional `onWin`, `prize`.
+- Validate checks the weekly screens and the mystery card; smoke covers the new routes and broken saves for every new key.
 shows a reaction and may change the path (`next`). The final trust picks one of 4 endings (`endings[].min`). Best trust per story is saved.
 `tidy` = file-cleanup agent (Priya), `nova` = kitchen voice assistant, `sage` = bank help bot, `pilot` = coding agent.
 
@@ -443,6 +459,7 @@ Things the repo does **not** have: unit tests, visual regression, a real-device 
 | (Oct 21) | Stats: "Game started" event (first answer per game per visit) and Spot the flaw now sends "Game finished"; installed iPhone app gets `viewport-fit=cover` so the bottom bar clears the home line; public "N visits" line with letter avatars (P, A, M, K: the story characters) above the credits (owner asked for one like their other site); the footer (visit count + credits) now shows on every page on phones too (owner) |
 | (Oct 22) | Build trip brief: "A practice run before booking" (nice, `sandbox-preview`) and the trap "Book it all, then show the receipt"; glossary term "Practice run" linked to the new card. Owner: skip performance work for now |
 | (Oct 22) | Engagement pass (owner picked all 5 ideas): Your misses deck, boss rounds per group, 16 achievements (3 secret) with toasts, the bot buddy, and day-streak colours for the player card. More content: story `owl` (Ishaan, study helper), brief `shop`, 3 flaw screens, 6 hard pairs (covering cards that had none) |
+| (Oct 22) | Habit pass (owner: "All" 13 ideas): tomorrow teaser, Monday recap, calendar reminder, daily goal choice, golden rounds, theme weeks, beat last week, Continue (runs now in localStorage for 3 days), first 5 minutes, weak spot, Screen of the week, growing designer type, Mystery card. Honest by design: no guilt copy, everything dismissable or optional |
 
 ### Decisions worth remembering
 - **Name: Good Bot, Bad Bot** (chosen by the owner from a short list). It matches the main game (pick the better screen). Renamed from "AI Patterns", which was clear but easy to forget.

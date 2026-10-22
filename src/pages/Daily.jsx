@@ -4,13 +4,14 @@ import { CalendarDays, Copy, Eye, Shuffle, Swords, Target } from 'lucide-react';
 import { challengeLink, dailyDareText, useChallenge, useDare, verdict } from '../game/challenge';
 import { dailyDeck, dailyLabel, dailyNumber, goalRounds } from '../game/decks';
 import { dayKey } from '../lib/dates';
-import { DAILY_GOAL, readDailyRun, saveDaily, saveDailyRun, useDaily, useStreak, XP } from '../progress';
+import { readDailyRun, saveDaily, saveDailyRun, useDaily, useDailyGoal, useStreak, XP } from '../progress';
 import ThisOrThat from '../components/ThisOrThat';
 import Breadcrumbs from '../components/Breadcrumbs';
 import CountUp from '../components/CountUp';
 import { copyText } from '../lib/clipboard';
 import Burst, { XpPop } from '../components/Burst';
 import { useTitle } from '../lib/useTitle';
+import { getCategory, getPattern } from '../data/patterns';
 
 // Daily challenge: 5 rounds, the same for everyone today, one try.
 // Why: a small reason to come back each day, and a result grid worth sharing.
@@ -40,7 +41,7 @@ export function shareText(num, results, streak) {
 // After the Daily: the daily goal is the next step, so it comes before sharing.
 function GoalStep() {
   const { todayMoves } = useStreak();
-  const left = DAILY_GOAL - todayMoves;
+  const left = useDailyGoal() - todayMoves;
   if (left <= 0) {
     return (
       <div className="daily-next is-done">
@@ -127,6 +128,7 @@ function Result({ num, day, results, streak, fresh, challenge, replay, goalDone 
         </details>
       </div>
       <p className="daily-countdown small muted"><CalendarDays size={14} strokeWidth={1.75} aria-hidden /> New Daily in {left}</p>
+      <TomorrowTeaser />
       <div className="daily-more">
         <span className="muted small">Play more:</span>
         <Link to="/play/this-or-that?mode=hard" className="text-link"><Eye size={14} strokeWidth={1.75} aria-hidden /> This or That: Hard</Link>
@@ -153,6 +155,7 @@ export default function Daily() {
   const [replayResult, setReplayResult] = useState(null);
   const today = replay ? replayResult : daily[key];
   const { streak, todayMoves } = useStreak(); // the day streak, same as the top bar flame
+  const goal = useDailyGoal();
 
   return (
     <div className="page page-wide">
@@ -172,7 +175,7 @@ export default function Daily() {
       )}
       <div className="view">
         {today ? (
-          <Result num={num} day={key} results={today} streak={streak} fresh={fresh && !replay} challenge={challenge} replay={replay} goalDone={todayMoves >= DAILY_GOAL} />
+          <Result num={num} day={key} results={today} streak={streak} fresh={fresh && !replay} challenge={challenge} replay={replay} goalDone={todayMoves >= goal} />
         ) : (
           <ThisOrThat
             key={key /* a new day (or another day's link) is a new board */}
@@ -188,5 +191,17 @@ export default function Daily() {
         )}
       </div>
     </div>
+  );
+}
+
+// A small hook to come back: which group tomorrow's Daily opens with (same for everyone). Never the brief: it can give the answer away.
+function TomorrowTeaser() {
+  const d = new Date();
+  d.setDate(d.getDate() + 1);
+  const group = getCategory(getPattern(dailyDeck(dayKey(d))[0].pattern).category).name;
+  return (
+    <p className="daily-teaser small">
+      <strong>Tomorrow</strong> opens with {/^[AEIOU]/.test(group) ? 'an' : 'a'} {group} screen. See you then!
+    </p>
   );
 }

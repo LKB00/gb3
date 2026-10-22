@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Copy, Download, Lock, Share2 } from 'lucide-react';
 import { patterns } from '../data/patterns';
-import { archetype, wonGroups } from '../game/archetype';
+import { wonGroups } from '../game/archetype';
+import { designerType } from '../game/designerType';
 import { useAchievements, useGameStats, usePassed, useStars, useStreak, useXP } from '../progress';
 import { getAchievement } from '../data/achievements';
 import { cardThemes, readCardTheme, saveCardTheme } from '../game/cardThemes';
@@ -37,7 +38,7 @@ function useCardData() {
   const { xp, level, levelNum, starTotal } = useXP();
   const { streak } = useStreak();
   return {
-    type: archetype(passed, stars),
+    type: designerType({ passed, stars }),
     groups: wonGroups(passed),
     level,
     levelNum,
@@ -262,6 +263,8 @@ export default function PlayerCard() {
           <p className={'pc-name' + (name.trim().length > 16 ? ' is-long' : '')}>{name.trim() || 'Player'}</p>
           <p className="pc-type">{data.type.name}</p>
           <p className="pc-line">{data.type.line}</p>
+          {/* Only on the page, not on the saved image. */}
+          {data.type.next && <p className="pc-line pc-next" style={{ opacity: 0.8 }}>{data.type.next}</p>}
           <div className="pc-level">
             <span className="pc-level-num">{data.levelNum}</span>
             <strong>{data.level.name}</strong>
