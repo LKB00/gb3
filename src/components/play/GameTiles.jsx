@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { Check, ChevronRight } from 'lucide-react';
 import { games } from '../../config/games';
 import { useRandomChallenge } from '../../game/useRandomChallenge';
-import { useGameStats, useHuntsDone, useMisses, usePassed } from '../../progress';
+import { useAchievements, useGameStats, useHuntsDone, useMisses, useMystery, usePassed, useWeeklyDone } from '../../progress';
 
 // The games, as two calm lists: quick games (1-2 minutes) and deeper games (about 5 minutes).
 // One row style for every game: a coloured icon, the name, one line, and your progress
@@ -14,7 +14,15 @@ const GROUPS = [
 
 export default function GameTiles() {
   const random = useRandomChallenge();
-  const progress = { stats: useGameStats(), passed: usePassed(), huntsDone: useHuntsDone(), misses: useMisses() };
+  const progress = {
+    stats: useGameStats(),
+    passed: usePassed(),
+    huntsDone: useHuntsDone(),
+    misses: useMisses(),
+    weeklyDone: useWeeklyDone(),
+    achievements: useAchievements(),
+    mystery: useMystery(),
+  };
   const row = (g) => {
     const [MetaIcon, metaText, played] = g.meta(progress);
     const inner = (

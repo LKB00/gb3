@@ -194,15 +194,14 @@ export default function Daily() {
   );
 }
 
-// A small hook to come back: the topic of tomorrow's first round (same for everyone), not the answer.
+// A small hook to come back: which group tomorrow's Daily opens with (same for everyone). Never the brief: it can give the answer away.
 function TomorrowTeaser() {
   const d = new Date();
   d.setDate(d.getDate() + 1);
-  const first = dailyDeck(dayKey(d))[0];
-  const p = getPattern(first.pattern);
+  const group = getCategory(getPattern(dailyDeck(dayKey(d))[0].pattern).category).name;
   return (
     <p className="daily-teaser small">
-      <strong>Tomorrow</strong> opens with a {getCategory(p.category).name} screen: “{first.brief}”
+      <strong>Tomorrow</strong> opens with {/^[AEIOU]/.test(group) ? 'an' : 'a'} {group} screen. See you then!
     </p>
   );
 }

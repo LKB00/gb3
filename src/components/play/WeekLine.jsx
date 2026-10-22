@@ -13,7 +13,7 @@ export function ThemeWeekLine() {
     <p className="week-line">
       <Sparkles size={15} strokeWidth={1.75} aria-hidden />
       <strong>{group.name} week.</strong>
-      {n >= THEME_GOAL ? 'Week badge won. Nice!' : `Get ${THEME_GOAL} ${group.name} screens right this week to win its badge.`}
+      <span>{n >= THEME_GOAL ? 'Week badge won. Nice!' : `Get ${THEME_GOAL} right to win its badge.`}</span>
       <span className="meter" aria-hidden><span style={{ width: `${(n / THEME_GOAL) * 100}%` }} /></span>
       <span className="small muted">{n}/{THEME_GOAL}</span>
     </p>
