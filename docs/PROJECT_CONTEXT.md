@@ -174,7 +174,7 @@ The owner looks at a **private Claude Artifact**. It is one self-contained HTML 
 | `/teardowns`, `/teardowns/:id` | Teardowns | ChatGPT, Perplexity, GitHub Copilot, Claude Code |
 | `/anti-patterns` | Dark patterns | 8 |
 | `/principles` | Principles | UX laws + Microsoft HAX 18 guidelines; `?focus=` scrolls to one |
-| `/glossary` | Glossary | 22 terms (19 link to their cards via `patterns`) + further reading |
+| `/glossary` | Glossary | 23 terms (20 link to their cards via `patterns`) + further reading |
 | `/learn`, `/learn/:id` | Deep dives | 9 short reads |
 | `/me` | Me | In order: a quiet level line (no XP repeat; totals only once above 0), the Today card (the one card with a button), player card, badges, settings (one grouped list: sound, vibration, dark mode), App and backup (one box) |
 | `/practice` | redirects to `/play` | old link |
@@ -435,6 +435,7 @@ Things the repo does **not** have: unit tests, visual regression, a real-device 
 | (Oct 21) | Game list (owner: "same issue" on Play): 7 big colour tiles in 3 shapes → two calm lists, Quick games and Deeper games, one row style, colour only in the icon, no zero stats; Home drops its double heading |
 | (Oct 21) | "Build all" pass: Me hides zero totals and the repeated XP, the Today card is one goal + one button with a quiet streak/week footer; Cards shows one section per group and one readable row per card on phones; the Fix it step bar is progress only on phones (no repeated question); "Skip it when" on Why it works; live demos for all 38 cards; new card `sandbox-preview` (Try it safely first, Agents, #21, so later card numbers moved up by 1; progress is by id); stories `roam` + `quill`; 3 flaw screens; 4 hard pairs (the Daily deck shuffle changes because `subtle` grew) |
 | (Oct 21) | Stats: "Game started" event (first answer per game per visit) and Spot the flaw now sends "Game finished"; installed iPhone app gets `viewport-fit=cover` so the bottom bar clears the home line; public "N visits" line with letter avatars (P, A, M, K: the story characters) above the credits (owner asked for one like their other site); the footer (visit count + credits) now shows on every page on phones too (owner) |
+| (Oct 22) | Build trip brief: "A practice run before booking" (nice, `sandbox-preview`) and the trap "Book it all, then show the receipt"; glossary term "Practice run" linked to the new card. Owner: skip performance work for now |
 
 ### Decisions worth remembering
 - **Name: Good Bot, Bad Bot** (chosen by the owner from a short list). It matches the main game (pick the better screen). Renamed from "AI Patterns", which was clear but easy to forget.
@@ -471,9 +472,7 @@ Things the repo does **not** have: unit tests, visual regression, a real-device 
 
 ## 13. Open ideas (backlog)
 
-From the research on aiuxplayground.com (not built yet):
-(Done Oct 21: the "Try it safely first" card `sandbox-preview`, a live demo on every card, and a "Skip it when" line on Why it works.)
-1. **A "Preview the result first" piece** in Build mode (travel and car briefs) and a matching trap.
+From the research on aiuxplayground.com: all done (Oct 21-22: the "Try it safely first" card `sandbox-preview`, a live demo on every card, a "Skip it when" line on Why it works, and in Build mode's trip brief a "practice run" piece (nice) with a "book it all, then show the receipt" trap). The car brief already teaches checking first through its read-back piece, so it got no new piece.
 
 Other options:
 - Look at the GoatCounter numbers to see what people play.
