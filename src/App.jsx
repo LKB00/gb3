@@ -20,6 +20,8 @@ import Speed from './pages/Speed';
 import Build from './pages/Build';
 import Power from './pages/Power';
 import Boss from './pages/Boss';
+import Weekly from './pages/Weekly';
+import Mystery from './pages/Mystery';
 import Autonomy from './pages/Autonomy';
 import Principles from './pages/Principles';
 import AntiPatterns from './pages/AntiPatterns';
@@ -105,6 +107,8 @@ export default function App() {
           <Route path="/play/power" element={<Power />} />
           <Route path="/play/boss" element={<Boss />} />
           <Route path="/play/boss/:group" element={<Boss />} />
+          <Route path="/play/weekly" element={<Weekly />} />
+          <Route path="/play/mystery" element={<Mystery />} />
           <Route path="/autonomy" element={<Autonomy />} />
           <Route path="/practice" element={<Navigate to="/play" replace />} />
           <Route path="/principles" element={<Principles />} />

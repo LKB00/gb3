@@ -11,6 +11,8 @@ import { lessons } from '../src/data/lessons.js';
 import { teardowns } from '../src/data/teardowns.js';
 import { subtle } from '../src/data/subtle.js';
 import { hunts } from '../src/data/hunts.js';
+import { weekly, weeklyScreen, weeklyTeaser } from '../src/data/weekly.js';
+import { mystery } from '../src/data/mystery.js';
 import { stories } from '../src/data/story.js';
 import { builds } from '../src/data/builds.js';
 import { antipatterns } from '../src/data/antipatterns.js';
@@ -35,6 +37,26 @@ const checkBlocks = (where, blocks, { allowEmpty = false } = {}) => {
   });
 };
 
+function checkLab(w, lab) {
+  if (!lab?.goal) bad(w, 'lab has no goal');
+  const ds = lab?.decisions || [];
+  if (ds.length < 1) bad(w, 'lab has no decisions');
+  dupes(ds.map((d) => d.id)).forEach((id) => bad(w, `lab duplicate decision "${id}"`));
+  checkBlocks(`${w} lab.frame`, lab?.frame);
+  for (const f of lab?.frame || []) if (f.slot && !ds.some((d) => d.id === f.slot)) bad(w, `frame slot "${f.slot}" has no decision`);
+  for (const d of ds) {
+    const dw = `${w} lab.${d.id}`;
+    if ((d.options || []).length < 2) bad(dw, 'fewer than 2 options');
+    const ok = (d.options || []).filter((o) => o.ok).length;
+    if (ok !== 1) bad(dw, `needs exactly one right option, has ${ok}`);
+    for (const [i, o] of (d.options || []).entries()) {
+      if (!o.label?.trim()) bad(`${dw}[${i}]`, 'empty label');
+      if (!o.ok && !o.why?.trim()) bad(`${dw}[${i}]`, 'wrong option without a "why"');
+      checkBlocks(`${dw}[${i}]`, o.blocks, { allowEmpty: true }); // empty = the option adds nothing to the screen
+    }
+  }
+}
+
 // ---- Patterns, categories, demos ----
 dupes(patterns.map((p) => p.id)).forEach((id) => bad('patterns', `duplicate id "${id}"`));
 const catIds = new Set(categories.map((c) => c.id));
@@ -54,24 +76,7 @@ for (const p of patterns) {
   if (!v) { bad(w, 'no visuals entry'); continue; }
   checkBlocks(`${w} compare.good`, v.compare?.good?.blocks);
   checkBlocks(`${w} compare.bad`, v.compare?.bad?.blocks);
-  const lab = v.lab;
-  if (!lab?.goal) bad(w, 'lab has no goal');
-  const ds = lab?.decisions || [];
-  if (ds.length < 1) bad(w, 'lab has no decisions');
-  dupes(ds.map((d) => d.id)).forEach((id) => bad(w, `lab duplicate decision "${id}"`));
-  checkBlocks(`${w} lab.frame`, lab?.frame);
-  for (const f of lab?.frame || []) if (f.slot && !ds.some((d) => d.id === f.slot)) bad(w, `frame slot "${f.slot}" has no decision`);
-  for (const d of ds) {
-    const dw = `${w} lab.${d.id}`;
-    if ((d.options || []).length < 2) bad(dw, 'fewer than 2 options');
-    const ok = (d.options || []).filter((o) => o.ok).length;
-    if (ok !== 1) bad(dw, `needs exactly one right option, has ${ok}`);
-    for (const [i, o] of (d.options || []).entries()) {
-      if (!o.label?.trim()) bad(`${dw}[${i}]`, 'empty label');
-      if (!o.ok && !o.why?.trim()) bad(`${dw}[${i}]`, 'wrong option without a "why"');
-      checkBlocks(`${dw}[${i}]`, o.blocks, { allowEmpty: true }); // empty = the option adds nothing to the screen
-    }
-  }
+  checkLab(w, v.lab);
 }
 for (const id of Object.keys(visuals)) if (!patternIds.has(id)) bad('visuals', `entry for unknown pattern "${id}"`);
 for (const id of Object.keys(realExamples)) if (!patternIds.has(id)) bad('examples', `entry for unknown pattern "${id}"`);
@@ -115,6 +120,44 @@ for (const h of hunts) {
   if (wrong.length === h.blocks.length) bad(w, 'every block is a mistake');
   wrong.forEach((b) => { mustPattern(w, b.mistake.pattern); b.mistake.text || bad(w, 'mistake without text'); });
 }
+// Screen of the week: same rules as Spot the flaw, 3-4 flaws, ids apart from the normal screens.
+dupes(weekly.map((h) => h.id)).forEach((id) => bad('weekly', `duplicate id "${id}"`));
+for (const h of weekly) {
+  const w = `weekly ${h.id}`;
+  if (hunts.some((x) => x.id === h.id)) bad(w, 'same id as a Spot the flaw screen');
+  for (const f of ['type', 'app', 'brief']) if (!h[f]?.trim()) bad(w, `empty ${f}`);
+  checkBlocks(w, h.blocks);
+  const wrong = h.blocks.filter((b) => b.mistake);
+  if (wrong.length < 3 || wrong.length > 4) bad(w, `needs 3 or 4 mistakes, has ${wrong.length}`);
+  if (wrong.length === h.blocks.length) bad(w, 'every block is a mistake');
+  wrong.forEach((b) => { mustPattern(w, b.mistake.pattern); b.mistake.text || bad(w, 'mistake without text'); });
+}
+{
+  // Every week for two years gets a screen, and the teaser matches it.
+  const seen = new Set();
+  for (let i = 0; i < 104; i++) {
+    const d = new Date(2026, 9, 19 + i * 7);
+    const s = weeklyScreen(d);
+    if (!s) { bad('weekly', `no screen for ${d.toDateString()}`); break; }
+    seen.add(s.id);
+    const t = weeklyTeaser(d);
+    if (t.id !== s.id || t.flaws !== s.blocks.filter((b) => b.mistake).length) bad('weekly', 'teaser does not match the screen');
+  }
+  if (seen.size !== weekly.length) bad('weekly', `only ${seen.size} of ${weekly.length} screens ever show up`);
+}
+
+// ---- Mystery card: a card that is NOT one of the patterns, with a winnable Fix it ----
+{
+  const w = `mystery ${mystery.id}`;
+  if (patternIds.has(mystery.id)) bad(w, 'id is already a pattern');
+  if (!catIds.has(mystery.category)) bad(w, `unknown category "${mystery.category}"`);
+  for (const f of ['title', 'summary', 'problem', 'solution']) if (!mystery[f]?.trim()) bad(w, `empty ${f}`);
+  if (patterns.some((p) => p.title.toLowerCase() === mystery.title.toLowerCase())) bad(w, 'title is the same as a pattern');
+  checkBlocks(`${w} compare.good`, mystery.compare?.good?.blocks);
+  checkBlocks(`${w} compare.bad`, mystery.compare?.bad?.blocks);
+  checkLab(w, mystery.lab);
+}
+
 dupes(subtle.map((s) => s.id)).forEach((id) => bad('subtle', `duplicate id "${id}"`));
 for (const s of subtle) {
   const w = `hard pair ${s.id}`;
@@ -215,7 +258,7 @@ const strings = [];
   if (typeof x === 'string') strings.push(x);
   else if (Array.isArray(x)) x.forEach(collect);
   else if (x && typeof x === 'object') Object.values(x).forEach(collect);
-})([patterns, visuals, lessons, teardowns, subtle, hunts, stories, builds, tasks, antipatterns, glossary, levels, questions]);
+})([patterns, visuals, lessons, teardowns, subtle, hunts, weekly, mystery, stories, builds, tasks, antipatterns, glossary, levels, questions]);
 for (const t of strings) {
   if (/\bundefined\b|\bTODO\b|\bFIXME\b|lorem ipsum|\[object|\bNaN\b/.test(t)) bad('text', `leftover in "${t.slice(0, 60)}"`);
 }
@@ -224,4 +267,4 @@ if (problems.length) {
   console.error(`${problems.length} content problem(s):\n- ` + problems.join('\n- '));
   process.exit(1);
 }
-console.log(`Content OK: ${patterns.length} patterns, ${stories.length} stories, ${builds.length} briefs, ${hunts.length} flaw screens, ${subtle.length} hard pairs, ${tasks.length} power tasks.`);
+console.log(`Content OK: ${patterns.length} patterns, ${stories.length} stories, ${builds.length} briefs, ${hunts.length} flaw screens, ${weekly.length} weekly screens, 1 mystery card, ${subtle.length} hard pairs, ${tasks.length} power tasks.`);

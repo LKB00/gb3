@@ -26,6 +26,8 @@ export { dayKey };
 //   recap-seen   { week: '2026-W43' }                 Monday recap dismissed for that week
 //   run:<key>    { v: run, at: ms }                   games in progress (see "Games in progress")
 //   daily-goal   { n: 5 | 10 | 20 }                   chosen daily goal (Me page), default 10
+//   weekly       { '2026-W43': 'wk-notes', … }        Screen of the week finished, per ISO week
+//   mystery      { won: true, stars: 1..3 }           the Mystery card's Fix it, once won
 // Adding a new game score: add a saveBest('myBest') line and a line in xpParts().
 
 // Everything read from storage is cleaned first: wrong types, NaN and absurd numbers
@@ -46,6 +48,7 @@ const KNOWN = {
   misses: new Set([...patterns.map((p) => `c:${p.id}`), ...subtle.map((x) => `h:${x.id}`)]),
   boss: new Set(categories.map((c) => c.id)),
   achievements: new Set(achievements.map((a) => a.id)),
+  weekly: new Set(weekly.map((w) => w.id)),
 };
 const isDay = (k) => /^\d{4}-\d{2}-\d{2}$/.test(k);
 const isWeek = (k) => /^\d{4}-W\d{2}$/.test(k);
@@ -63,6 +66,18 @@ const dailyDayOk = (k) => {
 const cleanDaily = (o) => cleanMap(o, (v) => (Array.isArray(v) ? v.slice(0, DAILY_LEN).map(Boolean) : null), dailyDayOk);
 const cleanAchievements = (o) => cleanMap(o, (v) => (typeof v === 'string' && isDay(v) ? v : null), (k) => KNOWN.achievements.has(k));
 const cleanDays = (o) => cleanMap(o, (v) => Math.round(num(v, 0, 100000)), isDay);
+// Screen of the week: { '2026-W43': screenId }. Only real weeks from the first one (2026-W43)
+// up to next week (time zones ahead), and only known screen ids.
+const FIRST_WEEK = '2026-W43';
+const weekOk = (k) => {
+  if (!isWeek(k) || k < FIRST_WEEK || Number(k.slice(6)) < 1 || Number(k.slice(6)) > 53) return false;
+  const soon = new Date();
+  soon.setDate(soon.getDate() + 7);
+  return k <= weekKey(soon);
+};
+const cleanWeekly = (o) => cleanMap(plainObj(o), (v) => (typeof v === 'string' && KNOWN.weekly.has(v) ? v : null), weekOk);
+// Mystery card: { won: true, stars: 1..3 } once won, else {}.
+const cleanMystery = (o) => (plainObj(o).won === true ? { won: true, stars: Math.round(num(o.stars, 1, 3)) || 1 } : {});
 function cleanStats(s) {
   const out = {
     bestStreak: Math.round(num(s.bestStreak, 0, 999)),
@@ -119,6 +134,22 @@ export const usePassed = () => useList('labs-passed');
 
 export const markHuntDone = (id) => add('hunts-done', id);
 export const useHuntsDone = () => useList('hunts-done');
+
+// Screen of the week: saved per ISO week, apart from hunts-done (its own ids, its own XP).
+export function markWeeklyDone(week, id) {
+  const all = cleanWeekly(readObj('weekly'));
+  if (all[week] === id || !KNOWN.weekly.has(id) || !weekOk(week)) return;
+  writeJSON('weekly', { ...all, [week]: id });
+}
+export const useWeeklyDone = () => useCleaned('weekly', cleanWeekly);
+
+// Mystery card: remembers the win and the best stars. No XP, it's a bonus.
+export function saveMystery(stars) {
+  const m = cleanMystery(readObj('mystery'));
+  if (m.won && m.stars >= stars) return;
+  writeJSON('mystery', { won: true, stars });
+}
+export const useMystery = () => useCleaned('mystery', cleanMystery);
 
 // ---- Stars, best scores, XP and levels ----
 // Stars per challenge: 3 = no mistakes, 2 = one mistake, 1 = more. Only the best is kept.
@@ -377,7 +408,7 @@ export function lastRun() {
     if (kind === 'story') {
       const s = stories.find((x) => x.id === id);
       const r = s && readStoryRun(s);
-      if (r && r.history.length) add(key, { to: `/play/story/${s.id}`, label: `${s.title} · scene ${r.history.length + (r.picked === null ? 1 : 0)}` });
+      if (r && r.history.length) add(key, { to: `/play/story/${s.id}`, label: `Story “${s.title}” · scene ${r.history.length + (r.picked === null ? 1 : 0)}` });
     } else if (kind === 'build') {
       const b = builds.find((x) => x.id === id);
       const r = b && readBuildRun(b);
@@ -469,7 +500,7 @@ export function dailyStreak(daily, today = new Date()) {
 }
 
 // Where XP comes from. One line per source; the total is the sum.
-export function xpParts({ stars, hunts, stats, passed, daily }) {
+export function xpParts({ stars, hunts, stats, passed, daily, weekly: weeksDone = {} }) {
   // A collected card always counts at least one star (older saves had no stars).
   const starTotal = passed.reduce((n, id) => n + Math.max(stars[id] || 1, 1), 0);
   const dailyRight = Object.values(daily).reduce((n, r) => n + r.filter(Boolean).length, 0);
@@ -487,12 +518,13 @@ export function xpParts({ stars, hunts, stats, passed, daily }) {
       power: (stats.powerBest || 0) * XP.power,
       boss: sum(stats.boss || {}, (n) => n * XP.boss),
       golden: (stats.golden || 0) * XP.golden,
+      weekly: Object.keys(weeksDone).length * XP.hunt,
     },
   };
 }
 
 export function useXP() {
-  const input = { stars: useStars(), hunts: useHuntsDone(), stats: useGameStats(), passed: usePassed(), daily: useDaily() };
+  const input = { stars: useStars(), hunts: useHuntsDone(), stats: useGameStats(), passed: usePassed(), daily: useDaily(), weekly: useWeeklyDone() };
   const { starTotal, parts } = xpParts(input);
   const xp = Object.values(parts).reduce((n, v) => n + v, 0);
   let i = LEVELS.length - 1;
@@ -592,7 +624,7 @@ export function useStreak() {
 // The code is "AIP1." + base64 of the saved progress. Restoring MERGES with what
 // is already here (keeps the best of both), so it can never lose progress.
 const LISTS = ['labs-passed', 'hunts-done', 'misses'];
-const OBJECTS = ['lab-stars', 'game-stats', 'daily', 'days', 'achievements'];
+const OBJECTS = ['lab-stars', 'game-stats', 'daily', 'days', 'achievements', 'weekly', 'mystery'];
 
 export function exportProgress() {
   const data = {};
@@ -602,6 +634,8 @@ export function exportProgress() {
   data.daily = cleanDaily(readObj('daily'));
   data.days = cleanDays(readObj('days'));
   data.achievements = readAchievements();
+  data.weekly = cleanWeekly(readObj('weekly'));
+  data.mystery = cleanMystery(readObj('mystery'));
   try {
     data.name = localStorage.getItem('player-name') || '';
   } catch {
@@ -662,7 +696,7 @@ export function importProgress(code) {
       if (!Array.isArray(data[k])) continue;
       localStorage.setItem(k, JSON.stringify(cleanList([...read(k), ...data[k]], k)));
     }
-    const CLEAN = { 'lab-stars': cleanStars, 'game-stats': cleanStats, daily: cleanDaily, days: cleanDays, achievements: cleanAchievements };
+    const CLEAN = { 'lab-stars': cleanStars, 'game-stats': cleanStats, daily: cleanDaily, days: cleanDays, achievements: cleanAchievements, weekly: cleanWeekly, mystery: cleanMystery };
     for (const k of OBJECTS) {
       if (!plain(data[k])) continue;
       const here = CLEAN[k](readObj(k));

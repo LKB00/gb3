@@ -17,7 +17,9 @@ import { useReveal } from '../lib/useReveal';
 const CHEERS = ['Nice pick!', 'Sharp eye!', 'That’s the one!'];
 const OOPS = ['Not quite', 'So close', 'Easy to miss'];
 
-export default function Lab({ id, lab, title, next }) {
+// For a bonus card that is not in patterns.js (the Mystery card), pass onWin(stars): it is called
+// instead of saving stars and the card, no XP is shown, and `prize` replaces the flipping card.
+export default function Lab({ id, lab, title, next, onWin, prize }) {
   const decisions = lab.decisions;
   const total = decisions.length;
   const [step, setStep] = useState(0);
@@ -64,10 +66,11 @@ export default function Lab({ id, lab, title, next }) {
     if (open >= 0) return goTo(open, true);
     setFinished(true);
     if (skipped) return;
-    setGained(Math.max(0, stars - (savedStars[id] || 0)) * XP.star);
+    if (!onWin) setGained(Math.max(0, stars - (savedStars[id] || 0)) * XP.star);
     fx('win');
     for (let n = 1; n <= stars; n++) chimes.current.push(setTimeout(() => fx('star', { n }), 450 + n * 160));
     track('Game finished', { game: 'fix-it', stars });
+    if (onWin) return onWin(stars);
     saveStars(id, stars);
     markPassed(id);
   };
@@ -205,7 +208,7 @@ export default function Lab({ id, lab, title, next }) {
                 <span>{mistakes === 0 ? 'Flawless. Not a single miss.' : mistakes === 1 ? 'Just 1 miss. So close to perfect!' : `${mistakes} misses, and you still cracked it.`}</span>
               </p>
             )}
-            {!skipped && <FlipCard id={id} stars={stars} />}
+            {!skipped && (onWin ? prize : <FlipCard id={id} stars={stars} />)}
             {/* The one next step, right under the win (pinned near the thumb on phones). */}
             <div className="lab-nav lab-end" ref={endRef}>
               {next}

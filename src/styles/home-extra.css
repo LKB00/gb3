@@ -1,0 +1,118 @@
+/* Home extras (components/play/HomeExtras.jsx): the "Continue" line, the first-steps list
+   for new players and the Monday recap. All quiet: lines and hairlines, no big cards. */
+
+/* Continue: one line, the label cut with … on small phones */
+.hx-continue {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 12px 0 0;
+  max-width: 100%;
+}
+.hx-continue-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  min-height: 32px;
+  font-size: 14px;
+  color: var(--ink-2);
+  text-decoration: none;
+}
+.hx-continue-link strong { color: var(--ink); }
+.hx-continue-link:hover strong { text-decoration: underline; text-underline-offset: 3px; }
+.hx-continue-link svg { flex: none; color: var(--ink); }
+.hx-continue-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.hx-x {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: var(--ink-3);
+  cursor: pointer;
+}
+.hx-x:hover { background: var(--sand-dark); color: var(--ink); }
+
+/* Monday recap: a headline, one details line and "Got it", between hairlines */
+.hx-recap {
+  margin-top: 12px;
+  padding: 12px 0;
+  border-top: var(--hair) solid var(--line);
+  border-bottom: var(--hair) solid var(--line);
+}
+.hx-recap-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.hx-recap-bits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 14px;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.hx-recap-ok { margin-top: 10px; }
+
+/* First 5 minutes: three lines with check circles, under the first game */
+.hx-steps { margin-top: 24px; }
+.hx-steps-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.hx-steps-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink-2);
+}
+.hx-step-list {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.hx-step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 36px;
+  font-size: 14px;
+  color: var(--ink);
+}
+.hx-step + .hx-step { border-top: var(--hair) solid var(--divider); }
+.hx-check {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+}
+.hx-step.is-done { color: var(--ink-3); }
+.hx-step.is-done .hx-check {
+  border-color: var(--positive);
+  background: var(--positive);
+  color: var(--on-ink);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hx-check { transition: background 0.2s, border-color 0.2s; }
+}
+
+/* home.css hides the Daily banner once the first game's score screen offers it; keep that with the list in between */
+.home-game:has(.tot-over) + .hx-steps + .home-daily-after { display: none; }

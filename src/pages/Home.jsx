@@ -1,13 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, CalendarDays, Zap } from 'lucide-react';
 import { getPattern, patterns } from '../data/patterns';
-import { useDaily, usePassed, useStreak, useXP } from '../progress';
+import { lastRun, startFirstSteps, useAchievements, useDaily, useFirstSteps, usePassed, useRecapSeen, useStreak, useXP, weekRecap } from '../progress';
 import { playerName } from '../game/challenge';
 import { dayKey } from '../lib/dates';
 import ThisOrThat from '../components/ThisOrThat';
 import DailyBanner from '../components/play/DailyBanner';
 import GameTiles from '../components/play/GameTiles';
+import { ContinueRow, FirstSteps, WeekRecap } from '../components/play/HomeExtras';
 import { useTitle } from '../lib/useTitle';
 import { buddy } from '../game/buddy';
 
@@ -37,6 +38,27 @@ export default function Home() {
   }, []);
   // Decided once per visit, so the first answer of a new player doesn't reshuffle the page mid-game.
   const [back] = useState(() => xp > 0 || Object.keys(days).length > 0);
+  // Returning players: one quiet line back into an unfinished game (read once, when Home opens).
+  // The Daily banner right below already says "keep going" for today's Daily, so that run isn't repeated here.
+  const [run] = useState(() => {
+    const r = back ? lastRun() : null;
+    return r?.key === 'daily' ? null : r;
+  });
+  // Brand-new players get the 3-step "first 5 minutes" list, below the first game.
+  // It ticks itself and goes away when all 3 are done or after "Hide".
+  const steps = useFirstSteps();
+  useEffect(() => {
+    if (!back && !passed.length) startFirstSteps();
+    // Once, when Home opens.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const played = Object.values(days).some((n) => n > 0);
+  const showSteps = steps.on && !steps.hidden && !(played && passed.length > 0 && steps.me);
+  // A new week: a short recap of last week, until "Got it". Never next to the first-steps list.
+  const earned = useAchievements();
+  const recapSeen = useRecapSeen();
+  const recap = useMemo(() => weekRecap({ days, daily, achievements: earned }), [days, daily, earned]);
+  const showRecap = back && !showSteps && recap && recapSeen !== recap.week;
   const dailyDone = !!daily[dayKey()];
   const name = playerName();
 
@@ -82,6 +104,9 @@ export default function Home() {
         </header>
       )}
 
+      {run && <ContinueRow run={run} />}
+      {showRecap && <WeekRecap recap={recap} />}
+
       {back && (
         <section className="home-daily">
           <DailyBanner />
@@ -92,6 +117,7 @@ export default function Home() {
       <section className="home-game" aria-label="This or That, quick round">
         <ThisOrThat rounds={5} next={next} />
       </section>
+      {showSteps && <FirstSteps played={played} carded={passed.length > 0} meSeen={steps.me} />}
 
       {!back && (
         <section className={'block' + (dailyDone ? '' : ' home-daily-after')}>

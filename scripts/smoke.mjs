@@ -12,7 +12,7 @@ import { builds } from '../src/data/builds.js';
 
 const routes = [
   '/', '/me', '/play', '/play/this-or-that', '/play/this-or-that?mode=hard', '/play/this-or-that?mode=misses', '/play/spot-the-flaw', '/play/daily',
-  '/play/story', '/play/card', '/play/speed', '/play/build', '/play/power', '/play/boss', '/play/boss/trust', '/play/boss/feedback', '/play/boss/not-a-group', '/patterns', '/principles',
+  '/play/story', '/play/card', '/play/speed', '/play/build', '/play/power', '/play/boss', '/play/boss/trust', '/play/boss/feedback', '/play/boss/not-a-group', '/play/weekly', '/play/mystery', '/patterns', '/principles',
   '/anti-patterns', '/glossary', '/teardowns', '/learn', '/autonomy', '/does-not-exist',
   ...patterns.flatMap((p) => [`/patterns/${p.id}`, `/patterns/${p.id}?view=understand`, `/patterns/${p.id}?view=reference`]),
   ...teardowns.map((t) => `/teardowns/${t.id}`),
@@ -42,8 +42,24 @@ const problems = [];
 const brokenSaves = {
   'labs-passed': '123', 'hunts-done': '{}', 'lab-stars': '[1,2]', 'game-stats': '{"bestStreak":"x","builds":5,"speedBest":-1,"boss":{"trust":"x","nope":9,"input":99}}',
   daily: '{"2026-10-01":"yes"}', days: '[]', 'player-name': '{"a":1}', 'daily-goal': '{"n":"7"}',
+  // Home extras: first-steps list, Monday recap, games in progress (new wrapped and broken shapes).
+  'first-steps': '[1]', 'recap-seen': '{"week":5}', 'daily-run': '{"day":"2026-10-22","r":"x","at":"y"}',
+  'run:story:tidy': '{"v":{"sceneId":"nope","trust":"x"},"at":"x"}', 'run:power': '{"v":{"ids":[1],"i":"a","log":[]},"at":9e15}',
+  'run:hunt:chat': '{"found":[99]}', 'run:build:research': 'not json',
+  // Screen of the week and the Mystery card.
+  weekly: '{"2026-W43":5,"not-a-week":"wk-notes","2026-W44":"nope","__proto__":"wk-notes"}', mystery: '{"won":"yes","stars":"x"}',
 };
-const savedRoutes = ['/', '/me', '/play', '/play/daily', '/play/card', '/play/speed', '/play/power', '/play/story', '/play/boss', '/patterns', '/patterns/citations'];
+// A returning player with an unfinished game and a played last week: Home shows the Continue line and the recap.
+const homeSaves = () => {
+  const d = new Date();
+  d.setDate(d.getDate() - ((d.getDay() + 6) % 7) - 4); // last week's Thursday
+  const k = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  return {
+    days: JSON.stringify({ [k]: 12 }),
+    'run:build:research': JSON.stringify({ v: { order: [], placed: ['answer-cited'], checked: false }, at: Date.now() }),
+  };
+};
+const savedRoutes = ['/', '/me', '/play', '/play/daily', '/play/card', '/play/speed', '/play/power', '/play/story', '/play/boss', '/play/weekly', '/play/mystery', '/patterns', '/patterns/citations'];
 
 for (const [name, viewport] of [['desktop', { width: 1280, height: 860 }], ['phone', { width: 320, height: 640 }]]) {
   const ctx = await browser.newContext({ viewport, serviceWorkers: 'block', isMobile: name === 'phone', hasTouch: name === 'phone' });
@@ -96,6 +112,10 @@ for (const [name, viewport] of [['desktop', { width: 1280, height: 860 }], ['pho
     await page.evaluate((saves) => { localStorage.clear(); for (const k in saves) localStorage.setItem(k, saves[k]); }, brokenSaves);
     await page.reload();
     for (const r of savedRoutes) await visit(r);
+    await page.evaluate((saves) => { localStorage.clear(); for (const k in saves) localStorage.setItem(k, saves[k]); }, homeSaves());
+    await page.reload();
+    await visit('/');
+    for (const sel of ['.hx-continue', '.hx-recap']) if (!(await page.locator(sel).count())) problems.push(`phone /: ${sel} missing for a returning player`);
     await page.evaluate(() => localStorage.clear());
   }
   await ctx.close();

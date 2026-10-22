@@ -13,13 +13,18 @@ import { revealEl } from '../lib/useReveal';
 // What you found is kept for this tab (run 'hunt:<id>'), so a link, Back or a refresh keeps it.
 // onOver(true) tells the page the screen is done (all found, or answers shown).
 // children (the page's next step) sit at the end of the side column, right under the result.
-export default function Hunt({ scenario, onOver, children }) {
+// Optional, for screens that are not in data/hunts.js (Screen of the week):
+//   onDone(id) saves the finish instead of hunts-done, doneBefore says if its XP was already won,
+//   game is the name sent with "Game finished".
+export default function Hunt({ scenario, onOver, children, onDone, doneBefore: doneProp, game = 'spot-the-flaw' }) {
   const [saved] = useState(() => readHuntRun(scenario));
   const [found, setFound] = useState(saved?.found ?? []); // block indexes, in the order found
   const [fine, setFine] = useState(null); // last "this part is fine" click
   const [revealed, setRevealed] = useState(saved?.revealed ?? false);
   const doneBefore = useHuntsDone();
-  const [wasDone] = useState(() => doneBefore.includes(scenario.id));
+  const [wasDone] = useState(() => doneProp ?? doneBefore.includes(scenario.id));
+  const finish = useRef(onDone ?? markHuntDone);
+  finish.current = onDone ?? markHuntDone;
   useEffect(() => {
     saveRun('hunt:' + scenario.id, { found, revealed });
   }, [scenario.id, found, revealed]);
@@ -34,12 +39,12 @@ export default function Hunt({ scenario, onOver, children }) {
   // Counted as a finished game only when the last find happens now, not when a finished screen is opened again.
   const doneAtOpen = useRef(done);
   useEffect(() => {
-    if (done && !revealed) markHuntDone(scenario.id);
+    if (done && !revealed) finish.current(scenario.id);
     if (done && !revealed && !doneAtOpen.current) {
       doneAtOpen.current = true;
-      track('Game finished', { game: 'spot-the-flaw' });
+      track('Game finished', { game });
     }
-  }, [done, revealed, scenario.id]);
+  }, [done, revealed, scenario.id, game]);
   const shown = revealed ? [...found, ...mistakes.filter((i) => !found.includes(i))] : found;
   // On a phone the list sits below the screen: show the newest mistake's note after each find.
   const listRef = useRef(null);
