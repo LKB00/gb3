@@ -1,0 +1,9 @@
+/* Boss rounds: the group picker, the result screen and the small crown on badges. */
+.boss-list { max-width: 640px; }
+/* The group colour comes from the tag-<group> classes (--pc). */
+.boss-icon { background: var(--pc, var(--sand-dark)); color: var(--ink); }
+.game-meta.boss-won { color: var(--ink); font-weight: 700; }
+.game-meta.boss-won svg, .boss-crown-big, .boss-crown { color: var(--attention); }
+.boss-over .row { margin-top: 4px; }
+/* Inline after the group name, so the badge layout stays the same. */
+.boss-crown { margin-left: 4px; vertical-align: -2px; }

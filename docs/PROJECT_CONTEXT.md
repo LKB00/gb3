@@ -4,7 +4,7 @@
 > with the same context: what the site is, what the owner wants, how to work, how to ship, what was decided and why,
 > and what is still open. Keep it up to date (see [Keeping this file current](#14-keeping-this-file-current)).
 >
-> Last updated: **2026-10-21**, after the "build all" pass (calmer Me and Cards, a demo on every card, new card #21 "Try it safely first", 2 more stories, 3 more flaw screens, 4 more hard pairs). Live site: <https://gb3.lokeshbhatia.com/>
+> Last updated: **2026-10-22**, after the engagement pass (Your misses deck, boss rounds, 16 achievements, bot buddy, streak colours for the player card) and more content (7 stories, 5 briefs, 16 flaw screens, 40 hard pairs).
 
 ## Contents
 1. [Snapshot](#1-snapshot) (name and brand: see [section 8b](#8b-brand))
@@ -165,16 +165,18 @@ The owner looks at a **private Claude Artifact**. It is one self-contained HTML 
 | `/play/this-or-that` | This or That | `?mode=hard` for Hard mode; `?rounds=3..10` for a shorter run (default 10), used by the daily-goal buttons |
 | `/play/speed` | Speed round | `?vs=&seed=&from=` for challenge links |
 | `/play/power` | How much power? | Autonomy-level game |
-| `/play/build` | Build mode | `?brief=research|travel|writer|car` |
-| `/play/story`, `/play/story/:id` | Stories | ids: `tidy`, `nova`, `sage`, `pilot`, `roam`, `quill` |
-| `/play/spot-the-flaw` | Spot the flaw | 13 screens |
+| `/play/this-or-that?mode=misses` | Your misses | Rounds you got wrong anywhere (This or That, Daily, Speed, boss), saved as round keys in `misses`; a right answer anywhere removes it. The tab and the Play row show only when the deck has something |
+| `/play/build` | Build mode | `?brief=research|travel|writer|car|shop` |
+| `/play/story`, `/play/story/:id` | Stories | ids: `tidy`, `nova`, `sage`, `pilot`, `roam`, `quill`, `owl` |
+| `/play/spot-the-flaw` | Spot the flaw | 16 screens |
+| `/play/boss`, `/play/boss/:group` | Boss rounds | One final per group: up to 8 rounds (`bossDeck` in `game/decks.js`: the group's hard pairs first, then classic rounds). Win = all but one right (`bossGoal`): 7/8 for most groups, Output 5/6, Feedback 4/5. Best per group in `game-stats.boss`, `XP.boss` = 5 per right answer of the best run; a beaten boss puts a crown on the group badge |
 | `/play/card` | Player card | Image made in the browser |
 | `/patterns`, `/patterns/:id` | Cards | 38 patterns, shown in one section per group when All groups is chosen (each card leaves out its group tag; on phones one row per card); tabs `?view=do|understand|reference` (shown as Play, Why it works, Cheat sheet; default `do`); `?category=` filter; `?show=missing|stars` (To collect / Not 3 stars yet); search also reads id, group, when/avoid/dos/donts, examples, product names and `keywords`. Read places (teardowns, glossary, principles, deep-dive pictures) link to `?view=understand`; games and the grid open Play |
 | `/autonomy` | Autonomy ladder | `?level=1..5`; has a level finder |
 | `/teardowns`, `/teardowns/:id` | Teardowns | ChatGPT, Perplexity, GitHub Copilot, Claude Code |
 | `/anti-patterns` | Dark patterns | 8 |
 | `/principles` | Principles | UX laws + Microsoft HAX 18 guidelines; `?focus=` scrolls to one |
-| `/glossary` | Glossary | 22 terms (19 link to their cards via `patterns`) + further reading |
+| `/glossary` | Glossary | 23 terms (20 link to their cards via `patterns`) + further reading |
 | `/learn`, `/learn/:id` | Deep dives | 9 short reads |
 | `/me` | Me | In order: a quiet level line (no XP repeat; totals only once above 0), the Today card (the one card with a button), player card, badges, settings (one grouped list: sound, vibration, dark mode), App and backup (one box) |
 | `/practice` | redirects to `/play` | old link |
@@ -200,7 +202,7 @@ The day streak counts days with at least one move. **One free "skip day" per 7 d
 yet, the streak is still kept (you still have time). Streak math is `streakInfo` in `progress.js`.
 
 **This or That** (`components/ThisOrThat.jsx`): 10 rounds. Two versions of the same AI screen; tap the better one. Classic uses one round Card links in games open a **card peek** (`components/PatternPeek.jsx`, `<PeekLink>`), so a run is never lost; the score screen lists the tricks met (misses first).
-per pattern (visuals), Hard uses the 34 "one small detail differs" pairs (`data/subtle.js`). Pins/captions appear after answering. Keys: Left/Right (or A/B), Enter for next.
+per pattern (visuals), Hard uses the 40 "one small detail differs" pairs (`data/subtle.js`). Pins/captions appear after answering. Keys: Left/Right (or A/B), Enter for next.
 Shortcuts with Ctrl/Cmd/Alt and held keys are ignored. Streak of 3+ plays the combo sound.
 
 **Daily** (`pages/Daily.jsx`): 5 rounds: easy, easy, hard, easy, hard. Same for everyone on the same date (seeded with `ai-patterns:<YYYY-MM-DD>`; the seed text keeps the old name on purpose, because changing it would change every day's rounds).
@@ -214,9 +216,13 @@ While playing, the body gets class `focus-mode` (top/bottom bars hidden on phone
 **Fix it** (`components/Lab.jsx`, one per pattern, reached from the card's Play tab): step by step, one decision at a time with instant feedback; 3 stars = no mistakes, The end screen's primary is **Next missing card** (else Next card for 3 stars) via `nextTarget()` in `game/useRandomChallenge.js`. The Play tab stays mounted (hidden) so switching tabs keeps your step. End screen order: stars, the won card, the next step, then "Play again" beside its reason, then "Your picks" as a quiet list.
 2 = one mistake, 1 = more. Finishing flips a **collectible card** (`FlipCard`) with a glow and star chimes. "Reveal the answer (no card)" exists for people who give up.
 
-**Spot the flaw** (`components/Hunt.jsx`): a realistic AI screen with hidden mistakes; tap what is wrong, tap fine parts to be told they are fine. Each of the 13 screens gives 30 XP once. Screens are picked with a small picker (back, a dropdown with ✓ for done, next) above the screen; on desktop the score and notes sit in a sand card beside it.
+**Spot the flaw** (`components/Hunt.jsx`): a realistic AI screen with hidden mistakes; tap what is wrong, tap fine parts to be told they are fine. Each of the 16 screens gives 30 XP once. Screens are picked with a small picker (back, a dropdown with ✓ for done, next) above the screen; on desktop the score and notes sit in a sand card beside it.
 
-**Stories** (`pages/Story.jsx`, `data/story.js`): 6 branching stories. Each scene = setup + a screen + a question + choices. Each choice changes **trust (0 to 100)**, The picker marks one story "Start here" / "Up next"; the how-to line shows on scene 1 only; on phones the trust meter is a slim line; the end puts Next story and Play again right under the ending.
+**Stories** (`pages/Story.jsx`, `data/story.js`): 7 branching stories. Each scene = setup + a screen + a question + choices. Each choice changes **trust (0 to 100)**, The picker marks one story "Start here" / "Up next"; the how-to line shows on scene 1 only; on phones the trust meter is a slim line; the end puts Next story and Play again right under the ending.
+
+**Achievements** (`data/achievements.js`, `components/Achievements.jsx`): 16, listed on Me (earned first; secret ones show "Secret" until earned). Rules are `test(p)` on saved progress (checked on every save) or `event(e)` on a moment (`gb3-event`: `{ type: 'answer', hour }` from `markPlayed`, `{ type: 'misses-cleared' }` from `clearMiss`). Saved as `achievements: { id: day }`. A toast (goal-toast style, trophy) pops per new one, queued; the first check for a player who has no `achievements` key yet unlocks quietly. `streak-3/7/30` (best day streak, `game-stats.bestDayStreak`) unlock the Lime, Ocean and Gold player card colours (`game/cardThemes.js`, choice saved as `card-theme: { id }`).
+
+**Bot buddy** (`game/buddy.js`, `components/Buddy.jsx`, lines in `data/buddy.js`): the app icon with a speech bubble, bottom left (above the bottom bar on phones). `buddy(moment)` for streak3/5/10 and lost (This or That), trap and win (Build, boss), welcome (Home after 2+ days away, once per visit). At most one line per 20 s, never while a toast shows (the sound hint is fine, it's at the top); switch on Me (`buddy: { off }`).
 shows a reaction and may change the path (`next`). The final trust picks one of 4 endings (`endings[].min`). Best trust per story is saved.
 `tidy` = file-cleanup agent (Priya), `nova` = kitchen voice assistant, `sage` = bank help bot, `pilot` = coding agent.
 
@@ -375,10 +381,10 @@ The same early script also applies the saved dark/light choice before the first 
 | Content | Count | File | Add by |
 |---|---|---|---|
 | Patterns | 38 (Input 6, Output 3, Control 4, Trust 8, Feedback 2, Agents 10, Voice & vision 5) | `data/patterns.js` + `data/visuals.js` + `data/examples.js` + `data/principles.js` (`patternPrinciples`) | add all four entries plus a `demo` (every card has one: `src/demos/`, registered in `demos/index.js`) |
-| Hard pairs | 34 | `data/subtle.js` | `pair(...)` entry |
-| Spot-the-flaw screens | 13 | `data/hunts.js` | blocks with `mistake: { text, pattern }` |
-| Stories | 6 | `data/story.js` | scenes + endings; export in `stories` |
-| Build briefs | 4 | `data/builds.js` | pieces with `need/nice/trap` |
+| Hard pairs | 40 | `data/subtle.js` | `pair(...)` entry |
+| Spot-the-flaw screens | 16 | `data/hunts.js` | blocks with `mistake: { text, pattern }` |
+| Stories | 7 | `data/story.js` | scenes + endings; export in `stories` |
+| Build briefs | 5 | `data/builds.js` | pieces with `need/nice/trap` |
 | Power tasks | 21 | `data/autonomy.js` `tasks` | `task(id, text, detail, level, tags, why)`; keep >= 2 per level |
 | Teardowns | 4 | `data/teardowns.js` | journey stages with pattern ids |
 | Dark patterns | 8 | `data/antipatterns.js` | |
@@ -435,6 +441,8 @@ Things the repo does **not** have: unit tests, visual regression, a real-device 
 | (Oct 21) | Game list (owner: "same issue" on Play): 7 big colour tiles in 3 shapes → two calm lists, Quick games and Deeper games, one row style, colour only in the icon, no zero stats; Home drops its double heading |
 | (Oct 21) | "Build all" pass: Me hides zero totals and the repeated XP, the Today card is one goal + one button with a quiet streak/week footer; Cards shows one section per group and one readable row per card on phones; the Fix it step bar is progress only on phones (no repeated question); "Skip it when" on Why it works; live demos for all 38 cards; new card `sandbox-preview` (Try it safely first, Agents, #21, so later card numbers moved up by 1; progress is by id); stories `roam` + `quill`; 3 flaw screens; 4 hard pairs (the Daily deck shuffle changes because `subtle` grew) |
 | (Oct 21) | Stats: "Game started" event (first answer per game per visit) and Spot the flaw now sends "Game finished"; installed iPhone app gets `viewport-fit=cover` so the bottom bar clears the home line; public "N visits" line with letter avatars (P, A, M, K: the story characters) above the credits (owner asked for one like their other site); the footer (visit count + credits) now shows on every page on phones too (owner) |
+| (Oct 22) | Build trip brief: "A practice run before booking" (nice, `sandbox-preview`) and the trap "Book it all, then show the receipt"; glossary term "Practice run" linked to the new card. Owner: skip performance work for now |
+| (Oct 22) | Engagement pass (owner picked all 5 ideas): Your misses deck, boss rounds per group, 16 achievements (3 secret) with toasts, the bot buddy, and day-streak colours for the player card. More content: story `owl` (Ishaan, study helper), brief `shop`, 3 flaw screens, 6 hard pairs (covering cards that had none) |
 
 ### Decisions worth remembering
 - **Name: Good Bot, Bad Bot** (chosen by the owner from a short list). It matches the main game (pick the better screen). Renamed from "AI Patterns", which was clear but easy to forget.
@@ -471,9 +479,7 @@ Things the repo does **not** have: unit tests, visual regression, a real-device 
 
 ## 13. Open ideas (backlog)
 
-From the research on aiuxplayground.com (not built yet):
-(Done Oct 21: the "Try it safely first" card `sandbox-preview`, a live demo on every card, and a "Skip it when" line on Why it works.)
-1. **A "Preview the result first" piece** in Build mode (travel and car briefs) and a matching trap.
+From the research on aiuxplayground.com: all done (Oct 21-22: the "Try it safely first" card `sandbox-preview`, a live demo on every card, a "Skip it when" line on Why it works, and in Build mode's trip brief a "practice run" piece (nice) with a "book it all, then show the receipt" trap). The car brief already teaches checking first through its read-back piece, so it got no new piece.
 
 Other options:
 - Look at the GoatCounter numbers to see what people play.

@@ -6,6 +6,7 @@ import { getPattern } from '../data/patterns';
 import { fx } from '../game/fx';
 import { shuffle } from '../lib/random';
 import { track } from '../game/track';
+import { buddy } from '../game/buddy';
 import Disagree from '../components/Disagree';
 import { PeekLink } from '../components/PatternPeek';
 import { clearRun, markPlayed, readBuildRun, saveBuild, saveRun, useGameStats, XP } from '../progress';
@@ -69,6 +70,8 @@ function Builder({ build, nextJob, onNextJob }) {
     setGain(Math.max(0, r.stars - before) * XP.star);
     saveBuild(build.id, r.stars);
     fx(r.stars === 3 ? 'win' : r.traps.length ? 'wrong' : 'right');
+    if (r.stars === 3) buddy('win');
+    else if (r.traps.length) buddy('trap');
     setResult(r);
     track('Game finished', { game: `build-${build.id}`, stars: r.stars });
   };

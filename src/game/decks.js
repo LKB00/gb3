@@ -3,6 +3,7 @@ import { visuals } from '../data/visuals';
 import { subtle } from '../data/subtle';
 import { seeded, shuffle } from '../lib/random';
 import { dayKey } from '../lib/dates';
+import { BOSS_ROUNDS, BOSS_WIN } from '../progress';
 
 // Rounds for This or That. Every round has the same shape, whatever its source:
 // { key, pattern, brief, good: { blocks, caption }, bad: { blocks, caption }, goodFirst, hard }
@@ -60,3 +61,22 @@ export function dailyDeck(key = dayKey()) {
 
 // How many This or That rounds to offer for the moves still missing from the daily goal (3 to 10).
 export const goalRounds = (movesLeft) => Math.min(10, Math.max(3, Math.ceil(movesLeft) || 0));
+
+// ---- Boss rounds: one tough final per pattern group ----
+// Up to BOSS_ROUNDS rounds: the group's hard pairs first, then classic rounds of its patterns.
+// A small group has fewer rounds (Feedback has 5), so its win line moves down with it:
+// you may miss as many as a full boss allows (BOSS_ROUNDS - BOSS_WIN = 1).
+const groupPatterns = (group) => patterns.filter((p) => p.category === group).map((p) => p.id);
+export const bossSize = (group) => {
+  const ids = groupPatterns(group);
+  return Math.min(BOSS_ROUNDS, subtle.filter((s) => ids.includes(s.pattern)).length + ids.length);
+};
+export const bossGoal = (group) => Math.max(1, bossSize(group) - (BOSS_ROUNDS - BOSS_WIN));
+export const bossBeaten = (group, best) => (best || 0) >= bossGoal(group);
+
+export function bossDeck(group, rng = Math.random) {
+  const ids = groupPatterns(group);
+  const hard = shuffle(subtle.filter((s) => ids.includes(s.pattern)), rng).map((s) => hardRound(s, rng() < 0.5));
+  const classic = shuffle(ids, rng).map((id) => classicRound(id, rng() < 0.5));
+  return shuffle([...hard, ...classic].slice(0, BOSS_ROUNDS), rng);
+}

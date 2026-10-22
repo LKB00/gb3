@@ -2,7 +2,7 @@
 // screen, leave the traps out, then check your design.
 //   kind: 'need' (the design isn't good without it), 'nice' (bonus), 'trap' (common mistake)
 
-import { user, ai, note, buttons, chips, steps, spinner, banner, modal, card, rows, toast, voice, list } from '../mock/blocks.js';
+import { user, ai, note, buttons, chips, steps, spinner, banner, modal, card, rows, toast, voice, list, variants } from '../mock/blocks.js';
 
 const piece = (id, label, kind, pattern, why, block) => ({ id, label, kind, pattern, why, block });
 
@@ -47,12 +47,16 @@ export const builds = [
         list(['✓ Booked IndiGo 6E-512 · Undo', '✓ Held 3 rooms at Sea Breeze · Undo'])),
       piece('status', 'Live progress for each task', 'nice', 'task-status', 'People know what’s done while they get on with their day.',
         steps([['Flights', 'done'], ['Hotel', 'active'], ['Dinner', 'todo']])),
+      piece('practice', 'A practice run before booking', 'nice', 'sandbox-preview', 'It tries everything first, books nothing, and flags the problem while it’s still free to fix.',
+        card('Practice run · Nothing booked yet', '6 seats ✓ · 3 rooms ✓ · ⚠ The dinner place is closed on day 2')),
       piece('sure', '“Are you sure?” popup', 'trap', 'action-approval', 'Sure about what? It doesn’t say. People click OK out of habit.',
         modal('Are you sure?', 'This action cannot be undone.', ['Cancel', '!OK'])),
       piece('lock', 'Lock the screen until finished', 'trap', 'task-status', 'People are stuck staring at it. And they can’t tell if it froze.',
         banner('warn', 'Please wait', 'The agent is working. Don’t close this page.')),
       piece('cheapest', 'Auto-book the cheapest option', 'trap', 'autonomy-dial', 'A big choice, made without asking. Enjoy your 2 stops and 14 hours.',
         toast('Booked the cheapest flights (2 stops, 14 h)')),
+      piece('receipt', 'Book it all, then show the receipt', 'trap', 'sandbox-preview', 'The receipt comes after the money moves. Too late to spot the closed restaurant.',
+        toast('All booked! Here’s your receipt.')),
     ],
   },
   {
@@ -99,6 +103,31 @@ export const builds = [
         voice('speaking', 'Car', 'Option one, UPI. Option two, card ending 4421. Option three…')),
       piece('screen', 'Long form on the car screen', 'trap', 'mode-switch', 'Reading and tapping at 80 km/h? That’s how crashes happen.',
         card('Payment details', 'Recipient · Account · IFSC · Note · Category · Schedule')),
+    ],
+  },
+  {
+    id: 'shop',
+    title: 'Shopping helper',
+    app: 'Shop AI',
+    brief: 'A runner asks the AI to find new shoes and buy a pair. Build a screen that helps them choose, with no tricks.',
+    base: [user('Find me running shoes under ₹5,000. Size 9.')],
+    pieces: [
+      piece('filters', 'What it’s using: size, budget, kind of run', 'need', 'visible-context', 'People see what the AI is working with, and fix it in one tap.',
+        chips(['Size 9 ✕', 'Under ₹5,000 ✕', 'Road running ✕'])),
+      piece('choices', '3 pairs side by side, with prices', 'need', 'multiple-variants', 'People compare and pick for themselves. Their feet, their choice.',
+        variants(['SwiftRun · ₹4,299', 'TrailLite · ₹3,899', 'CloudStep · ₹4,950'])),
+      piece('reasons', 'Why it picked these, in plain words', 'need', 'explain-why', 'Short reasons people can check. Not a mystery list.',
+        list(['✓ All in size 9, in stock', '✓ Soft soles for road running', '✓ All under ₹5,000'])),
+      piece('confirm', 'A clear “Buy?” question with the full price', 'need', 'action-approval', 'Money is moving. People see the shoe, the size and the price before they say yes.',
+        modal('Buy SwiftRun, size 9, for ₹4,299?', 'Arrives Friday. Free returns for 30 days.', ['Cancel', '!Buy for ₹4,299'])),
+      piece('reviews', 'Real review quotes behind each claim', 'nice', 'citations', 'People hear from real runners, not only from the AI.',
+        card('[1] 212 reviews · 4.4 stars', '“Comfy from day one. Runs a bit small.”')),
+      piece('best', 'Only one “Best for you” pick', 'trap', 'multiple-variants', 'Best how? With one pick, people can’t compare. Or say no.',
+        card('Best for you', 'SwiftRun · ₹4,299')),
+      piece('autobuy', 'Buy the top pick right away', 'trap', 'action-approval', 'A purchase nobody said yes to. Hello, return form.',
+        toast('Ordered SwiftRun · size 9 · ₹4,299')),
+      piece('paid', 'Paid brands on top, with no label', 'trap', 'explain-why', 'The top pick paid to be there. People think it’s the best match. That’s a trick.',
+        ai('Top pick for you: MegaSole Pro, ₹4,999.')),
     ],
   },
 ];

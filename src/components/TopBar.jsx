@@ -3,6 +3,8 @@ import { ChevronLeft, Moon, Sun, Volume2, VolumeX, Zap } from 'lucide-react';
 import { useXP } from '../progress';
 import { useTheme } from '../lib/theme';
 import { GoalToast, LevelUpToast, SoundHint, StreakPill } from './Today';
+import { AchievementToast } from './Achievements';
+import Buddy from './Buddy';
 import { useFx } from '../game/fx';
 import LogoMark from './LogoMark';
 import { useCountUp } from '../lib/useCountUp';
@@ -67,6 +69,8 @@ export default function TopBar({ from }) {
         </div>
       </div>
       <GoalToast />
+      <AchievementToast />
+      <Buddy />
       <LevelUpToast />
       <SoundHint />
     </header>

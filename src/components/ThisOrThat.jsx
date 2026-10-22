@@ -3,21 +3,24 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Check, Eye, Flame, RotateCcw, Trophy, X } from 'lucide-react';
 import { getCategory, getPattern } from '../data/patterns';
 import { makeDeck } from '../game/decks';
+import { missesDeck } from '../game/missesDeck';
 import MockFrame, { MockBlock } from '../mock/Mock';
-import { markPlayed, saveStreak, useGameStats, XP } from '../progress';
+import { addMiss, clearMiss, markPlayed, saveStreak, useGameStats, useMisses, XP } from '../progress';
 import Burst from './Burst';
 import { fx } from '../game/fx';
 import CountUp from './CountUp';
 import { track } from '../game/track';
+import { buddy } from '../game/buddy';
 import Disagree from './Disagree';
 import { PeekLink } from './PatternPeek';
 
 // This or That: two versions of the same AI screen. Tap the better one.
 // Quick rounds, instant answer, a streak to protect. No reading needed to start.
-//   mode:   'classic' (clear differences) or 'hard' (one small detail differs)
+//   mode:   'classic' (clear differences), 'hard' (one small detail differs) or 'misses' (rounds you got wrong)
 //   deck:   a fixed list of rounds (used by the Daily challenge)
 //   onDone: called with [true/false per round] instead of showing the score screen
 //   next:   ({ missed, last }) => buttons for the score screen (pattern ids). "Play again" then goes quiet.
+//   game:   the name for the "Game finished" event (default: 'daily' with onDone, else this-or-that-<mode>)
 const VERDICT = [
   [1, 'Perfect round. Frame it!'],
   [0.8, 'Sharp eye! Only a couple got past you.'],
@@ -28,9 +31,12 @@ const VERDICT = [
 const YES = ['Nailed it!', 'Sharp eye!', 'That’s the one!', 'Yes!'];
 const NO = ['So close. The green one wins.', 'Easy to miss. The green one wins.', 'Not quite. The green one wins.'];
 
+// Every wrong answer goes into "Your misses"; a right answer takes that round out again.
+const buildDeck = (mode, n) => (mode === 'misses' ? missesDeck(n) : makeDeck(mode, n));
+
 // `start` resumes a run (answers already given, e.g. a Daily after a refresh); `onAnswer` gets every answer so far.
-export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedDeck, onDone, start, onAnswer, next: nextStep }) {
-  const [deck, setDeck] = useState(() => fixedDeck || makeDeck(mode, rounds));
+export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedDeck, onDone, start, onAnswer, next: nextStep, game }) {
+  const [deck, setDeck] = useState(() => fixedDeck || buildDeck(mode, rounds));
   const resumeAt = start && fixedDeck ? Math.min(start.length, fixedDeck.length - 1) : 0;
   const [i, setI] = useState(resumeAt);
   const [pick, setPick] = useState(null); // 0 or 1
@@ -40,12 +46,13 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
   const [over, setOver] = useState(false);
   const [recordXp, setRecordXp] = useState(0);
   const stats = useGameStats();
+  const missesLeft = useMisses().length;
   const nextRef = useRef(null);
 
   // Switching mode (Classic ↔ Hard) starts a fresh run.
   useEffect(() => {
     if (fixedDeck) return;
-    setDeck(makeDeck(mode, rounds));
+    setDeck(buildDeck(mode, rounds));
     setI(0);
     setPick(null);
     setResults([]);
@@ -68,6 +75,8 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
       setPick(n);
       markPlayed();
       const ok = (n === 0) === round.goodFirst;
+      if (ok) clearMiss(round.key);
+      else addMiss(round.key);
       if (!ok) fx('wrong');
       else if (streak + 1 >= 3) fx('combo', { streak: streak + 1 });
       else fx('right', { streak });
@@ -78,11 +87,13 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
         const s = streak + 1;
         setStreak(s);
         setRunBest((b) => Math.max(b, s));
+        if (s === 3 || s === 5 || s === 10) buddy(`streak${s}`);
       } else {
+        if (streak >= 3) buddy('lost');
         setStreak(0);
       }
     },
-    [pick, over, round.goodFirst, streak, results, onAnswer]
+    [pick, over, round.goodFirst, round.key, streak, results, onAnswer]
   );
 
   const next = useCallback(() => {
@@ -94,13 +105,13 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
     }
     setRecordXp(Math.max(0, runBest - (stats.bestStreak || 0)) * XP.streak);
     saveStreak(runBest);
-    track('Game finished', { game: onDone ? 'daily' : `this-or-that-${mode}`, score: results.filter(Boolean).length });
+    track('Game finished', { game: game || (onDone ? 'daily' : `this-or-that-${mode}`), score: results.filter(Boolean).length });
     if (onDone) onDone(results);
     else setOver(true);
-  }, [pick, i, deck.length, runBest, stats.bestStreak, onDone, results, mode]);
+  }, [pick, i, deck.length, runBest, stats.bestStreak, onDone, results, mode, game]);
 
   const again = () => {
-    setDeck(makeDeck(mode, rounds));
+    setDeck(buildDeck(mode, rounds));
     setI(0);
     setPick(null);
     setResults([]);
@@ -135,7 +146,8 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
     const met = deck.map((r, n) => ({ id: r.pattern, ok: results[n] }));
     const tricks = [...met.filter((m) => !m.ok), ...met.filter((m) => m.ok)].filter((m, n, all) => all.findIndex((x) => x.id === m.id) === n);
     const missed = tricks.filter((m) => !m.ok).map((m) => m.id);
-    const replay = (
+    const cleared = mode === 'misses' && missesLeft === 0;
+    const replay = cleared ? null : (
       <button type="button" className={nextStep ? 'text-link tot-again' : 'btn btn-primary btn-lg'} onClick={again}>
         <RotateCcw size={15} strokeWidth={1.75} aria-hidden /> Play again
       </button>
@@ -145,7 +157,8 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
         {score >= deck.length * 0.8 && <Burst count={24} />}
         <Trophy size={28} strokeWidth={1.5} aria-hidden />
         <p className="tot-big"><CountUp value={score} /><span>/{deck.length}</span></p>
-        <p className="tot-verdict">{verdict}</p>
+        <p className="tot-verdict">{cleared ? 'Misses deck cleared. Every one of them, fixed!' : verdict}</p>
+        {mode === 'misses' && !cleared && <p className="small muted">{missesLeft} {missesLeft === 1 ? 'miss is' : 'misses are'} still in your deck.</p>}
         <div className="tot-stats">
           <span><Flame size={14} strokeWidth={1.75} aria-hidden /> Most right in a row: <strong>{runBest}</strong></span>
           {recordXp > 0 && <span className="pill-new">New best streak! +{recordXp} XP</span>}
@@ -158,7 +171,9 @@ export default function ThisOrThat({ rounds = 10, mode = 'classic', deck: fixedD
         ) : (
           <div className="row wrap center">
             {replay}
-            {mode === 'classic' ? (
+            {mode === 'misses' ? (
+              <Link to="/play" className={'btn btn-lg ' + (cleared ? 'btn-primary' : 'btn-ghost')}>Back to Play</Link>
+            ) : mode === 'classic' ? (
               <Link to="/play/this-or-that?mode=hard" className="btn btn-ghost btn-lg"><Eye size={15} strokeWidth={1.75} aria-hidden /> Try Hard mode</Link>
             ) : (
               <Link to="/play/daily" className="btn btn-ghost btn-lg">Play today’s Daily</Link>

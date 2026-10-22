@@ -6,13 +6,17 @@ A playground for AI interaction design. Not a course: quick games, instant wins,
 
 - **Daily challenge** (`/play/daily`): 5 rounds, the same for everyone each day (3 classic + 2 hard), one try. Wordle-style share grid (copy, X, LinkedIn), days-in-a-row streak, countdown to the next Daily.
 - **Agent on duty** (`/play/story`): a short branching story. You design Tidy, a file-cleanup agent; each choice moves Priya's trust meter, and trust decides one of 4 endings.
-- **This or That** (`/play/this-or-that`, and a 5-round version right on Home): two versions of the same AI screen, tap the better one. Score, streak, keyboard ← / →. **Hard mode** (`?mode=hard`): 34 near-identical pairs where only one detail differs.
+- **This or That** (`/play/this-or-that`, and a 5-round version right on Home): two versions of the same AI screen, tap the better one. Score, streak, keyboard ← / →. **Hard mode** (`?mode=hard`): 40 near-identical pairs where only one detail differs.
 - **Fix it** (the Play tab on each card): build an AI feature one decision at a time with instant feedback. Win the card with 1–3 stars.
 - **Spot the flaw** (`/play/spot-the-flaw`): realistic AI screens with hidden mistakes. Tap what is wrong.
 - **Cards** (`/patterns`): 38 pattern cards in 7 groups (Input, Output, Control, Trust, Feedback, Agents, Voice & vision). Each has Play, Why it works and Cheat sheet tabs. Every card has a small live demo ("Try it yourself") and a "Skip it when" line on Why it works. All cards shows them in one section per group; on phones each card is one readable row.
 - **How much power?**: pick how much an AI should do on its own (suggest → act alone) for 8 real tasks.
-- **Build mode** (`/play/build`): a blank AI screen and a box of pieces. Tap or drag the right pieces on, leave the traps out, then check. 4 briefs (research answer, travel agent, long writing task, voice in a car), 1–3 stars each.
-- **Stories** (`/play/story`): 6 branching stories with a trust meter and 4 endings each: a file-cleanup agent (Priya), a kitchen voice assistant (Arjun), a bank help bot (Meera), a coding agent (Kabir), a trip-booking AI (Fatima) and a writing helper (Zara).
+- **Build mode** (`/play/build`): a blank AI screen and a box of pieces. Tap or drag the right pieces on, leave the traps out, then check. 5 briefs (research answer, travel agent, long writing task, voice in a car, shopping helper), 1–3 stars each.
+- **Stories** (`/play/story`): 7 branching stories with a trust meter and 4 endings each: a file-cleanup agent (Priya), a kitchen voice assistant (Arjun), a bank help bot (Meera), a coding agent (Kabir), a trip-booking AI (Fatima), a writing helper (Zara) and a study helper (Ishaan).
+- **Your misses** (`/play/this-or-that?mode=misses`): every This or That screen you get wrong (also in the Daily, Speed and boss rounds) goes into your own deck; get it right anywhere and it leaves. Shows on Play only when it has something in it.
+- **Boss rounds** (`/play/boss`): one tough final per group, up to 8 rounds (hard pairs first). Miss at most one to beat the boss; a beaten boss puts a crown on that group's badge and gives XP.
+- **Achievements** (on Me): 16 surprises, 3 of them secret (Night owl, Early bird, Clean slate). A toast pops when one is earned; players from before get theirs quietly. Day streaks of 3, 7 and 30 unlock Lime, Ocean and Gold colours for the player card.
+- **Bot buddy**: the GB3 icon says one short line at real moments (3/5/10 in a row, a lost streak, a Build trap, a win, coming back after 2+ days). At most one line every 20 seconds, never on top of another toast; a switch on Me turns it off.
 - **Challenge a friend**: after the Daily or a Speed round, copy a link. Your friend plays the exact same rounds (seeded) and sees your score to beat. Everything is in the link, no server.
 - **Speed round** (`/play/speed`): 60 seconds of quick "which is better?" picks (classic + hard mixed). 3 in a row = ×2 points; a wrong tap costs 1 point, so random tapping doesn't pay. 3-2-1 countdown, ticking last 5 seconds, copyable score.
 - **Card flip**: winning a Fix it challenge flips your new pattern card over with a glow.

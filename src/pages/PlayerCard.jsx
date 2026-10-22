@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { Copy, Download, Share2 } from 'lucide-react';
+import { Copy, Download, Lock, Share2 } from 'lucide-react';
 import { patterns } from '../data/patterns';
 import { archetype, wonGroups } from '../game/archetype';
-import { useGameStats, usePassed, useStars, useStreak, useXP } from '../progress';
+import { useAchievements, useGameStats, usePassed, useStars, useStreak, useXP } from '../progress';
+import { getAchievement } from '../data/achievements';
+import { cardThemes, readCardTheme, saveCardTheme } from '../game/cardThemes';
 import { copyText } from '../lib/clipboard';
 import LogoMark, { ICON_SVG } from '../components/LogoMark';
 import Breadcrumbs from '../components/Breadcrumbs';
@@ -19,9 +21,6 @@ const DOT = {
   agents: '#d2b850',
   voice: '#6fb3ad',
 };
-const INK = '#24282c';
-const LIME = '#c2ef72';
-const PAPER = '#fbfbf7';
 
 function readName() {
   try {
@@ -85,7 +84,7 @@ function fillFit(g, text, x, y, maxWidth, weight, size, family, minSize = 24) {
   g.fillText(text, x, y);
 }
 
-async function drawCard(name, data) {
+async function drawCard(name, data, t) {
   await document.fonts?.ready;
   const icon = await loadIcon();
   const W = 1080;
@@ -103,33 +102,33 @@ async function drawCard(name, data) {
     g.fill();
   };
 
-  round(0, 0, W, H, 64, INK);
+  round(0, 0, W, H, 64, t.bg);
   // header
   drawLogo(g, icon, 84, 86, 72);
-  g.fillStyle = '#c9ccc4';
+  g.fillStyle = t.soft;
   g.font = `700 30px ${sans}`;
   g.fillText('GOOD BOT, BAD BOT · PLAYER CARD', 200, 131);
 
   // name + type
-  g.fillStyle = PAPER;
+  g.fillStyle = t.ink;
   fillFit(g, name || 'Player', 84, 290, 912, 800, 64, display);
-  g.fillStyle = LIME;
+  g.fillStyle = t.accent;
   fillFit(g, data.type.name, 84, 410, 912, 800, 96, display);
-  g.fillStyle = '#c9ccc4';
+  g.fillStyle = t.soft;
   fillFit(g, data.type.line, 84, 475, 912, 400, 38, sans);
 
   // level pill
-  round(84, 540, 912, 130, 36, '#33383d');
-  round(112, 568, 74, 74, 22, LIME);
-  g.fillStyle = INK;
+  round(84, 540, 912, 130, 36, t.panel);
+  round(112, 568, 74, 74, 22, t.accent);
+  g.fillStyle = t.bg;
   g.font = `800 44px ${display}`;
   g.textAlign = 'center';
   g.fillText(String(data.levelNum), 149, 620);
   g.textAlign = 'left';
-  g.fillStyle = PAPER;
+  g.fillStyle = t.ink;
   g.font = `800 44px ${display}`;
   g.fillText(data.level.name, 212, 620);
-  g.fillStyle = LIME;
+  g.fillStyle = t.accent;
   g.textAlign = 'right';
   g.fillText(`${data.xp} XP`, 964, 620);
   g.textAlign = 'left';
@@ -138,17 +137,17 @@ async function drawCard(name, data) {
   data.stats.forEach(([label, value], i) => {
     const x = 84 + (i % 2) * 464;
     const y = 700 + Math.floor(i / 2) * 200;
-    round(x, y, 448, 180, 32, '#33383d');
-    g.fillStyle = PAPER;
+    round(x, y, 448, 180, 32, t.panel);
+    g.fillStyle = t.ink;
     g.font = `800 72px ${display}`;
     g.fillText(value, x + 36, y + 100);
-    g.fillStyle = '#c9ccc4';
+    g.fillStyle = t.soft;
     g.font = `400 32px ${sans}`;
     g.fillText(label, x + 36, y + 148);
   });
 
   // badges
-  g.fillStyle = '#c9ccc4';
+  g.fillStyle = t.soft;
   g.font = `700 28px ${sans}`;
   g.fillText('BADGES', 84, 1150);
   data.groups.forEach((b, i) => {
@@ -159,13 +158,13 @@ async function drawCard(name, data) {
       g.fillStyle = DOT[b.id];
       g.fill();
     } else {
-      g.strokeStyle = '#4a4f55';
+      g.strokeStyle = t.line;
       g.lineWidth = 4;
       g.stroke();
     }
   });
 
-  g.fillStyle = '#8d918a';
+  g.fillStyle = t.faint;
   g.font = `400 28px ${sans}`;
   g.fillText('gb3.lokeshbhatia.com', 84, 1290);
   g.textAlign = 'right';
@@ -189,6 +188,30 @@ export default function PlayerCard() {
   const canShare = typeof navigator !== 'undefined' && !!navigator.share;
   const [msg, setMsg] = useState('');
   const data = useCardData();
+  const earned = useAchievements();
+  const [themeId, setThemeId] = useState(() => readCardTheme(earned).id);
+  const [hint, setHint] = useState('');
+  const isOpen = (t) => !t.unlock || !!earned[t.unlock];
+  // A saved colour that is locked again (cleared data) falls back to Classic.
+  const theme = cardThemes.find((t) => t.id === themeId && isOpen(t)) || cardThemes[0];
+  const pickTheme = (t) => {
+    if (!isOpen(t)) {
+      const how = getAchievement(t.unlock)?.how || 'Keep your day streak going.';
+      setHint(`${how.replace(/\.$/, '')} to unlock ${t.name}.`);
+      return;
+    }
+    setHint('');
+    setThemeId(t.id);
+    saveCardTheme(t.id);
+  };
+  const cardStyle = {
+    '--pc-bg': theme.bg,
+    '--pc-panel': theme.panel,
+    '--pc-ink': theme.ink,
+    '--pc-soft': theme.soft,
+    '--pc-accent': theme.accent,
+    '--pc-line': theme.line,
+  };
 
   const save = (v) => {
     setName(v);
@@ -203,7 +226,7 @@ export default function PlayerCard() {
     setTimeout(() => setMsg(''), 2200);
   };
   const toBlob = async () => {
-    const cv = await drawCard(name.trim(), data);
+    const cv = await drawCard(name.trim(), data, theme);
     return new Promise((res) => cv.toBlob(res, 'image/png'));
   };
   const download = async () => {
@@ -234,7 +257,7 @@ export default function PlayerCard() {
     <div className="page page-wide">
       <Breadcrumbs items={[{ label: 'Play', to: '/play' }, { label: 'Player card' }]} />
       <div className="pc-layout">
-        <div className="pc-card" aria-label="Your player card">
+        <div className="pc-card" style={cardStyle} aria-label="Your player card">
           <p className="pc-brand"><LogoMark /> GOOD BOT, BAD BOT · PLAYER CARD</p>
           <p className={'pc-name' + (name.trim().length > 16 ? ' is-long' : '')}>{name.trim() || 'Player'}</p>
           <p className="pc-type">{data.type.name}</p>
@@ -265,6 +288,26 @@ export default function PlayerCard() {
             <span className="label">Name on the card</span>
             <input value={name} maxLength={24} placeholder="Your name" onChange={(e) => save(e.target.value)} />
           </label>
+          <div className="pc-colors" role="group" aria-label="Card colour">
+            {cardThemes.map((t) => {
+              const locked = !isOpen(t);
+              return (
+                <button
+                  key={t.id}
+                  type="button"
+                  className={'pc-swatch' + (locked ? ' is-locked' : '')}
+                  style={{ '--sw-bg': t.bg, '--sw-accent': t.accent }}
+                  aria-pressed={t.id === theme.id}
+                  aria-label={locked ? `${t.name}, locked` : t.name}
+                  title={locked ? `${t.name} (locked)` : t.name}
+                  onClick={() => pickTheme(t)}
+                >
+                  {locked && <Lock size={14} strokeWidth={1.75} aria-hidden />}
+                </button>
+              );
+            })}
+            <span className="small muted pc-colors-hint" role="status">{hint}</span>
+          </div>
           <div className="row wrap">
             {shareFiles ? (
               <>

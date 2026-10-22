@@ -6,7 +6,7 @@ import { seeded, shuffle } from '../lib/random';
 import { challengeLink, speedDareText, useChallenge, useDare, verdict } from '../game/challenge';
 import { fx } from '../game/fx';
 import { track } from '../game/track';
-import { markPlayed, saveSpeed, useGameStats, XP } from '../progress';
+import { addMiss, clearMiss, markPlayed, saveSpeed, useGameStats, XP } from '../progress';
 import MockFrame, { MockBlock } from '../mock/Mock';
 import Breadcrumbs from '../components/Breadcrumbs';
 import CountUp from '../components/CountUp';
@@ -145,6 +145,8 @@ export default function Speed() {
       if (phase !== 'play' || flash) return;
       const ok = (n === 0) === round.goodFirst;
       markPlayed();
+      if (ok) clearMiss(round.key);
+      else addMiss(round.key);
       if (!ok) fx('wrong');
       else if (combo + 1 >= 3) fx('combo', { streak: combo + 1 });
       else fx('right', { streak: combo });
@@ -168,7 +170,7 @@ export default function Speed() {
         setI((x) => x + 1);
       }, ok ? 320 : 650);
     },
-    [phase, flash, round.goodFirst, round.pattern, combo]
+    [phase, flash, round.goodFirst, round.key, round.pattern, combo]
   );
 
   useEffect(() => {

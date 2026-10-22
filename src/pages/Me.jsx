@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { ChevronRight, IdCard, Moon, Smartphone, Sun, Volume2, VolumeX } from 'lucide-react';
+import { useState } from 'react';
+import { Bot, ChevronRight, IdCard, Moon, Smartphone, Sun, Volume2, VolumeX } from 'lucide-react';
 import { useHaptic, useSound } from '../game/fx';
 import { useTheme } from '../lib/theme';
 import { TodayCard } from '../components/Today';
@@ -7,6 +8,8 @@ import AppAndBackup from '../components/play/AppAndBackup';
 import Badges from '../components/play/Badges';
 import LevelCard from '../components/play/LevelCard';
 import { useTitle } from '../lib/useTitle';
+import { AchievementList } from '../components/Achievements';
+import { buddyOn, setBuddyOn } from '../game/buddy';
 
 // "Me": your level, today, badges, settings and backup in one place.
 // Order: who you are (a quiet level line), today's goal (the one card with a button), then details.
@@ -16,6 +19,11 @@ export default function Me() {
   const [sound, toggleSound] = useSound();
   const [haptic, toggleHaptic] = useHaptic();
   const [isDark, toggleTheme] = useTheme();
+  const [pal, setPal] = useState(buddyOn);
+  const togglePal = () => {
+    setBuddyOn(!pal);
+    setPal(!pal);
+  };
   return (
     <div className="page page-wide me">
       <header className="page-head page-head-tight">
@@ -37,6 +45,11 @@ export default function Me() {
       </section>
 
       <section className="block">
+        <h2>Achievements</h2>
+        <AchievementList />
+      </section>
+
+      <section className="block">
         <h2>Settings</h2>
         <div className="me-group">
           <button type="button" className="me-row" onClick={toggleSound} aria-pressed={sound}>
@@ -48,6 +61,11 @@ export default function Me() {
             <Smartphone size={20} strokeWidth={1.75} aria-hidden />
             <span><strong>Vibration</strong><span className="small muted">A small buzz on taps and wins, on phones</span></span>
             <span className={'switch' + (haptic ? ' is-on' : '')} aria-hidden />
+          </button>
+          <button type="button" className="me-row" onClick={togglePal} aria-pressed={pal}>
+            <Bot size={20} strokeWidth={1.75} aria-hidden />
+            <span><strong>Bot buddy</strong><span className="small muted">A little GB3 bot that cheers you on now and then</span></span>
+            <span className={'switch' + (pal ? ' is-on' : '')} aria-hidden />
           </button>
           <button type="button" className="me-row" onClick={toggleTheme} aria-pressed={isDark}>
             {isDark ? <Moon size={20} strokeWidth={1.75} aria-hidden /> : <Sun size={20} strokeWidth={1.75} aria-hidden />}

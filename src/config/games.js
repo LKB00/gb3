@@ -1,9 +1,11 @@
-import { BookOpenText, Check, Flame, Gauge, Hammer, Puzzle, ScanSearch, Shuffle, Star, Timer, Zap } from 'lucide-react';
+import { BookOpenText, Check, Crown, Flame, Gauge, Hammer, Puzzle, RotateCcw, ScanSearch, Shuffle, Star, Swords, Timer, Zap } from 'lucide-react';
 import { patterns } from '../data/patterns';
 import { hunts } from '../data/hunts';
 import { builds } from '../data/builds';
 import { stories } from '../data/story';
+import { categories } from '../data/patterns';
 import { storyBests } from '../progress';
+import { bossBeaten } from '../game/decks';
 
 // Every game on the Play page, in the order shown. The tiles are drawn from
 // this list (components/play/GameTiles.jsx), in two groups: quick games and deeper games.
@@ -18,8 +20,20 @@ import { storyBests } from '../progress';
 //   group  'quick' (1-2 minutes) or 'deep' (about 5 minutes): the two lists on the Play page
 //   isNew  shows a small "New" pill
 //   meta   your progress in this game: (progress) => [Icon, text, played]
-//          progress = { stats, passed, huntsDone }; the line only shows once played is true
+//          progress = { stats, passed, huntsDone, misses }; the line only shows once played is true
+//   show   optional: (progress) => false hides the row (e.g. "Your misses" with nothing in it)
 export const games = [
+  {
+    id: 'misses',
+    to: '/play/this-or-that?mode=misses',
+    title: 'Your misses',
+    blurb: 'The screens you got wrong. Win them back and the deck empties.',
+    icon: RotateCcw,
+    tone: 'game-f',
+    group: 'quick',
+    show: ({ misses }) => misses.length > 0,
+    meta: ({ misses }) => [RotateCcw, `${misses.length} to win back`, true],
+  },
   {
     id: 'this-or-that',
     to: '/play/this-or-that',
@@ -90,5 +104,18 @@ export const games = [
     tone: 'game-c',
     group: 'deep',
     meta: ({ huntsDone }) => [Check, `${huntsDone.length}/${hunts.length} screens done`, huntsDone.length > 0],
+  },
+  {
+    id: 'boss',
+    to: '/play/boss',
+    title: 'Boss rounds',
+    blurb: '8 tough screens from one group. Get 7 right to beat its boss.',
+    icon: Swords,
+    tone: 'game-d',
+    group: 'deep',
+    meta: ({ stats }) => {
+      const beaten = Object.entries(stats.boss || {}).filter(([g, n]) => bossBeaten(g, n)).length;
+      return [Crown, `${beaten}/${categories.length} bosses beaten`, Object.keys(stats.boss || {}).length > 0];
+    },
   },
 ];
